@@ -2,22 +2,155 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, lib, modulesPath, inputs, ... }:
+{ lib, config, pkgs, ... }:
 
 {
+  imports =
+    [
+      # Include the results of the hardware scan.
+      ./hardware-configuration.nix
+    ];
+  nix.package = pkgs.nixUnstable;
+  nix.extraOptions = ''
+    	experimental-features = nix-command flakes
+    	'';
 
-  imports = [
-    ./hardware-configuration.nix
-  ];
+  programs.nix-ld.enable = true;
 
-  services.sshd.enable = true;
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "mysystem";
+  # networking.hostName = "nixos"; # Define your hostname.
+  # Pick only one of the below networking options.
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
-  nixpkgs.overlays = [ inputs.nur.overlay ];
+  # Set your time zone.
+  # time.timeZone = "Europe/Amsterdam";
 
+  # Enable the X11 windowing system.
+  # services.xserver.enable = true;
+  programs.zsh.enable = true;
+  users.defaultUserShell = pkgs.zsh;
+
+  # for compatibility add zsh to list of /etc/shells
+  environment.shells = with pkgs; [ zsh ];
+
+  # Enable CUPS to print documents.
+  # services.printing.enable = true;
+
+  # Enable sound.
+  # sound.enable = true;
+  # hardware.pulseaudio.enable = true;
+
+  # Enable touchpad support (enabled default in most desktopManager).
+  # services.xserver.libinput.enable = true;
+
+  # xservices 
+  services.xserver.enable = true;
+  services.xserver.autorun = false;
+  services.xserver.displayManager.startx.enable = true;
+  services.xserver.windowManager.qtile.enable = true;
+
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.daylin = {
+    shell = pkgs.zsh;
+    isNormalUser = true;
+    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    packages = with pkgs; [
+    ];
+  };
+
+  # List packages installed in system profile. To search, run:
+  # $ nix search wget
   environment.systemPackages = with pkgs; [
-    pkgs.nur.repos.mic92.hello-nur
+
+    fuse
+    zsh
+
+    wget
+
+    git
+    vim
+    # neovim
+
+    nixpkgs-fmt
+
+    autorandr
+    wezterm
+    eww
+    rofi
+    picom
+    dunst
+    (python3.withPackages (p: with  p; [ tomli ]))
+
+
   ];
+
+
+  ## make qtile's python handle the extra dependency
+  #nixpkgs.overlays = [
+  #(self: super: {
+  #qtile = super.qtile.overrideAttrs(oldAttrs: { 
+  #pythonPath = oldAttrs.pythonPath ++ (with self.python3Packages; [
+  #tomli
+  #]);
+  #});
+  #
+  #})];
+
+
+  fonts.fonts = with pkgs; [
+    (nerdfonts.override { fonts = [ "FiraCode" ]; })
+  ];
+
+
+
+
+  environment.variables = {
+    NIX_LD_LIBRARY_PATH = with pkgs; lib.makeLibraryPath [
+      stdenv.cc.cc
+      openssl
+
+      zlib # for delta
+      fuse # for libfuse/Neovim Appimage
+    ];
+    NIX_LD = lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker";
+  };
+
+
+  # Some programs need SUID wrappers, can be configured further or are
+  # started in user sessions.
+  # programs.mtr.enable = true;
+  # programs.gnupg.agent = {
+  #   enable = true;
+  #   enableSSHSupport = true;
+  # };
+
+  # List services that you want to enable:
+
+  # Enable the OpenSSH daemon.
+  # services.openssh.enable = true;
+
+  # Open ports in the firewall.
+  # networking.firewall.allowedTCPPorts = [ ... ];
+  # networking.firewall.allowedUDPPorts = [ ... ];
+  # Or disable the firewall altogether.
+  # networking.firewall.enable = false;
+
+  # Copy the NixOS configuration file and link it from the resulting system
+  # (/run/current-system/configuration.nix). This is useful in case you
+  # accidentally delete configuration.nix.
+  # system.copySystemConfiguration = true;
+
+  # This value determines the NixOS release from which the default
+  # settings for stateful data, like file locations and database versions
+  # on your system were taken. It‘s perfectly fine and recommended to leave
+  # this value at the release version of the first install of this system.
+  # Before changing this value read the documentation for this option
+  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  system.stateVersion = "22.05"; # Did you read the comment?
+
 }
 
