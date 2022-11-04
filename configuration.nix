@@ -20,6 +20,8 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+    
+  virtualization.virtualbox.guest.enable = true;
 
   # networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.
@@ -73,18 +75,20 @@
 
     git
     vim
-    # neovim
+    neovim
 
     nixpkgs-fmt
 
     autorandr
-    #    wezterm
+    xdotool
+    wezterm
     eww
     rofi
-    picom
+    picom-jonaburg
     dunst
-    (python3.withPackages (p: with  p; [ tomli ]))
 
+    firefox
+#    (python3.withPackages (p: with  p; [ tomli ]))
 
   ];
 
