@@ -2,7 +2,7 @@
   description = "An example NixOS configuration";
 
   inputs = {
-    nixpkgs = { url = "github:nixos/nixpkgs/nixos-unstable"; };
+    nixpkgs = { url = "github:nixos/nixpkgs/master"; };
     nix-ld = {
       url = "github:Mic92/nix-ld";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -20,7 +20,7 @@
           system = "x86_64-linux";
           modules = [
             ./configuration.nix
-            nix-ld.nixosModules.nix-ld
+            inputs.nix-ld.nixosModules.nix-ld
 
           ];
           specialArgs = { inherit inputs; };

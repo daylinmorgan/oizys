@@ -15,7 +15,7 @@
     	experimental-features = nix-command flakes
     	'';
 
-  programs.nix-ld.enable = true;
+  #  programs.nix-ld.enable = true;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -78,7 +78,7 @@
     nixpkgs-fmt
 
     autorandr
-    wezterm
+    #    wezterm
     eww
     rofi
     picom
@@ -89,23 +89,9 @@
   ];
 
 
-  ## make qtile's python handle the extra dependency
-  #nixpkgs.overlays = [
-  #(self: super: {
-  #qtile = super.qtile.overrideAttrs(oldAttrs: { 
-  #pythonPath = oldAttrs.pythonPath ++ (with self.python3Packages; [
-  #tomli
-  #]);
-  #});
-  #
-  #})];
-
-
   fonts.fonts = with pkgs; [
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
   ];
-
-
 
 
   environment.variables = {
