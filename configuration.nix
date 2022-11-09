@@ -26,11 +26,14 @@
 
 
   # xstuffs
-  services.xserver.enable = true;
-  services.xserver.autorun = false;
-  services.xserver.displayManager.startx.enable = true;
-  services.xserver.windowManager.qtile.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  #services.xserver.enable = true;
+  #services.xserver.autorun = false;
+  #services.xserver.displayManager.startx.enable = true;
+  #services.xserver.windowManager.qtile.enable = true;
+  #services.xserver.desktopManager.plasma5.enable = true;
+ 
+# overrwite default login
+  services.xserver.displayManager.autoLogin.enable = lib.mkForce false;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.daylin = {
@@ -79,6 +82,7 @@
     noto-fonts-emoji
     noto-fonts-extra
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
+
   ];
 
 
