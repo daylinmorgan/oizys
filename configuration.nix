@@ -12,6 +12,21 @@
     	experimental-features = nix-command flakes
     	'';
 
+  nixpkgs.overlays = [
+    (self: super: /* overlay goes here */
+
+      {
+        wavebox = super.wavebox.overrideAttrs (old: {
+          version = "10.107.10";
+        });
+      }
+
+
+    )
+  ];
+
+
+
   # networking.hostName = "nixos"; # Define your hostname.
 
   # time.timeZone = "Europe/Amsterdam";
@@ -60,35 +75,34 @@
     #   rofi
     #   picom
     #   dunst
-    (wavebox.override {
-      version = 10.107 .10 })
-      firefox
-      (python3.withPackages (p: with  p;
-      [ pynvim ]))
-      ];
+
+    firefox
+    (python3.withPackages (p: with  p;
+    [ pynvim ]))
+  ];
 
 
-      fonts.fonts = with pkgs; [
-        font-awesome
-        noto-fonts
-        noto-fonts-cjk
-        noto-fonts-emoji
-        noto-fonts-extra
-        last-resort
-        (nerdfonts.override { fonts = [ "FiraCode" ]; })
+  fonts.fonts = with pkgs; [
+    font-awesome
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+    noto-fonts-extra
+    last-resort
+    (nerdfonts.override { fonts = [ "FiraCode" ]; })
 
-      ];
+  ];
 
 
-      environment.variables = {
-        NIX_LD_LIBRARY_PATH = with pkgs; lib.makeLibraryPath [
-          stdenv.cc.cc
-          openssl
+  environment.variables = {
+    NIX_LD_LIBRARY_PATH = with pkgs; lib.makeLibraryPath [
+      stdenv.cc.cc
+      openssl
 
-          zlib # for delta
-          fuse # for libfuse/Neovim Appimage
-        ];
-        NIX_LD = lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker";
-      };
+      zlib # for delta
+      fuse # for libfuse/Neovim Appimage
+    ];
+    NIX_LD = lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker";
+  };
 
-    }
+}
