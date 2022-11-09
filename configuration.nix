@@ -12,8 +12,6 @@
     	experimental-features = nix-command flakes
     	'';
 
-  #  programs.nix-ld.enable = true;
-
   # networking.hostName = "nixos"; # Define your hostname.
 
   # time.timeZone = "Europe/Amsterdam";
@@ -25,14 +23,8 @@
   environment.shells = with pkgs; [ zsh ];
 
 
-  # xstuffs
-  #services.xserver.enable = true;
-  #services.xserver.autorun = false;
-  #services.xserver.displayManager.startx.enable = true;
-  #services.xserver.windowManager.qtile.enable = true;
-  #services.xserver.desktopManager.plasma5.enable = true;
- 
-# overrwite default login
+
+  # overrwite default login
   services.xserver.displayManager.autoLogin.enable = lib.mkForce false;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -44,9 +36,8 @@
     ];
   };
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
   environment.systemPackages = with pkgs; [
+
     fuse
     zsh
 
@@ -63,38 +54,41 @@
 
     nixpkgs-fmt
 
- #   xdotool
+    #   xdotool
     wezterm
- #   eww
- #   rofi
- #   picom
- #   dunst
-
-    firefox
-    (python3.withPackages (p: with  p; [ pynvim ]))
-  ];
-
-
-  fonts.fonts = with pkgs; [
-    font-awesome
-    noto-fonts
-    noto-fonts-cjk
-    noto-fonts-emoji
-    noto-fonts-extra
-    (nerdfonts.override { fonts = [ "FiraCode" ]; })
-
-  ];
+    #   eww
+    #   rofi
+    #   picom
+    #   dunst
+    (wavebox.override {
+      version = 10.107 .10 })
+      firefox
+      (python3.withPackages (p: with  p;
+      [ pynvim ]))
+      ];
 
 
-  environment.variables = {
-    NIX_LD_LIBRARY_PATH = with pkgs; lib.makeLibraryPath [
-      stdenv.cc.cc
-      openssl
+      fonts.fonts = with pkgs; [
+        font-awesome
+        noto-fonts
+        noto-fonts-cjk
+        noto-fonts-emoji
+        noto-fonts-extra
+        last-resort
+        (nerdfonts.override { fonts = [ "FiraCode" ]; })
 
-      zlib # for delta
-      fuse # for libfuse/Neovim Appimage
-    ];
-    NIX_LD = lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker";
-  };
+      ];
 
-}
+
+      environment.variables = {
+        NIX_LD_LIBRARY_PATH = with pkgs; lib.makeLibraryPath [
+          stdenv.cc.cc
+          openssl
+
+          zlib # for delta
+          fuse # for libfuse/Neovim Appimage
+        ];
+        NIX_LD = lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker";
+      };
+
+    }
