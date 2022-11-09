@@ -8,8 +8,10 @@
   imports =
     [
       # Include the results of the hardware scan.
-      ./hardware-configuration.nix
+      #     ./hardware-configuration.nix
+      <nixpkgs/nixos/modules/installer/virtualbox-demo.nix>
     ];
+
   nix.package = pkgs.nixUnstable;
   nix.extraOptions = ''
     	experimental-features = nix-command flakes
@@ -18,10 +20,8 @@
   #  programs.nix-ld.enable = true;
 
   # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  virtualisation.virtualbox.guest.enable = true;
+  #  boot.loader.systemd-boot.enable = true;
+  #  boot.loader.efi.canTouchEfiVariables = true;
 
   # networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.
@@ -54,6 +54,7 @@
   services.xserver.autorun = false;
   services.xserver.displayManager.startx.enable = true;
   services.xserver.windowManager.qtile.enable = true;
+  services.xserver.desktopManager.plasma5.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.daylin = {
@@ -89,6 +90,8 @@
     rofi
     picom-jonaburg
     dunst
+
+    gh
 
     firefox
     (python3.withPackages (p: with  p; [ pynvim ]))
@@ -146,4 +149,3 @@
   system.stateVersion = "22.05"; # Did you read the comment?
 
 }
-
