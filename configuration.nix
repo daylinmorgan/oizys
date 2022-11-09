@@ -55,16 +55,17 @@
 
     vim
     neovim
+    starship
     gh
 
     nixpkgs-fmt
 
-    xdotool
+ #   xdotool
     wezterm
-    eww
-    rofi
-    picom
-    dunst
+ #   eww
+ #   rofi
+ #   picom
+ #   dunst
 
     firefox
     (python3.withPackages (p: with  p; [ pynvim ]))
@@ -76,6 +77,7 @@
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
+    noto-fonts-extra
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
   ];
 
