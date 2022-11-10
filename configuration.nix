@@ -18,6 +18,33 @@
       {
         wavebox = super.wavebox.overrideAttrs (old: {
           version = "10.107.10";
+          src = super.fetchurl {
+            # url = "https://github.com/wavebox/waveboxapp/releases/download/v${version}/${tarball}";
+            # sha256 = "0z04071lq9bfyrlg034fmvd4346swgfhxbmsnl12m7c2m2b9z784";
+            url = "https://download.wavebox.app/stable/linux/tar/Wavebox_10.107.10-2.tar.gz";
+            sha256 = "sha256-cbcAmnq9rJlQy6Y+06G647R72HWcK97KgSsYgusSB58=";
+          };
+          nativeBuildInputs = with pkgs; [
+            autoPatchelfHook
+            makeWrapper
+            qt5.wrapQtAppsHook
+          ];
+          buildInputs = with pkgs.xorg; [
+            libXdmcp
+            libXScrnSaver
+            libXtst
+            libXdamage
+          ] ++ [
+            pkgs.alsa-lib
+            pkgs.gtk3
+            pkgs.nss
+            pkgs.mesa
+          ];
+          postFixup = ''
+            # make xdg-open overrideable at runtime
+            makeWrapper $out/opt/wavebox/wavebox $out/bin/wavebox \
+              --suffix PATH : ${super.xdg-utils}/bin
+          '';
         });
       }
 
@@ -79,6 +106,8 @@
     firefox
     (python3.withPackages (p: with  p;
     [ pynvim ]))
+
+    wavebox
   ];
 
 
@@ -88,6 +117,7 @@
     noto-fonts-cjk
     noto-fonts-emoji
     noto-fonts-extra
+    dejavu_fonts
     last-resort
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
 
