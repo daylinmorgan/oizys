@@ -3,7 +3,6 @@
 {
   imports =
     [
-      # Include the results of the hardware scan.
       <nixpkgs/nixos/modules/installer/virtualbox-demo.nix>
     ];
 
@@ -11,7 +10,7 @@
   nix.extraOptions = ''
     	experimental-features = nix-command flakes
     	'';
-
+  # todo import from a different file
   nixpkgs.overlays = [
     (self: super:
       {
@@ -62,6 +61,7 @@
 
   # overwrite demo as default login
   services.xserver.displayManager.autoLogin.enable = lib.mkForce false;
+  services.xserver.windowManager.qtile.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.daylin = {
@@ -90,18 +90,30 @@
 
     nixpkgs-fmt
 
-    #   xdotool
+       xdotool
     wezterm
-    #   eww
-    #   rofi
-    #   picom
-    #   dunst
+       eww
+       rofi
+       picom
+       dunst
 
-    firefox
+   
     (python3.withPackages (p: with  p;
     [ pynvim ]))
 
+    firefox
     wavebox
+    
+
+    (vivaldi.override {
+      proprietaryCodecs = true;
+      enableWidevine = false;
+    })
+
+
+    go
+    rustup
+
   ];
 
 
