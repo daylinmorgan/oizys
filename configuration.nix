@@ -13,14 +13,11 @@
     	'';
 
   nixpkgs.overlays = [
-    (self: super: /* overlay goes here */
-
+    (self: super:
       {
         wavebox = super.wavebox.overrideAttrs (old: {
           version = "10.107.10";
           src = super.fetchurl {
-            # url = "https://github.com/wavebox/waveboxapp/releases/download/v${version}/${tarball}";
-            # sha256 = "0z04071lq9bfyrlg034fmvd4346swgfhxbmsnl12m7c2m2b9z784";
             url = "https://download.wavebox.app/stable/linux/tar/Wavebox_10.107.10-2.tar.gz";
             sha256 = "sha256-cbcAmnq9rJlQy6Y+06G647R72HWcK97KgSsYgusSB58=";
           };
@@ -34,12 +31,13 @@
             libXScrnSaver
             libXtst
             libXdamage
-          ] ++ [
-            pkgs.alsa-lib
-            pkgs.gtk3
-            pkgs.nss
-            pkgs.mesa
-          ];
+          ] ++
+          (with pkgs; [
+            alsa-lib
+            gtk3
+            nss
+            mesa
+          ]);
           postFixup = ''
             # make xdg-open overrideable at runtime
             makeWrapper $out/opt/wavebox/wavebox $out/bin/wavebox \
@@ -52,11 +50,9 @@
     )
   ];
 
-
-
   # networking.hostName = "nixos"; # Define your hostname.
 
-  # time.timeZone = "Europe/Amsterdam";
+  time.timeZone = "America/Chicago";
 
   programs.zsh.enable = true;
   users.defaultUserShell = pkgs.zsh;
@@ -64,9 +60,7 @@
   # for compatibility add zsh to list of /etc/shells
   environment.shells = with pkgs; [ zsh ];
 
-
-
-  # overrwite default login
+  # overwrite demo as default login
   services.xserver.displayManager.autoLogin.enable = lib.mkForce false;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
