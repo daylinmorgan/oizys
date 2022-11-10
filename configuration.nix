@@ -90,20 +90,20 @@
 
     nixpkgs-fmt
 
-       xdotool
+    xdotool
     wezterm
-       eww
-       rofi
-       picom
-       dunst
+    eww
+    rofi
+    picom
+    dunst
 
-   
+
     (python3.withPackages (p: with  p;
     [ pynvim ]))
 
     firefox
     wavebox
-    
+
 
     (vivaldi.override {
       proprietaryCodecs = true;
