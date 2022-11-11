@@ -12,9 +12,7 @@
     	experimental-features = nix-command flakes
     	'';
 
-
   # todo import from a different file
-
   nixpkgs.overlays = [
     (self: super:
       {
@@ -58,7 +56,6 @@
           };
         });
       })
-
   ];
 
   # networking.hostName = "nixos"; # Define your hostname.
@@ -86,9 +83,15 @@
     };
   };
 
+fonts.fonts = with pkgs; [
+    noto-fonts
+    noto-fonts-emoji
+    noto-fonts-extra
+    (nerdfonts.override { fonts = [ "FiraCode" "FiraMono" ]; })
+  ];
+
   # for compatibility add zsh to list of /etc/shells
   environment.shells = with pkgs; [ zsh ];
-
 
   environment.systemPackages = with pkgs; [
 
@@ -135,16 +138,10 @@
   ];
 
 
-  fonts.fonts = with pkgs; [
-    noto-fonts
-    noto-fonts-cjk
-    noto-fonts-emoji
-    noto-fonts-extra
-    (nerdfonts.override { fonts = [ "FiraCode" "FiraMono" ]; })
-
-  ];
-
-
+ environment.etc = {
+  issue.source = ./etc/issue;
+  };
+  
   environment.variables = {
     NIX_LD_LIBRARY_PATH = with pkgs; lib.makeLibraryPath [
       stdenv.cc.cc
