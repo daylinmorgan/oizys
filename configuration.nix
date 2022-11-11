@@ -15,7 +15,6 @@
 
   # todo import from a different file
 
-
   nixpkgs.overlays = [
     (self: super:
       {
@@ -49,6 +48,7 @@
                 --suffix PATH : ${super.xdg-utils}/bin
             '';
           });
+
         picom = super.picom.overrideAttrs (o: {
           src = pkgs.fetchFromGitHub {
             repo = "picom";
@@ -66,24 +66,29 @@
   time.timeZone = "America/Chicago";
 
   programs.zsh.enable = true;
-  users.defaultUserShell = pkgs.zsh;
+
+  # overwrite demo as default login
+  services.xserver = {
+    enable = true;
+    displayManager.autoLogin.enable = lib.mkForce false;
+    windowManager.qtile.enable = true;
+  };
+
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users = {
+    defaultUserShell = pkgs.zsh;
+    users.daylin = {
+      shell = pkgs.zsh;
+      isNormalUser = true;
+      extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+      packages = with pkgs; [
+      ];
+    };
+  };
 
   # for compatibility add zsh to list of /etc/shells
   environment.shells = with pkgs; [ zsh ];
 
-  # overwrite demo as default login
-  services.xserver.enable = true;
-  services.xserver.displayManager.autoLogin.enable = lib.mkForce false;
-  services.xserver.windowManager.qtile.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.daylin = {
-    shell = pkgs.zsh;
-    isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-    packages = with pkgs; [
-    ];
-  };
 
   environment.systemPackages = with pkgs; [
 
