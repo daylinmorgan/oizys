@@ -58,7 +58,7 @@
       })
   ];
 
-  # networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "nixos-vm"; # Define your hostname.
 
   time.timeZone = "America/Chicago";
 
@@ -67,6 +67,9 @@
   # overwrite demo as default login
   services.xserver = {
     enable = true;
+    displayManager.startx.enable = true;
+    displayManager.sddm.enable = lib.mkForce false; 
+
     displayManager.autoLogin.enable = lib.mkForce false;
     windowManager.qtile.enable = true;
   };
@@ -116,6 +119,7 @@ fonts.fonts = with pkgs; [
     eww
     rofi
     dunst
+    feh
     picom
 
 
