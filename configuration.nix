@@ -11,52 +11,9 @@
   nix.extraOptions = ''
     	experimental-features = nix-command flakes
     	'';
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # todo import from a different file
-  nixpkgs.overlays = [
-    (self: super:
-      {
-        wavebox = super.wavebox.overrideAttrs
-          (old: {
-            version = "10.107.10";
-            src = super.fetchurl {
-              url = "https://download.wavebox.app/stable/linux/tar/Wavebox_10.107.10-2.tar.gz";
-              sha256 = "sha256-cbcAmnq9rJlQy6Y+06G647R72HWcK97KgSsYgusSB58=";
-            };
-            nativeBuildInputs = with pkgs; [
-              autoPatchelfHook
-              makeWrapper
-              qt5.wrapQtAppsHook
-            ];
-            buildInputs = with pkgs.xorg; [
-              libXdmcp
-              libXScrnSaver
-              libXtst
-              libXdamage
-            ] ++
-            (with pkgs; [
-              alsa-lib
-              gtk3
-              nss
-              mesa
-            ]);
-            postFixup = ''
-              # make xdg-open overrideable at runtime
-              makeWrapper $out/opt/wavebox/wavebox $out/bin/wavebox \
-                --suffix PATH : ${super.xdg-utils}/bin
-            '';
-          });
-
-        picom = super.picom.overrideAttrs (o: {
-          src = pkgs.fetchFromGitHub {
-            repo = "picom";
-            owner = "ibhagwan";
-            rev = "44b4970f70d6b23759a61a2b94d9bfb4351b41b1";
-            sha256 = "0iff4bwpc00xbjad0m000midslgx12aihs33mdvfckr75r114ylh";
-          };
-        });
-      })
-  ];
 
   networking.hostName = "nixos-vm"; # Define your hostname.
 
@@ -68,7 +25,7 @@
   services.xserver = {
     enable = true;
     displayManager.startx.enable = true;
-    displayManager.sddm.enable = lib.mkForce false; 
+    displayManager.sddm.enable = lib.mkForce false;
 
     displayManager.autoLogin.enable = lib.mkForce false;
     windowManager.qtile.enable = true;
@@ -86,7 +43,7 @@
     };
   };
 
-fonts.fonts = with pkgs; [
+  fonts.fonts = with pkgs; [
     noto-fonts
     noto-fonts-emoji
     noto-fonts-extra
@@ -102,6 +59,7 @@ fonts.fonts = with pkgs; [
     zsh
 
     wget
+    less
     gnumake
     gcc
 
@@ -110,6 +68,8 @@ fonts.fonts = with pkgs; [
     vim
     neovim
     starship
+    chezmoi
+    delta
     gh
 
     nixpkgs-fmt
@@ -126,7 +86,7 @@ fonts.fonts = with pkgs; [
     (python3.withPackages (p: with  p;
     [ pynvim ]))
 
-    firefox
+    # firefox
     wavebox
 
 
@@ -142,10 +102,10 @@ fonts.fonts = with pkgs; [
   ];
 
 
- environment.etc = {
-  issue.source = ./etc/issue;
+  environment.etc = {
+    issue.source = ./etc/issue;
   };
-  
+
   environment.variables = {
     NIX_LD_LIBRARY_PATH = with pkgs; lib.makeLibraryPath [
       stdenv.cc.cc
