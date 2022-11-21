@@ -13,14 +13,12 @@
     	'';
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  # todo import from a different file
-
   networking.hostName = "nixos-vm"; # Define your hostname.
 
   time.timeZone = "America/Chicago";
 
-  programs.zsh.enable = true;
-
+    programs.zsh.enable = true;
+programs.dconf.enable = true;
   # overwrite demo as default login
   services.xserver = {
     enable = true;
@@ -53,8 +51,8 @@
   # for compatibility add zsh to list of /etc/shells
   environment.shells = with pkgs; [ zsh ];
 
-  environment.systemPackages = with pkgs; [
 
+  environment.systemPackages = with pkgs; [
     fuse
     zsh
 
@@ -71,7 +69,7 @@
     chezmoi
     delta
     gh
-
+    
     nixpkgs-fmt
 
     xdotool
@@ -79,12 +77,18 @@
     eww
     rofi
     dunst
-    feh
+   feh
+  
     picom
+    gtk3
+    
+gnome.adwaita-icon-theme
+    gnome.gnome-settings-daemon
+    catppuccin-gtk
 
 
-    (python3.withPackages (p: with  p;
-    [ pynvim ]))
+    # (python3.withPackages (p: with  p;
+    # [ pynvim ]))
 
     # firefox
     wavebox
@@ -93,11 +97,14 @@
     (vivaldi.override {
       proprietaryCodecs = true;
       enableWidevine = false;
+      commandLineArgs = "--force-dark-mode";
     })
 
-
+vscode.fhs
+  
     go
     rustup
+
 
   ];
 

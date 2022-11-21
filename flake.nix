@@ -20,7 +20,7 @@
           modules = [
             ./configuration.nix
             inputs.nix-ld.nixosModules.nix-ld
-
+            ./overlays.nix
           ];
           specialArgs = { inherit inputs; };
         };
