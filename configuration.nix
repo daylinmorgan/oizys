@@ -17,8 +17,7 @@
 
   time.timeZone = "America/Chicago";
 
-    programs.zsh.enable = true;
-programs.dconf.enable = true;
+  programs.zsh.enable = true;
   # overwrite demo as default login
   services.xserver = {
     enable = true;
@@ -69,7 +68,7 @@ programs.dconf.enable = true;
     chezmoi
     delta
     gh
-    
+
     nixpkgs-fmt
 
     xdotool
@@ -77,12 +76,12 @@ programs.dconf.enable = true;
     eww
     rofi
     dunst
-   feh
-  
+    feh
+
     picom
     gtk3
-    
-gnome.adwaita-icon-theme
+
+    gnome.adwaita-icon-theme
     gnome.gnome-settings-daemon
     catppuccin-gtk
 
@@ -93,18 +92,17 @@ gnome.adwaita-icon-theme
     # firefox
     wavebox
 
-
+pciutils
     (vivaldi.override {
       proprietaryCodecs = true;
       enableWidevine = false;
       commandLineArgs = "--force-dark-mode";
     })
 
-vscode.fhs
-  
+    vscode.fhs
+
     go
     rustup
-
 
   ];
 
@@ -119,7 +117,6 @@ vscode.fhs
       openssl
 
       zlib # for delta
-      fuse # for libfuse/Neovim Appimage
     ];
     NIX_LD = lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker";
   };

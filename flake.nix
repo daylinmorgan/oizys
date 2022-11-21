@@ -7,11 +7,15 @@
       url = "github:Mic92/nix-ld";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hyprland = {
+      url = "github:hyprwm/Hyprland";
+      # build with your own instance of nixpkgs
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
 
   outputs = inputs:
-    /* ignore:: */
     {
       nixosConfigurations = {
 
@@ -19,8 +23,11 @@
           system = "x86_64-linux";
           modules = [
             ./configuration.nix
-            inputs.nix-ld.nixosModules.nix-ld
             ./overlays.nix
+            ./environment.nix
+            inputs.hyprland.nixosModules.default
+            { programs.hyprland.enable = true; }
+            inputs.nix-ld.nixosModules.nix-ld
           ];
           specialArgs = { inherit inputs; };
         };
