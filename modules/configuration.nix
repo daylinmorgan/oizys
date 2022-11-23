@@ -6,8 +6,9 @@
       <nixpkgs/nixos/modules/installer/virtualbox-demo.nix>
     ];
 
-  nix.package = pkgs.nixUnstable;
   nixpkgs.config.allowUnfree = true;
+
+  nix.package = pkgs.nixUnstable;
   nix.extraOptions = ''
     	experimental-features = nix-command flakes
     	'';
@@ -37,8 +38,6 @@
       shell = pkgs.zsh;
       isNormalUser = true;
       extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-      packages = with pkgs; [
-      ];
     };
   };
 
@@ -84,11 +83,6 @@
     gnome.gnome-settings-daemon
     catppuccin-gtk
 
-
-    # (python3.withPackages (p: with  p;
-    # [ pynvim ]))
-
-    # firefox
     wavebox
 
     pciutils
