@@ -1,12 +1,33 @@
 {
   "nodes": {
+    "nix-ld": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "utils": "utils"
+      },
+      "locked": {
+        "lastModified": 1652641841,
+        "narHash": "sha256-TTBz20XR2vmvOSDu8hXcbHbOEI0t/IWq8vZuRKyep1E=",
+        "owner": "Mic92",
+        "repo": "nix-ld",
+        "rev": "c25cc4b5ec65f03c2bb96f927ae724a59c51d7ee",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Mic92",
+        "repo": "nix-ld",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1673979550,
-        "narHash": "sha256-csZikluJGnqsnuPLN3s0lg0gMtUcKHkjw5eUid6UoS0=",
+        "lastModified": 1668132053,
+        "narHash": "sha256-eQ2/vjxbkEJmG1YJu58TK8S/AEB52MKrXPy5IhTH6nE=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "e93dd01af9a93c85404f3c828fe60905a0fc8f76",
+        "rev": "34f89bcce8711acb0e4de1203ed078b7976e08b2",
         "type": "github"
       },
       "original": {
@@ -18,7 +39,23 @@
     },
     "root": {
       "inputs": {
+        "nix-ld": "nix-ld",
         "nixpkgs": "nixpkgs"
+      }
+    },
+    "utils": {
+      "locked": {
+        "lastModified": 1652372896,
+        "narHash": "sha256-lURGussfF3mGrFPQT3zgW7+RC0pBhbHzco0C7I+ilow=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "0d347c56f6f41de822a4f4c7ff5072f3382db121",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
       }
     }
   },
