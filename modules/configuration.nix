@@ -18,7 +18,9 @@
   time.timeZone = "America/Chicago";
 
   programs.zsh.enable = true;
-  # overwrite demo as default login
+
+  programs.nix-ld.enable = true;
+
   services.xserver = {
     enable = true;
     displayManager.startx.enable = true;
@@ -92,7 +94,7 @@
     # firefox
     wavebox
 
-pciutils
+    pciutils
     (vivaldi.override {
       proprietaryCodecs = true;
       enableWidevine = false;
