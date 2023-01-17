@@ -55,6 +55,7 @@
     zsh
 
     wget
+    unzip
     less
     gnumake
     gcc
