@@ -14,6 +14,7 @@
     	'';
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  virtualisation.virtualbox.guest.enable = true;
   networking.hostName = "nixos-vm"; # Define your hostname.
 
   time.timeZone = "America/Chicago";
@@ -64,6 +65,7 @@
     neovim
     starship
     chezmoi
+    fzf
     delta
     gh
 
@@ -96,6 +98,5 @@
 
     go
     rustup
-
   ];
 }
