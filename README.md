@@ -27,3 +27,5 @@ I'm currently evaluating `nix`/`nixos` in a virtual machine.
 
 After some more experimentation with my flakes setup I will try to deploy it on a GCP server in order to host [git.dayl.in](https://git.dayl.in).
 
+
+Try to track the goal of the `check.sh` script.
