@@ -16,14 +16,14 @@
       isNormalUser = true;
     };
   };
-  
+
   services.resolved.enable = true;
   system.stateVersion = "22.11";
   nixpkgs.config.allowUnfree = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
- services.cron = {
+  services.cron = {
     enable = true;
     systemCronJobs = [
       # update repos
