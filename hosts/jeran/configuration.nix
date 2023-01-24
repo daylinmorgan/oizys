@@ -5,12 +5,14 @@
     "${inputs.nixpkgs}/nixos/modules/virtualisation/google-compute-image.nix"
   ];
   security.sudo.wheelNeedsPassword = false;
-  users.motd = (builtin.readFile "motd");
   users.defaultUserShell = pkgs.zsh;
-  users.extraUsers.daylin = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "docker" ];
-    useDefaultShell = true;
+  users.extraUsers = {
+    daylin = {
+      isNormalUser = true;
+      extraGroups = [ "wheel" "docker" ];
+      useDefaultShell = true;
+
+    };
   };
   services.openssh.passwordAuthentication = true;
   services.resolved.enable = true;
