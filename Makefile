@@ -1,3 +1,6 @@
+boot:
+	sudo nixos-rebuild boot --flake .
+
 ## switch | perform nixos rebuild
 switch:
 	sudo nixos-rebuild switch --flake .
@@ -6,7 +9,7 @@ switch:
 lint:
 	nixpkgs-fmt .
 
-.PHONY: lint switch
+.PHONY: lint switch boot
 
 USAGE := {a.style('==>','bold')} {a.style('flakes ftw','header')} {a.style('<==','bold')}\n
 -include .task.mk

@@ -11,20 +11,27 @@
       isNormalUser = true;
       extraGroups = [ "wheel" "docker" ];
       useDefaultShell = true;
-
+    };
+    git = {
+      isNormalUser = true;
     };
   };
-  services.openssh.passwordAuthentication = true;
+  
   services.resolved.enable = true;
   system.stateVersion = "22.11";
   nixpkgs.config.allowUnfree = true;
 
-  nix.package = pkgs.nixUnstable;
-  nix.extraOptions = ''
-    	experimental-features = nix-command flakes
-    	'';
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+ services.cron = {
+    enable = true;
+    systemCronJobs = [
+      # update repos
+      "0 * * * * make -C /home/daylin/git soft-repos"
+      # update container so home page is semi-accurate
+      "0 2 * * * make -C /home/daylin/git update-soft-serve"
+    ];
+  };
   networking.hostName = "jeran"; # Define your hostname.
   time.timeZone = "America/Chicago";
   programs.zsh.enable = true;
