@@ -1,18 +1,19 @@
-{ lib, config, pkgs, ... }:
+{ inputs, lib, config, pkgs, ... }:
 {
+  # TODO: put in hardware-configuration.nix
   imports = [
-    <nixpkgs/nixos/modules/virtualisation/google-compute-image.nix>
+    "${inputs.nixpkgs}/nixos/modules/virtualisation/google-compute-image.nix"
   ];
   security.sudo.wheelNeedsPassword = false;
-
- users.defaultUserShell = pkgs.zsh;
-users.extraUsers.daylin = {
-isNormalUser = true;
-extraGroups = ["wheel" "docker"];
-useDefaultShell = true;
-};
+  users.motd = (builtin.readFile "motd");
+  users.defaultUserShell = pkgs.zsh;
+  users.extraUsers.daylin = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" "docker" ];
+    useDefaultShell = true;
+  };
   services.openssh.passwordAuthentication = true;
-	
+  services.resolved.enable = true;
   system.stateVersion = "22.11";
   nixpkgs.config.allowUnfree = true;
 
@@ -27,14 +28,13 @@ useDefaultShell = true;
   programs.zsh.enable = true;
   programs.nix-ld.enable = true;
   virtualisation.docker.enable = true;
- 
+
   environment.systemPackages = with pkgs; [
     zsh
 
     tmux
     wget
     unzip
-    htop
     less
     gnumake
     gcc
@@ -48,18 +48,18 @@ useDefaultShell = true;
     atuin
     # sheldon
     chezmoi
-   
+
     fzf
     delta
     ripgrep
-	lsd
+    lsd
 
     gh
     lazygit
 
     nixpkgs-fmt
 
-	nodejs
+    nodejs
     go
     rustup
   ];

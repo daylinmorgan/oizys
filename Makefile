@@ -1,6 +1,6 @@
 ## switch | perform nixos rebuild
 switch:
-	sudo nixos-rebuild switch --flake . --impure
+	sudo nixos-rebuild switch --flake .
 	
 ## lint | format *.nix
 lint:

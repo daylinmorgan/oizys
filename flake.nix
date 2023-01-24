@@ -18,13 +18,14 @@
             ./modules/environment.nix
           ];
         };
-	jeran = inputs.nixpkgs.lib.nixosSystem {
-system = "x86_64-linux";
-modules = [
-            ./modules/configuration.nix
+        jeran = inputs.nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./hosts/jeran/configuration.nix
             ./modules/environment.nix
-];
+          ];
+          specialArgs = { inherit inputs; };
+        };
       };
     };
-};
 }
