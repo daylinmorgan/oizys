@@ -55,9 +55,8 @@
 
     starship
     atuin
-    # sheldon
     chezmoi
-
+    bat
     fzf
     delta
     ripgrep
@@ -67,6 +66,7 @@
     lazygit
 
     nixpkgs-fmt
+    lazydocker
 
     nodejs
     go
