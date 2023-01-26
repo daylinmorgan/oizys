@@ -13,10 +13,11 @@
         nixos-vm = inputs.nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
-            # ./modules/configuration.nix
+            ./modules/configuration.nix
             ./modules/overlays.nix
             ./modules/environment.nix
           ];
+          specialArgs = { inherit inputs; };
         };
         jeran = inputs.nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
@@ -24,7 +25,6 @@
             ./hosts/jeran/configuration.nix
             ./hosts/jeran/motd.nix
             ./modules/environment.nix
-
           ];
           specialArgs = { inherit inputs; };
         };
