@@ -68,6 +68,7 @@
     nixpkgs-fmt
     lazydocker
 
+    python3
     nodejs
     go
     rustup
