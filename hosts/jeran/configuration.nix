@@ -72,5 +72,6 @@
     nodejs
     go
     rustup
+    nim
   ];
 }
