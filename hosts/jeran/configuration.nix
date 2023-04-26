@@ -32,11 +32,17 @@
       "0 2 * * * make -C /home/daylin/git update-soft-serve"
     ];
   };
+
   networking.hostName = "jeran"; # Define your hostname.
   time.timeZone = "America/Chicago";
   programs.zsh.enable = true;
-  programs.nix-ld.enable = true;
   virtualisation.docker.enable = true;
+
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    stdenv.cc.cc
+    curl # for choosenim
+  ];
 
   environment.systemPackages = with pkgs; [
     zsh
@@ -47,6 +53,9 @@
     less
     gnumake
     gcc
+    gnupg
+
+    curl
 
     git
 
@@ -72,6 +81,5 @@
     nodejs
     go
     rustup
-    nim
   ];
 }
