@@ -2,7 +2,7 @@
   description = "An example NixOS configuration";
 
   inputs = {
-    nixpkgs = { url = "github:nixos/nixpkgs/22.11"; };
+    nixpkgs = { url = "github:nixos/nixpkgs/master"; };
   };
 
 
