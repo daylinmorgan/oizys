@@ -78,6 +78,8 @@
     lazydocker
 
     python3
+    micromamba
+
     nodejs
     go
     rustup
