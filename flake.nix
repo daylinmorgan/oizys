@@ -26,8 +26,8 @@
             ./modules/environment.nix
           ];
           specialArgs = { inherit inputs; };
-      	};
- 	algiz = inputs.nixpkgs.lib.nixosSystem {
+        };
+        algiz = inputs.nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             ./hosts/algiz/configuration.nix
@@ -36,6 +36,6 @@
           ];
           specialArgs = { inherit inputs; };
         };
+      };
     };
-};
 }

@@ -33,7 +33,7 @@
     ];
   };
 
-  networking.hostName = "algiz"; 
+  networking.hostName = "algiz";
   time.timeZone = "America/Chicago";
   programs.zsh.enable = true;
   virtualisation.docker.enable = true;
@@ -92,9 +92,9 @@
   boot.loader.grub.device = "/dev/vda"; # or "nodev" for efi only
 
   programs.gnupg.agent = {
-     enable = true;
-     enableSSHSupport = true;
-   };
+    enable = true;
+    enableSSHSupport = true;
+  };
 
   # List services that you want to enable:
 
