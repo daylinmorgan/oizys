@@ -9,7 +9,6 @@
   outputs = inputs:
     {
       nixosConfigurations = {
-
         nixos-vm = inputs.nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
@@ -27,7 +26,16 @@
             ./modules/environment.nix
           ];
           specialArgs = { inherit inputs; };
+      	};
+ 	algiz = inputs.nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./hosts/algiz/configuration.nix
+            ./hosts/algiz/motd.nix
+            ./modules/environment.nix
+          ];
+          specialArgs = { inherit inputs; };
         };
-      };
     };
+};
 }

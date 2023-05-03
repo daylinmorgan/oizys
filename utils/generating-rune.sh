@@ -1,16 +1,18 @@
-#!/usr/bin/env bash
+#! /usr/bin/env nix-shell
+#! nix-shell -i bash -p ascii-image-converter
+
 set -e
 declare -A IMG_SRC
 IMG_SRC=(
 	[jeran]=https://upload.wikimedia.org/wikipedia/commons/0/01/Runic_letter_jeran.png
 	[othalan]=https://upload.wikimedia.org/wikipedia/commons/1/16/Runic_letter_othalan.png
+	[algiz]=https://upload.wikimedia.org/wikipedia/commons/1/14/Runic_letter_algiz.png
 )
-
 
 if [[ $# -eq 0 ]]; then
 	echo please provide rune name
 	echo options:
-	for i in "${!IMG_SRC[@]}";do 
+	for i in "${!IMG_SRC[@]}"; do
 		echo $i
 	done
 	exit 1
