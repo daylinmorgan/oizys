@@ -5,8 +5,13 @@
     ./hardware-configuration.nix
   ];
   security.sudo.wheelNeedsPassword = false;
-  users.defaultUserShell = pkgs.zsh;
 
+  nix.package = pkgs.nixUnstable;
+  nix.extraOptions = ''
+    	experimental-features = nix-command flakes
+    	'';
+
+  users.defaultUserShell = pkgs.zsh;
   users.extraUsers = {
     daylin = {
       isNormalUser = true;
@@ -35,6 +40,12 @@
   };
 
   networking.hostName = "algiz";
+
+  # added to make using `pip install` work in docker build
+  networking.nameservers = [ 
+    "8.8.8.8"
+  ];
+
   time.timeZone = "America/Chicago";
   programs.zsh.enable = true;
   virtualisation.docker.enable = true;
@@ -104,10 +115,9 @@
   };
 
   # Enable the OpenSSH daemon.
-  services.openssh = {
-    enable = true;
-    settings.passwordAuthentication = false;
-  };
+  services.openssh.enable = true;
+  services.openssh.settings.passwordAuthentication = false;
+
   users.mutableUsers = false;
 
   # This value determines the NixOS release from which the default
