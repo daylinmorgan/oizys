@@ -116,7 +116,7 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-  services.openssh.settings.passwordAuthentication = false;
+  services.openssh.passwordAuthentication = false;
 
   users.mutableUsers = false;
 
