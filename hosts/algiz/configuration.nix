@@ -6,6 +6,7 @@
   ];
   security.sudo.wheelNeedsPassword = false;
   users.defaultUserShell = pkgs.zsh;
+
   users.extraUsers = {
     daylin = {
       isNormalUser = true;
@@ -36,7 +37,7 @@
   networking.hostName = "algiz";
   time.timeZone = "America/Chicago";
   programs.zsh.enable = true;
-  virtualisation.docker.enable = true;
+   virtualisation.docker.enable = true;
 
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [
@@ -96,11 +97,14 @@
     enableSSHSupport = true;
   };
 
-  # List services that you want to enable:
+  # allow tcp connections for git.dayl.in (gitea)
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 80 443 ];
+  };
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-  services.openssh.permitRootLogin = "no";
   users.mutableUsers = false;
 
   # This value determines the NixOS release from which the default
