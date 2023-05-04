@@ -37,7 +37,7 @@
   networking.hostName = "algiz";
   time.timeZone = "America/Chicago";
   programs.zsh.enable = true;
-   virtualisation.docker.enable = true;
+  virtualisation.docker.enable = true;
 
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [
@@ -104,7 +104,10 @@
   };
 
   # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    passwordAuthentication = false;
+  };
   users.mutableUsers = false;
 
   # This value determines the NixOS release from which the default
