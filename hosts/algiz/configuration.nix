@@ -5,6 +5,8 @@
   ];
   security.sudo.wheelNeedsPassword = false;
 
+  nixpkgs.config.allowUnfree = true;
+  
   nix.package = pkgs.nixUnstable;
   nix.extraOptions = ''
     	experimental-features = nix-command flakes
@@ -24,7 +26,7 @@
   };
 
   services.resolved.enable = true;
-  nixpkgs.config.allowUnfree = true;
+  services.fail2ban.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
