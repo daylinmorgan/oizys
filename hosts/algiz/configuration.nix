@@ -6,7 +6,7 @@
   security.sudo.wheelNeedsPassword = false;
 
   nixpkgs.config.allowUnfree = true;
-  
+
   nix.package = pkgs.nixUnstable;
   nix.extraOptions = ''
     	experimental-features = nix-command flakes
@@ -43,7 +43,7 @@
   networking.hostName = "algiz";
 
   # added to make using `pip install` work in docker build
-  networking.nameservers = [ 
+  networking.nameservers = [
     "8.8.8.8"
   ];
 
