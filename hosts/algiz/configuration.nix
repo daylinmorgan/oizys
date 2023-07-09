@@ -1,6 +1,5 @@
 { inputs, lib, config, pkgs, ... }:
 {
-  # TODO: put in hardware-configuration.nix
   imports = [
     ./hardware-configuration.nix
   ];
