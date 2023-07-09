@@ -101,7 +101,6 @@
 
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/vda"; # or "nodev" for efi only
 
   programs.gnupg.agent = {
@@ -117,7 +116,7 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-  services.openssh.passwordAuthentication = false;
+  services.openssh.settings.passwordAuthentication = false;
 
   users.mutableUsers = false;
 
