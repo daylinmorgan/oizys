@@ -27,44 +27,46 @@
 
   services.resolved.enable = true;
 
-  # fail2ban config based on:
-  # https://www.linode.com/docs/guides/how-to-use-fail2ban-for-ssh-brute-force-protection/
   services.fail2ban = {
     enable = true;
     maxretry = 5;
     bantime = "24h";
-    jails =
-      {
-        sshd = ''
-          port = ssh
-          filter = sshd
-          logpath = /var/log/auth.log
-          maxretry = 3
-          findtime = 300
-          bantime = 3600
-        '';
-      };
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  # TODO: convert this to a systemd service/timer
-  # services.cron = {
-  #   enable = true;
-  #   systemCronJobs = [
-  #     # update repos
-  #     "0 * * * * make -C /home/daylin/git soft-repos"
-  #     # update container so home page is semi-accurate
-  #     "0 2 * * * make -C /home/daylin/git update-soft-serve"
-  #   ];
-  # };
-  #
-  networking.hostName = "algiz";
+  systemd = {
+    timers.softServe = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        # every day at 4:AM
+        OnCalendar = "*-*-* 4:00:00";
+      };
+    };
+    services.softServe = {
+      wantedBy = [ "multi-user.target" ];
+      description = "update soft serve git repos";
+      serviceConfig = {
+        type = "oneshot";
+        ExecStart =
+          let gitDir = "/home/daylin/git";
+          in
+          ''
+            ${pkgs.python3.interpreter} "${gitDir}/soft/config/update-soft-serve-repos.py" && \
+            ${pkgs.docker} compose --project-directory ${gitDir} restart
+          '';
+      };
+    };
+  };
 
-  # added to make using `pip install` work in docker build
-  networking.nameservers = [
-    "8.8.8.8"
-  ];
+  networking = {
+    hostName = "algiz";
+
+    # added to make using `pip install` work in docker build
+    nameservers = [
+      "8.8.8.8"
+    ];
+  };
 
   time.timeZone = "America/Chicago";
   programs.zsh.enable = true;
