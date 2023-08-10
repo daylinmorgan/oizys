@@ -35,6 +35,7 @@
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  # systemd services in order to keep soft-serve list up to date
   systemd = {
     timers.softServe = {
       wantedBy = [ "timers.target" ];
