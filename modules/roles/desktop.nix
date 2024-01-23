@@ -5,9 +5,9 @@
   ...
 }: {
   imports = with inputs.self.nixosModules; [
+    fonts
     gui
     vscode
-    vpn
     hyprland
   ];
 }

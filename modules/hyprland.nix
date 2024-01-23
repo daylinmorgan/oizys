@@ -12,11 +12,6 @@ in
 {
   config = mkIf cfg.enable {
 
-  fonts.fontconfig.enable = true;
-  fonts.packages = with pkgs; [
-    (nerdfonts.override {fonts = ["FiraCode"];})
-  ];
-
   security.pam.services.swaylock = {};
   programs.hyprland.package = inputs.hyprland.packages.${pkgs.system}.default;
   # Optional, hint electron apps to use wayland:

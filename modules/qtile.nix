@@ -7,10 +7,6 @@
     ./lock
   ];
 
-  fonts.fontconfig.enable = true;
-  fonts.packages = with pkgs; [
-    (nerdfonts.override {fonts = ["FiraCode"];})
-  ];
 
   # Enable the X11 windowing system.
   services.xserver = {

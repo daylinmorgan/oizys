@@ -4,6 +4,7 @@
     cli
     dev
     nvim
+    vpn
 
     # langs
     python
