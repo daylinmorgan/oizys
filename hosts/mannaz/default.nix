@@ -6,23 +6,15 @@
   ...
 }: {
   imports = with inputs.self.nixosModules; [
-    ./hardware-configuration.nix
-    ./system.nix
-    ./motd.nix
-
-    cli
     desktop
-    dev
-    gui
-    nix
-    nix-ld
     nvim
+
+    gui
+    nix-ld
     virtualization
   ];
 
   environment.systemPackages = with pkgs; [
-    nix-output-monitor
-
     (vivaldi.override {
       proprietaryCodecs = true;
       # enableWidevine = true;
@@ -30,12 +22,11 @@
   ];
 
   users = {
-    defaultUserShell = pkgs.zsh;
     extraUsers = {
       daylin = {
+        shell = pkgs.zsh;
         isNormalUser = true;
         extraGroups = ["wheel" "docker" "networkmanager"];
-        useDefaultShell = true;
         initialPassword = "nix";
       };
     };
