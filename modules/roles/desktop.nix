@@ -5,10 +5,8 @@
   ...
 }: {
   imports = with inputs.self.nixosModules; [
-    common
     gui
     vscode
     vpn
-    # qtile
   ];
 }

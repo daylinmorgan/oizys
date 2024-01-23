@@ -1,4 +1,12 @@
-{pkgs, ...}: {
+{config, lib,pkgs,...}:
+let
+  inherit (lib) mkEnableOption mkIf;
+  cfg = config.languages.python;
+in
+{
+  options.languages.python.enable = mkEnableOption "python";
+  config = mkIf cfg.enable {
+
   environment.systemPackages = with pkgs; [
     # https://github.com/Mic92/nix-ld?tab=readme-ov-file#my-pythonnodejsrubyinterpreter-libraries-do-not-find-the-libraries-configured-by-nix-ld
     (pkgs.writeShellScriptBin "python" ''
@@ -14,4 +22,6 @@
     (python3.withPackages (ps: with ps; [pip]))
     micromamba
   ];
+
+};
 }

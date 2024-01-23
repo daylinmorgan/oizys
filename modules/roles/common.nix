@@ -7,5 +7,9 @@
 
     # langs
     python
+    misc
+    node
+    tex
+    nim
   ];
 }

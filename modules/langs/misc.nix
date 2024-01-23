@@ -1,12 +1,14 @@
+{config, lib,pkgs,...}:
+let
+  inherit (lib) mkEnableOption mkIf;
+  cfg = config.languages.misc;
+in
 {
-  inputs,
-  pkgs,
-  ...
-}: {
+  options.languages.misc.enable = mkEnableOption "go + rustup";
+  config = mkIf cfg.enable {
   environment.systemPackages = with pkgs; [
-    # language supports
-    nodejs
     go
     rustup
   ];
+};
 }

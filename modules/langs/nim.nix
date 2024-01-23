@@ -1,8 +1,11 @@
+{nixpkgs,config, lib,pkgs,...}:
+let
+  inherit (lib) mkEnableOption mkIf;
+  cfg = config.languages.nim;
+in
 {
-  pkgs,
-  nixpkgs,
-  ...
-}: {
+  options.languages.nim.enable = mkEnableOption "nim";
+  config = mkIf cfg.enable {
   nixpkgs.overlays = [
     # (import ../../overlays/nim {})
     (import ../../overlays/nimlsp {})
@@ -16,4 +19,5 @@
     nimble
     nimlsp
   ];
+};
 }

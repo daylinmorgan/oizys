@@ -12,14 +12,17 @@
     virtualization
 
     restic
-
-    # langs
-    misc
-    nim
-    node
-    tex
   ];
+
   services.vpn.enable = true;
+
+  languages = {
+    misc.enable = true;
+    python.enable = true;
+    nim.enable = true;
+    tex.enable = true;
+    node.enable = true;
+  };
 
 
   services.restic.backups.gdrive = {
