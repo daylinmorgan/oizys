@@ -7,7 +7,7 @@ in
   options.languages.nim.enable = mkEnableOption "nim";
   config = mkIf cfg.enable {
   nixpkgs.overlays = [
-    # (import ../../overlays/nim {})
+    (import ../../overlays/nim {})
     (import ../../overlays/nimlsp {})
     (import ../../overlays/nimble {})
     (import ../../overlays/nim-atlas {})
