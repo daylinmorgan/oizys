@@ -14,8 +14,9 @@ jobs:
         host: ["othalan", "algiz"]
     runs-on: ubuntu-latest
     steps:
-      - run: sudo du /opt/* -sh
+      # free up some space
       - run: sudo rm -rf /opt&
+
       - uses: actions/checkout@v4
       - uses: cachix/install-nix-action@v25 # v25
         with:
