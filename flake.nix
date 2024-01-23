@@ -9,6 +9,11 @@
     wezterm.url = "github:wez/wezterm?dir=nix";
   };
 
+  nixConfig = {
+    extra-substituters = [ "https://daylin.cachix.org"];
+    extra-trusted-public-keys = ["daylin.cachix.org-1:fLdSnbhKjtOVea6H9KqXeir+PyhO+sDSPhEW66ClE/k="];
+  };
+
   outputs = inputs @ {
     self,
     nixpkgs,

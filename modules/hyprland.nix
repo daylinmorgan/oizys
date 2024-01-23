@@ -32,7 +32,7 @@
     catppuccin-cursors.mochaDark
     pavucontrol
   ];
-  nixpkgs.overlays =  [ inputs.nixpkgs-wayland.overlay ];
+  nixpkgs.overlays = [inputs.nixpkgs-wayland.overlay];
   # wayland extras
   nix.settings = {
     # add binary caches

@@ -1,4 +1,4 @@
-{...}:{
+{...}: {
   services.restic.backups.gdrive = {
     extraBackupArgs = [
       "--exclude-file /home/daylin/.config/restic/excludes.txt"
@@ -21,5 +21,4 @@
       RandomizedDelaySec = "5h";
     };
   };
-
 }
