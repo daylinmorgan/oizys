@@ -32,11 +32,11 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
       - name: Build
         run: |
-          cachix watch-store daylin
+          cachix watch-exec daylin -- \
           nix build \
             '.#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel' \
             --accept-flake-config \
-            --print-build-log
+            --print-build-logs
       - name: Push
         env:
           CACHIX_ACTIVATE_TOKEN: "${{ secrets.CACHIX_ACTIVATE_TOKEN }}"
