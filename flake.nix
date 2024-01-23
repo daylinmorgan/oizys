@@ -4,9 +4,13 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
+    nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     hyprland.url = "github:hyprwm/Hyprland/main";
+    hyprland.inputs.nixpkgs.follows = "nixpkgs";
     hyprland-contrib.url = "github:hyprwm/contrib";
+    hyprland-contrib.inputs.nixpkgs.follows = "nixpkgs";
     wezterm.url = "github:wez/wezterm?dir=nix";
+    wezterm.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   nixConfig = {
