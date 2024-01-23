@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+
+set -e
+
+# rewrite as python script?
+
+FLAKE_PATH=$HOME/nixcfg
+
+DIM="$(tput dim)"
+BOLD="$(tput bold)"
+RED="$(tput setaf 1)"
+GREEN="$(tput setaf 2)"
+YELLOW="$(tput setaf 3)"
+CYAN="$(tput setaf 4)"
+RESET="$(tput sgr0)"
+PREFIX="${CYAN}styx${RESET}"
+
+log() {
+	printf "%s | %s\n" "$PREFIX" "$*"
+}
+
+error() {
+	printf "%s | %s | %s\n" "$PREFIX" "${RED}error${RESET}" "$*"
+}
+
+help() {
+	cat <<EOF
+styx <cmd> [-h]
+  ${DIM}sister moon to nix on pluto
+  sister software to nix in this repo${RESET}
+
+  pass additional args with -- --key value
+${BOLD}commands${RESET}:
+EOF
+	printf "${GREEN}%8s${RESET} | ${YELLOW}%s${RESET}\n" \
+    fmt "format *.nix" \
+    build "build and monitor with nom" \
+    boot "evaluate flake for next boot" \
+    switch "perform nixos rebuild" \
+    store "run some store cleanup"
+	exit
+}
+
+fmt() {
+	alejandra . "$@"
+}
+
+boot() {
+	sudo nixos-rebuild boot --flake "$FLAKE_PATH" "$@"
+}
+
+switch() {
+	sudo nixos-rebuild switch --flake "$FLAKE_PATH" "$@"
+}
+
+store() {
+	nix store optimise "$@"
+}
+
+build() {
+  nom build "$FLAKE_PATH#nixosConfigurations.$(hostname).config.system.build.toplevel"
+  case "$1" in
+    switch | boot | test ) sudo ./result/bin/switch-to-configuration "$1";;
+  esac
+}
+
+if [[ $# -eq 0 ]]; then
+	log no command specified see below for help
+	help
+fi
+
+while [[ $# -gt 0 ]]; do
+	case $1 in
+	fmt | boot | switch | store | build)
+		cmd=$1
+		shift
+		;;
+	-h | --help)
+		help
+		;;
+	--)
+		# stop parsing and foward the rest of the args
+		shift
+		break
+		;;
+	-*,--*)
+		error "unknown flag: ${BOLD}$1${RESET}"
+		exit 1
+		;;
+	*)
+		error "unknown command: ${BOLD}$1${RESET}"
+		exit 1
+		;;
+	esac
+done
+
+if [[ $# -gt 0 ]]; then
+	echo "forwarding args: ${BOLD}$*${RESET}"
+fi
+
+$cmd "$@"

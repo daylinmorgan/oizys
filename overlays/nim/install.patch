@@ -1,0 +1,10 @@
+diff --git a/install.sh b/install.sh
+@@ -1113,6 +1113,8 @@
+   chmod 644 "$nimbleDir/doc/advopt.txt"
+   cp "doc/nimdoc.css" "$nimbleDir/doc/nimdoc.css"
+   chmod 644 "$nimbleDir/doc/nimdoc.css"
++  cp "doc/nimdoc.cls" "$nimbleDir/doc/nimdoc.cls"
++  chmod 644 "$nimbleDir/doc/nimdoc.cls"
+ cp "nim.nimble" "$nimbleDir/nim.nimble"
+ chmod 644 "$nimbleDir/nim.nimble"
+ 
