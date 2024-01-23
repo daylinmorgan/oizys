@@ -22,4 +22,14 @@
     nix-output-monitor
     alejandra
   ];
+
+  nix.settings = {
+    trusted-users = ["daylin"];
+    substituters = [
+      "https://daylin.cachix.org"
+    ];
+     trusted-public-keys = [
+      "daylin.cachix.org-1:fLdSnbhKjtOVea6H9KqXeir+PyhO+sDSPhEW66ClE/k="
+    ];
+  };
 }
