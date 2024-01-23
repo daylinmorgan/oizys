@@ -7,12 +7,13 @@
   inherit (nixpkgs.lib) hasSuffix nixosSystem;
   inherit (nixpkgs.lib.filesystem) listFilesRecursive;
 in rec {
+  isNixFile = path: hasSuffix ".nix" path;
+
   mkSystem = hostname:
     nixosSystem {
       system = "x86_64-linux";
       modules =
-        builtins.filter
-        (path: hasSuffix ".nix" path) (listFilesRecursive (../. + "/hosts/${hostname}"));
+        builtins.filter isNixFile (listFilesRecursive (../. + "/hosts/${hostname}"));
       specialArgs = {inherit inputs;};
     };
 
