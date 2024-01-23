@@ -12,7 +12,10 @@ jobs:
   build:
     strategy:
       matrix:
-        host: ["othalan", "algiz", "mannaz"]
+        host: ["algiz", "othalan", "mannaz"]
+        # try to use the cache here along the way
+      fail-fast: true
+      max-parallel: 1
     runs-on: ubuntu-latest
     steps:
       # free up some space
