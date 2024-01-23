@@ -5,7 +5,6 @@
   ...
 }: {
   imports = with inputs.self.nixosModules; [
-    common
     desktop
     hyprland
 
@@ -20,6 +19,9 @@
     node
     tex
   ];
+  services.vpn.enable = true;
+
+
   services.restic.backups.gdrive = {
     user = "daylin";
     repository = "rclone:g:archives/othalan";
@@ -31,9 +33,6 @@
     zk
     rclone
     quarto
-
-    expect
-    openconnect
   ];
 
   programs.gnupg.agent = {

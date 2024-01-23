@@ -8,6 +8,7 @@
     common
     gui
     vscode
+    vpn
     # qtile
   ];
 }
