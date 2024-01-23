@@ -64,6 +64,11 @@ build() {
   esac
 }
 
+dry() {
+  # poor mans nix flake check
+  nix build "$FLAKE_PATH#nixosConfigurations.$(hostname).config.system.build.toplevel" --dry-run
+}
+
 if [[ $# -eq 0 ]]; then
 	log no command specified see below for help
 	help
@@ -71,7 +76,7 @@ fi
 
 while [[ $# -gt 0 ]]; do
 	case $1 in
-	fmt | boot | switch | store | build)
+	fmt | boot | switch | store | build | dry)
 		cmd=$1
 		shift
 		;;
