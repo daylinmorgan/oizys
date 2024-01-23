@@ -6,6 +6,7 @@ in
 {
   options.languages.misc.enable = mkEnableOption "go + rustup";
   config = mkIf cfg.enable {
+
   environment.systemPackages = with pkgs; [
     go
     rustup

@@ -1,8 +1,13 @@
+{config, lib,pkgs,...}:
+let
+  inherit (lib) mkEnableOption mkIf;
+  cfg = config.cli;
+in
 {
-  inputs,
-  pkgs,
-  ...
-}: {
+  options.cli.enable = mkEnableOption "cli";
+  config = mkIf cfg.enable {
+
+
   programs.direnv.enable = true;
   environment.systemPackages = with pkgs; [
     chezmoi
@@ -17,5 +22,7 @@
     ripgrep
 
     btop
+
   ];
+};
 }

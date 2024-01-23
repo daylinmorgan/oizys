@@ -6,13 +6,14 @@
 }: {
   imports = with inputs.self.nixosModules; [
     desktop
-    hyprland
+  #  hyprland
 
     nix-ld
     virtualization
 
     restic
   ];
+  programs.hyprland.enable = true;
 
   services.vpn.enable = true;
 
@@ -23,7 +24,7 @@
     tex.enable = true;
     node.enable = true;
   };
-
+  cli.enable = true;
 
   services.restic.backups.gdrive = {
     user = "daylin";
@@ -43,7 +44,6 @@
     enableSSHSupport = true;
   };
 
-  programs.zsh.enable = true;
   users.users.daylin = {
     isNormalUser = true;
     shell = pkgs.zsh;

@@ -4,17 +4,19 @@
   ...
 }: {
   imports = with inputs.self.nixosModules; [
-    common
     docker
-
-    # langs
-    nim
-    python
   ];
+
+  languages = {
+    nim.enable = true;
+    python.enable = true;
+  };
+  cli.enable =true;
 
   environment.systemPackages = with pkgs; [
     rclone
   ];
+
   # https://francis.begyn.be/blog/nixos-restic-backups
   # TODO: parameterize to use on algiz AND othalan ...
   services.restic.backups.gdrive = {
@@ -33,7 +35,6 @@
       shell = pkgs.zsh;
       isNormalUser = true;
       extraGroups = ["wheel" "docker"];
-      useDefaultShell = true;
       initialPassword = "nix";
     };
     git = {

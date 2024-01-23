@@ -8,5 +8,6 @@
     gui
     vscode
     vpn
+    hyprland
   ];
 }
