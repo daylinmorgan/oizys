@@ -2,8 +2,7 @@
 
 set -e
 
-# rewrite as python script?
-
+TERM=${TERM:-dumb}
 HOSTNAME=${HOSTNAME:-$(hostname)}
 FLAKE_PATH=${FLAKE_PATH:-$HOME/nixcfg}
 
