@@ -34,7 +34,7 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
       - name: Build
         run: |
-          for host in "$HOSTS"
+          for host in "${HOSTS[@]}"
           do
             cachix watch-exec daylin -- \
             nix build \
