@@ -35,13 +35,12 @@ jobs:
       - name: Build
         shell: bash
         run: |
-          #for host in "${HOSTS[@]}"
-          for host in algiz othalan mannaz
+          # for host in algiz othalan mannaz
+          for host in ${HOSTS[@]}
           do
             cachix watch-exec daylin -- \
             nix build \
               ".#nixosConfigurations.$host.config.system.build.toplevel" \
-              --accept-flake-config \
               --print-build-logs
           done
       - name: Push
