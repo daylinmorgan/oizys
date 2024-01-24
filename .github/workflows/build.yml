@@ -38,7 +38,8 @@ jobs:
           # for host in algiz othalan mannaz
           for host in ${HOSTS[@]}
           do
-            cachix watch-exec daylin -- \
+            cachix watch-exec daylin \
+            -- \
             nix build \
               ".#nixosConfigurations.$host.config.system.build.toplevel" \
               --print-build-logs
