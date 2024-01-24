@@ -33,6 +33,7 @@ jobs:
           name: daylin
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
       - name: Build
+        shell: bash
         run: |
           for host in "${HOSTS[@]}"
           do
