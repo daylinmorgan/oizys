@@ -13,8 +13,8 @@ in rec {
     nixosSystem {
       system = "x86_64-linux";
       modules =
-        [ ../modules/roles/common.nix ] ++
-        builtins.filter isNixFile (listFilesRecursive (../. + "/hosts/${hostname}"));
+        [../modules/roles/common.nix]
+        ++ builtins.filter isNixFile (listFilesRecursive (../. + "/hosts/${hostname}"));
       specialArgs = {inherit inputs;};
     };
 

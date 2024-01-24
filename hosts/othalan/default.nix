@@ -6,7 +6,7 @@
 }: {
   imports = with inputs.self.nixosModules; [
     desktop
-  #  hyprland
+    #  hyprland
 
     nix-ld
     virtualization

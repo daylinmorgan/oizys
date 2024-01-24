@@ -1,14 +1,17 @@
-{config, lib,pkgs,...}:
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.languages.node;
-in
-{
+in {
   options.languages.node.enable = mkEnableOption "node";
   config = mkIf cfg.enable {
-  environment.systemPackages = with pkgs; [
-        nodejs
-    nodePackages.pnpm
-  ];
-};
+    environment.systemPackages = with pkgs; [
+      nodejs
+      nodePackages.pnpm
+    ];
+  };
 }

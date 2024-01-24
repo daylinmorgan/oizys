@@ -1,5 +1,9 @@
-{config, lib,pkgs,...}:
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.services.vpn;
 in {
