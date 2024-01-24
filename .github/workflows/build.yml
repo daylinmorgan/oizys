@@ -50,7 +50,7 @@ jobs:
         run: |
           for host in ${HOSTS[@]}
           do
-            ./modules/styx/styx cache --host $host --flake .
+            nix run ".#styx" -- cache --host $host --flake .
           done
       # - name: Push
       #   env:
