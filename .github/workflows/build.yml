@@ -46,11 +46,10 @@ jobs:
           name: daylin
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
       - name: Build
-        shell: bash
         run: |
           for host in ${HOSTS[@]}
           do
-            ./styx -- cache --host $host --flake .
+            nix run ".#styx" -- cache --host $host --flake .
           done
       # - name: Push
       #   env:
