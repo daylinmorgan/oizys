@@ -69,11 +69,19 @@ dry() {
   nix build "$FLAKE_PATH#nixosConfigurations.$(hostname).config.system.build.toplevel" --dry-run
 }
 
+
 cache() {
+  start=$(date +%s)
+
   cachix watch-exec daylin \
     -- \
     nix build "$FLAKE_PATH#nixosConfigurations.${HOSTNAME}.config.system.build.toplevel" \
     --print-build-logs
+
+  end=$(date +%s)
+  runtime=$(date -d@$((end-start)) +'%M minutes, %S seconds')
+
+  echo "Built host: ${HOSTNAME} in ${runtime} seconds" >> "$GITHUB_OUTPUT_SUMMARY"
 }
 
 

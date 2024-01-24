@@ -1,5 +1,5 @@
 {
-  input,
+  inputs,
   pkgs,
   ...
 }: {
@@ -19,6 +19,7 @@
   environment.systemPackages = with pkgs; [
     nix-output-monitor
     alejandra
+    inputs.self.packages.${pkgs.system}.styx
   ];
 
   nix.settings = {
