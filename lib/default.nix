@@ -7,6 +7,8 @@
   inherit (nixpkgs.lib) hasSuffix nixosSystem;
   inherit (nixpkgs.lib.filesystem) listFilesRecursive;
 in rec {
+  nixpkgsFor = system: import nixpkgs {inherit system;};
+
   isNixFile = path: hasSuffix ".nix" path;
 
   mkSystem = hostname:

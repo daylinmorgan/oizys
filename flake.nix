@@ -23,8 +23,11 @@
     ...
   }: let
     lib = import ./lib {inherit inputs nixpkgs;};
+    inherit (lib) findModules nixpkgsFor mapHosts;
+    inherit (builtins) listToAttrs readFile;
   in {
-    nixosModules = builtins.listToAttrs (lib.findModules ./modules);
-    nixosConfigurations = lib.mapHosts ./hosts;
+    nixosModules = listToAttrs (findModules ./modules);
+    nixosConfigurations = mapHosts ./hosts;
+    packages.x86_64-linux.styx = (nixpkgsFor "x86_64-linux").writeScriptBin "styx" (readFile ./styx);
   };
 }
