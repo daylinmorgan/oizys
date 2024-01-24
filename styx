@@ -5,7 +5,7 @@ set -e
 # rewrite as python script?
 
 HOSTNAME=${HOSTNAME:-$(hostname)}
-FLAKE_PATH=${FLAKE_PATH-:$HOME/nixcfg}
+FLAKE_PATH=${FLAKE_PATH:-$HOME/nixcfg}
 
 DIM="$(tput dim)"
 BOLD="$(tput bold)"
@@ -30,7 +30,6 @@ styx <cmd> [-h]
   ${DIM}sister moon to nix on pluto
   sister software to nix in this repo${RESET}
 
-  pass additional args with -- --key value
 ${BOLD}commands${RESET}:
 EOF
 	printf "${GREEN}%8s${RESET} | ${YELLOW}%s${RESET}\n" \
@@ -38,7 +37,8 @@ EOF
     build "build and monitor with nom" \
     boot "evaluate flake for next boot" \
     switch "perform nixos rebuild" \
-    store "run some store cleanup"
+    store "run some store cleanup" \
+    cache "nix build and push to daylin.cachix.org"
 	exit
 }
 
@@ -99,6 +99,10 @@ while [[ $# -gt 0 ]]; do
     ;;
   --help)
 		help
+    ;;
+  --)
+    shift
+    break
 		;;
 	-*,--*)
 		error "unknown flag: ${BOLD}$1${RESET}"
@@ -114,7 +118,6 @@ done
 if [[ $# -gt 0 ]]; then
 	echo "forwarding args: ${BOLD}$*${RESET}"
 fi
-
 
 
 $cmd "$@"

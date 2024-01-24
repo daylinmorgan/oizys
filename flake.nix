@@ -23,8 +23,10 @@
     ...
   }: let
     lib = import ./lib {inherit inputs nixpkgs;};
+    inherit (lib) findModules mapHosts shToPkg;
   in {
-    nixosModules = builtins.listToAttrs (lib.findModules ./modules);
-    nixosConfigurations = lib.mapHosts ./hosts;
+    nixosModules = findModules ./modules;
+    nixosConfigurations = mapHosts ./hosts;
+    packages = shToPkg ./styx;
   };
 }
