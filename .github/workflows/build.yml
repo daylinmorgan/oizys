@@ -9,15 +9,10 @@ on:
       - main
 env:
   HOSTS: "algiz othalan mannaz"
+  TERM: xterm # so styx will just get on with it
 
 jobs:
   build:
-    # strategy:
-      # matrix:
-        # hosts: "algiz othalan mannaz"
-        # try to use the cache here along the way
-      # fail-fast: true
-      # max-parallel: 1
     runs-on: ubuntu-latest
     steps:
       # free up some space
