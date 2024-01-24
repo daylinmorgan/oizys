@@ -7,15 +7,17 @@ on:
   pull_request:
     branches:
       - main
+env:
+  HOSTS: "algiz othalan mannaz"
 
 jobs:
   build:
-    strategy:
-      matrix:
-        host: ["algiz", "othalan", "mannaz"]
+    # strategy:
+      # matrix:
+        # hosts: "algiz othalan mannaz"
         # try to use the cache here along the way
-      fail-fast: true
-      max-parallel: 1
+      # fail-fast: true
+      # max-parallel: 1
     runs-on: ubuntu-latest
     steps:
       # free up some space
@@ -32,11 +34,14 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
       - name: Build
         run: |
-          cachix watch-exec daylin -- \
-          nix build \
-            '.#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel' \
-            --accept-flake-config \
-            --print-build-logs
+          for host in "$HOSTS"
+          do
+            cachix watch-exec daylin -- \
+            nix build \
+              ".#nixosConfigurations.$host.config.system.build.toplevel" \
+              --accept-flake-config \
+              --print-build-logs
+          done
       - name: Push
         env:
           CACHIX_ACTIVATE_TOKEN: "${{ secrets.CACHIX_ACTIVATE_TOKEN }}"
