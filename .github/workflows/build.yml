@@ -35,7 +35,8 @@ jobs:
       - name: Build
         shell: bash
         run: |
-          for host in "${HOSTS[@]}"
+          #for host in "${HOSTS[@]}"
+          for host in algiz othalan mannaz
           do
             cachix watch-exec daylin -- \
             nix build \
