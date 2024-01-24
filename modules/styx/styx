@@ -4,7 +4,8 @@ set -e
 
 # rewrite as python script?
 
-FLAKE_PATH=$HOME/nixcfg
+HOSTNAME=${HOSTNAME:-$(hostname)}
+FLAKE_PATH=${FLAKE_PATH-:$HOME/nixcfg}
 
 DIM="$(tput dim)"
 BOLD="$(tput bold)"
@@ -69,6 +70,14 @@ dry() {
   nix build "$FLAKE_PATH#nixosConfigurations.$(hostname).config.system.build.toplevel" --dry-run
 }
 
+cache() {
+  cachix watch-exec daylin \
+    -- \
+    nix build "$FLAKE_PATH#nixosConfigurations.${HOSTNAME}.config.system.build.toplevel" \
+    --print-build-logs
+}
+
+
 if [[ $# -eq 0 ]]; then
 	log no command specified see below for help
 	help
@@ -76,17 +85,20 @@ fi
 
 while [[ $# -gt 0 ]]; do
 	case $1 in
-	fmt | boot | switch | store | build | dry)
+	fmt | boot | switch | store | build | dry | cache)
 		cmd=$1
 		shift
 		;;
-	-h | --help)
-		help
+  -f | --flake)
+    FLAKE_PATH="$2"
+    shift; shift;
 		;;
-	--)
-		# stop parsing and foward the rest of the args
-		shift
-		break
+  -h | --host)
+    HOSTNAME="$2"
+    shift; shift;
+    ;;
+  --help)
+		help
 		;;
 	-*,--*)
 		error "unknown flag: ${BOLD}$1${RESET}"
@@ -102,5 +114,7 @@ done
 if [[ $# -gt 0 ]]; then
 	echo "forwarding args: ${BOLD}$*${RESET}"
 fi
+
+
 
 $cmd "$@"

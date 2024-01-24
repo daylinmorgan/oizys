@@ -38,7 +38,7 @@ jobs:
             https://hyprland.cachix.org
             https://nixpkgs-wayland.cachix.org
             https://daylin.cachix.org
-            cache.nixos.org
+            https://cache.nixos.org
 
       - uses: DeterminateSystems/magic-nix-cache-action@v2
       - uses: cachix/cachix-action@v14
@@ -48,16 +48,11 @@ jobs:
       - name: Build
         shell: bash
         run: |
-          # for host in algiz othalan mannaz
           for host in ${HOSTS[@]}
           do
-            cachix watch-exec daylin \
-            -- \
-            nix build \
-              ".#nixosConfigurations.$host.config.system.build.toplevel" \
-              --print-build-logs
+            ./modules/styx/styx cache --host $host --flake .
           done
-      - name: Push
-        env:
-          CACHIX_ACTIVATE_TOKEN: "${{ secrets.CACHIX_ACTIVATE_TOKEN }}"
-        run: cachix push daylin ./result
+      # - name: Push
+      #   env:
+      #     CACHIX_ACTIVATE_TOKEN: "${{ secrets.CACHIX_ACTIVATE_TOKEN }}"
+      #   run: cachix push daylin ./result
