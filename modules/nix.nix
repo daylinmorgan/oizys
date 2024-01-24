@@ -3,9 +3,6 @@
   pkgs,
   ...
 }: {
-  imports = [
-    ./styx
-  ];
   nixpkgs.config.allowUnfree = true;
   nix.package = pkgs.nixUnstable;
   nix.extraOptions = ''
