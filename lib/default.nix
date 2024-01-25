@@ -8,8 +8,9 @@
   inherit (nixpkgs.lib.filesystem) listFilesRecursive;
 
   supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
-  forAllSystems = f: genAttrs supportedSystems (system: f nixpkgs.legacyPackages.${system});
 in rec {
+  forAllSystems = f: genAttrs supportedSystems (system: f nixpkgs.legacyPackages.${system});
+
   shToPkg = path:
     forAllSystems (
       pkgs: let

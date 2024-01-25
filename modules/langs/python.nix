@@ -5,7 +5,7 @@
   ...
 }: let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.languages ;
+  cfg = config.languages;
 in {
   options.languages.python = mkEnableOption "python";
   config = mkIf cfg.python {
