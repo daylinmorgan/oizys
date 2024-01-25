@@ -5,10 +5,10 @@
   ...
 }: let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.languages.tex;
+  cfg = config.languages;
 in {
-  options.languages.tex.enable = mkEnableOption "tex";
-  config = mkIf cfg.enable {
+  options.languages.tex = mkEnableOption "tex";
+  config = mkIf cfg.tex {
     environment.systemPackages = with pkgs; [
       texlive.combined.scheme-full
     ];

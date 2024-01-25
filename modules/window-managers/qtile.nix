@@ -1,17 +1,16 @@
 {
-  input,
+  inputs,
   pkgs,
   ...
 }: {
-  imports = [
-    ./lock
+  imports = with inputs.self.nixosModules; [
+    lock
   ];
 
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
     displayManager.startx.enable = true;
-    desktopManager.plasma5.enable = true;
     windowManager.qtile.enable = true;
   };
 

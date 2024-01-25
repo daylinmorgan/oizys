@@ -5,10 +5,10 @@
   ...
 }: let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.languages.python;
+  cfg = config.languages ;
 in {
-  options.languages.python.enable = mkEnableOption "python";
-  config = mkIf cfg.enable {
+  options.languages.python = mkEnableOption "python";
+  config = mkIf cfg.python {
     environment.systemPackages = with pkgs; [
       # https://github.com/Mic92/nix-ld?tab=readme-ov-file#my-pythonnodejsrubyinterpreter-libraries-do-not-find-the-libraries-configured-by-nix-ld
       (pkgs.writeShellScriptBin "python" ''

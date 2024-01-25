@@ -9,8 +9,7 @@
     #  hyprland
 
     nix-ld
-    virtualization
-
+    virtualbox
     restic
   ];
   programs.hyprland.enable = true;
@@ -18,11 +17,11 @@
   services.vpn.enable = true;
 
   languages = {
-    misc.enable = true;
-    python.enable = true;
-    nim.enable = true;
-    tex.enable = true;
-    node.enable = true;
+    misc = true;
+    python = true;
+    nim = true;
+    tex = true;
+    node = true;
   };
   cli.enable = true;
 

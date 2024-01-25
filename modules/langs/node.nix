@@ -5,10 +5,10 @@
   ...
 }: let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.languages.node;
+  cfg = config.languages;
 in {
-  options.languages.node.enable = mkEnableOption "node";
-  config = mkIf cfg.enable {
+  options.languages.node = mkEnableOption "node";
+  config = mkIf cfg.node {
     environment.systemPackages = with pkgs; [
       nodejs
       nodePackages.pnpm

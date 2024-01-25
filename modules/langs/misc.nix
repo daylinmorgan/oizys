@@ -5,10 +5,10 @@
   ...
 }: let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.languages.misc;
+  cfg = config.languages;
 in {
-  options.languages.misc.enable = mkEnableOption "go + rustup";
-  config = mkIf cfg.enable {
+  options.languages.misc = mkEnableOption "go + rustup";
+  config = mkIf cfg.misc {
     environment.systemPackages = with pkgs; [
       go
       rustup

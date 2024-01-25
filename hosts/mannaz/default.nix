@@ -11,14 +11,6 @@
 
     gui
     nix-ld
-    virtualization
-  ];
-
-  environment.systemPackages = with pkgs; [
-    (vivaldi.override {
-      proprietaryCodecs = true;
-      # enableWidevine = true;
-    })
   ];
 
   users = {

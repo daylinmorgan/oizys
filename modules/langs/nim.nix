@@ -6,10 +6,10 @@
   ...
 }: let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.languages.nim;
+  cfg = config.languages;
 in {
-  options.languages.nim.enable = mkEnableOption "nim";
-  config = mkIf cfg.enable {
+  options.languages.nim = mkEnableOption "nim";
+  config = mkIf cfg.nim {
     nixpkgs.overlays = [
       (import ../../overlays/nim {})
       (import ../../overlays/nimlsp {})

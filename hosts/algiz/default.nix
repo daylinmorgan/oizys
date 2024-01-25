@@ -8,8 +8,8 @@
   ];
 
   languages = {
-    nim.enable = true;
-    python.enable = true;
+    nim= true;
+    python= true;
   };
   cli.enable = true;
 
