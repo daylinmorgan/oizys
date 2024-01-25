@@ -101,7 +101,8 @@ while [[ $# -gt 0 ]]; do
     shift; shift;
 		;;
   -h | --host)
-    HOSTNAME="$2"
+    shift
+    HOSTNAME="$1"
     shift;
     ;;
   --help)
