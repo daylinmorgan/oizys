@@ -58,7 +58,7 @@ store() {
 }
 
 build() {
-  nom build "$FLAKE_PATH#nixosConfigurations.$(hostname).config.system.build.toplevel"
+  nom build "$FLAKE_PATH#nixosConfigurations.${HOSTNAME}.config.system.build.toplevel"
   case "$1" in
     switch | boot | test ) sudo ./result/bin/switch-to-configuration "$1";;
   esac
@@ -66,7 +66,7 @@ build() {
 
 dry() {
   # poor mans nix flake check
-  nix build "$FLAKE_PATH#nixosConfigurations.$(hostname).config.system.build.toplevel" --dry-run
+  nix build "$FLAKE_PATH#nixosConfigurations.${HOSTNAME}.config.system.build.toplevel" --dry-run
 }
 
 
@@ -81,7 +81,7 @@ cache() {
   end=$(date +%s)
   runtime=$(date -d@$((end-start)) +'%M minutes, %S seconds')
 
-  echo "Built host: ${HOSTNAME} in ${runtime} seconds" >> "$GITHUB_OUTPUT_SUMMARY"
+  echo "Built host: ${HOSTNAME} in ${runtime} seconds" >> "$GITHUB_STEP_SUMMARY"
 }
 
 
