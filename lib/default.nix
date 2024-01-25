@@ -7,19 +7,14 @@
   inherit (nixpkgs.lib) hasSuffix nixosSystem genAttrs;
   inherit (nixpkgs.lib.filesystem) listFilesRecursive;
 
-  # https://xeiaso.net/blog/nix-flakes-1-2022-02-21/
   supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
-  forAllSystems = genAttrs supportedSystems;
-  nixpkgsFor = forAllSystems (system: import nixpkgs {inherit system;});
+  forAllSystems = f: genAttrs supportedSystems (system: f nixpkgs.legacyPackages.${system});
 in rec {
   shToPkg = path:
     forAllSystems (
-      system: let
+      pkgs: let
         name = baseNameOf path;
-        pkgs = nixpkgsFor.${system};
-      in {
-        ${name} = pkgs.writeScriptBin name (readFile path);
-      }
+      in {${name} = pkgs.writeScriptBin name (readFile path);}
     );
 
   isNixFile = path: hasSuffix ".nix" path;
