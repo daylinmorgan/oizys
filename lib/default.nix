@@ -14,10 +14,9 @@ in rec {
   buildStyx = _:
     forAllSystems (
       pkgs: let
-        name = baseNameOf ../styx;
-        pkg = pkgs.writeScriptBin name (readFile ../styx/styx.sh);
+        pkg = pkgs.callPackage ../styx {};
       in {
-        ${name} = pkg;
+        styx = pkg;
         default = pkg;
       }
     );
