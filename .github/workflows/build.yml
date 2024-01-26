@@ -32,7 +32,7 @@ jobs:
         run: |
           for host in ${HOSTS[@]}
           do
-            nix run ".#styx" -- cache --host $host --flake .
+            nix run ".#styx" --accept-flake-config -- cache --host:$host --flake:.
           done
       # - name: Push
       #   env:
