@@ -11,11 +11,11 @@
 in rec {
   forAllSystems = f: genAttrs supportedSystems (system: f nixpkgs.legacyPackages.${system});
 
-  shToPkg = path:
+  buildStyx = _:
     forAllSystems (
       pkgs: let
-        name = baseNameOf path;
-      in {${name} = pkgs.writeScriptBin name (readFile path);}
+        name = baseNameOf ../styx;
+      in {${name} = pkgs.writeScriptBin name (readFile ../styx);}
     );
 
   isNixFile = path: hasSuffix ".nix" path;

@@ -35,10 +35,10 @@
     ...
   }: let
     lib = import ./lib {inherit inputs nixpkgs;};
-    inherit (lib) findModules mapHosts shToPkg;
+    inherit (lib) findModules mapHosts buildStyx;
   in {
     nixosModules = findModules ./modules;
     nixosConfigurations = mapHosts ./hosts;
-    packages = shToPkg ./styx;
+    packages = buildStyx {};
   };
 }
