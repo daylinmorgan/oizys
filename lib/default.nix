@@ -15,7 +15,11 @@ in rec {
     forAllSystems (
       pkgs: let
         name = baseNameOf ../styx;
-      in {${name} = pkgs.writeScriptBin name (readFile ../styx);}
+        pkg = pkgs.writeScriptBin name (readFile ../styx/styx.sh);
+      in {
+        ${name} = pkg;
+        default = pkg;
+      }
     );
 
   isNixFile = path: hasSuffix ".nix" path;
