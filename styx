@@ -76,7 +76,8 @@ cache() {
   cachix watch-exec daylin \
     -- \
     nix build "$FLAKE_PATH#nixosConfigurations.${HOSTNAME}.config.system.build.toplevel" \
-    --print-build-logs
+    --print-build-logs \
+    --accept-flake-config
 
   end=$(date +%s)
   runtime=$(date -d@$((end-start)) +'%M minutes, %S seconds')
