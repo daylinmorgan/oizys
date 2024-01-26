@@ -20,6 +20,7 @@ in {
 
       swaylock
       brightnessctl
+      udiskie
 
       # notifications
       libnotify
@@ -27,8 +28,6 @@ in {
 
       # screenshots
       inputs.hyprland-contrib.packages.${pkgs.system}.grimblast
-      grim
-      slurp
 
       eww-wayland
       rofi-wayland
