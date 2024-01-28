@@ -1,5 +1,5 @@
 {...}: {
-  users.motd = builtins.readFile ./rune;
+  users.motdFile = ./rune;
 
   swapDevices = [
     {

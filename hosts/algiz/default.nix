@@ -30,12 +30,9 @@
 
   security.sudo.wheelNeedsPassword = false;
 
-  users.extraUsers = {
+  users.users = {
     daylin = {
-      shell = pkgs.zsh;
-      isNormalUser = true;
-      extraGroups = ["wheel" "docker"];
-      initialPassword = "nix";
+      extraGroups = ["docker"];
     };
     git = {
       isNormalUser = true;

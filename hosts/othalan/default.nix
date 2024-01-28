@@ -43,13 +43,19 @@
     enableSSHSupport = true;
   };
 
-  users.users.daylin = {
-    isNormalUser = true;
-    shell = pkgs.zsh;
-    extraGroups = [
-      "wheel" # sudo
+  users.users.daylin.extraGroups = [
       "video" # backlight control via light
       "audio"
-    ];
-  };
+  ];
+
+  # users.users.daylin = {
+  #   isNormalUser = true;
+  #   shell = pkgs.zsh;
+  #   extraGroups = [
+  #     "wheel" # sudo
+  #     "video" # backlight control via light
+  #     "audio"
+  #   ];
+  # };
+
 }

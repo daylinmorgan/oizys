@@ -13,14 +13,5 @@
     nix-ld
   ];
 
-  users = {
-    extraUsers = {
-      daylin = {
-        shell = pkgs.zsh;
-        isNormalUser = true;
-        extraGroups = ["wheel" "docker" "networkmanager"];
-        initialPassword = "nix";
-      };
-    };
-  };
+  users.users.daylin.extraGroups = ["docker"];
 }
