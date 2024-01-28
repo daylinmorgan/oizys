@@ -5,7 +5,6 @@
 }
 : {
   networking.networkmanager.enable = true;
-  programs.light.enable = true;
   services.printing.enable = true;
   services.fwupd.enable = true;
   hardware.bluetooth.enable = true;
