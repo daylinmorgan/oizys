@@ -1,4 +1,8 @@
-{inputs, lib, ...}: {
+{
+  inputs,
+  lib,
+  ...
+}: {
   imports = with inputs.self.nixosModules; [
     users
     nix
@@ -27,4 +31,3 @@
 
   options.desktop.enable = lib.mkEnableOption "is desktop";
 }
-

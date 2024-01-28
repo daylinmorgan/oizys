@@ -6,11 +6,11 @@
   ...
 }: {
   imports = with inputs.self.nixosModules; [
-    desktop
-
     nix-ld
   ];
 
+  desktop.enable = true;
+  cli.enable = true;
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
@@ -18,12 +18,9 @@
     windowManager.qtile.enable = true;
   };
 
-  cli.enable = true;
   users.users.daylin.extraGroups = ["docker"];
-programs.gnupg.agent = {
+  programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
   };
-
-  }
-
+}

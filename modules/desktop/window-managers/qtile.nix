@@ -9,33 +9,31 @@
   cfg = config.services.xserver.windowManager.qtile;
 in {
   config = mkIf cfg.enable {
+    environment.systemPackages = with pkgs; [
+      brightnessctl
 
-  environment.systemPackages = with pkgs; [
-    brightnessctl
+      picom
+      # xorg utils
+      xdotool
+      xclip
 
-    picom
-    # xorg utils
-    xdotool
-    xclip
+      # xrandr friends
+      autorandr
+      arandr
 
-    # xrandr friends
-    autorandr
-    arandr
+      # notifications
+      libnotify
+      dunst
 
-    # notifications
-    libnotify
-    dunst
+      # qtile & friends
+      # qtile
+      eww
+      feh
+      rofi
 
-    # qtile & friends
-    # qtile
-    eww
-    feh
-    rofi
-
-    flameshot
-    catppuccin-cursors.mochaDark
-    pavucontrol
-
-  ];
+      flameshot
+      catppuccin-cursors.mochaDark
+      pavucontrol
+    ];
   };
 }

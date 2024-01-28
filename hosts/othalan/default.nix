@@ -5,7 +5,6 @@
   ...
 }: {
   imports = with inputs.self.nixosModules; [
-
     nix-ld
     virtualbox
     restic
@@ -14,7 +13,7 @@
   cli.enable = true;
   desktop.enable = true;
 
-    languages = {
+  languages = {
     misc = true;
     python = true;
     nim = true;
@@ -43,6 +42,6 @@
   };
 
   users.users.daylin.extraGroups = [
-      "audio"
+    "audio"
   ];
 }

@@ -12,18 +12,18 @@ in {
     default = true;
     type = types.bool;
     description = ''
-    include default user "daylin"
+      include default user "daylin"
     '';
   };
 
   config = mkIf cfg {
-  users.users.daylin = {
-    isNormalUser = true;
-    shell = pkgs.zsh;
-    extraGroups = [
-      "wheel" # sudo
-    ];
-    initialPassword = "nix";
-  };
+    users.users.daylin = {
+      isNormalUser = true;
+      shell = pkgs.zsh;
+      extraGroups = [
+        "wheel" # sudo
+      ];
+      initialPassword = "nix";
+    };
   };
 }

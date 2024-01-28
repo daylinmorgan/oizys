@@ -9,22 +9,22 @@
   cfg = config.desktop;
 in {
   config = mkIf cfg.enable {
-  environment.systemPackages = with pkgs; [
-    inputs.wezterm.packages.${pkgs.system}.default
-    alacritty
+    environment.systemPackages = with pkgs; [
+      inputs.wezterm.packages.${pkgs.system}.default
+      alacritty
 
-    inkscape
-    gimp
+      inkscape
+      gimp
 
-    libreoffice-qt
-    hunspell # spell check for libreoffice
+      libreoffice-qt
+      hunspell # spell check for libreoffice
 
-    (vivaldi.override {
-      commandLineArgs = [
-        "--force-dark-mode"
-      ];
-      proprietaryCodecs = true;
-    })
-  ];
-};
+      (vivaldi.override {
+        commandLineArgs = [
+          "--force-dark-mode"
+        ];
+        proprietaryCodecs = true;
+      })
+    ];
+  };
 }
