@@ -1,18 +1,14 @@
 {
   inputs,
   pkgs,
+  config,
+  lib,
   ...
-}: {
-  imports = with inputs.self.nixosModules; [
-    lock
-  ];
-
-  # Enable the X11 windowing system.
-  services.xserver = {
-    enable = true;
-    displayManager.startx.enable = true;
-    windowManager.qtile.enable = true;
-  };
+}: let
+  inherit (lib) mkIf;
+  cfg = config.services.xserver.windowManager.qtile;
+in {
+  config = mkIf cfg.enable {
 
   environment.systemPackages = with pkgs; [
     brightnessctl
@@ -39,5 +35,7 @@
     flameshot
     catppuccin-cursors.mochaDark
     pavucontrol
+
   ];
+  };
 }

@@ -9,6 +9,7 @@
   cfg = config.programs.hyprland;
 in {
   config = mkIf cfg.enable {
+
     security.pam.services.swaylock = {};
     programs.hyprland.package = inputs.hyprland.packages.${pkgs.system}.default;
     # Optional, hint electron apps to use wayland:
