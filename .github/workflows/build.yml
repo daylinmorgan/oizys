@@ -7,9 +7,6 @@ on:
   pull_request:
     branches:
       - main
-env:
-  HOSTS: "algiz othalan mannaz"
-  TERM: xterm # so styx will just get on with it
 
 jobs:
   build:
@@ -28,13 +25,15 @@ jobs:
         with:
           name: daylin
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
-      - name: Build
+      - name: Build all flake outputs
         run: |
-          for host in ${HOSTS[@]}
-          do
-            nix run ".#styx" --accept-flake-config -- cache --host:$host --flake:.
-          done
-      # - name: Push
-      #   env:
-      #     CACHIX_ACTIVATE_TOKEN: "${{ secrets.CACHIX_ACTIVATE_TOKEN }}"
-      #   run: cachix push daylin ./result
+          cachix watch-exec daylin -- \
+          nix build github:srid/devour-flake \
+          -L --no-link --print-out-paths \
+          --override-input flake .
+      # - name: Build
+      #   run: |
+      #     for host in ${HOSTS[@]}
+      #     do
+      #       nix run ".#styx" --accept-flake-config -- cache --host:$host --flake:.
+      #     done
