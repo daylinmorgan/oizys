@@ -1,10 +1,25 @@
-import std/[logging, os, osproc, tables, times]
+import std/[os, osproc, tables, times, strutils, terminal]
 from std/nativesockets import getHostname
 
-
-var logger = newConsoleLogger()
-addHandler(logger)
 let summaryFile = getEnv("GITHUB_STEP_SUMMARY")
+
+
+proc info(args: varargs[string, `$`]) =
+  stdout.styledWriteLine(
+    fgCyan, "oizys", resetStyle, "|",
+    styleDim, "INFO", resetStyle, "| ",
+    args.join("")
+  )
+
+proc error(args: varargs[string, `$`]) =
+  stdout.styledWriteLine(
+    fgCyan, "oizys", resetStyle, "|",
+    styleDim, "ERROR", resetStyle, "| ",
+    args.join("")
+  )
+
+proc execQuit(cmd: string) =
+  quit (execCmd cmd)
 
 type
   OizysContext = object
@@ -20,9 +35,6 @@ proc newCtx(): OizysContext =
 proc systemFlakePath(c: OizysContext): string =
   c.flake & "#nixosConfigurations." & c.host & ".config.system.build.toplevel"
 
-proc execQuit(cmd: string) =
-  quit (execCmd cmd)
-
 proc build(c: OizysContext) =
   ## build nixos
   let
@@ -34,7 +46,6 @@ proc dry(c: OizysContext) =
   execQuit "nix build " & c.systemFlakePath & " --dry-run"
 
 proc cache(c: OizysContext) =
-  # Simple benchmarking
   let start = cpuTime()
   let code = execCmd """
     cachix watch-exec """ & c.cache & """ \
@@ -95,13 +106,13 @@ proc runCmd(c: OizysContext, cmd: string) =
       quit 1
 
 
-proc parseFlag(c: var OizysContext, key, val: string) = 
+proc parseFlag(c: var OizysContext, key, val: string) =
   case key:
     of "help":
       echo usage; quit 0
-    of "h","host":
+    of "h", "host":
       c.host = val
-    of "f","flake":
+    of "f", "flake":
       c.flake = val
     of "no-nom":
       c.nom = false
