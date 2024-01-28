@@ -11,12 +11,12 @@
 in rec {
   forAllSystems = f: genAttrs supportedSystems (system: f nixpkgs.legacyPackages.${system});
 
-  buildStyx = _:
+  buildOizys = _:
     forAllSystems (
       pkgs: let
-        pkg = pkgs.callPackage ../styx {};
+        pkg = pkgs.callPackage ../oizys {};
       in {
-        styx = pkg;
+        oizys = pkg;
         default = pkg;
       }
     );

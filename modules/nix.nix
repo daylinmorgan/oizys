@@ -19,7 +19,7 @@
   environment.systemPackages = with pkgs; [
     nix-output-monitor
     alejandra
-    inputs.self.packages.${pkgs.system}.styx
+    inputs.self.packages.${pkgs.system}.oizys
   ];
 
   nix.settings = {

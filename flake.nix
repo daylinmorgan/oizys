@@ -1,5 +1,5 @@
 {
-  description = "daylinmorgan-nixcfg";
+  description = "nix begat oizys";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
@@ -35,10 +35,10 @@
     ...
   }: let
     lib = import ./lib {inherit inputs nixpkgs;};
-    inherit (lib) findModules mapHosts buildStyx;
+    inherit (lib) findModules mapHosts buildOizys;
   in {
     nixosModules = findModules ./modules;
     nixosConfigurations = mapHosts ./hosts;
-    packages = buildStyx {};
+    packages = buildOizys {};
   };
 }
