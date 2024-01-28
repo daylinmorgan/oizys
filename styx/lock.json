@@ -1,1 +1,0 @@
-{"depends":[{"method":"fetchzip","packages":["cligen"],"path":"/nix/store/b5dgqx2wds42kw2241qv7rmdf29hwl20-source","ref":"1.6.18","rev":"c54e2f3ea09d405a0d1b9bd8e7c0472d657d1193","sha256":"0ms572f6563bc2cr65gnh943adld5xbd6jy2w7gwvybxpczkxlf3","srcDir":"","url":"https://github.com/c-blake/cligen/archive/c54e2f3ea09d405a0d1b9bd8e7c0472d657d1193.tar.gz"}]}

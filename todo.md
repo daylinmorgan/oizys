@@ -1,5 +1,5 @@
-# daylin's nixcfg todo's
+# oizys todo's
 
-- [ ] add a styx command to trigger build on flake.lock pr
+<!-- nothing :) -->
 
 <!-- generated with <3 by daylinmorgan/todo -->
