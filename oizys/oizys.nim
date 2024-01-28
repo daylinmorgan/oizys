@@ -7,33 +7,33 @@ addHandler(logger)
 let summaryFile = getEnv("GITHUB_STEP_SUMMARY")
 
 type
-  StyxContext = object
+  OizysContext = object
     flake, host: string
     cache = "daylin"
     nom: bool = true
 
-proc newCtx(): StyxContext =
-  result = StyxContext()
-  result.flake = getEnv("FLAKE_PATH", getEnv("HOME") / "nixcfg")
+proc newCtx(): OizysContext =
+  result = OizysContext()
+  result.flake = getEnv("FLAKE_PATH", getEnv("HOME") / "oizys")
   result.host = getHostname()
 
-proc systemFlakePath(c: StyxContext): string =
+proc systemFlakePath(c: OizysContext): string =
   c.flake & "#nixosConfigurations." & c.host & ".config.system.build.toplevel"
 
 proc execQuit(cmd: string) =
   quit (execCmd cmd)
 
-proc build(c: StyxContext) =
+proc build(c: OizysContext) =
   ## build nixos
   let
     cmd = if c.nom: "nom" else: "nix"
   execQuit cmd & " build " & c.systemFlakePath
 
-proc dry(c: StyxContext) =
+proc dry(c: OizysContext) =
   ## poor man's nix flake check
   execQuit "nix build " & c.systemFlakePath & " --dry-run"
 
-proc cache(c: StyxContext) =
+proc cache(c: OizysContext) =
   # Simple benchmarking
   let start = cpuTime()
   let code = execCmd """
@@ -55,14 +55,14 @@ proc cache(c: StyxContext) =
   info "Built host: " & c.host & " in " & $duration & " seconds"
 
 
-proc nixosRebuild(c: StyxContext, cmd: string) =
+proc nixosRebuild(c: OizysContext, cmd: string) =
   execQuit "sudo nixos-rebuild " & cmd & " " & " --flake " & c.flake
 
-proc boot(c: StyxContext) =
+proc boot(c: OizysContext) =
   ## nixos rebuild boot
   nixosRebuild c, "build"
 
-proc switch(c: StyxContext) =
+proc switch(c: OizysContext) =
   ## nixos rebuild switch
   nixosRebuild c, "switch"
 
@@ -82,7 +82,7 @@ oizys <cmd> [opts]
     -c|--cache > name of cachix binary cache (daylin)
 """
 
-proc runCmd(c: StyxContext, cmd: string) =
+proc runCmd(c: OizysContext, cmd: string) =
   case cmd:
     of "dry": dry c
     of "switch": switch c
@@ -95,7 +95,7 @@ proc runCmd(c: StyxContext, cmd: string) =
       quit 1
 
 
-proc parseFlag(c: var StyxContext, key, val: string) = 
+proc parseFlag(c: var OizysContext, key, val: string) = 
   case key:
     of "help":
       echo usage; quit 0

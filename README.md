@@ -1,3 +1,3 @@
-# daylin's nixcfg
+# oizys
 
-[![](https://github.com/daylinmorgan/nixcfg/actions/workflows/build.yml/badge.svg)](https://github.com/daylinmorgan/nixcfg/actions/workflows/build.yml)
+[![](https://github.com/daylinmorgan/oizys/actions/workflows/build.yml/badge.svg)](https://github.com/daylinmorgan/oizys/actions/workflows/build.yml)
