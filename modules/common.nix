@@ -1,4 +1,4 @@
-{inputs, ...}: {
+{inputs, lib, ...}: {
   imports = with inputs.self.nixosModules; [
     users
     nix
@@ -7,6 +7,16 @@
     nvim
     vpn
 
+    # gui
+    fonts
+
+    lock
+    qtile
+    hyprland
+
+    gui
+    vscode
+
     # langs
     python
     misc
@@ -14,4 +24,7 @@
     tex
     nim
   ];
+
+  options.desktop.enable = lib.mkEnableOption "is desktop";
 }
+

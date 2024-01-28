@@ -1,8 +1,14 @@
 {
   inputs,
   pkgs,
+  config,
+  lib,
   ...
-}: {
+}: let
+  inherit (lib) mkIf;
+  cfg = config.desktop;
+in {
+  config = mkIf cfg.enable {
   environment.systemPackages = with pkgs; [
     inputs.wezterm.packages.${pkgs.system}.default
     alacritty
@@ -20,4 +26,5 @@
       proprietaryCodecs = true;
     })
   ];
+};
 }

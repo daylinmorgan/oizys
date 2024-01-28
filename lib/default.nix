@@ -27,7 +27,7 @@ in rec {
     nixosSystem {
       system = "x86_64-linux";
       modules =
-        [../modules/roles/common.nix]
+        [../modules/common.nix]
         ++ filter isNixFile (listFilesRecursive (../. + "/hosts/${hostname}"));
       specialArgs = {inherit inputs;};
     };
