@@ -57,7 +57,7 @@ proc dry(c: OizysContext) =
   execQuit "nix build " & c.systemFlakePath & " --dry-run"
 
 proc cache(c: OizysContext) =
-  let start = cpuTime()
+  let start = now()
   let code = execCmd """
     cachix watch-exec """ & c.cache & """ \
         -- \
@@ -65,7 +65,7 @@ proc cache(c: OizysContext) =
         --print-build-logs \
         --accept-flake-config
     """
-  let duration = (cpuTime() - start)
+  let duration = (now() - start)
   if code != 0:
     error "faile to build configuration for: ", c.host
 
