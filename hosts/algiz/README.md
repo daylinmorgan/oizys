@@ -1,6 +1,6 @@
 <div align="center">
 <img src="https://upload.wikimedia.org/wikipedia/commons/d/df/Runic_letter_algiz.svg">
-<h1>Algiz</h1>
+<h1>algiz</h1>
 </div>
 
 ## Setting up git user for use with gitea originally

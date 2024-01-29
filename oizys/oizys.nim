@@ -14,7 +14,7 @@ proc info(args: varargs[string, `$`]) =
 proc error(args: varargs[string, `$`]) =
   stdout.styledWriteLine(
     fgCyan, "oizys", resetStyle, "|",
-    styleDim, "ERROR", resetStyle, "| ",
+    fgRed, "ERROR", resetStyle, "| ",
     args.join("")
   )
 
@@ -31,6 +31,17 @@ proc newCtx(): OizysContext =
   result = OizysContext()
   result.flake = getEnv("FLAKE_PATH", getEnv("HOME") / "oizys")
   result.host = getHostname()
+
+proc check(c: OizysContext) =
+  if not dirExists c.flake:
+    error c.flake, " does not exist"
+    error "please use -f/--flake or $FLAKE_PATH"
+    quit 1
+
+  info "flake: ", c.flake
+  info "host: ", c.host
+
+
 
 proc systemFlakePath(c: OizysContext): string =
   c.flake & "#nixosConfigurations." & c.host & ".config.system.build.toplevel"
@@ -87,11 +98,13 @@ oizys <cmd> [opts]
     build   build system flake
 
   options:
-    -h|--help  > show this help
-       --host  > hostname (current host)
-    -f|--flake > path to flake ($FLAKE_PATH or $HOME/styx)
-    -c|--cache > name of cachix binary cache (daylin)
+    -h|--help    show this help
+       --host    hostname (current host)
+    -f|--flake   path to flake ($FLAKE_PATH or $HOME/styx)
+    -c|--cache   name of cachix binary cache (daylin)
+       --no-nom  don't use nix-output-monitor
 """
+
 
 proc runCmd(c: OizysContext, cmd: string) =
   case cmd:
@@ -134,5 +147,5 @@ when isMainModule:
     echo "please specify a command"
     echo usage; quit 1
 
-  info $c
+  check c
   runCmd c, cmd
