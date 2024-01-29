@@ -1,8 +1,7 @@
 {
-  lib,
   buildNimPackage,
 }:
-buildNimPackage (final: prev: {
+buildNimPackage (_final: _prev: {
   pname = "oizys";
   version = "unstable";
   src = ./.;

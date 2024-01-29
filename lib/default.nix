@@ -3,7 +3,7 @@
   nixpkgs,
   ...
 }: let
-  inherit (builtins) concatLists attrValues mapAttrs elemAt match readDir filter listToAttrs baseNameOf readFile;
+  inherit (builtins) concatLists attrValues mapAttrs elemAt match readDir filter listToAttrs;
   inherit (nixpkgs.lib) hasSuffix nixosSystem genAttrs;
   inherit (nixpkgs.lib.filesystem) listFilesRecursive;
 

@@ -1,4 +1,4 @@
-{...}: (final: prev: {
+{...}: (_final: prev: {
   nim-atlas = prev.nim-atlas.overrideNimAttrs {
     version = "unstable";
     src = prev.fetchFromGitHub {

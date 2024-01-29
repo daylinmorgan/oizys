@@ -1,4 +1,4 @@
-{...}: (final: prev: {
+{...}: (_final: prev: {
   hyprland = prev.hyprland.overrideAttrs {
     src = prev.fetchFromGitHub {
       version = "main-20240121";

@@ -1,4 +1,4 @@
-{...}: (final: prev: {
+{...}: (_final: prev: {
   nimble = prev.nimble.overrideNimAttrs {
     version = "0.14.2-f74bf2";
     requiredNimVersion = 2;

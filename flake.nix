@@ -30,7 +30,6 @@
     ];
   };
   outputs = inputs @ {
-    self,
     nixpkgs,
     ...
   }: let
