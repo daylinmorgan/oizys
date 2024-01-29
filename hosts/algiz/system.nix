@@ -1,5 +1,5 @@
-{...}: {
-  users.motdFile = ./rune;
+{mkRune, ...}: {
+  users.motd = mkRune {number="6"; rune = "algiz";};
 
   swapDevices = [
     {

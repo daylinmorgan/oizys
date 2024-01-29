@@ -8,7 +8,10 @@
   inherit (nixpkgs.lib.filesystem) listFilesRecursive;
 
   supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
+  runes = import ../modules/runes;
 in rec {
+  mkRune = {rune, number ? "2", runeKind ? "braille"}: "\e[3${number}m" + runes.${rune}.${runeKind} + "\e[0m";
+
   forAllSystems = f: genAttrs supportedSystems (system: f nixpkgs.legacyPackages.${system});
 
   buildOizys = _:
@@ -29,7 +32,7 @@ in rec {
       modules =
         [../modules/common.nix]
         ++ filter isNixFile (listFilesRecursive (../. + "/hosts/${hostname}"));
-      specialArgs = {inherit inputs;};
+      specialArgs = {inherit inputs mkRune;};
     };
 
   mapHosts = dir:

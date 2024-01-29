@@ -1,11 +1,11 @@
 {
   inputs,
-  lib,
   config,
   pkgs,
+  mkRune,
   ...
 }: {
-  users.motdFile = ./rune;
+  users.motd = mkRune {number="2"; rune="mannaz";};
 
   # Use the systemd-boot EFI boot loader.
   boot.loader = {
