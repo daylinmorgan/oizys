@@ -2,7 +2,7 @@
   inputs,
   pkgs,
   ...
-}:{
+}: {
   imports = with inputs.self.nixosModules; [
     docker
   ];
@@ -18,7 +18,7 @@
 
     (pkgs.writeShellScriptBin "gitea" ''
       ssh -p 2222 -o StrictHostKeyChecking=no git@127.0.0.1 "SSH_ORIGINAL_COMMAND=\"$SSH_ORIGINAL_COMMAND\" $0 $@"
-      '')
+    '')
   ];
 
   # https://francis.begyn.be/blog/nixos-restic-backups
@@ -41,10 +41,5 @@
     git = {
       isNormalUser = true;
     };
-  };
-
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
   };
 }

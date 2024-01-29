@@ -8,9 +8,9 @@
   cfg = config.desktop;
 in {
   config = mkIf cfg.enable {
-  environment.systemPackages = with pkgs; [
-    # vscode
-    vscode-fhs
-  ];
-};
+    environment.systemPackages = with pkgs; [
+      # vscode
+      vscode-fhs
+    ];
+  };
 }

@@ -10,6 +10,7 @@
     dev
     nvim
     vpn
+    gpg
 
     # gui
     fonts

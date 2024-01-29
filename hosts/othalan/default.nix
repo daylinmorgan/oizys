@@ -25,6 +25,7 @@
     rclone
     quarto
   ];
+
   programs.hyprland.enable = true;
 
   services.vpn.enable = true;
@@ -34,11 +35,6 @@
     repository = "rclone:g:archives/othalan";
     passwordFile = "/home/daylin/.config/restic/othalan-pass";
     paths = ["/home/daylin/stuff/" "/home/daylin/dev/"];
-  };
-
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
   };
 
   users.users.daylin.extraGroups = [

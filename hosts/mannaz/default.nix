@@ -19,8 +19,4 @@
   };
 
   users.users.daylin.extraGroups = ["docker"];
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
 }
