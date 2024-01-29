@@ -11,8 +11,7 @@ sudo -u git cat /home/git/.ssh/id_rsa.pub | sudo -u git tee -a /home/git/.ssh/au
 sudo -u git chmod 600 /home/git/.ssh/authorized_keys
 ```
 
-
-`/home/git/.ssh/authorized_keys` should Look like this:
+`/home/git/.ssh/authorized_keys` should look like this:
 
 ```txt
 # SSH pubkey from git user
@@ -22,10 +21,10 @@ ssh-rsa <Gitea Host Key>
 command="/usr/local/bin/gitea --config=/data/gitea/conf/app.ini serv key-1",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty <user pubkey>
 ```
 
+To point gitea/forgejo to the shim gitea binary for SSH I symlink the current system version to `/usr/local/bin/gitea`.
 
-Nixify this step....
-cat <<"EOF" | sudo tee /usr/local/bin/gitea
-#!/bin/sh
-ssh -p 2222 -o StrictHostKeyChecking=no git@127.0.0.1 "SSH_ORIGINAL_COMMAND=\"$SSH_ORIGINAL_COMMAND\" $0 $@"
-EOF
-sudo chmod +x /usr/local/bin/gitea
+```sh
+ln -s /run/current-system/sw/bin/gitea /usr/local/bin/gitea
+```
+
+
