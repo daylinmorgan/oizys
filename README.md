@@ -65,6 +65,6 @@ Oizys was birthed by the goddess Nyx/Nix and embodies suffering and misery. Whic
 
 ---
 
-> **NOTE**
+> [!NOTE]
 > I don't use home-manager to manager my shell/user configs. You can find those in my separate `chezmoi`-managed [`dotfiles`](https://git.dayl.in/daylin/dotfiles) repository.
 
