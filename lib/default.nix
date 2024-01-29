@@ -15,7 +15,7 @@ in rec {
     number ? "2",
     runeKind ? "braille",
   }:
-    "^[[1;3${number}m" + runes.${rune}.${runeKind} + "^[[0m";
+    "[1;3${number}m" + runes.${rune}.${runeKind} + "[0m";
 
   forAllSystems = f: genAttrs supportedSystems (system: f nixpkgs.legacyPackages.${system});
 
