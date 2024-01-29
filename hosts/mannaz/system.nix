@@ -5,7 +5,10 @@
   mkRune,
   ...
 }: {
-  users.motd = mkRune {number="2"; rune="mannaz";};
+  users.motd = mkRune {
+    number = "2";
+    rune = "mannaz";
+  };
 
   # Use the systemd-boot EFI boot loader.
   boot.loader = {

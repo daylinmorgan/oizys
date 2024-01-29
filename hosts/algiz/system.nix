@@ -1,5 +1,8 @@
 {mkRune, ...}: {
-  users.motd = mkRune {number="6"; rune = "algiz";};
+  users.motd = mkRune {
+    number = "6";
+    rune = "algiz";
+  };
 
   swapDevices = [
     {

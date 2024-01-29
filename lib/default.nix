@@ -10,7 +10,12 @@
   supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
   runes = import ../modules/runes;
 in rec {
-  mkRune = {rune, number ? "2", runeKind ? "braille"}: "^[[1;3${number}m" + runes.${rune}.${runeKind} + "^[[0m";
+  mkRune = {
+    rune,
+    number ? "2",
+    runeKind ? "braille",
+  }:
+    "^[[1;3${number}m" + runes.${rune}.${runeKind} + "^[[0m";
 
   forAllSystems = f: genAttrs supportedSystems (system: f nixpkgs.legacyPackages.${system});
 
