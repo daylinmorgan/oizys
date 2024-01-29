@@ -87,8 +87,8 @@ oizys <cmd> [opts]
     build   build system flake
 
   options:
-    --help  > show this help
-    -h|--host  > hostname (current host)
+    -h|--help  > show this help
+       --host  > hostname (current host)
     -f|--flake > path to flake ($FLAKE_PATH or $HOME/styx)
     -c|--cache > name of cachix binary cache (daylin)
 """
@@ -108,9 +108,9 @@ proc runCmd(c: OizysContext, cmd: string) =
 
 proc parseFlag(c: var OizysContext, key, val: string) =
   case key:
-    of "help":
+    of "h","help":
       echo usage; quit 0
-    of "h", "host":
+    of "host":
       c.host = val
     of "f", "flake":
       c.flake = val
