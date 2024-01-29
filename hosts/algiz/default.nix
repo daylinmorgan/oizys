@@ -2,7 +2,13 @@
   inputs,
   pkgs,
   ...
-}: {
+}: let
+  gitea-shim = pkgs.writeShellScriptBin "gitea" ''
+  #!/bin/sh
+  ssh -p 2222 -o StrictHostKeyChecking=no git@127.0.0.1 "SSH_ORIGINAL_COMMAND=\"$SSH_ORIGINAL_COMMAND\" $0 $@"
+  '';
+
+in {
   imports = with inputs.self.nixosModules; [
     docker
   ];
@@ -15,6 +21,8 @@
 
   environment.systemPackages = with pkgs; [
     rclone
+
+    gitea-shim
   ];
 
   # https://francis.begyn.be/blog/nixos-restic-backups
