@@ -1,10 +1,20 @@
+<div align="center">
+<img src="https://upload.wikimedia.org/wikipedia/commons/d/df/Runic_letter_algiz.svg">
+<h1>Algiz</h1>
+</div>
+
+## Setting up git user for use with gitea originally
+
+```sh
 sudo -u git ssh-keygen -t rsa -b 4096 -C "Gitea Host Key"
 sudo -u git cat /home/git/.ssh/id_rsa.pub | sudo -u git tee -a /home/git/.ssh/authorized_keys
 sudo -u git chmod 600 /home/git/.ssh/authorized_keys
-
-
-Should Look like this
 ```
+
+
+`/home/git/.ssh/authorized_keys` should Look like this:
+
+```txt
 # SSH pubkey from git user
 ssh-rsa <Gitea Host Key>
 
