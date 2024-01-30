@@ -12,7 +12,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      - matrix: ["othalan", "mannaz", "algiz"]
+      max-parallel: 1
+      matrix:
+        hosts: ["othalan", "mannaz", "algiz"]
     steps:
       # free up some space
       - run: sudo rm -rf /opt&
