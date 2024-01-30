@@ -135,7 +135,7 @@ when isMainModule:
   var
     c = newCtx()
     cmd: string
-  for kind, key, val in getopt():
+  for kind, key, val in getopt(longNoVal = @["no-nom"]):
     case kind
     of cmdArgument:
       cmd = key
