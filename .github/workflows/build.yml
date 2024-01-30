@@ -37,7 +37,4 @@ jobs:
       #     --override-input flake .
       - name: Build
         run: |
-          for host in ${HOSTS[@]}
-          do
-            nix run . --accept-flake-config -- cache --host $host --flake .
-          done
+          nix run . --accept-flake-config -- cache --host ${{ matrix.host }} --flake .
