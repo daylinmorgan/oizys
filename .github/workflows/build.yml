@@ -11,6 +11,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      - matrix: ["othalan", "mannaz", "algiz"]
     steps:
       # free up some space
       - run: sudo rm -rf /opt&
@@ -25,15 +27,15 @@ jobs:
         with:
           name: daylin
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
-      - name: Build all flake outputs
-        run: |
-          cachix watch-exec daylin -- \
-          nix build github:srid/devour-flake \
-          -L --no-link --print-out-paths \
-          --override-input flake .
-      # - name: Build
+      # - name: Build all flake outputs
       #   run: |
-      #     for host in ${HOSTS[@]}
-      #     do
-      #       nix run ".#styx" --accept-flake-config -- cache --host:$host --flake:.
-      #     done
+      #     cachix watch-exec daylin -- \
+      #     nix build github:srid/devour-flake \
+      #     -L --no-link --print-out-paths \
+      #     --override-input flake .
+      - name: Build
+        run: |
+          for host in ${HOSTS[@]}
+          do
+            nix run . --accept-flake-config -- cache --host $host --flake .
+          done
