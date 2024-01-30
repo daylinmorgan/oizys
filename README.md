@@ -53,7 +53,7 @@ oizys <cmd> [opts]
   options:
     -h|--help    show this help
        --host    hostname (current host)
-    -f|--flake   path to flake ($FLAKE_PATH or $HOME/styx)
+    -f|--flake   path to flake ($FLAKE_PATH or $HOME/oizys)
     -c|--cache   name of cachix binary cache (daylin)
        --no-nom  don't use nix-output-monitor
 ```
