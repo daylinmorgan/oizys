@@ -10,7 +10,7 @@
 in {
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      inputs.wezterm.packages.${pkgs.system}.default
+      wezterm
       alacritty
 
       inkscape
