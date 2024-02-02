@@ -1,10 +1,10 @@
-{...}: (_final: prev: {
+{...}: (final: prev: {
   nimble = prev.nimble.overrideNimAttrs {
     version = "0.14.2-f74bf2";
     requiredNimVersion = 2;
     buildInputs = [prev.pkgs.openssl];
 
-    src = prev.fetchFromGitHub {
+    src = final.fetchFromGitHub {
       owner = "nim-lang";
       repo = "nimble";
       # more recent commit

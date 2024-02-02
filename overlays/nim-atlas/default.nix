@@ -1,7 +1,7 @@
-{...}: (_final: prev: {
+{...}: (final: prev: {
   nim-atlas = prev.nim-atlas.overrideNimAttrs {
     version = "unstable";
-    src = prev.fetchFromGitHub {
+    src = final.fetchFromGitHub {
       owner = "nim-lang";
       repo = "atlas";
       rev = "cbba9fa77fa837931bf3c58e20c1f8cb15a22919";
