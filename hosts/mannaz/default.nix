@@ -1,7 +1,4 @@
-{
-  inputs,
-  ...
-}: {
+{inputs, ...}: {
   imports = with inputs.self.nixosModules; [
     nix-ld
   ];

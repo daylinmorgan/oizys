@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   programs.nix-ld.enable = true;
 
   # Packages that need at least something in this list:

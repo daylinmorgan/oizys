@@ -27,10 +27,7 @@
     ];
   };
 
-  outputs = inputs @ {
-    nixpkgs,
-    ...
-  }: let
+  outputs = inputs @ {nixpkgs, ...}: let
     lib = import ./lib {inherit inputs nixpkgs;};
     inherit (lib) findModules mapHosts buildOizys;
   in {
