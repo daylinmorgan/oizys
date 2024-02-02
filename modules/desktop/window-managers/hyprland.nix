@@ -10,7 +10,7 @@
 in {
   config = mkIf cfg.enable {
     security.pam.services.swaylock = {};
-    programs.hyprland.package = inputs.hyprland.packages.${pkgs.system}.default;
+    # programs.hyprland.package = inputs.hyprland.packages.${pkgs.system}.default;
     # Optional, hint electron apps to use wayland:
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
@@ -36,6 +36,9 @@ in {
       catppuccin-cursors.mochaDark
       pavucontrol
     ];
-    nixpkgs.overlays = [inputs.nixpkgs-wayland.overlay];
+    nixpkgs.overlays = [
+      inputs.nixpkgs-wayland.overlay
+      inputs.hyprland.overlays.default
+    ];
   };
 }
