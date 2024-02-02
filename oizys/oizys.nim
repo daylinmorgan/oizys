@@ -90,19 +90,20 @@ proc switch(c: OizysContext) =
 
 const usage = """
 oizys <cmd> [opts]
-  commands:
-    dry     poor man's nix flake check
-    boot    nixos-rebuild boot
-    switch  nixos-rebuild switch
-    cache   build and push to cachix
-    build   build system flake
 
-  options:
-    -h|--help    show this help
-       --host    hostname (current host)
-    -f|--flake   path to flake ($FLAKE_PATH or $HOME/oizys)
-    -c|--cache   name of cachix binary cache (daylin)
-       --no-nom  don't use nix-output-monitor
+commands:
+  dry     poor man's nix flake check
+  boot    nixos-rebuild boot
+  switch  nixos-rebuild switch
+  cache   build and push to cachix
+  build   build system flake
+
+options:
+  -h|--help    show this help
+     --host    hostname (current host)
+  -f|--flake   path to flake ($FLAKE_PATH or $HOME/oizys)
+  -c|--cache   name of cachix binary cache (daylin)
+     --no-nom  don't use nix-output-monitor
 """
 
 
@@ -121,7 +122,7 @@ proc runCmd(c: OizysContext, cmd: string) =
 
 proc parseFlag(c: var OizysContext, key, val: string) =
   case key:
-    of "h","help":
+    of "h", "help":
       echo usage; quit 0
     of "host":
       c.host = val
