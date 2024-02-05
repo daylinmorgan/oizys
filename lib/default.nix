@@ -52,7 +52,7 @@ in rec {
           hostname = name;
           system = "aarch64-linux";
         })
-      else mkSystem {hostname=name;})
+      else mkSystem {hostname = name;})
     (readDir dir);
 
   findModules = modulesPath: listToAttrs (findModulesList modulesPath);
