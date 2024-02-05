@@ -27,7 +27,7 @@ in {
       dunst
 
       # screenshots
-      inputs.hyprland-contrib.packages.${pkgs.system}.grimblast
+      grimblast
 
       eww-wayland
       rofi-wayland
@@ -37,6 +37,7 @@ in {
       pavucontrol
     ];
     nixpkgs.overlays = [
+      inputs.hyprland-contrib.overlays.default
       inputs.nixpkgs-wayland.overlay
       inputs.hyprland.overlays.default
     ];
