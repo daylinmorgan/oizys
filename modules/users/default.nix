@@ -18,11 +18,15 @@ in {
   config = mkIf cfg {
     users.users.daylin = {
       isNormalUser = true;
+
       shell = pkgs.zsh;
       extraGroups = [
         "wheel" # sudo
       ];
       initialPassword = "nix";
+      openssh.authorizedKeys.keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKkezPIhB+QW37G15ZV3bewydpyEcNlYxfHLlzuk3PH9"
+      ];
     };
   };
 }
