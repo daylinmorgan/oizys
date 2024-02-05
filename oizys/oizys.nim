@@ -1,4 +1,4 @@
-import std/[os, osproc, tables, times, strutils, terminal]
+import std/[os, osproc, times, strutils, terminal]
 from std/nativesockets import getHostname
 
 let summaryFile = getEnv("GITHUB_STEP_SUMMARY")

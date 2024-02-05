@@ -39,4 +39,7 @@
   users.users.daylin.extraGroups = [
     "audio"
   ];
+
+ boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 }
+
