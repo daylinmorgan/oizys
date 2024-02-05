@@ -31,7 +31,10 @@ in rec {
 
   isNixFile = path: hasSuffix ".nix" path;
 
-  mkSystem = hostname:
+  mkSystem = {
+    hostname,
+    system ? "x86_64-linux",
+  }:
     nixosSystem {
       system = "x86_64-linux";
       modules =
@@ -42,7 +45,14 @@ in rec {
 
   mapHosts = dir:
     mapAttrs
-    (name: _: mkSystem name)
+    (name: _:
+      if name == "laukaz"
+      then
+        (mkSystem {
+          hostname = name;
+          system = "aarch64-linux";
+        })
+      else mkSystem {hostname=name;})
     (readDir dir);
 
   findModules = modulesPath: listToAttrs (findModulesList modulesPath);
