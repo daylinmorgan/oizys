@@ -35,7 +35,10 @@ in {
 
       catppuccin-cursors.mochaDark
       pavucontrol
+
+      wl-clipboard
     ];
+
     nixpkgs.overlays = [
       inputs.hyprland-contrib.overlays.default
       inputs.nixpkgs-wayland.overlay
