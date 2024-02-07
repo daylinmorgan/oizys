@@ -5,6 +5,7 @@
 }: {
   imports = with inputs.self.nixosModules; [
     docker
+    restic
   ];
 
   languages = {
@@ -21,8 +22,6 @@
     '')
   ];
 
-  # https://francis.begyn.be/blog/nixos-restic-backups
-  # TODO: parameterize to use on algiz AND othalan ...
   services.restic.backups.gdrive = {
     # directories created by gitea and soft-serve aren't world readable
     user = "root";
