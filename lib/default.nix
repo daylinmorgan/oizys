@@ -10,15 +10,15 @@
   supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
   runes = import ../modules/runes;
 in rec {
+  forAllSystems = f: genAttrs supportedSystems (system: f nixpkgs.legacyPackages.${system});
   mkRune = {
     rune,
-    number ? "2",
+    number ? "6",
     runeKind ? "braille",
   }:
-    "[1;3${number}m\n" + runes.${rune}.${runeKind} + "\n[0m";
+    "[1;3${number}m\n\n" + runes.${rune}.${runeKind} + "\n[0m";
 
-  forAllSystems = f: genAttrs supportedSystems (system: f nixpkgs.legacyPackages.${system});
-
+  isNixFile = path: hasSuffix ".nix" path;
   buildOizys = _:
     forAllSystems (
       pkgs: let
@@ -29,8 +29,6 @@ in rec {
       }
     );
 
-  isNixFile = path: hasSuffix ".nix" path;
-
   mkSystem = hostname:
     nixosSystem {
       system = "x86_64-linux";
@@ -39,13 +37,7 @@ in rec {
         ++ filter isNixFile (listFilesRecursive (../. + "/hosts/${hostname}"));
       specialArgs = {inherit inputs mkRune;};
     };
-
-  mapHosts = dir:
-    mapAttrs
-    (name: _: mkSystem name)
-    (readDir dir);
-
-
+  mapHosts = dir: mapAttrs (name: _: mkSystem name) (readDir dir);
   buildHosts = _: mapHosts ../hosts;
 
   findModules = modulesPath: listToAttrs (findModulesList modulesPath);
