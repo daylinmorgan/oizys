@@ -19,6 +19,7 @@
     tex = true;
     node = true;
   };
+
   environment.systemPackages = with pkgs; [
     zk
     rclone

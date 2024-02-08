@@ -3,9 +3,7 @@
   pkgs,
   mkRune,
   ...
-}: let
-  rune = import ../../modules/runes/othalan.nix;
-in {
+}: {
   networking.networkmanager.enable = true;
   services.printing.enable = true;
   services.fwupd.enable = true;
@@ -31,7 +29,7 @@ in {
   ];
 
   services.getty.greetingLine =
-    ''<<< Welcome to NixOS ${config.system.nixos.label} (\m) - \l >>>''
+    ''<<< Welcome to NixOS ${config.system.nixos.label} (\m) - \l >>>\n''
     + mkRune {
       rune = "othalan";
       runeKind = "ascii";

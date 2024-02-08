@@ -16,7 +16,7 @@ in rec {
     number ? "6",
     runeKind ? "braille",
   }:
-    "[1;3${number}m\n\n" + runes.${rune}.${runeKind} + "\n[0m";
+    "[1;3${number}m\n" + runes.${rune}.${runeKind} + "\n[0m";
 
   isNixFile = path: hasSuffix ".nix" path;
   buildOizys = _:
