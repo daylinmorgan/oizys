@@ -7,6 +7,14 @@
 }: let
   inherit (lib) mkIf;
   cfg = config.programs.hyprland;
+
+  lock = pkgs.writeShellApplication {
+    name = "lock";
+    runtimeInputs = with pkgs; [swaylock];
+    text = ''
+    swaylock -c 1e1e2e
+    '';
+  };
 in {
   config = mkIf cfg.enable {
     security.pam.services.swaylock = {};
@@ -18,7 +26,7 @@ in {
       wlr-randr
       kanshi
 
-      swaylock
+      lock
       brightnessctl
       udiskie
 
