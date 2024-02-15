@@ -7,8 +7,9 @@
     nix-ld
     virtualbox
     restic
+    docker
   ];
-
+  nixpkgs.overlays = [inputs.pinix.overlays.default];
   cli.enable = true;
   desktop.enable = true;
 
@@ -24,6 +25,7 @@
     zk
     rclone
     quarto
+    pinix
   ];
 
   programs.hyprland.enable = true;
@@ -38,6 +40,7 @@
   };
 
   users.users.daylin.extraGroups = [
+    "docker"
     "audio"
   ];
 }

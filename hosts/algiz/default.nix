@@ -37,6 +37,7 @@
     daylin = {
       extraGroups = ["docker"];
     };
+
     git = {
       isNormalUser = true;
     };

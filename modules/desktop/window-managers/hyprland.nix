@@ -12,7 +12,7 @@
     name = "lock";
     runtimeInputs = with pkgs; [swaylock];
     text = ''
-    swaylock -c 1e1e2e
+      swaylock -c 1e1e2e
     '';
   };
 in {

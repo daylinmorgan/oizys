@@ -22,6 +22,7 @@ in {
       shell = pkgs.zsh;
       extraGroups = [
         "wheel" # sudo
+        "docker"
       ];
       initialPassword = "nix";
       openssh.authorizedKeys.keys = [
