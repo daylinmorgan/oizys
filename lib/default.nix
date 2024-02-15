@@ -32,15 +32,14 @@ in rec {
   mkSystem = hostname:
     nixosSystem {
       system = "x86_64-linux";
-      modules = [
+      modules =
+        [
           ../modules/common.nix
-
-          # ({...}: nixpkgs.overlays = [ import ../overlays {}; ])
-          (_:
-            { nixpkgs.overlays = import ../overlays _ ++
-              [inputs.pinix.overlays.default]; })
+          ../overlays
         ]
-        ++ filter isNixFile (listFilesRecursive (../. + "/hosts/${hostname}"));
+        ++ filter
+        isNixFile
+        (listFilesRecursive (../. + "/hosts/${hostname}"));
 
       specialArgs = {inherit inputs mkRune;};
     };
