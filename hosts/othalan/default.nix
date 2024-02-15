@@ -25,7 +25,6 @@
     zk
     rclone
     quarto
-    pinix
   ];
 
   programs.hyprland.enable = true;

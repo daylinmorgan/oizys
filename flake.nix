@@ -13,8 +13,7 @@
     nix-eval-jobs.url = "github:nix-community/nix-eval-jobs";
     nix-eval-jobs.inputs.nixpkgs.follows = "nixpkgs";
 
-    # https://github.com/remi-dupre/pinix/pull/2
-    pinix.url = "github:daylinmorgan/pinix";
+    pinix.url = "github:remi-dupre/pinix";
     pinix.inputs.nixpkgs.follows = "nixpkgs";
   };
 

@@ -10,9 +10,5 @@
       (f: f != "default.nix")
       (builtins.attrNames (builtins.readDir ./.)));
 in {
-  nixpkgs.overlays =
-    defaultOverlays
-    ++ [
-      inputs.pinix.overlays.default
-    ];
+  nixpkgs.overlays = defaultOverlays;
 }

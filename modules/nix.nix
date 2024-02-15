@@ -20,6 +20,7 @@
     nix-output-monitor
     alejandra
     inputs.self.packages.${pkgs.system}.oizys
+    inputs.pinix.packages.${pkgs.system}.default
   ];
 
   nix.settings = {

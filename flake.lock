@@ -269,19 +269,18 @@
       "inputs": {
         "nixpkgs": [
           "nixpkgs"
-        ],
-        "systems": "systems_3"
+        ]
       },
       "locked": {
-        "lastModified": 1707852451,
-        "narHash": "sha256-6FkObpMDcQJ53Wfzs/uWzk9JapQQ72UuJ6DRrMDRbY0=",
-        "owner": "daylinmorgan",
+        "lastModified": 1708024475,
+        "narHash": "sha256-D6rH2MD9yoslhA98cX9I3Ncf2J5JC6JMCh/837dTE4A=",
+        "owner": "remi-dupre",
         "repo": "pinix",
-        "rev": "f148a5dbc84e53dbcc1cb983bb80c65df620616d",
+        "rev": "a488c0e7cf36b0a20fa8d237d5b3930ad7c5d3ce",
         "type": "github"
       },
       "original": {
-        "owner": "daylinmorgan",
+        "owner": "remi-dupre",
         "repo": "pinix",
         "type": "github"
       }
@@ -312,21 +311,6 @@
       }
     },
     "systems_2": {
-      "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
-        "owner": "nix-systems",
-        "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-systems",
-        "repo": "default",
-        "type": "github"
-      }
-    },
-    "systems_3": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
