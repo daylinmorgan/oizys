@@ -32,9 +32,16 @@ in rec {
   mkSystem = hostname:
     nixosSystem {
       system = "x86_64-linux";
-      modules =
-        [../modules/common.nix]
+      modules = [
+          ../modules/common.nix
+
+          # ({...}: nixpkgs.overlays = [ import ../overlays {}; ])
+          (_:
+            { nixpkgs.overlays = import ../overlays _ ++
+              [inputs.pinix.overlays.default]; })
+        ]
         ++ filter isNixFile (listFilesRecursive (../. + "/hosts/${hostname}"));
+
       specialArgs = {inherit inputs mkRune;};
     };
   mapHosts = dir: mapAttrs (name: _: mkSystem name) (readDir dir);

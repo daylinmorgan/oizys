@@ -9,7 +9,7 @@
     restic
     docker
   ];
-  nixpkgs.overlays = [inputs.pinix.overlays.default];
+
   cli.enable = true;
   desktop.enable = true;
 

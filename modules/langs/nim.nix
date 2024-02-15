@@ -10,15 +10,10 @@
 in {
   options.languages.nim = mkEnableOption "nim";
   config = mkIf cfg.nim {
-    nixpkgs.overlays = [
-      (import ../../overlays/nimlsp {})
-      (import ../../overlays/nimble {})
-      (import ../../overlays/nim-atlas {})
-    ];
-
     environment.systemPackages = with pkgs; [
-      nim-atlas
       nim
+
+      nim-atlas
       nimble
       nimlsp
     ];
