@@ -12,7 +12,6 @@
     nixpkgs-wayland.inputs.nix-eval-jobs.follows = "nix-eval-jobs";
     nix-eval-jobs.url = "github:nix-community/nix-eval-jobs";
     nix-eval-jobs.inputs.nixpkgs.follows = "nixpkgs";
-
     pinix.url = "github:remi-dupre/pinix";
     pinix.inputs.nixpkgs.follows = "nixpkgs";
   };
