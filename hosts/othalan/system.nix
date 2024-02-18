@@ -28,15 +28,13 @@
     pamixer
   ];
 
-  services.getty.greetingLine =
-    ''<<< Welcome to NixOS ${config.system.nixos.label} (\m) - \l >>>\n''
-    + mkRune {
+  services.getty.greetingLine = mkRune {
       rune = "othalan";
       runeKind = "ascii";
     };
   # + inputs.self.nixosModules.runes.othalan.ascii;
 
-  # catppuccin/tty
+  # catppuccin/tty move to "module"
   boot.kernelParams = [
     "vt.default_red=30,243,166,249,137,245,148,186,88,243,166,249,137,245,148,166"
     "vt.default_grn=30,139,227,226,180,194,226,194,91,139,227,226,180,194,226,173"
