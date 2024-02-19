@@ -1,7 +1,7 @@
 {
   description = "nix begat oizys";
 
-  inputs.inputs.url = "./inputs";
+  inputs.inputs.url = "path:./inputs";
 
   # nixConfig = {
   #   extra-substituters = [

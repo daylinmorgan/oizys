@@ -187,11 +187,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-f1iK37gKrRA5Ampke23EzstEFHuKAwEdQnFi2kp4Gi4=",
-        "path": "/nix/store/6mqi9hqplan2ylc4ajk4w4jfjnqasb2b-source/inputs",
+        "path": "./inputs",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/6mqi9hqplan2ylc4ajk4w4jfjnqasb2b-source/inputs",
+        "path": "./inputs",
         "type": "path"
       }
     },
