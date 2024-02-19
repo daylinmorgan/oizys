@@ -25,7 +25,7 @@ type
   OizysContext = object
     flake, host: string
     cache = "daylin"
-    nom: bool = true
+    pinix: bool = true
 
 proc newCtx(): OizysContext =
   result = OizysContext()
@@ -37,24 +37,22 @@ proc check(c: OizysContext) =
     error c.flake, " does not exist"
     error "please use -f/--flake or $FLAKE_PATH"
     quit 1
-
   info "flake: ", c.flake
   info "host: ", c.host
 
-
+proc cmd(c: OizysContext): string {.inline.} =
+  if c.pinix: "pix" else: "nix"
 
 proc systemFlakePath(c: OizysContext): string =
   c.flake & "#nixosConfigurations." & c.host & ".config.system.build.toplevel"
 
 proc build(c: OizysContext) =
   ## build nixos
-  let
-    cmd = if c.nom: "nom" else: "nix"
-  execQuit cmd & " build " & c.systemFlakePath
+  execQuit c.cmd & " build " & c.systemFlakePath
 
 proc dry(c: OizysContext) =
   ## poor man's nix flake check
-  execQuit "nix build " & c.systemFlakePath & " --dry-run"
+  execQuit c.cmd & " build " & c.systemFlakePath & " --dry-run"
 
 proc cache(c: OizysContext) =
   let start = now()
@@ -77,8 +75,8 @@ proc cache(c: OizysContext) =
   info "Built host: " & c.host & " in " & $duration & " seconds"
 
 
-proc nixosRebuild(c: OizysContext, cmd: string) =
-  execQuit "sudo nixos-rebuild " & cmd & " " & " --flake " & c.flake
+proc nixosRebuild(c: OizysContext, subcmd: string) =
+  execQuit "sudo nixos-rebuild " & subcmd & " " & " --flake " & c.flake
 
 proc boot(c: OizysContext) =
   ## nixos rebuild boot
@@ -99,11 +97,11 @@ commands:
   build   build system flake
 
 options:
-  -h|--help    show this help
-     --host    hostname (current host)
-  -f|--flake   path to flake ($FLAKE_PATH or $HOME/oizys)
-  -c|--cache   name of cachix binary cache (daylin)
-     --no-nom  don't use nix-output-monitor
+  -h|--help      show this help
+     --host      hostname (current host)
+  -f|--flake     path to flake ($FLAKE_PATH or $HOME/oizys)
+  -c|--cache     name of cachix binary cache (daylin)
+     --no-pinix  don't use pinix
 """
 
 
@@ -128,25 +126,25 @@ proc parseFlag(c: var OizysContext, key, val: string) =
       c.host = val
     of "f", "flake":
       c.flake = val
-    of "no-nom":
-      c.nom = false
+    of "no-pinix":
+      c.pinix = false
 
 when isMainModule:
   import std/parseopt
   var
     c = newCtx()
-    cmd: string
+    subcmd: string
   for kind, key, val in getopt(longNoVal = @["no-nom"]):
     case kind
     of cmdArgument:
-      cmd = key
+      subcmd = key
     of cmdLongOption, cmdShortOption:
       parseFlag c, key, val
     of cmdEnd:
       discard
-  if cmd == "":
+  if subcmd == "":
     echo "please specify a command"
     echo usage; quit 1
 
   check c
-  runCmd c, cmd
+  runCmd c, subcmd
