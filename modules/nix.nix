@@ -18,7 +18,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-    nix-output-monitor
+    # nix-output-monitor
     alejandra
     self.packages.${pkgs.system}.oizys
     inputs.pinix.packages.${pkgs.system}.default
