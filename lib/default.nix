@@ -47,7 +47,7 @@ in rec {
   mapHosts = dir: mapAttrs (name: _: mkSystem name) (readDir dir);
   buildHosts = _: mapHosts ../hosts;
 
-  findModules = modulesPath: listToAttrs (findModulesList modulesPath);
+  findModules = _: listToAttrs (findModulesList ../modules);
   # https://github.com/balsoft/nixos-config/blob/73cc2c3a8bb62a9c3980a16ae70b2e97af6e1abd/flake.nix#L109-L120
   findModulesList = dir:
     concatLists (attrValues (mapAttrs

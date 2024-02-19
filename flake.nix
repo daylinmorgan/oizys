@@ -1,7 +1,6 @@
 {
   description = "nix begat oizys";
 
-
   inputs.inputs.url = "github:daylinmorgan/oizys?dir=inputs";
 
   outputs = {
@@ -16,7 +15,7 @@
     };
     inherit (lib) findModules buildHosts buildOizys;
   in {
-    nixosModules = findModules ./modules;
+    nixosModules = findModules {};
     nixosConfigurations = buildHosts {};
     packages = buildOizys {};
   };
