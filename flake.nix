@@ -17,7 +17,10 @@
   # };
   #
   outputs = {inputs, ...}: let
-    lib = import ./lib {nixpkgs = inputs.inputs.nixpkgs; inputs = inputs;};
+    lib = import ./lib {
+      nixpkgs = inputs.inputs.nixpkgs;
+      inputs = inputs;
+    };
     inherit (lib) findModules buildHosts buildOizys;
   in {
     nixosModules = findModules ./modules;

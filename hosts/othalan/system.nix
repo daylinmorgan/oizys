@@ -29,9 +29,9 @@
   ];
 
   services.getty.greetingLine = mkRune {
-      rune = "othalan";
-      runeKind = "ascii";
-    };
+    rune = "othalan";
+    runeKind = "ascii";
+  };
   # + inputs.self.nixosModules.runes.othalan.ascii;
 
   # catppuccin/tty move to "module"
