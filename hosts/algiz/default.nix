@@ -1,9 +1,9 @@
 {
-  inputs,
+  self,
   pkgs,
   ...
 }: {
-  imports = with inputs.self.nixosModules; [
+  imports = with self.nixosModules; [
     docker
     restic
   ];

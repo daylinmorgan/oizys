@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   mkRune,
   ...
@@ -32,7 +31,6 @@
     rune = "othalan";
     runeKind = "ascii";
   };
-  # + inputs.self.nixosModules.runes.othalan.ascii;
 
   # catppuccin/tty move to "module"
   boot.kernelParams = [

@@ -1,9 +1,9 @@
 {
-  inputs,
   lib,
+  self,
   ...
 }: {
-  imports = with inputs.self.nixosModules; [
+  imports = with self.nixosModules; [
     users
     nix
     cli

@@ -1,5 +1,6 @@
 {
   inputs,
+  self,
   pkgs,
   ...
 }: {
@@ -19,7 +20,7 @@
   environment.systemPackages = with pkgs; [
     nix-output-monitor
     alejandra
-    inputs.self.packages.${pkgs.system}.oizys
+    self.packages.${pkgs.system}.oizys
     inputs.pinix.packages.${pkgs.system}.default
   ];
 

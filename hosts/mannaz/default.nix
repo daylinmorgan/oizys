@@ -1,5 +1,5 @@
-{inputs, ...}: {
-  imports = with inputs.self.nixosModules; [
+{self, ...}: {
+  imports = with self.nixosModules; [
     nix-ld
   ];
 

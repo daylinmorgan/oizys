@@ -1,6 +1,7 @@
 {
   inputs,
   nixpkgs,
+  self,
   ...
 }: let
   inherit (builtins) concatLists attrValues mapAttrs elemAt match readDir filter listToAttrs;
@@ -41,7 +42,7 @@ in rec {
         isNixFile
         (listFilesRecursive (../. + "/hosts/${hostname}"));
 
-      specialArgs = {inherit inputs mkRune;};
+      specialArgs = {inherit inputs mkRune self;};
     };
   mapHosts = dir: mapAttrs (name: _: mkSystem name) (readDir dir);
   buildHosts = _: mapHosts ../hosts;

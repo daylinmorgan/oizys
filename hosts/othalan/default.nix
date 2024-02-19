@@ -1,9 +1,9 @@
 {
-  inputs,
   pkgs,
+  self,
   ...
 }: {
-  imports = with inputs.self.nixosModules; [
+  imports = with self.nixosModules; [
     nix-ld
     virtualbox
     restic
