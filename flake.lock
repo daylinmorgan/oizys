@@ -185,14 +185,19 @@
         "pinix": "pinix"
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-f1iK37gKrRA5Ampke23EzstEFHuKAwEdQnFi2kp4Gi4=",
-        "path": "inputs",
-        "type": "path"
+        "dir": "inputs",
+        "lastModified": 1708362494,
+        "narHash": "sha256-ldp9eBp8/slVmtUIas1lNUBScZTTnXWW7jFBnrr90qg=",
+        "owner": "daylinmorgan",
+        "repo": "oizys",
+        "rev": "8965a18cceb4c07c5b66442ea5562977df19941e",
+        "type": "github"
       },
       "original": {
-        "path": "inputs",
-        "type": "path"
+        "dir": "inputs",
+        "owner": "daylinmorgan",
+        "repo": "oizys",
+        "type": "github"
       }
     },
     "lib-aggregate": {

@@ -1,7 +1,8 @@
 {
   description = "nix begat oizys";
 
-  inputs.inputs.url = "path:inputs";
+
+  inputs.inputs.url = "github:daylinmorgan/oizys?dir=inputs";
 
   outputs = {
     inputs,
