@@ -4,6 +4,10 @@
   pkgs,
   ...
 }: {
+  imports = [
+    inputs.nix-index-database.nixosModules.nix-index
+  ];
+
   nixpkgs.config.allowUnfree = true;
   nix.package = pkgs.nixUnstable;
   nix.extraOptions = ''
@@ -18,11 +22,16 @@
   };
 
   environment.systemPackages = with pkgs; [
-    # nix-output-monitor
     alejandra
+
     self.packages.${pkgs.system}.oizys
     inputs.pinix.packages.${pkgs.system}.default
   ];
+
+  programs.nix-index-database.comma.enable = true;
+
+  # nix-index didn't like this being enabled?
+  programs.command-not-found.enable = false;
 
   nix.settings = {
     trusted-users = ["@wheel"];

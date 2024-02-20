@@ -17,45 +17,33 @@
   };
 in {
   config = mkIf cfg.enable {
-    systemd.services.screen-locker = {
-      wantedBy = ["sleep.target"];
-      description = "Lock the screen using a custom lock script";
-      before = ["suspend.target"];
-      serviceConfig = {
-        User = "daylin";
-        Type = "forking";
-        Environment = "DISPLAY=:0";
-        ExecStart = "${lock}/bin/lock";
-      };
-    };
     security.pam.services.swaylock = {};
     # programs.hyprland.package = inputs.hyprland.packages.${pkgs.system}.default;
     # Optional, hint electron apps to use wayland:
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
     environment.systemPackages = with pkgs; [
+      swayidle
       wlr-randr
       kanshi
 
       lock
       brightnessctl
       udiskie
+      eww-wayland
 
       # notifications
       libnotify
       dunst
 
-      # screenshots
+      # utils
       grimblast
-
-      eww-wayland
+      wl-clipboard
       rofi-wayland
-      hyprpaper
-
-      catppuccin-cursors.mochaDark
       pavucontrol
 
-      wl-clipboard
+      catppuccin-cursors.mochaDark
+      hyprpaper
     ];
 
     nixpkgs.overlays = [
