@@ -17,6 +17,17 @@
   };
 in {
   config = mkIf cfg.enable {
+    systemd.services.screen-locker = {
+      wantedBy = ["sleep.target"];
+      description = "Lock the screen using a custom lock script";
+      before = ["suspend.target"];
+      serviceConfig = {
+        User = "daylin";
+        Type = "forking";
+        Environment = "DISPLAY=:0";
+        ExecStart = "${lock}/bin/lock";
+      };
+    };
     security.pam.services.swaylock = {};
     # programs.hyprland.package = inputs.hyprland.packages.${pkgs.system}.default;
     # Optional, hint electron apps to use wayland:
