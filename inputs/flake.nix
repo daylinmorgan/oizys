@@ -21,6 +21,9 @@
 
     pinix.url = "github:remi-dupre/pinix";
     pinix.inputs.nixpkgs.follows = "nixpkgs";
+
+    nix-index-database.url = "github:nix-community/nix-index-database";
+    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   nixConfig = {
