@@ -43,21 +43,21 @@ nix run "github:daylinmorgan/oizys"
 
 ```
 oizys <cmd> [opts]
-  commands:
-    dry     poor man's nix flake check
-    boot    nixos-rebuild boot
-    switch  nixos-rebuild switch
-    cache   build and push to cachix
-    build   build system flake
 
-  options:
-    -h|--help    show this help
-       --host    hostname (current host)
-    -f|--flake   path to flake ($FLAKE_PATH or $HOME/oizys)
-    -c|--cache   name of cachix binary cache (daylin)
-       --no-nom  don't use nix-output-monitor
+commands:
+  dry     poor man's nix flake check
+  boot    nixos-rebuild boot
+  switch  nixos-rebuild switch
+  cache   build and push to cachix
+  build   build system flake
+
+options:
+  -h|--help      show this help
+     --host      hostname (current host)
+  -f|--flake     path to flake ($FLAKE_PATH or $HOME/oizys)
+  -c|--cache     name of cachix binary cache (daylin)
+     --no-pinix  don't use pinix
 ```
-
 
 ## oizys?
 
