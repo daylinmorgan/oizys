@@ -76,7 +76,8 @@ proc cache(c: OizysContext) =
 
 
 proc nixosRebuild(c: OizysContext, subcmd: string) =
-  execQuit "sudo nixos-rebuild " & subcmd & " " & " --flake " & c.flake
+  let cmd = if c.pinix: "pixos-rebuild" else: "nixos-rebuild"
+  execQuit "sudo " & cmd & " " & subcmd & " " & " --flake " & c.flake
 
 proc boot(c: OizysContext) =
   ## nixos rebuild boot
