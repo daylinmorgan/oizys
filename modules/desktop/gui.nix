@@ -12,6 +12,8 @@ in {
       wezterm
       alacritty
 
+      xfce.thunar
+
       inkscape
       gimp
 
@@ -24,6 +26,6 @@ in {
         ];
         proprietaryCodecs = true;
       })
-    ];
+   ];
   };
 }
