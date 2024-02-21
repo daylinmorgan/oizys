@@ -15,31 +15,10 @@
         "type": "github"
       }
     },
-    "flake-inputs": {
-      "inputs": {
-        "hyprland": "hyprland",
-        "hyprland-contrib": "hyprland-contrib",
-        "nix-eval-jobs": "nix-eval-jobs",
-        "nix-index-database": "nix-index-database",
-        "nixpkgs": "nixpkgs",
-        "nixpkgs-wayland": "nixpkgs-wayland",
-        "pinix": "pinix"
-      },
-      "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-pNq475t8Hbj+GhSfheiUYA7hVRMjFmTa3B8iAaLtE74=",
-        "path": "./inputs",
-        "type": "path"
-      },
-      "original": {
-        "path": "./inputs",
-        "type": "path"
-      }
-    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
-          "flake-inputs",
+          "inputs",
           "nix-eval-jobs",
           "nixpkgs"
         ]
@@ -81,7 +60,7 @@
         "hyprland-protocols": "hyprland-protocols",
         "hyprlang": "hyprlang",
         "nixpkgs": [
-          "flake-inputs",
+          "inputs",
           "nixpkgs"
         ],
         "systems": "systems",
@@ -106,7 +85,7 @@
     "hyprland-contrib": {
       "inputs": {
         "nixpkgs": [
-          "flake-inputs",
+          "inputs",
           "nixpkgs"
         ]
       },
@@ -127,12 +106,12 @@
     "hyprland-protocols": {
       "inputs": {
         "nixpkgs": [
-          "flake-inputs",
+          "inputs",
           "hyprland",
           "nixpkgs"
         ],
         "systems": [
-          "flake-inputs",
+          "inputs",
           "hyprland",
           "systems"
         ]
@@ -154,7 +133,7 @@
     "hyprlang": {
       "inputs": {
         "nixpkgs": [
-          "flake-inputs",
+          "inputs",
           "hyprland",
           "nixpkgs"
         ]
@@ -176,7 +155,7 @@
     "hyprlang_2": {
       "inputs": {
         "nixpkgs": [
-          "flake-inputs",
+          "inputs",
           "hyprland",
           "xdph",
           "nixpkgs"
@@ -194,6 +173,27 @@
         "owner": "hyprwm",
         "repo": "hyprlang",
         "type": "github"
+      }
+    },
+    "inputs": {
+      "inputs": {
+        "hyprland": "hyprland",
+        "hyprland-contrib": "hyprland-contrib",
+        "nix-eval-jobs": "nix-eval-jobs",
+        "nix-index-database": "nix-index-database",
+        "nixpkgs": "nixpkgs",
+        "nixpkgs-wayland": "nixpkgs-wayland",
+        "pinix": "pinix"
+      },
+      "locked": {
+        "lastModified": 1,
+        "narHash": "sha256-pNq475t8Hbj+GhSfheiUYA7hVRMjFmTa3B8iAaLtE74=",
+        "path": "./inputs",
+        "type": "path"
+      },
+      "original": {
+        "path": "./inputs",
+        "type": "path"
       }
     },
     "lib-aggregate": {
@@ -220,7 +220,7 @@
         "flake-parts": "flake-parts",
         "nix-github-actions": "nix-github-actions",
         "nixpkgs": [
-          "flake-inputs",
+          "inputs",
           "nixpkgs"
         ],
         "treefmt-nix": "treefmt-nix"
@@ -242,7 +242,7 @@
     "nix-github-actions": {
       "inputs": {
         "nixpkgs": [
-          "flake-inputs",
+          "inputs",
           "nix-eval-jobs",
           "nixpkgs"
         ]
@@ -264,7 +264,7 @@
     "nix-index-database": {
       "inputs": {
         "nixpkgs": [
-          "flake-inputs",
+          "inputs",
           "nixpkgs"
         ]
       },
@@ -318,11 +318,11 @@
         "flake-compat": "flake-compat",
         "lib-aggregate": "lib-aggregate",
         "nix-eval-jobs": [
-          "flake-inputs",
+          "inputs",
           "nix-eval-jobs"
         ],
         "nixpkgs": [
-          "flake-inputs",
+          "inputs",
           "nixpkgs"
         ]
       },
@@ -343,7 +343,7 @@
     "pinix": {
       "inputs": {
         "nixpkgs": [
-          "flake-inputs",
+          "inputs",
           "nixpkgs"
         ]
       },
@@ -363,7 +363,7 @@
     },
     "root": {
       "inputs": {
-        "flake-inputs": "flake-inputs"
+        "inputs": "inputs"
       }
     },
     "systems": {
@@ -399,7 +399,7 @@
     "treefmt-nix": {
       "inputs": {
         "nixpkgs": [
-          "flake-inputs",
+          "inputs",
           "nix-eval-jobs",
           "nixpkgs"
         ]
@@ -440,18 +440,18 @@
     "xdph": {
       "inputs": {
         "hyprland-protocols": [
-          "flake-inputs",
+          "inputs",
           "hyprland",
           "hyprland-protocols"
         ],
         "hyprlang": "hyprlang_2",
         "nixpkgs": [
-          "flake-inputs",
+          "inputs",
           "hyprland",
           "nixpkgs"
         ],
         "systems": [
-          "flake-inputs",
+          "inputs",
           "hyprland",
           "systems"
         ]
