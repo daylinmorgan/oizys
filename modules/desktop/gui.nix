@@ -26,6 +26,6 @@ in {
         ];
         proprietaryCodecs = true;
       })
-   ];
+    ];
   };
 }
