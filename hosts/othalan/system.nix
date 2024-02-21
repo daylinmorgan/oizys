@@ -42,6 +42,7 @@
   networking.hostName = "othalan";
   time.timeZone = "US/Central";
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.consoleMode = "max";
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
