@@ -31,5 +31,5 @@ jobs:
 
       - name: Build
         run: |
-          nix flake lock --update-input inputs
+          nix flake update inputs
           nix run . --accept-flake-config -- cache --host "${{ matrix.host }}" --flake .
