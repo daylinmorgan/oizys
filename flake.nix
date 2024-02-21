@@ -1,23 +1,16 @@
 {
   description = "nix begat oizys";
 
-  # inputs.inputs.url = "github:daylinmorgan/oizys?dir=inputs";
-  inputs.inputs.url = "path:./inputs";
+  # inputs.flake-inputs.url = "github:daylinmorgan/oizys?dir=inputs";
+  inputs.flake-inputs.url = "path:./inputs";
 
   outputs = {
-    inputs,
     self,
-    ...
-  }: let
-    lib = import ./lib {
-      nixpkgs = inputs.inputs.nixpkgs;
-      inputs = inputs.inputs;
+    flake-inputs,
+  }:
+    (import ./lib {
       inherit self;
-    };
-    inherit (lib) findModules buildHosts buildOizys;
-  in {
-    nixosModules = findModules {};
-    nixosConfigurations = buildHosts {};
-    packages = buildOizys {};
-  };
+      inputs = flake-inputs.inputs;
+    })
+    .oizysFlake {};
 }

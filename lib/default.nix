@@ -1,9 +1,9 @@
 {
   inputs,
-  nixpkgs,
   self,
   ...
 }: let
+  nixpkgs = inputs.nixpkgs;
   inherit (builtins) concatLists attrValues mapAttrs elemAt match readDir filter listToAttrs;
   inherit (nixpkgs.lib) hasSuffix nixosSystem genAttrs;
   inherit (nixpkgs.lib.filesystem) listFilesRecursive;
@@ -69,4 +69,11 @@ in rec {
           }
         ]
         else findModulesList (dir + "/${name}")) (readDir dir)));
+
+  oizysFlake = _: {
+    nixosModules = findModules {};
+    nixosConfigurations = buildHosts {};
+    packages = buildOizys {};
+    formatter = forAllSystems (pkgs: pkgs.alejandra);
+  };
 }
