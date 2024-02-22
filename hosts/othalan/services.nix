@@ -6,7 +6,9 @@ in {
     serviceConfig = {
       Type = "oneshot";
       User = "daylin";
-      ExecStart = ''${notes-git} commit -m ":memo: :robot: $(${pkgs.coreutils}/bin/date +'%T')" --no-gpg-sign -- notes'';
+      ExecStart = ''
+        ${pkgs.bash}/bin/bash -c '${notes-git} commit -m ":memo: :robot: $(${pkgs.coreutils}/bin/date +\'%%T\')" --no-gpg-sign -- notes'
+      '';
     };
   };
   systemd.timers.notes-bot-timer = {
