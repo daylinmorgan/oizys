@@ -1,7 +1,6 @@
 {
   description = "nix begat oizys";
-  # inputs.flake-inputs.url = "github:daylinmorgan/oizys?dir=inputs";
-  inputs.inputs.url = "path:./inputs";
+  inputs.inputs.url = "github:daylinmorgan/oizys?dir=inputs";
   outputs = {
     inputs,
     self,
