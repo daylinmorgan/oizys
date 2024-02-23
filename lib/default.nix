@@ -2,9 +2,7 @@
   inputs,
   self,
 }: let
-  # inputs = flake-inputs.inputs.inputs;
-  # self = flake-inputs.self;
-  nixpkgs = inputs.nixpkgs;
+  inherit (inputs) nixpkgs;
   inherit (builtins) concatLists attrValues mapAttrs elemAt match readDir filter listToAttrs;
   inherit (nixpkgs.lib) hasSuffix nixosSystem genAttrs;
   inherit (nixpkgs.lib.filesystem) listFilesRecursive;
