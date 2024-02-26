@@ -24,7 +24,7 @@ in {
           exec ${python}/bin/python "$@"
         '')
 
-        # (python3.withPackages (ps: with ps; [pip]))
+        (python3.withPackages (ps: with ps; [pip]))
         micromamba
       ];
   };
