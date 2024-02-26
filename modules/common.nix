@@ -20,7 +20,6 @@
     hyprland
 
     gui
-    vscode
 
     # langs
     python
@@ -28,6 +27,10 @@
     node
     tex
     nim
+
+    # programs
+    vivaldi
+    vscode
   ];
 
   options.desktop.enable = lib.mkEnableOption "is desktop";

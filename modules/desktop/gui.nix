@@ -19,13 +19,6 @@ in {
 
       libreoffice-qt
       hunspell # spell check for libreoffice
-
-      (vivaldi.override {
-        commandLineArgs = [
-          "--force-dark-mode"
-        ];
-        proprietaryCodecs = true;
-      })
     ];
   };
 }

@@ -12,6 +12,7 @@
 
   cli.enable = true;
   desktop.enable = true;
+  vivaldi.enable = true;
 
   languages = {
     misc = true;
