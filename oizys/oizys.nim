@@ -1,8 +1,7 @@
-import std/[os, osproc, tables, times, strutils, terminal]
+import std/[os, osproc, parseopt, times, strutils, terminal]
 from std/nativesockets import getHostname
 
 let summaryFile = getEnv("GITHUB_STEP_SUMMARY")
-
 
 proc info(args: varargs[string, `$`]) =
   stdout.styledWriteLine(
@@ -18,15 +17,17 @@ proc error(args: varargs[string, `$`]) =
     args.join("")
   )
 
-proc execQuit(cmd: string) =
-  info "exec: ", cmd
-  quit (execCmd cmd)
-
 type
   OizysContext = object
     flake, host: string
+    extraArgs: seq[string]
     cache = "daylin"
     pinix: bool = true
+
+proc execQuit(c: OizysContext, args: varargs[string]) =
+  let cmd = (@args & c.extraArgs).join(" ")
+  info "exec: ", cmd
+  quit (execCmd cmd)
 
 proc newCtx(): OizysContext =
   result = OizysContext()
@@ -49,11 +50,11 @@ proc systemFlakePath(c: OizysContext): string =
 
 proc build(c: OizysContext) =
   ## build nixos
-  execQuit c.cmd & " build " & c.systemFlakePath
+  execQuit c, c.cmd, "build", c.systemFlakePath
 
 proc dry(c: OizysContext) =
   ## poor man's nix flake check
-  execQuit c.cmd & " build " & c.systemFlakePath & " --dry-run"
+  execQuit c, c.cmd, "build", c.systemFlakePath, "--dry-run"
 
 proc cache(c: OizysContext) =
   let start = now()
@@ -78,7 +79,7 @@ proc cache(c: OizysContext) =
 
 proc nixosRebuild(c: OizysContext, subcmd: string) =
   let cmd = if c.pinix: "pixos-rebuild" else: "nixos-rebuild"
-  execQuit "sudo " & cmd & " " & subcmd & " " & " --flake " & c.flake
+  execQuit c, "sudo", cmd, subcmd, "--flake", c.flake
 
 proc boot(c: OizysContext) =
   ## nixos rebuild boot
@@ -120,7 +121,7 @@ proc runCmd(c: OizysContext, cmd: string) =
       quit 1
 
 
-proc parseFlag(c: var OizysContext, key, val: string) =
+proc parseFlag(c: var OizysContext, kind: CmdLineKind, key, val: string) =
   case key:
     of "h", "help":
       echo usage; quit 0
@@ -130,23 +131,31 @@ proc parseFlag(c: var OizysContext, key, val: string) =
       c.flake = val
     of "no-pinix":
       c.pinix = false
+    else:
+      c.extraArgs.add (if kind == cmdLongOption: "--" else: "-") & key
+      c.extraArgs.add val
 
 when isMainModule:
-  import std/parseopt
   var
     c = newCtx()
     subcmd: string
-  for kind, key, val in getopt(longNoVal = @["no-nom"]):
+  var p = initOptParser(
+    longNoVal = @["no-pinix", "help", ""], shortNoVal = {'h'}
+  )
+  for kind, key, val in p.getopt():
     case kind
     of cmdArgument:
+      echo key
       subcmd = key
     of cmdLongOption, cmdShortOption:
-      parseFlag c, key, val
+      if key == "":
+        break
+      parseFlag c, kind, key, val
     of cmdEnd:
       discard
   if subcmd == "":
     echo "please specify a command"
     echo usage; quit 1
-
+  c.extraArgs = p.remainingArgs
   check c
   runCmd c, subcmd
