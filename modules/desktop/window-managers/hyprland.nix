@@ -44,6 +44,7 @@ in {
 
       catppuccin-cursors.mochaDark
       hyprpaper
+      swww
     ];
 
     nixpkgs.overlays = [
