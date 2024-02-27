@@ -19,6 +19,7 @@ proc error(args: varargs[string, `$`]) =
   )
 
 proc execQuit(cmd: string) =
+  info "exec: ", cmd
   quit (execCmd cmd)
 
 type
