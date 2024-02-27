@@ -5,10 +5,10 @@
   ...
 }: let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.services.vpn;
+  cfg = config.oizys.vpn;
 in {
-  options.services.vpn.enable = mkEnableOption ''
-    use openconnect vpn
+  options.oizys.vpn.enable = mkEnableOption ''
+    Whether to enable openconnect for vpn connection.
   '';
 
   config = mkIf cfg.enable {

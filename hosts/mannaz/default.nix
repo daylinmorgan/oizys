@@ -3,7 +3,7 @@
     nix-ld
   ];
 
-  desktop.enable = true;
+  oizys.desktop.enable = true;
   cli.enable = true;
   # Enable the X11 windowing system.
   services.xserver = {

@@ -12,7 +12,6 @@
     nim = true;
     python = true;
   };
-  cli.enable = true;
 
   environment.systemPackages = with pkgs; [
     rclone

@@ -10,17 +10,20 @@
     docker
   ];
 
-  cli.enable = true;
-  desktop.enable = true;
+  oizys = {
+    desktop.enable = true;
+    vpn.enable = true;
+    languages = [
+    "misc"
+    "python"
+    "nim"
+    "tex"
+    "node"
+  ];
+  };
   vivaldi.enable = true;
 
-  languages = {
-    misc = true;
-    python = true;
-    nim = true;
-    tex = true;
-    node = true;
-  };
+  
 
   environment.systemPackages = with pkgs; [
     zk
@@ -29,8 +32,6 @@
   ];
 
   programs.hyprland.enable = true;
-
-  services.vpn.enable = true;
 
   services.restic.backups.gdrive = {
     user = "daylin";

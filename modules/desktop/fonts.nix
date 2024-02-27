@@ -5,7 +5,7 @@
   ...
 }: let
   inherit (lib) mkIf;
-  cfg = config.desktop;
+  cfg = config.oizys.desktop;
 in {
   config = mkIf cfg.enable {
     fonts.fontconfig.enable = true;

@@ -4,11 +4,10 @@
   pkgs,
   ...
 }: let
-  inherit (lib) mkEnableOption mkIf;
-  cfg = config.languages;
+  inherit (lib) mkIf;
+  cfg = config.oizys.languages;
 in {
-  options.languages.nim = mkEnableOption "nim";
-  config = mkIf cfg.nim {
+  config = mkIf (builtins.elem "nim" cfg) {
     environment.systemPackages = with pkgs; [
       nim
 

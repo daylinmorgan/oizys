@@ -4,11 +4,10 @@
   pkgs,
   ...
 }: let
-  inherit (lib) mkEnableOption mkIf;
-  cfg = config.languages;
+  inherit (lib) mkIf;
+  cfg = config.oizys.languages;
 in {
-  options.languages.node = mkEnableOption "node";
-  config = mkIf cfg.node {
+  config = mkIf (builtins.elem "node" cfg) {
     environment.systemPackages = with pkgs; [
       nodejs
       nodePackages.pnpm

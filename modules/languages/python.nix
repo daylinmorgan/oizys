@@ -4,11 +4,10 @@
   pkgs,
   ...
 }: let
-  inherit (lib) mkEnableOption mkIf;
-  cfg = config.languages;
+  inherit (lib) mkIf;
+  cfg = config.oizys.languages;
 in {
-  options.languages.python = mkEnableOption "python";
-  config = mkIf cfg.python {
+  config = mkIf (builtins.elem "python" cfg) {
     environment.systemPackages = let
       python = pkgs.python3.withPackages (ps: with ps; [pip]);
     in

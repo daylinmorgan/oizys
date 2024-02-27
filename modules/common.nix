@@ -21,17 +21,12 @@
 
     gui
 
-    # langs
-    python
-    misc
-    node
-    tex
-    nim
+    languages
 
     # programs
     vivaldi
     vscode
   ];
 
-  options.desktop.enable = lib.mkEnableOption "is desktop";
+  options.oizys.desktop.enable = lib.mkEnableOption "is desktop";
 }
