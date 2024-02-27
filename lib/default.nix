@@ -7,30 +7,12 @@
   inherit (nixpkgs.lib) hasSuffix nixosSystem genAttrs;
   inherit (nixpkgs.lib.filesystem) listFilesRecursive;
 
-  runes = import ../modules/runes;
-  lib = nixpkgs.lib.extend (final: prev: {
-    mkIfIn = name: list: prev.mkIf (builtins.elem name list);
-  mkRune = {
-    rune,
-    number ? "6",
-    runeKind ? "braille",
-  }:
-    "[1;3${number}m\n" + runes.${rune}.${runeKind} + "\n[0m";
-
-
-  });
-
+  lib = nixpkgs.lib.extend (import ./extended.nix);
   #supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
   supportedSystems = ["x86_64-linux"];
 in rec {
   forAllSystems = f: genAttrs supportedSystems (system: f nixpkgs.legacyPackages.${system});
-  # mkRune = {
-  #   rune,
-  #   number ? "6",
-  #   runeKind ? "braille",
-  # }:
-  #   "[1;3${number}m\n" + runes.${rune}.${runeKind} + "\n[0m";
-  
+
   isNixFile = path: hasSuffix ".nix" path;
   buildOizys = _:
     forAllSystems (
@@ -57,7 +39,6 @@ in rec {
       specialArgs = {inherit inputs lib self;};
     };
   mapHosts = dir: mapAttrs (name: _: mkSystem name) (readDir dir);
-  buildHosts = _: mapHosts ../hosts;
 
   findModules = _: listToAttrs (findModulesList ../modules);
   # https://github.com/balsoft/nixos-config/blob/73cc2c3a8bb62a9c3980a16ae70b2e97af6e1abd/flake.nix#L109-L120
@@ -84,7 +65,7 @@ in rec {
 
   oizysFlake = _: {
     nixosModules = findModules {};
-    nixosConfigurations = buildHosts {};
+    nixosConfigurations = mapHosts ../hosts;
     packages = buildOizys {};
     formatter = forAllSystems (pkgs: pkgs.alejandra);
   };
