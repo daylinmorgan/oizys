@@ -1,10 +1,10 @@
 {
   config,
   pkgs,
-  mkRune,
+  lib,
   ...
 }: {
-  users.motd = mkRune {
+  users.motd = lib.mkRune {
     number = "2";
     rune = "mannaz";
   };

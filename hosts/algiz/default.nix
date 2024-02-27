@@ -8,10 +8,10 @@
     restic
   ];
 
-  languages = {
-    nim = true;
-    python = true;
-  };
+  oizys.languages = [
+    "nim"
+    "python"
+  ];
 
   environment.systemPackages = with pkgs; [
     rclone

@@ -4,10 +4,10 @@
   pkgs,
   ...
 }: let
-  inherit (lib) mkIf;
+  inherit (lib) mkIfIn;
   cfg = config.oizys.languages;
 in {
-  config = mkIf (builtins.elem "misc" cfg) {
+  config = mkIfIn "misc" cfg {
     environment.systemPackages = with pkgs; [
       go
       rustup

@@ -1,6 +1,6 @@
 {
   pkgs,
-  mkRune,
+  lib,
   ...
 }: {
   networking.networkmanager.enable = true;
@@ -27,7 +27,7 @@
     pamixer
   ];
 
-  services.getty.greetingLine = mkRune {
+  services.getty.greetingLine = lib.mkRune {
     rune = "othalan";
     runeKind = "ascii";
   };

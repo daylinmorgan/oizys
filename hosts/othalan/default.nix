@@ -14,16 +14,14 @@
     desktop.enable = true;
     vpn.enable = true;
     languages = [
-    "misc"
-    "python"
-    "nim"
-    "tex"
-    "node"
-  ];
+      "misc"
+      "python"
+      "nim"
+      "tex"
+      "node"
+    ];
   };
   vivaldi.enable = true;
-
-  
 
   environment.systemPackages = with pkgs; [
     zk

@@ -1,5 +1,5 @@
-{mkRune, ...}: {
-  users.motd = mkRune {
+{lib, ...}: {
+  users.motd = lib.mkRune {
     number = "6";
     rune = "algiz";
   };

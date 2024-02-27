@@ -7,11 +7,9 @@
   inherit (nixpkgs.lib) hasSuffix nixosSystem genAttrs;
   inherit (nixpkgs.lib.filesystem) listFilesRecursive;
 
-  #supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
-  supportedSystems = ["x86_64-linux" ];
   runes = import ../modules/runes;
-in rec {
-  forAllSystems = f: genAttrs supportedSystems (system: f nixpkgs.legacyPackages.${system});
+  lib = nixpkgs.lib.extend (final: prev: {
+    mkIfIn = name: list: prev.mkIf (builtins.elem name list);
   mkRune = {
     rune,
     number ? "6",
@@ -19,6 +17,20 @@ in rec {
   }:
     "[1;3${number}m\n" + runes.${rune}.${runeKind} + "\n[0m";
 
+
+  });
+
+  #supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
+  supportedSystems = ["x86_64-linux"];
+in rec {
+  forAllSystems = f: genAttrs supportedSystems (system: f nixpkgs.legacyPackages.${system});
+  # mkRune = {
+  #   rune,
+  #   number ? "6",
+  #   runeKind ? "braille",
+  # }:
+  #   "[1;3${number}m\n" + runes.${rune}.${runeKind} + "\n[0m";
+  
   isNixFile = path: hasSuffix ".nix" path;
   buildOizys = _:
     forAllSystems (
@@ -42,7 +54,7 @@ in rec {
         isNixFile
         (listFilesRecursive (../. + "/hosts/${hostname}"));
 
-      specialArgs = {inherit inputs mkRune self;};
+      specialArgs = {inherit inputs lib self;};
     };
   mapHosts = dir: mapAttrs (name: _: mkSystem name) (readDir dir);
   buildHosts = _: mapHosts ../hosts;

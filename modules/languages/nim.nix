@@ -4,10 +4,10 @@
   pkgs,
   ...
 }: let
-  inherit (lib) mkIf;
+  inherit (lib) mkIfIn;
   cfg = config.oizys.languages;
 in {
-  config = mkIf (builtins.elem "nim" cfg) {
+  config = mkIfIn "nim" cfg {
     environment.systemPackages = with pkgs; [
       nim
 

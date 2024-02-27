@@ -4,11 +4,10 @@
   pkgs,
   ...
 }: let
-  inherit (lib) mkIf;
-  # cfg = config.oizys.languages;
-  langEnabled = name: builtins.elem name config.oizys.languages;
+  inherit (lib) mkIf mkIfIn;
+  cfg = config.oizys.languages;
 in {
-  config = mkIf (langEnabled "tex") {
+  config = mkIfIn "tex" cfg {
     environment.systemPackages = with pkgs; [
       texlive.combined.scheme-full
     ];
