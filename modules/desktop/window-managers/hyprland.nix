@@ -30,7 +30,7 @@ in {
       lock
       brightnessctl
       udiskie
-      eww-wayland
+      eww
 
       # notifications
       libnotify
