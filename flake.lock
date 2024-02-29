@@ -18,7 +18,6 @@
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
-          "inputs",
           "nix-eval-jobs",
           "nixpkgs"
         ]
@@ -60,7 +59,6 @@
         "hyprland-protocols": "hyprland-protocols",
         "hyprlang": "hyprlang",
         "nixpkgs": [
-          "inputs",
           "nixpkgs"
         ],
         "systems": "systems",
@@ -68,11 +66,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1709227424,
-        "narHash": "sha256-/RC/4TDKW6FABeSPMIeHbPf81k6ZOI8SoNBFOTDyy9c=",
+        "lastModified": 1709242419,
+        "narHash": "sha256-KrgZzmNe5JTtbK1DAmarghdB7A4VqhehsofgXgp6Xg0=",
         "owner": "hyprwm",
         "repo": "Hyprland",
-        "rev": "1698d336f2511ee7c93d0a520c7ba3491c831e8d",
+        "rev": "f801d15947e151a8129ff82c99abb208e4767322",
         "type": "github"
       },
       "original": {
@@ -85,7 +83,6 @@
     "hyprland-contrib": {
       "inputs": {
         "nixpkgs": [
-          "inputs",
           "nixpkgs"
         ]
       },
@@ -106,12 +103,10 @@
     "hyprland-protocols": {
       "inputs": {
         "nixpkgs": [
-          "inputs",
           "hyprland",
           "nixpkgs"
         ],
         "systems": [
-          "inputs",
           "hyprland",
           "systems"
         ]
@@ -133,12 +128,10 @@
     "hyprlang": {
       "inputs": {
         "nixpkgs": [
-          "inputs",
           "hyprland",
           "nixpkgs"
         ],
         "systems": [
-          "inputs",
           "hyprland",
           "systems"
         ]
@@ -154,32 +147,6 @@
       "original": {
         "owner": "hyprwm",
         "repo": "hyprlang",
-        "type": "github"
-      }
-    },
-    "inputs": {
-      "inputs": {
-        "hyprland": "hyprland",
-        "hyprland-contrib": "hyprland-contrib",
-        "nix-eval-jobs": "nix-eval-jobs",
-        "nix-index-database": "nix-index-database",
-        "nixpkgs": "nixpkgs",
-        "nixpkgs-wayland": "nixpkgs-wayland",
-        "pinix": "pinix"
-      },
-      "locked": {
-        "dir": "inputs",
-        "lastModified": 1709062040,
-        "narHash": "sha256-/WnKTvmM3LFJ76+zFhlx2bMVL5PrRJ5ImeSTKtjtDPE=",
-        "owner": "daylinmorgan",
-        "repo": "oizys",
-        "rev": "8766668a1c2a01a68982ee2e25f696662a679fdf",
-        "type": "github"
-      },
-      "original": {
-        "dir": "inputs",
-        "owner": "daylinmorgan",
-        "repo": "oizys",
         "type": "github"
       }
     },
@@ -207,7 +174,6 @@
         "flake-parts": "flake-parts",
         "nix-github-actions": "nix-github-actions",
         "nixpkgs": [
-          "inputs",
           "nixpkgs"
         ],
         "treefmt-nix": "treefmt-nix"
@@ -229,7 +195,6 @@
     "nix-github-actions": {
       "inputs": {
         "nixpkgs": [
-          "inputs",
           "nix-eval-jobs",
           "nixpkgs"
         ]
@@ -251,7 +216,6 @@
     "nix-index-database": {
       "inputs": {
         "nixpkgs": [
-          "inputs",
           "nixpkgs"
         ]
       },
@@ -305,11 +269,9 @@
         "flake-compat": "flake-compat",
         "lib-aggregate": "lib-aggregate",
         "nix-eval-jobs": [
-          "inputs",
           "nix-eval-jobs"
         ],
         "nixpkgs": [
-          "inputs",
           "nixpkgs"
         ]
       },
@@ -330,7 +292,6 @@
     "pinix": {
       "inputs": {
         "nixpkgs": [
-          "inputs",
           "nixpkgs"
         ]
       },
@@ -350,7 +311,13 @@
     },
     "root": {
       "inputs": {
-        "inputs": "inputs"
+        "hyprland": "hyprland",
+        "hyprland-contrib": "hyprland-contrib",
+        "nix-eval-jobs": "nix-eval-jobs",
+        "nix-index-database": "nix-index-database",
+        "nixpkgs": "nixpkgs",
+        "nixpkgs-wayland": "nixpkgs-wayland",
+        "pinix": "pinix"
       }
     },
     "systems": {
@@ -386,7 +353,6 @@
     "treefmt-nix": {
       "inputs": {
         "nixpkgs": [
-          "inputs",
           "nix-eval-jobs",
           "nixpkgs"
         ]
@@ -427,22 +393,18 @@
     "xdph": {
       "inputs": {
         "hyprland-protocols": [
-          "inputs",
           "hyprland",
           "hyprland-protocols"
         ],
         "hyprlang": [
-          "inputs",
           "hyprland",
           "hyprlang"
         ],
         "nixpkgs": [
-          "inputs",
           "hyprland",
           "nixpkgs"
         ],
         "systems": [
-          "inputs",
           "hyprland",
           "systems"
         ]
