@@ -1,9 +1,6 @@
 {
   description = "nix begat oizys";
-  outputs = inputs@{
-    self,
-    ...
-  }:
+  outputs = inputs @ {self, ...}:
     (import ./lib {
       inherit inputs;
       inherit self;
@@ -50,4 +47,3 @@
     ];
   };
 }
-
