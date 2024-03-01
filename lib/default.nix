@@ -3,17 +3,17 @@
   self,
 }: let
   inherit (inputs) nixpkgs;
-  inherit (builtins) concatLists attrValues mapAttrs elemAt match readDir filter listToAttrs;
-  inherit (nixpkgs.lib) hasSuffix nixosSystem genAttrs;
-  inherit (nixpkgs.lib.filesystem) listFilesRecursive;
-
   lib = nixpkgs.lib.extend (import ./extended.nix);
+
+  inherit (builtins) concatLists attrValues mapAttrs elemAt match readDir filter listToAttrs;
+  inherit (lib) hasSuffix nixosSystem genAttrs isNixFile;
+  inherit (lib.filesystem) listFilesRecursive;
+
   #supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
   supportedSystems = ["x86_64-linux"];
 in rec {
   forAllSystems = f: genAttrs supportedSystems (system: f nixpkgs.legacyPackages.${system});
 
-  isNixFile = path: hasSuffix ".nix" path;
   buildOizys = _:
     forAllSystems (
       pkgs: let
