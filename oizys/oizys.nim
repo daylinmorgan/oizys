@@ -17,6 +17,14 @@ proc error(args: varargs[string, `$`]) =
     args.join("")
   )
 
+proc warn(args: varargs[string, `$`]) =
+  stdout.styledWriteLine(
+    fgCyan, "oizys", resetStyle, "|",
+    fgYellow, "WARN", resetStyle, "| ",
+    args.join("")
+  )
+
+
 type
   OizysContext = object
     flake, host: string
@@ -43,7 +51,13 @@ proc check(c: OizysContext) =
   info "host: ", c.host
 
 proc cmd(c: OizysContext): string {.inline.} =
-  if c.pinix: "pix" else: "nix"
+  let pixExists = findExe("pix") != ""
+  if c.pinix:
+    if pixExists:
+      return "pix"
+    else:
+      warn "pinix not found, falling back to nix"
+  return "nix"
 
 proc systemFlakePath(c: OizysContext): string =
   c.flake & "#nixosConfigurations." & c.host & ".config.system.build.toplevel"
