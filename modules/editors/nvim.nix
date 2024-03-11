@@ -3,7 +3,7 @@
     vim
     neovim
 
-    nixd
+    # nixd
     tree-sitter
   ];
 }
