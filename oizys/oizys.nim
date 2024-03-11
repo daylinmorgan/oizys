@@ -79,9 +79,11 @@ proc cache(c: OizysContext) =
         --print-build-logs \
         --accept-flake-config
     """
+
   let duration = (now() - start)
   if code != 0:
-    error "faile to build configuration for: ", c.host
+    error "failed to build configuration for: ", c.host
+    quit code
 
   if summaryFile != "":
     writeFile(
