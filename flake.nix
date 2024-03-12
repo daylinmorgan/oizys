@@ -8,7 +8,10 @@
     .oizysFlake {};
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    # nixpkgs.url = "github:nixos/nixpkgs/032162631dbfefa15898fc5ddd8daef484fd6d53";
+    nixpkgs.url = "github:nixos/nixpkgs/d5decf6e964b50425195ea8fd831931bb10b064f";
+
+    stable.url = "github:nixos/nixpkgs/nixos-23.11";
 
     hyprland.url = "github:hyprwm/Hyprland/main";
     hyprland.inputs.nixpkgs.follows = "nixpkgs";
