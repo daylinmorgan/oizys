@@ -8,8 +8,11 @@
     .oizysFlake {};
 
   inputs = {
+
     # nixpkgs.url = "github:nixos/nixpkgs/032162631dbfefa15898fc5ddd8daef484fd6d53";
-    nixpkgs.url = "github:nixos/nixpkgs/d5decf6e964b50425195ea8fd831931bb10b064f";
+    # nixpkgs.url = "github:nixos/nixpkgs/d5decf6e964b50425195ea8fd831931bb10b064f";
+    # nixpkgs.url = "github:nixos/nixpkgs/bfa8b30043892dc2b660d403faa159bab7b65898";
+    nixpkgs.url = "github:wegank/nixpkgs/51d879e6533624bd124a60adf8aa3c304a7f9523";
 
     stable.url = "github:nixos/nixpkgs/nixos-23.11";
 
