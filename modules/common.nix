@@ -19,6 +19,9 @@
     qtile
     hyprland
 
+
+    virtualbox
+
     gui
 
     languages

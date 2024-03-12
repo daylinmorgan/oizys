@@ -5,12 +5,12 @@
 }: {
   imports = with self.nixosModules; [
     nix-ld
-    virtualbox
     restic
     docker
   ];
 
   oizys = {
+    vbox.enable = true;
     desktop.enable = true;
     vpn.enable = true;
     languages = [
