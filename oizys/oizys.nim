@@ -161,11 +161,9 @@ when isMainModule:
   for kind, key, val in p.getopt():
     case kind
     of cmdArgument:
-      echo key
       subcmd = key
     of cmdLongOption, cmdShortOption:
-      if key == "":
-        break
+      if key == "": break
       parseFlag c, kind, key, val
     of cmdEnd:
       discard
