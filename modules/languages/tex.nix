@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  inherit (lib) mkIf mkIfIn;
+  inherit (lib) mkIfIn;
   cfg = config.oizys.languages;
 in {
   config = mkIfIn "tex" cfg {

@@ -6,7 +6,7 @@
   lib = nixpkgs.lib.extend (import ./extended.nix);
 
   inherit (builtins) concatLists attrValues mapAttrs elemAt match readDir filter listToAttrs;
-  inherit (lib) hasSuffix nixosSystem genAttrs isNixFile;
+  inherit (lib) nixosSystem genAttrs isNixFile;
   inherit (lib.filesystem) listFilesRecursive;
 
   #supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];

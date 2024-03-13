@@ -12,7 +12,7 @@
 in {
   nixpkgs.overlays = defaultOverlays ++ [
     (
-      final: prev: {
+      final: _prev: {
         stable = import inputs.stable { system = final.system; 
         config.allowUnfree = true;
       };
