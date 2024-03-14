@@ -10,13 +10,16 @@
       (f: f != "default.nix")
       (builtins.attrNames (builtins.readDir ./.)));
 in {
-  nixpkgs.overlays = defaultOverlays ++ [
-    (
-      final: _prev: {
-        stable = import inputs.stable { system = final.system; 
-        config.allowUnfree = true;
-      };
+  nixpkgs.overlays =
+    defaultOverlays
+    ++ [
+      (
+        final: _prev: {
+          stable = import inputs.stable {
+            system = final.system;
+            config.allowUnfree = true;
+          };
         }
-    )
-  ];
+      )
+    ];
 }

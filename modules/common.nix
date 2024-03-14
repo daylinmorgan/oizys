@@ -19,7 +19,6 @@
     qtile
     hyprland
 
-
     virtualbox
 
     gui
