@@ -1,23 +1,38 @@
-import std/[os, osproc, parseopt, times, strutils, terminal]
+import std/[macros, os, osproc, parseopt, times, strformat, strutils, terminal]
 from std/nativesockets import getHostname
 
 let summaryFile = getEnv("GITHUB_STEP_SUMMARY")
 
-proc info(args: varargs[string, `$`]) =
+macro doc(procedure: typed): untyped =
+  ## extract documenatation comments from procedure
+  procedure.expectKind(nnkSym)
+  if procedure.symKind != nskProc:
+    error("procedure expected", procedure)
+  let
+    impl = procedure.getImpl
+    docs = impl.body.extractDocCommentsAndRunnables
+  var doc: string
+  for element in docs:
+    if element.kind == nnkCommentStmt:
+      doc.addSep("\n", startLen = 1)
+      doc.add($element)
+  result = newLit(doc)
+
+proc logInfo(args: varargs[string, `$`]) =
   stdout.styledWriteLine(
     fgCyan, "oizys", resetStyle, "|",
     styleDim, "INFO", resetStyle, "| ",
     args.join("")
   )
 
-proc error(args: varargs[string, `$`]) =
+proc logErr(args: varargs[string, `$`]) =
   stdout.styledWriteLine(
     fgCyan, "oizys", resetStyle, "|",
     fgRed, "ERROR", resetStyle, "| ",
     args.join("")
   )
 
-proc warn(args: varargs[string, `$`]) =
+proc logWarn(args: varargs[string, `$`]) =
   stdout.styledWriteLine(
     fgCyan, "oizys", resetStyle, "|",
     fgYellow, "WARN", resetStyle, "| ",
@@ -34,7 +49,7 @@ type
 
 proc execQuit(c: OizysContext, args: varargs[string]) =
   let cmd = (@args & c.extraArgs).join(" ")
-  info "exec: ", cmd
+  logInfo "exec: ", cmd
   quit (execCmd cmd)
 
 proc newCtx(): OizysContext =
@@ -44,11 +59,11 @@ proc newCtx(): OizysContext =
 
 proc check(c: OizysContext) =
   if not dirExists c.flake:
-    error c.flake, " does not exist"
-    error "please use -f/--flake or $FLAKE_PATH"
+    logErr c.flake, " does not exist"
+    logErr "please use -f/--flake or $FLAKE_PATH"
     quit 1
-  info "flake: ", c.flake
-  info "host: ", c.host
+  logInfo "flake: ", c.flake
+  logInfo "host: ", c.host
 
 proc cmd(c: OizysContext): string {.inline.} =
   let pixExists = findExe("pix") != ""
@@ -56,7 +71,7 @@ proc cmd(c: OizysContext): string {.inline.} =
     if pixExists:
       return "pix"
     else:
-      warn "pinix not found, falling back to nix"
+      logWarn "pinix not found, falling back to nix"
   return "nix"
 
 proc systemFlakePath(c: OizysContext): string =
@@ -71,6 +86,7 @@ proc dry(c: OizysContext) =
   execQuit c, c.cmd, "build", c.systemFlakePath, "--dry-run"
 
 proc cache(c: OizysContext) =
+  ## build and push to cachix
   let start = now()
   let code = execCmd """
     cachix watch-exec """ & c.cache & """ \
@@ -82,7 +98,7 @@ proc cache(c: OizysContext) =
 
   let duration = (now() - start)
   if code != 0:
-    error "failed to build configuration for: ", c.host
+    logErr "failed to build configuration for: ", c.host
     quit code
 
   if summaryFile != "":
@@ -90,7 +106,7 @@ proc cache(c: OizysContext) =
       summaryFile,
       "Built host: " & c.host & " in " & $duration & " seconds"
     )
-  info "Built host: " & c.host & " in " & $duration & " seconds"
+  logInfo "Built host: " & c.host & " in " & $duration & " seconds"
 
 
 proc nixosRebuild(c: OizysContext, subcmd: string) =
@@ -105,15 +121,20 @@ proc switch(c: OizysContext) =
   ## nixos rebuild switch
   nixosRebuild c, "switch"
 
-const usage = """
+proc path(c: OizysContext) =
+  ## print nix flake output
+  echo c.systemFlakePath
+
+const usage = fmt"""
 oizys <cmd> [opts]
 
 commands:
-  dry     poor man's nix flake check
-  boot    nixos-rebuild boot
-  switch  nixos-rebuild switch
-  cache   build and push to cachix
-  build   build system flake
+  dry     {dry.doc}
+  boot    {boot.doc}
+  switch  {switch.doc}
+  cache   {cache.doc}
+  build   {build.doc}
+  path    {path.doc}
 
 options:
   -h|--help      show this help
@@ -131,8 +152,9 @@ proc runCmd(c: OizysContext, cmd: string) =
     of "boot": boot c
     of "cache": cache c
     of "build": build c
+    of "path": path c
     else:
-      error "unknown command: ", cmd
+      logErr "unknown command: ", cmd
       echo usage
       quit 1
 
