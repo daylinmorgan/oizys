@@ -59,11 +59,11 @@ proc newCtx(): OizysContext =
 
 proc check(c: OizysContext) =
   if not dirExists c.flake:
-    logErr c.flake, " does not exist"
+    logErr c.flake, "does not exist"
     logErr "please use -f/--flake or $FLAKE_PATH"
     quit 1
-  logInfo "flake: ", c.flake
-  logInfo "host: ", c.host
+  logInfo "flake:", c.flake
+  logInfo "host:", c.host
 
 proc cmd(c: OizysContext): string {.inline.} =
   let pixExists = findExe("pix") != ""
