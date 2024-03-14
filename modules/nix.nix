@@ -22,6 +22,7 @@
   };
 
   environment.systemPackages = with pkgs; [
+    nil
     alejandra
 
     self.packages.${pkgs.system}.oizys

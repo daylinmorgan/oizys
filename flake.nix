@@ -13,18 +13,10 @@
 
     hyprland.url = "github:hyprwm/Hyprland/main";
     hyprland.inputs.nixpkgs.follows = "nixpkgs";
-
     hyprland-contrib.url = "github:hyprwm/contrib";
     hyprland-contrib.inputs.nixpkgs.follows = "nixpkgs";
-
-    nixpkgs-wayland = {
-      url = "github:nix-community/nixpkgs-wayland";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nix-eval-jobs.follows = "nix-eval-jobs";
-    };
-
-    nix-eval-jobs.url = "github:nix-community/nix-eval-jobs";
-    nix-eval-jobs.inputs.nixpkgs.follows = "nixpkgs";
+    nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
+    nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
 
     pinix.url = "github:remi-dupre/pinix";
     pinix.inputs.nixpkgs.follows = "nixpkgs";
