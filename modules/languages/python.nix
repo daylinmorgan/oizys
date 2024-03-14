@@ -6,7 +6,6 @@
 }: let
   inherit (lib) mkIfIn;
   cfg = config.oizys.languages;
-  pixi = pkgs.callPackage ../../pkgs/pixi.nix {};
 in {
   config = mkIfIn "python" cfg {
     environment.systemPackages = let
