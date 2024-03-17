@@ -5,10 +5,11 @@
   inherit (inputs) nixpkgs;
   lib = nixpkgs.lib.extend (import ./extended.nix);
 
-  inherit (builtins) concatLists attrValues mapAttrs elemAt match readDir filter listToAttrs;
+  inherit (builtins) mapAttrs readDir filter listToAttrs;
   inherit (lib) nixosSystem genAttrs isNixFile;
   inherit (lib.filesystem) listFilesRecursive;
 
+  inherit (import ./find-modules.nix {inherit lib;}) findModulesList;
   #supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
   supportedSystems = ["x86_64-linux"];
 in rec {
@@ -39,29 +40,7 @@ in rec {
       specialArgs = {inherit inputs lib self;};
     };
   mapHosts = dir: mapAttrs (name: _: mkSystem name) (readDir dir);
-
   findModules = _: listToAttrs (findModulesList ../modules);
-  # https://github.com/balsoft/nixos-config/blob/73cc2c3a8bb62a9c3980a16ae70b2e97af6e1abd/flake.nix#L109-L120
-  findModulesList = dir:
-    concatLists (attrValues (mapAttrs
-      (name: type:
-        if type == "regular"
-        then [
-          {
-            name = elemAt (match "(.*)\\.nix" name) 0;
-            value = dir + "/${name}";
-          }
-        ]
-        else if
-          (readDir (dir + "/${name}"))
-          ? "default.nix"
-        then [
-          {
-            inherit name;
-            value = dir + "/${name}";
-          }
-        ]
-        else findModulesList (dir + "/${name}")) (readDir dir)));
 
   oizysFlake = _: {
     nixosModules = findModules {};
