@@ -20,8 +20,8 @@
       "tex"
       "node"
     ];
+    chrome.enable = true;
   };
-  vivaldi.enable = true;
 
   environment.systemPackages = with pkgs; [
     zk

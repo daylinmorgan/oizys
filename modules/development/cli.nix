@@ -1,7 +1,8 @@
 {
-  config,
+  inputs,
   lib,
   pkgs,
+  config,
   ...
 }: let
   inherit (lib) mkOption mkIf types;
@@ -32,6 +33,7 @@ in {
       ripgrep
 
       btop
+      inputs.tsm.packages.${pkgs.system}.tsm
     ];
   };
 }

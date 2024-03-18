@@ -381,7 +381,8 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "pinix": "pinix",
-        "stable": "stable"
+        "stable": "stable",
+        "tsm": "tsm"
       }
     },
     "stable": {
@@ -464,6 +465,28 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "tsm": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "dir": "nix",
+        "lastModified": 1710799014,
+        "narHash": "sha256-QQMkhLc3UPOziGHCKHLkLffbbUxhXBOpmaarTX1LfxM=",
+        "owner": "daylinmorgan",
+        "repo": "tsm",
+        "rev": "ebdf050743bfac25a08944b2a348327909371ce2",
+        "type": "github"
+      },
+      "original": {
+        "dir": "nix",
+        "owner": "daylinmorgan",
+        "repo": "tsm",
         "type": "github"
       }
     },

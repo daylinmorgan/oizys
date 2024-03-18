@@ -26,7 +26,7 @@
     languages
 
     # programs
-    vivaldi
+    chrome
     vscode
   ];
 
