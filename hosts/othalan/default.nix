@@ -4,7 +4,8 @@
   lib,
   ...
 }: let
-  inherit (lib) enabled;
+  inherit (lib) enabled enableAttrs;
+
 in {
   imports = with self.nixosModules; [
     restic
@@ -18,13 +19,21 @@ in {
       "tex"
       "node"
     ];
-    nix-ld = enabled;
-    docker = enabled;
-    vbox = enabled;
-    desktop = enabled;
-    vpn = enabled;
-    chrome = enabled;
-  };
+  } // enableAttrs [
+    "chrome"
+    "desktop"
+    "docker" 
+    "nix-ld" 
+    "vbox" 
+    "vpn" 
+  ];
+    # nix-ld = enabled;
+    # docker = enabled;
+    # vbox = enabled;
+    # desktop = enabled;
+    # vpn = enabled;
+    # chrome = enabled;
+  # };
 
   environment.systemPackages = with pkgs; [
     zk
