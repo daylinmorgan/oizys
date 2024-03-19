@@ -20,6 +20,7 @@
     hyprland
 
     virtualbox
+    docker
 
     gui
 

@@ -8,7 +8,6 @@
 in {
   imports = with self.nixosModules; [
     restic
-    docker
   ];
 
   oizys = {
@@ -20,6 +19,7 @@ in {
       "node"
     ];
     nix-ld = enabled;
+    docker = enabled;
     vbox = enabled;
     desktop = enabled;
     vpn = enabled;

@@ -1,17 +1,22 @@
 {
   self,
   pkgs,
+  lib,
   ...
-}: {
+}: 
+let inherit (lib) enabled;
+in {
   imports = with self.nixosModules; [
-    docker
     restic
   ];
 
-  oizys.languages = [
+  oizys = {languages = [
     "nim"
     "python"
   ];
+  docker = enabled;
+
+};
 
   environment.systemPackages = with pkgs; [
     rclone
