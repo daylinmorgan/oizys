@@ -2,6 +2,8 @@ final: prev: let
   inherit (final) hasSuffix;
   runes = import ../modules/runes;
 in {
+  enabled = {enable = true;};
+  disabled = {enable = false;};
   isNixFile = path: hasSuffix ".nix" path;
   mkIfIn = name: list: prev.mkIf (builtins.elem name list);
   mkRune = {

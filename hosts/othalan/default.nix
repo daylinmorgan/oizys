@@ -1,18 +1,17 @@
 {
   pkgs,
   self,
+  lib,
   ...
-}: {
+}: let
+  inherit (lib) enabled;
+in {
   imports = with self.nixosModules; [
-    nix-ld
     restic
     docker
   ];
 
   oizys = {
-    vbox.enable = true;
-    desktop.enable = true;
-    vpn.enable = true;
     languages = [
       "misc"
       "python"
@@ -20,7 +19,11 @@
       "tex"
       "node"
     ];
-    chrome.enable = true;
+    nix-ld = enabled;
+    vbox = enabled;
+    desktop = enabled;
+    vpn = enabled;
+    chrome = enabled;
   };
 
   environment.systemPackages = with pkgs; [

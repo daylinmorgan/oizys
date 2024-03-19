@@ -28,6 +28,8 @@
     # programs
     chrome
     vscode
+
+    nix-ld
   ];
 
   options.oizys.desktop.enable = lib.mkEnableOption "is desktop";
