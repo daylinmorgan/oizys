@@ -2,7 +2,7 @@
   services.restic.backups.gdrive = {
     # BUG: if .conda/environments.txt doesn't exist then this won't work
     # workaround for now `mkdir ~/.conda && touch ~/.conda/environments.txt`
-    
+
     extraBackupArgs = [
       "--exclude-file /home/daylin/.config/restic/excludes.txt"
       "--exclude-file /home/daylin/.conda/environments.txt"

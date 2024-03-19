@@ -3,20 +3,20 @@
   pkgs,
   lib,
   ...
-}: 
-let inherit (lib) enabled;
+}: let
+  inherit (lib) enabled;
 in {
   imports = with self.nixosModules; [
     restic
   ];
 
-  oizys = {languages = [
-    "nim"
-    "python"
-  ];
-  docker = enabled;
-
-};
+  oizys = {
+    languages = [
+      "nim"
+      "python"
+    ];
+    docker = enabled;
+  };
 
   environment.systemPackages = with pkgs; [
     rclone

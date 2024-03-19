@@ -4,36 +4,30 @@
   lib,
   ...
 }: let
-  inherit (lib) enabled enableAttrs;
-
+  inherit (lib) enableAttrs;
 in {
   imports = with self.nixosModules; [
     restic
   ];
 
-  oizys = {
-    languages = [
-      "misc"
-      "python"
-      "nim"
-      "tex"
-      "node"
+  oizys =
+    {
+      languages = [
+        "misc"
+        "python"
+        "nim"
+        "tex"
+        "node"
+      ];
+    }
+    // enableAttrs [
+      "chrome"
+      "desktop"
+      "docker"
+      "nix-ld"
+      "vbox"
+      "vpn"
     ];
-  } // enableAttrs [
-    "chrome"
-    "desktop"
-    "docker" 
-    "nix-ld" 
-    "vbox" 
-    "vpn" 
-  ];
-    # nix-ld = enabled;
-    # docker = enabled;
-    # vbox = enabled;
-    # desktop = enabled;
-    # vpn = enabled;
-    # chrome = enabled;
-  # };
 
   environment.systemPackages = with pkgs; [
     zk

@@ -1,4 +1,5 @@
-{pkgs,
+{
+  pkgs,
   config,
   lib,
   ...
@@ -9,10 +10,9 @@ in {
   options.oizys.docker.enable = mkEnableOption "enable docker support";
 
   config = mkIf cfg.enable {
-
-  virtualisation.docker.enable = true;
-  environment.systemPackages = with pkgs; [
-    lazydocker
-  ];
-};
+    virtualisation.docker.enable = true;
+    environment.systemPackages = with pkgs; [
+      lazydocker
+    ];
+  };
 }

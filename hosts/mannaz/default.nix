@@ -1,4 +1,10 @@
-{self, lib, ...}: let inherit (lib) enabled; in {
+{
+  self,
+  lib,
+  ...
+}: let
+  inherit (lib) enabled;
+in {
   imports = with self.nixosModules; [
     nix-ld
   ];
@@ -6,7 +12,7 @@
   oizys = {
     desktop = enabled;
     nix-ld = enabled;
-};
+  };
 
   # Enable the X11 windowing system.
   services.xserver = {
