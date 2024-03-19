@@ -30,7 +30,7 @@ in rec {
       system = "x86_64-linux";
       modules =
         [
-          ../modules/common.nix
+          ../modules/oizys.nix
           ../overlays
         ]
         ++ filter

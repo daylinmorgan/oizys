@@ -4,34 +4,31 @@
   lib,
   ...
 }: let
-  inherit (lib) enableAttrs;
+  inherit (lib) enabled;
 in {
   imports = with self.nixosModules; [
     restic
   ];
 
-  oizys =
-    {
-      languages = [
-        "misc"
-        "python"
-        "nim"
-        "tex"
-        "node"
-      ];
-    }
-    // enableAttrs [
-      "chrome"
-      "desktop"
-      "docker"
-      "nix-ld"
-      "vbox"
-      "vpn"
+  oizys = {
+    desktop = enabled;
+    chrome = enabled;
+    docker = enabled;
+    nix-ld = enabled;
+    vbox = enabled;
+    vpn = enabled;
+    backups = enabled;
+    languages = [
+      "misc"
+      "python"
+      "nim"
+      "tex"
+      "node"
     ];
+  };
 
   environment.systemPackages = with pkgs; [
     zk
-    rclone
     quarto
   ];
 

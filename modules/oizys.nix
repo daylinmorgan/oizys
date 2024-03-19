@@ -2,7 +2,9 @@
   lib,
   self,
   ...
-}: {
+}: let
+  inherit (lib) mkEnableOption;
+in {
   imports = with self.nixosModules; [
     users
     nix
@@ -33,5 +35,5 @@
     nix-ld
   ];
 
-  options.oizys.desktop.enable = lib.mkEnableOption "is desktop";
+  options.oizys.desktop.enable = mkEnableOption "is desktop";
 }
