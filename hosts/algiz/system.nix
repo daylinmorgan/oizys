@@ -27,7 +27,7 @@
   services.openssh.enable = true;
   services.openssh.settings.PasswordAuthentication = false;
 
-  users.mutableUsers = false;
+  # users.mutableUsers = false;
 
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
