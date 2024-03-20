@@ -15,15 +15,7 @@
 in rec {
   forAllSystems = f: genAttrs supportedSystems (system: f nixpkgs.legacyPackages.${system});
 
-  buildOizys = _:
-    forAllSystems (
-      pkgs: let
-        pkg = pkgs.callPackage ../oizys {};
-      in {
-        oizys = pkg;
-        default = pkg;
-      }
-    );
+  nixosModules = listToAttrs (findModulesList ../modules);
 
   mkSystem = hostname:
     nixosSystem {
@@ -39,13 +31,29 @@ in rec {
 
       specialArgs = {inherit inputs lib self;};
     };
-  mapHosts = dir: mapAttrs (name: _: mkSystem name) (readDir dir);
-  findModules = _: listToAttrs (findModulesList ../modules);
+
+  oizysHosts = mapAttrs (name: _: mkSystem name) (readDir ../hosts);
+  oizysPkg = forAllSystems (
+    pkgs: let
+      pkg = pkgs.callPackage ../oizys {};
+    in {
+      oizys = pkg;
+      default = pkg;
+    }
+  );
+  devShells = forAllSystems (
+    pkgs: {
+      default = pkgs.mkShell {
+        packages = with pkgs; [git deadnix];
+      };
+    }
+  );
 
   oizysFlake = _: {
-    nixosModules = findModules {};
-    nixosConfigurations = mapHosts ../hosts;
-    packages = buildOizys {};
+    nixosModules = nixosModules;
+    nixosConfigurations = oizysHosts;
+    packages = oizysPkg;
+    devShells = devShells;
     formatter = forAllSystems (pkgs: pkgs.alejandra);
   };
 }
