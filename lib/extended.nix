@@ -1,5 +1,5 @@
 final: prev: let
-  inherit (final) hasSuffix mkEnableOption mkIf;
+  inherit (final) hasSuffix mkEnableOption mkIf mkOption types;
   runes = import ../modules/runes;
 in rec {
   enabled = {enable = true;};
@@ -31,6 +31,14 @@ in rec {
 
   mkOizysModule = config: attr: content: {
     options.oizys.${attr}.enable = mkEnableOption "enable ${attr} support";
+    config = mkIf config.oizys.${attr}.enable content;
+  };
+  mkDefaultOizysModule = config: attr: content: {
+    options.oizys.${attr}.enable = mkOption {
+      default = true;
+      description = "enable ${attr} support";
+      type = types.bool;
+    };
     config = mkIf config.oizys.${attr}.enable content;
   };
 }

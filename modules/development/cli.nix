@@ -5,16 +5,9 @@
   config,
   ...
 }: let
-  inherit (lib) mkOption mkIf types;
-  cfg = config.oizys.cli;
-in {
-  options.oizys.cli.enable = mkOption {
-    default = true;
-    description = "Whether to enable cli.";
-    type = types.bool;
-  };
-
-  config = mkIf cfg.enable {
+  inherit (lib) mkDefaultOizysModule;
+in
+  mkDefaultOizysModule config "cli" {
     programs.direnv.enable = true;
     environment.sessionVariables = {
       DIRENV_LOG_FORMAT = "[2mdirenv: %s[0m";
@@ -35,5 +28,4 @@ in {
       btop
       inputs.tsm.packages.${pkgs.system}.tsm
     ];
-  };
-}
+  }
