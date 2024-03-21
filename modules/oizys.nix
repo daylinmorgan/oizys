@@ -14,9 +14,6 @@ in {
     vpn
     gpg
 
-    # gui
-    fonts
-
     lock
     qtile
     hyprland
@@ -25,6 +22,7 @@ in {
     docker
 
     gui
+    fonts
 
     languages
 
@@ -33,6 +31,7 @@ in {
     vscode
 
     nix-ld
+    restic
   ];
 
   options.oizys.desktop.enable = mkEnableOption "is desktop";

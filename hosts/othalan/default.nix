@@ -1,17 +1,13 @@
 {
   pkgs,
-  self,
   lib,
   ...
 }: let
   inherit (lib) enabled;
 in {
-  imports = with self.nixosModules; [
-    restic
-  ];
-
   oizys = {
     desktop = enabled;
+    hyprland = enabled;
     chrome = enabled;
     docker = enabled;
     nix-ld = enabled;
@@ -31,8 +27,6 @@ in {
     zk
     quarto
   ];
-
-  programs.hyprland.enable = true;
 
   services.restic.backups.gdrive = {
     user = "daylin";
