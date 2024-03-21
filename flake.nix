@@ -1,11 +1,8 @@
 {
   description = "nix begat oizys";
+
   outputs = inputs @ {self, ...}:
-    (import ./lib {
-      inherit inputs;
-      inherit self;
-    })
-    .oizysFlake {};
+    (import ./lib {inherit self inputs;}).oizysFlake;
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";

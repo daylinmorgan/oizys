@@ -49,7 +49,7 @@ in rec {
     }
   );
 
-  oizysFlake = _: {
+  oizysFlake = {
     nixosModules = nixosModules;
     nixosConfigurations = oizysHosts;
     packages = oizysPkg;
