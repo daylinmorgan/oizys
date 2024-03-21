@@ -3,7 +3,9 @@
   pkgs,
   lib,
   ...
-}: {
+}: let
+  inherit (lib) enabled;
+in {
   users.motd = lib.mkRune {
     number = "2";
     rune = "mannaz";
@@ -11,7 +13,7 @@
 
   # Use the systemd-boot EFI boot loader.
   boot.loader = {
-    systemd-boot.enable = true;
+    systemd-boot = enabled;
     efi.canTouchEfiVariables = true;
   };
 
@@ -26,27 +28,31 @@
     }
   ];
 
-  hardware.opengl = {
-    enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
-    extraPackages = with pkgs; [
-      libGL
-    ];
-    setLdLibraryPath = true;
-  };
+  hardware.opengl =
+    enabled
+    // {
+      driSupport = true;
+      driSupport32Bit = true;
+      extraPackages = with pkgs; [
+        libGL
+      ];
+      setLdLibraryPath = true;
+    };
   # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = ["nvidia"];
 
   hardware.nvidia = {
     # Modesetting is required.
-    modesetting.enable = true;
+    modesetting = enabled;
 
     # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
-    powerManagement.enable = false;
-    # Fine-grained power management. Turns off GPU when not in use.
-    # Experimental and only works on modern Nvidia GPUs (Turing or newer).
-    powerManagement.finegrained = false;
+    powerManagement =
+      enabled
+      // {
+        # Fine-grained power management. Turns off GPU when not in use.
+        # Experimental and only works on modern Nvidia GPUs (Turing or newer).
+        finegrained = false;
+      };
 
     # Use the NVidia open source kernel module (not to be confused with the
     # independent third-party "nouveau" open source driver).
@@ -65,8 +71,8 @@
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
-  programs.nix-ld.enable = true;
-  services.openssh.enable = true;
+  programs.nix-ld = enabled;
+  services.openssh = enabled;
 
   networking.hostName = "mannaz";
   # networking.wireless.enable = true;
@@ -80,21 +86,6 @@
   time.timeZone = "America/Chicago";
   security.sudo.wheelNeedsPassword = false;
 
-  # This option defines the first version of NixOS you have installed on this particular machine,
-  # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
-  #
-  # Most users should NEVER change this value after the initial install, for any reason,
-  # even if you've upgraded your system to a new NixOS release.
-  #
-  # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
-  # so changing it will NOT upgrade your system.
-  #
-  # This value being lower than the current NixOS release does NOT mean your system is
-  # out of date, out of support, or vulnerable.
-  #
-  # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
-  # and migrated your data accordingly.
-  #
-  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
+  # don't delete this you foo bar
   system.stateVersion = "23.11"; # Did you read the comment?
 }

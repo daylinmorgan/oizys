@@ -13,7 +13,8 @@
       swaylock -c 1e1e2e
     '';
   };
-in mkOizysModule config "hyprland" {
+in
+  mkOizysModule config "hyprland" {
     security.pam.services.swaylock = {};
     # Optional, hint electron apps to use wayland:
     environment.sessionVariables.NIXOS_OZONE_WL = "1";

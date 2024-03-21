@@ -5,7 +5,8 @@
   ...
 }: let
   inherit (lib) mkOizysModule;
-in mkOizysModule config "chrome" {
+in
+  mkOizysModule config "chrome" {
     programs.chromium = {
       enable = true;
 

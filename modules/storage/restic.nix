@@ -5,7 +5,7 @@
   ...
 }: let
   inherit (lib) mkOizysModule;
-in 
+in
   mkOizysModule config "backups" {
     environment.systemPackages = with pkgs; [rclone];
 

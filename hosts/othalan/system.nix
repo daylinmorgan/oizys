@@ -2,26 +2,27 @@
   pkgs,
   lib,
   ...
-}: {
-  networking.networkmanager.enable = true;
-  services.printing.enable = true;
-  services.fwupd.enable = true;
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true;
+}: let
+  inherit (lib) enabled;
+in {
+  networking.networkmanager = enabled;
+  services.printing = enabled;
+  services.fwupd = enabled;
+  hardware.bluetooth = enabled // {powerOnBoot = true;};
 
   # https://github.com/NixOS/nixos-hardware/blob/c478b3d56969006e015e55aaece4931f3600c1b2/lenovo/thinkpad/x1/9th-gen/default.nix
   # https://github.com/NixOS/nixos-hardware/blob/c478b3d56969006e015e55aaece4931f3600c1b2/common/pc/ssd/default.nix
-  services.fstrim.enable = true;
+  services.fstrim = enabled;
 
   # rtkit is optional but recommended
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    audio.enable = true;
-    pulse.enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-  };
+  security.rtkit = enabled;
+  services.pipewire =
+    enabled
+    // {
+      audio = enabled;
+      pulse = enabled;
+      alsa = enabled // {support32Bit = true;};
+    };
 
   environment.systemPackages = with pkgs; [
     pamixer
@@ -46,21 +47,6 @@
   boot.loader.efi.canTouchEfiVariables = true;
   # boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  # This option defines the first version of NixOS you have installed on this particular machine,
-  # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
-  #
-  # Most users should NEVER change this value after the initial install, for any reason,
-  # even if you've upgraded your system to a new NixOS release.
-  #
-  # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
-  # so changing it will NOT upgrade your system.
-  #
-  # This value being lower than the current NixOS release does NOT mean your system is
-  # out of date, out of support, or vulnerable.
-  #
-  # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
-  # and migrated your data accordingly.
-  #
-  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
+  # don't delete this you foo bar
   system.stateVersion = "23.11"; # Did you read the comment?
 }
