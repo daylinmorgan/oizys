@@ -13,8 +13,10 @@ in {
   oizys = {
     languages = [
       "nim"
+      "node" # for docker langservers
       "python"
     ];
+
     docker = enabled;
     backups = enabled;
   };
