@@ -1,11 +1,9 @@
 {
   config,
-  lib,
   pkgs,
+  mkOizysModule,
   ...
-}: let
-  inherit (lib) mkOizysModule;
-in
-  mkOizysModule config "vpn" {
-    environment.systemPackages = [pkgs.openconnect];
-  }
+}:
+mkOizysModule config "vpn" {
+  environment.systemPackages = [pkgs.openconnect];
+}

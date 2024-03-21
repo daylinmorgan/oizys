@@ -1,31 +1,29 @@
 {
   inputs,
-  lib,
   pkgs,
   config,
+  mkDefaultOizysModule,
   ...
-}: let
-  inherit (lib) mkDefaultOizysModule;
-in
-  mkDefaultOizysModule config "cli" {
-    programs.direnv.enable = true;
-    environment.sessionVariables = {
-      DIRENV_LOG_FORMAT = "[2mdirenv: %s[0m";
-    };
+}:
+mkDefaultOizysModule config "cli" {
+  programs.direnv.enable = true;
+  environment.sessionVariables = {
+    DIRENV_LOG_FORMAT = "[2mdirenv: %s[0m";
+  };
 
-    environment.systemPackages = with pkgs; [
-      chezmoi
-      zoxide
-      lsd
-      fzf
+  environment.systemPackages = with pkgs; [
+    chezmoi
+    zoxide
+    lsd
+    fzf
 
-      # utils
-      fd
-      bat
-      delta
-      ripgrep
+    # utils
+    fd
+    bat
+    delta
+    ripgrep
 
-      btop
-      inputs.tsm.packages.${pkgs.system}.tsm
-    ];
-  }
+    btop
+    inputs.tsm.packages.${pkgs.system}.tsm
+  ];
+}
