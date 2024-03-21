@@ -4,11 +4,8 @@
   lib,
   ...
 }: let
-  inherit (lib) mkIf mkEnableOption;
-  cfg = config.oizys.chrome;
-in {
-  options.oizys.chrome.enable = mkEnableOption "enable chrome + extensions";
-  config = mkIf cfg.enable {
+  inherit (lib) mkOizysModule;
+in mkOizysModule config "chrome" {
     programs.chromium = {
       enable = true;
 
@@ -29,5 +26,4 @@ in {
         ];
       })
     ];
-  };
-}
+  }

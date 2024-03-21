@@ -4,11 +4,9 @@
   lib,
   ...
 }: let
-  inherit (lib) mkEnableOption mkIf;
-  cfg = config.oizys.backups;
-in {
-  options.oizys.backups.enable = mkEnableOption "enable restic/rclone backups";
-  config = mkIf cfg.enable {
+  inherit (lib) mkOizysModule;
+in 
+  mkOizysModule config "backups" {
     environment.systemPackages = with pkgs; [rclone];
 
     services.restic.backups.gdrive = {
@@ -36,5 +34,4 @@ in {
         RandomizedDelaySec = "5h";
       };
     };
-  };
-}
+  }

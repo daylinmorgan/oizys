@@ -5,9 +5,7 @@
   lib,
   ...
 }: let
-  inherit (lib) mkIf;
-  cfg = config.programs.hyprland;
-
+  inherit (lib) mkOizysModule;
   lock = pkgs.writeShellApplication {
     name = "lock";
     runtimeInputs = with pkgs; [swaylock];
@@ -15,10 +13,8 @@
       swaylock -c 1e1e2e
     '';
   };
-in {
-  config = mkIf cfg.enable {
+in mkOizysModule config "hyprland" {
     security.pam.services.swaylock = {};
-    # programs.hyprland.package = inputs.hyprland.packages.${pkgs.system}.default;
     # Optional, hint electron apps to use wayland:
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
@@ -52,5 +48,4 @@ in {
       inputs.nixpkgs-wayland.overlay
       inputs.hyprland.overlays.default
     ];
-  };
-}
+  }

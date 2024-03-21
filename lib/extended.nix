@@ -1,5 +1,5 @@
 final: prev: let
-  inherit (final) hasSuffix;
+  inherit (final) hasSuffix mkEnableOption mkIf;
   runes = import ../modules/runes;
 in rec {
   enabled = {enable = true;};
@@ -28,4 +28,9 @@ in rec {
     runeKind ? "braille",
   }:
     "[1;3${number}m\n" + runes.${rune}.${runeKind} + "\n[0m";
+
+  mkOizysModule = config: attr: content: {
+    options.oizys.${attr}.enable = mkEnableOption "enable ${attr} support";
+    config = mkIf config.oizys.${attr}.enable content;
+  };
 }

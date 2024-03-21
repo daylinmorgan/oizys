@@ -5,9 +5,8 @@
   ...
 }: let
   inherit (lib) mkIf;
-  cfg = config.oizys.desktop;
 in {
-  config = mkIf cfg.enable {
+  config = mkIf config.oizys.desktop.enable {
     environment.systemPackages = with pkgs; [
       wezterm
       alacritty

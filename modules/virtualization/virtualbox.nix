@@ -3,15 +3,11 @@
   lib,
   ...
 }: let
-  inherit (lib) mkEnableOption mkIf;
-  cfg = config.oizys.vbox;
-in {
-  options.oizys.vbox.enable = mkEnableOption "enable virtualbox host";
-
-  config = mkIf cfg.enable {
+  inherit (lib) mkOizysModule;
+in
+  mkOizysModule config "vbox" {
     virtualisation.virtualbox = {
       host.enable = true;
     };
     users.extraGroups.vboxusers.members = ["daylin"];
-  };
-}
+  }
