@@ -42,10 +42,10 @@ in {
 
   networking.hostName = "othalan";
   time.timeZone = "US/Central";
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.consoleMode = "max";
-  boot.loader.efi.canTouchEfiVariables = true;
-  # boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.loader = { 
+    systemd-boot ={ enable = true; consoleMode = "max";};
+    efi.canTouchEfiVariables = true;
+  };
 
   # don't delete this you foo bar
   system.stateVersion = "23.11"; # Did you read the comment?
