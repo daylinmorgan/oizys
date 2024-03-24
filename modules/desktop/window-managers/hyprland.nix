@@ -20,11 +20,9 @@ in
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
     environment.systemPackages = with pkgs; [
-      swayidle
       wlr-randr
       kanshi
 
-      lock
       brightnessctl
       udiskie
       eww
@@ -35,12 +33,17 @@ in
 
       # utils
       grimblast
+      ksnip
       wl-clipboard
       rofi-wayland
       pavucontrol
 
       catppuccin-cursors.mochaDark
-      hyprpaper
+
+      #hypr ecosystem
+      hyprlock
+      hypridle
+
       swww
     ];
 
