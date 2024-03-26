@@ -1,8 +1,5 @@
-{
-  inputs,
-  self,
-}: let
-  inherit (inputs) nixpkgs;
+inputs: let
+  inherit (inputs) nixpkgs self;
   lib = nixpkgs.lib.extend (import ./extended.nix);
 
   inherit (builtins) mapAttrs readDir filter listToAttrs;
