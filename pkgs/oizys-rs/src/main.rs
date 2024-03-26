@@ -83,6 +83,9 @@ impl Oizys {
         (if self.no_pinix { "nix" } else { "pix" }).to_string()
     }
 
+    fn nixos_rebuild_cmd(self: &Oizys) -> String {
+        self.nix() + "os-rebuild"
+    }
     fn show_cmd(self: &Oizys, cmd: &Command) {
         println!("executing: {}", format!("{:?}", cmd).replace('"', ""));
     }
@@ -105,8 +108,13 @@ impl Oizys {
 
     fn nixos_rebuild(self: &Oizys, subcommand: &str) {
         let flake_output = format!("{}#{}", self.flake.to_string_lossy(), self.host);
-        let mut cmd = Command::new("nixos-rebuild");
-        cmd.arg(subcommand).arg(flake_output);
+        let mut cmd = Command::new("sudo");
+        cmd.args([
+            &self.nixos_rebuild_cmd(),
+            subcommand,
+            "--flake",
+            &flake_output,
+        ]);
         if self.verbose >= 2 {
             self.show_cmd(&cmd);
         }
