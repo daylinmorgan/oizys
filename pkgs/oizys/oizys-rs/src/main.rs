@@ -51,7 +51,7 @@ enum Commands {
     Build {},
 
     /// print nix flake output
-    Path {},
+    Output {},
 }
 
 fn print_completions<G: Generator>(gen: G, cmd: &mut clap::Command) {
@@ -67,19 +67,24 @@ struct Oizys {
 }
 
 impl Oizys {
-    fn new(host: Option<String>, flake: Option<PathBuf>, no_pinix: bool, verbose: u8) -> Oizys {
-        let hostname = hostname::get().unwrap().to_string_lossy().to_string();
-        let flake_path = env::var("OIZYS_DIR").map_or(
+    fn from(cli: &Cli) -> Oizys {
+        let host = cli
+            .host
+            .clone()
+            .unwrap_or(hostname::get().unwrap().to_string_lossy().to_string());
+        let flake = cli.flake.clone().unwrap_or(env::var("OIZYS_DIR").map_or(
             homedir::get_my_home().unwrap().unwrap().join("oizys"),
             PathBuf::from,
-        );
+        ));
+
         Oizys {
-            host: host.unwrap_or(hostname),
-            flake: flake.unwrap_or(flake_path),
-            no_pinix,
-            verbose,
+            host,
+            flake,
+            no_pinix: cli.no_pinix,
+            verbose: cli.verbose,
         }
     }
+
     fn output(self: &Oizys) -> String {
         format!(
             "{}#nixosConfigurations.{}.config.system.build.toplevel",
@@ -155,7 +160,7 @@ impl Oizys {
 
 fn main() {
     let cli = Cli::parse();
-    let oizys = Oizys::new(cli.host, cli.flake, cli.no_pinix, cli.verbose);
+    let oizys = Oizys::from(&cli);
 
     if let Some(completions) = cli.completions {
         let mut cmd = Cli::command();
@@ -175,7 +180,7 @@ fn main() {
         match command {
             Commands::Dry {} => oizys.build(true),
             Commands::Build {} => oizys.build(false),
-            Commands::Path {} => println!("{}", oizys.output()),
+            Commands::Output {} => println!("{}", oizys.output()),
             Commands::Boot {} => oizys.nixos_rebuild("boot"),
             Commands::Switch {} => oizys.nixos_rebuild("switch"),
             Commands::Cache { name } => oizys.cache(name),
