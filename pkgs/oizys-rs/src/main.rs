@@ -21,7 +21,7 @@ struct Cli {
     no_pinix: bool,
 
     #[command(subcommand)]
-    command: Option<Commands>,
+    command: Commands,
 }
 
 #[derive(Debug, Subcommand)]
@@ -155,16 +155,12 @@ fn main() {
         println!("{:?}", oizys)
     }
 
-    if let Some(command) = &cli.command {
-        match command {
-            Commands::Dry {} => oizys.build(true),
-            Commands::Build {} => oizys.build(false),
-            Commands::Path {} => println!("{}", oizys.output()),
-            Commands::Boot {} => oizys.nixos_rebuild("boot"),
-            Commands::Switch {} => oizys.nixos_rebuild("switch"),
-            Commands::Cache { name } => oizys.cache(name),
-        }
-    } else {
-        println!("No command given")
+    match &cli.command {
+        Commands::Dry {} => oizys.build(true),
+        Commands::Build {} => oizys.build(false),
+        Commands::Path {} => println!("{}", oizys.output()),
+        Commands::Boot {} => oizys.nixos_rebuild("boot"),
+        Commands::Switch {} => oizys.nixos_rebuild("switch"),
+        Commands::Cache { name } => oizys.cache(name),
     }
 }
