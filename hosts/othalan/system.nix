@@ -42,8 +42,12 @@ in {
 
   networking.hostName = "othalan";
   time.timeZone = "US/Central";
-  boot.loader = { 
-    systemd-boot ={ enable = true; consoleMode = "max";};
+  boot.loader = {
+    systemd-boot =
+      enabled
+      // {
+        consoleMode = "max";
+      };
     efi.canTouchEfiVariables = true;
   };
 
