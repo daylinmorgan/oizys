@@ -1,5 +1,6 @@
-use clap::{Parser, Subcommand};
-use std::{env, path::PathBuf, process::Command};
+use clap::{CommandFactory, Parser, Subcommand};
+use clap_complete::{generate, Generator, Shell};
+use std::{env, io, path::PathBuf, process::Command};
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
@@ -20,8 +21,12 @@ struct Cli {
     #[arg(long, global=true, action = clap::ArgAction::SetTrue)]
     no_pinix: bool,
 
+    /// generate shell completion
+    #[arg(long, value_enum)]
+    completions: Option<Shell>,
+
     #[command(subcommand)]
-    command: Commands,
+    command: Option<Commands>,
 }
 
 #[derive(Debug, Subcommand)]
@@ -47,6 +52,10 @@ enum Commands {
 
     /// print nix flake output
     Path {},
+}
+
+fn print_completions<G: Generator>(gen: G, cmd: &mut clap::Command) {
+    generate(gen, cmd, cmd.get_name().to_string(), &mut io::stdout());
 }
 
 #[derive(Debug)]
@@ -148,6 +157,13 @@ fn main() {
     let cli = Cli::parse();
     let oizys = Oizys::new(cli.host, cli.flake, cli.no_pinix, cli.verbose);
 
+    if let Some(completions) = cli.completions {
+        let mut cmd = Cli::command();
+        eprintln!("Generating completion for {completions:?}");
+        print_completions(completions, &mut cmd);
+        std::process::exit(0);
+    }
+
     if oizys.verbose > 2 {
         println!("-vv is max verbosity")
     }
@@ -155,12 +171,18 @@ fn main() {
         println!("{:?}", oizys)
     }
 
-    match &cli.command {
-        Commands::Dry {} => oizys.build(true),
-        Commands::Build {} => oizys.build(false),
-        Commands::Path {} => println!("{}", oizys.output()),
-        Commands::Boot {} => oizys.nixos_rebuild("boot"),
-        Commands::Switch {} => oizys.nixos_rebuild("switch"),
-        Commands::Cache { name } => oizys.cache(name),
+    if let Some(command) = &cli.command {
+        match command {
+            Commands::Dry {} => oizys.build(true),
+            Commands::Build {} => oizys.build(false),
+            Commands::Path {} => println!("{}", oizys.output()),
+            Commands::Boot {} => oizys.nixos_rebuild("boot"),
+            Commands::Switch {} => oizys.nixos_rebuild("switch"),
+            Commands::Cache { name } => oizys.cache(name),
+        }
+    } else {
+        eprintln!("No subcommand provided..");
+        let mut cmd = Cli::command();
+        cmd.print_help().unwrap();
     }
 }
