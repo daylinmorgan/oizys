@@ -32,8 +32,8 @@ in rec {
   oizysHosts = mapAttrs (name: _: mkSystem name) (readDir ../hosts);
   oizysPkg = forAllSystems (
     pkgs: rec {
-      oizys-nim = pkgs.callPackage ../pkgs/oizys-nim {};
-      oizys = pkgs.callPackage ../pkgs/oizys-rs {};
+      oizys-nim = pkgs.callPackage ../pkgs/oizys/oizys-nim {};
+      oizys = pkgs.callPackage ../pkgs/oizys/oizys-rs {};
       default = oizys;
     }
   );
