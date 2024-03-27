@@ -22,7 +22,7 @@ struct Cli {
     no_pinix: bool,
 
     /// generate shell completion
-    #[arg(long, value_enum)]
+    #[arg(long, value_enum, hide=true)]
     completions: Option<Shell>,
 
     #[command(subcommand)]
