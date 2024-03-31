@@ -22,6 +22,9 @@
 
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
+
+    zig2nix.url = "github:Cloudef/zig2nix";
+    zig2nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   nixConfig = {

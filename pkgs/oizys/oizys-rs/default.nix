@@ -1,6 +1,7 @@
 {
   installShellFiles,
   rustPlatform,
+  nix-output-monitor,
 }:
 rustPlatform.buildRustPackage {
   pname = "oizys";
@@ -11,6 +12,7 @@ rustPlatform.buildRustPackage {
   };
 
   nativeBuildInputs = [installShellFiles];
+  buildInputs = [nix-output-monitor];
 
   postInstall = ''
     installShellCompletion --cmd oizys \

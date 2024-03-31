@@ -25,7 +25,7 @@
     nil
     alejandra
 
-    self.packages.${pkgs.system}.oizys
+    self.packages.${pkgs.system}.default
     inputs.pinix.packages.${pkgs.system}.default
   ];
 

@@ -9,6 +9,7 @@
 in {
   config = mkIfIn "misc" cfg {
     environment.systemPackages = with pkgs; [
+      zig
       go
       rustup
     ];

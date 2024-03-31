@@ -10,7 +10,7 @@ inputs: let
   #supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
   supportedSystems = ["x86_64-linux"];
 in rec {
-  forAllSystems = f: genAttrs supportedSystems (system: f nixpkgs.legacyPackages.${system});
+  forAllSystems = f: genAttrs supportedSystems (system: f (import nixpkgs {inherit system;}));
 
   nixosModules = listToAttrs (findModulesList ../modules);
 
@@ -32,9 +32,10 @@ in rec {
   oizysHosts = mapAttrs (name: _: mkSystem name) (readDir ../hosts);
   oizysPkg = forAllSystems (
     pkgs: rec {
+      oizys-zig = pkgs.callPackage ../pkgs/oizys/oizys-zig { zig2nix = inputs.zig2nix;};
       oizys-nim = pkgs.callPackage ../pkgs/oizys/oizys-nim {};
-      oizys = pkgs.callPackage ../pkgs/oizys/oizys-rs {};
-      default = oizys;
+      oizys-rs = pkgs.callPackage ../pkgs/oizys/oizys-rs {};
+      default = oizys-zig;
     }
   );
   devShells = forAllSystems (
