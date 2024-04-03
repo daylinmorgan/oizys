@@ -15,6 +15,7 @@ mkOizysModule config "chrome" {
       "oemmndcbldboiebfnladdacbdfmadadm" # pdf viewer
       "clngdbkpkpeebahjckkjfobafhncgmne" # stylus
       "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
+      "ekhagklcjbdpajgpjgmbionohlpdbjgc" # zotero connector
     ];
   };
 

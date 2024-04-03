@@ -16,6 +16,8 @@ in {
       inkscape
       gimp
 
+      zotero
+
       libreoffice-qt
       hunspell # spell check for libreoffice
     ];
