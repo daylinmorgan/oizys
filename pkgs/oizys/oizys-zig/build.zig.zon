@@ -3,7 +3,7 @@
     .version = "0.0.0",
     .dependencies = .{
         .yazap = .{
-            .url = "git+https://github.com/cdmistman/yazap.git#1ae1a5b562f5c66caf8e87e04313094f16e327fc",
+            .url = "git+https://github.com/prajwalch/yazap.git#341750ff62e3102da4a7f8233920aebace1fc337",
             .hash = "1220fa71798c994044a987cbde6e73af76bfc402117a61971ccf48f4af4b7154e8d3",
         },
     },
