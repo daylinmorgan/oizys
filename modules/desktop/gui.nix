@@ -20,6 +20,11 @@ in {
 
       libreoffice-qt
       hunspell # spell check for libreoffice
+
+      (catppuccin-gtk.override {
+        accents = ["rosewater"];
+        variant = "mocha";
+      })
     ];
   };
 }
