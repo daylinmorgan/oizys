@@ -22,7 +22,7 @@ See below for the currently maintained hosts.
 <tr>
   <td><img src="https://upload.wikimedia.org/wikipedia/commons/d/df/Runic_letter_algiz.svg"></td>
   <td>algiz</td>
-  <td>Vultr VPS hosting forgejo,soft-serve & gts</td>
+  <td>Hetzner Cloud hosting forgejo,soft-serve & gts</td>
 </tr>
 <tr>
   <td><img src="https://upload.wikimedia.org/wikipedia/commons/5/57/Runic_letter_mannaz.svg"></td>
