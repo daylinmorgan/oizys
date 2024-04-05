@@ -10,9 +10,11 @@
   zig = inputs.zig2nix.outputs.packages.${pkgs.system}.zig.master.bin;
 in {
   config = mkIfIn "misc" cfg {
-    environment.systemPackages = with pkgs; [
-      go
-      rustup
-    ] ++ [ zig ];
+    environment.systemPackages = with pkgs;
+      [
+        go
+        rustup
+      ]
+      ++ [zig];
   };
 }
