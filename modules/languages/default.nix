@@ -1,10 +1,10 @@
 {lib, ...}: let
   inherit (lib) mkOption types literalExpression mdDoc;
 in {
-  imports = [./nim.nix ./tex.nix ./misc.nix ./node.nix ./python.nix];
+  imports = [./nim.nix ./tex.nix ./misc.nix ./node.nix ./python.nix ./zig.nix];
   options.oizys.languages = mkOption {
     type = with types; (listOf str);
-    description = lib.mdDoc ''
+    description = mdDoc ''
       List of programming languages to enable.
     '';
     default = [];

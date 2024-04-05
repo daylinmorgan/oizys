@@ -20,6 +20,7 @@ in {
       "nim"
       "tex"
       "node"
+      "zig"
     ];
   };
 
