@@ -23,6 +23,7 @@ mkDefaultOizysModule config "cli" {
     delta
     ripgrep
 
+    glow
     btop
     inputs.tsm.packages.${pkgs.system}.tsm
   ];
