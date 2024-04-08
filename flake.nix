@@ -28,6 +28,9 @@
 
     zls.url = "github:zigtools/zls";
     zls.inputs.nixpkgs.follows = "nixpkgs";
+
+    f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
+    f1multiviewer.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   nixConfig = {

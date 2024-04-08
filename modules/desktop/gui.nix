@@ -1,4 +1,5 @@
 {
+  inputs,
   pkgs,
   config,
   lib,
@@ -25,6 +26,8 @@ in {
         accents = ["rosewater"];
         variant = "mocha";
       })
+
+      inputs.f1multiviewer.outputs.packages.${pkgs.system}.default
     ];
   };
 }
