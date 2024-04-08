@@ -31,7 +31,11 @@ pub fn init(allocator: std.mem.Allocator, matches: *const ArgMatches) !Oizys {
         .allocator = allocator,
         .host = host,
         .flake = flake,
-        .output = try std.fmt.allocPrint(allocator, "{s}#nixosConfigurations.{s}.config.system.build.toplevel", .{ flake, host }),
+        .output = try std.fmt.allocPrint(
+            allocator,
+            "{s}#nixosConfigurations.{s}.config.system.build.toplevel",
+            .{ flake, host },
+        ),
         .cmd = std.meta.stringToEnum(OizysCmd, cmd).?,
         .cache_name = flags.getSingleValue("cache") orelse "daylin",
         .no_pinix = flags.containsArg("no-pinix"),
@@ -67,7 +71,11 @@ pub fn getDefaultFlake(allocator: Allocator) ![]const u8 {
 }
 
 pub fn getOutputPath(self: *Oizys) ![]const u8 {
-    return std.fmt.allocPrint(self.allocator, "{s}#nixosConfigurations.{s}.config.system.build.toplevel", .{ self.flake, self.host });
+    return std.fmt.allocPrint(
+        self.allocator,
+        "{s}#nixosConfigurations.{s}.config.system.build.toplevel",
+        .{ self.flake, self.host },
+    );
 }
 
 pub const NixCmd = enum { Nix, NixosRebuild };
@@ -86,7 +94,21 @@ pub fn runNixCmd(self: *Oizys, cmd: NixCmd, argv: []const []const u8) !void {
 }
 
 pub fn cache(self: *Oizys) !void {
-    var p = std.ChildProcess.init(&.{ "cachix", "watch-exec", self.cache_name, "--verbose", "--", "nix", "build", self.flake, "--print-build-logs", "--accept-flake-config" }, self.allocator);
+    var p = std.ChildProcess.init(
+        &.{
+            "cachix",
+            "watch-exec",
+            self.cache_name,
+            "--verbose",
+            "--",
+            "nix",
+            "build",
+            self.output,
+            "--print-build-logs",
+            "--accept-flake-config",
+        },
+        self.allocator,
+    );
     _ = try p.spawnAndWait();
 }
 
