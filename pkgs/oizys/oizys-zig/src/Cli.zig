@@ -33,6 +33,7 @@ pub fn init(allocator: Allocator) !Cli {
         try oizys.addSubcommand(subcmd.*);
     }
 
+    // TODO: accept positinal args after -- to forward along?
     return Cli{ .app = app };
 }
 
