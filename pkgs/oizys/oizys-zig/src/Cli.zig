@@ -17,10 +17,16 @@ pub fn init(allocator: Allocator) !Cli {
     var cmd_output = app.createCommand("output", "show system flake output path");
     var cmd_boot = app.createCommand("boot", "nixos rebuild boot");
     var cmd_switch = app.createCommand("switch", "nixos rebuild switch");
-    const commands = .{ &cmd_dry, &cmd_build, &cmd_cache, &cmd_output, &cmd_switch, &cmd_boot };
 
     try cmd_cache.addArg(Arg.singleValueOption("name", 'n', "name of cachix cache"));
-    inline for (commands) |subcmd| {
+    inline for (.{
+        &cmd_dry,
+        &cmd_build,
+        &cmd_cache,
+        &cmd_output,
+        &cmd_switch,
+        &cmd_boot,
+    }) |subcmd| {
         try subcmd.addArg(Arg.singleValueOption("flake", 'f', "path to flake"));
         try subcmd.addArg(Arg.singleValueOption("host", null, "hostname (default: current host)"));
         try subcmd.addArg(Arg.booleanOption("no-pinix", null, "don't use pinix"));
