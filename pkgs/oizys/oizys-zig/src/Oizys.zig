@@ -24,8 +24,10 @@ pub const OizysCmd = enum {
 pub fn init(allocator: std.mem.Allocator, matches: *const ArgMatches) !Oizys {
     const cmd = matches.subcommand.?.name;
     const flags = matches.subcommandMatches(cmd).?;
-    const host = flags.getSingleValue("host") orelse try Oizys.getDefaultHostName(allocator);
-    const flake = flags.getSingleValue("flake") orelse try Oizys.getDefaultFlake(allocator);
+    const host = flags.getSingleValue("host") orelse
+        try Oizys.getDefaultHostName(allocator);
+    const flake = flags.getSingleValue("flake") orelse
+        try Oizys.getDefaultFlake(allocator);
 
     return Oizys{
         .allocator = allocator,
@@ -127,7 +129,8 @@ pub fn run(self: *Oizys) !void {
             try self.runNixCmd(NixCmd.Nix, &.{ "build", self.output });
         },
         .output => {
-            std.debug.print("{s}", .{self.output});
+            const stdout = std.io.getStdOut().writer();
+            try stdout.print("{s}\n", .{self.output});
         },
         .cache => {
             try self.cache();

@@ -18,5 +18,4 @@ pub fn main() !void {
 
     var oizys = try Oizys.init(allocator, matches);
     try oizys.run();
-
 }
