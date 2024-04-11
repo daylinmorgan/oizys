@@ -11,6 +11,7 @@ output: []const u8,
 cmd: OizysCmd,
 no_pinix: bool,
 debug: bool = false,
+forward: ?[][]const u8,
 
 pub const OizysCmd = enum {
     dry,
@@ -21,7 +22,7 @@ pub const OizysCmd = enum {
     build,
 };
 
-pub fn init(allocator: std.mem.Allocator, matches: *const ArgMatches) !Oizys {
+pub fn init(allocator: std.mem.Allocator, matches: *const ArgMatches, forward: ?[][]const u8) !Oizys {
     const cmd = matches.subcommand.?.name;
     const flags = matches.subcommandMatches(cmd).?;
     const host = flags.getSingleValue("host") orelse
@@ -41,6 +42,7 @@ pub fn init(allocator: std.mem.Allocator, matches: *const ArgMatches) !Oizys {
         .cmd = std.meta.stringToEnum(OizysCmd, cmd).?,
         .cache_name = flags.getSingleValue("cache") orelse "daylin",
         .no_pinix = flags.containsArg("no-pinix"),
+        .forward = forward,
     };
 }
 
@@ -91,6 +93,7 @@ pub fn runNixCmd(self: *Oizys, cmd: NixCmd, argv: []const []const u8) !void {
         NixCmd.NixosRebuild => try args.appendSlice(&.{ "sudo", self.nixos_rebuild() }),
     }
     try args.appendSlice(argv);
+    if (self.forward) |fwd| try args.appendSlice(fwd);
     var p = std.ChildProcess.init(args.items, self.allocator);
     _ = try p.spawnAndWait();
 }

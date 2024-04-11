@@ -9,13 +9,13 @@ pub fn main() !void {
     const allocator = arena.allocator();
 
     var cli = try Cli.init(allocator);
-    const matches = try cli.app.parseProcess();
+    try cli.parse();
 
-    if (!matches.containsArgs()) {
+    if (!cli.matches.containsArgs()) {
         try cli.app.displayHelp();
         return;
     }
 
-    var oizys = try Oizys.init(allocator, matches);
+    var oizys = try Oizys.init(allocator, cli.matches, cli.forward);
     try oizys.run();
 }

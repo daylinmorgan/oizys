@@ -3,9 +3,12 @@ const std = @import("std");
 const yazap = @import("yazap");
 const App = yazap.App;
 const Arg = yazap.Arg;
-
 const Allocator = std.mem.Allocator;
+
+allocator: Allocator,
 app: App,
+forward: ?[][]const u8 = null,
+matches: *const yazap.ArgMatches = undefined,
 
 pub fn init(allocator: Allocator) !Cli {
     var app = App.init(allocator, "oizys", "nix begat oizys");
@@ -27,16 +30,41 @@ pub fn init(allocator: Allocator) !Cli {
         &cmd_switch,
         &cmd_boot,
     }) |subcmd| {
+        try subcmd.addArg(Arg.positional("forward", null, null));
         try subcmd.addArg(Arg.singleValueOption("flake", 'f', "path to flake"));
         try subcmd.addArg(Arg.singleValueOption("host", null, "hostname (default: current host)"));
         try subcmd.addArg(Arg.booleanOption("no-pinix", null, "don't use pinix"));
         try oizys.addSubcommand(subcmd.*);
     }
 
-    // TODO: accept positinal args after -- to forward along?
-    return Cli{ .app = app };
+    return Cli{
+        .allocator = allocator,
+        .app = app,
+    };
+}
+
+pub fn parse(self: *Cli) !void {
+    const args = try std.process.argsAlloc(self.allocator);
+    defer std.process.argsFree(self.allocator, args);
+    var forward = std.ArrayList([]const u8).init(self.allocator);
+
+    // TODO: simplify, this smells
+    const delim_idx = blk: {
+        for (args, 0..) |arg, i|
+            if (std.mem.eql(u8, "--", arg)) {
+                for (args[i + 1 ..]) |fwd|
+                    try forward.append(try self.allocator.dupe(u8, fwd));
+                break :blk i;
+            };
+        break :blk args.len;
+    };
+
+    self.forward = try forward.toOwnedSlice();
+    self.matches = try self.app.parseFrom(args[1..delim_idx]);
 }
 
 pub fn deinit(self: *Cli) void {
     self.app.deinit();
+    for (self.forward) |arg| self.allocator.free(arg);
+    self.allocator.free(self.forward);
 }
