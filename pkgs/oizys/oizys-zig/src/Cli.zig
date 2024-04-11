@@ -43,23 +43,26 @@ pub fn init(allocator: Allocator) !Cli {
     };
 }
 
+fn get_forward_args(self: *Cli, args: [][]const u8) !usize {
+    var forward = std.ArrayList([]const u8).init(self.allocator);
+    var delim_idx: usize = args.len;
+
+    for (args, 0..) |arg, i|
+        if (std.mem.eql(u8, "--", arg)) {
+            for (args[i + 1 ..]) |fwd|
+                try forward.append(try self.allocator.dupe(u8, fwd));
+            delim_idx = i;
+            break;
+        };
+
+    self.forward = try forward.toOwnedSlice();
+    return delim_idx;
+}
+
 pub fn parse(self: *Cli) !void {
     const args = try std.process.argsAlloc(self.allocator);
     defer std.process.argsFree(self.allocator, args);
-    var forward = std.ArrayList([]const u8).init(self.allocator);
-
-    // TODO: simplify, this smells
-    const delim_idx = blk: {
-        for (args, 0..) |arg, i|
-            if (std.mem.eql(u8, "--", arg)) {
-                for (args[i + 1 ..]) |fwd|
-                    try forward.append(try self.allocator.dupe(u8, fwd));
-                break :blk i;
-            };
-        break :blk args.len;
-    };
-
-    self.forward = try forward.toOwnedSlice();
+    const delim_idx = try self.get_forward_args(args);
     self.matches = try self.app.parseFrom(args[1..delim_idx]);
 }
 
