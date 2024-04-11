@@ -10,6 +10,7 @@ pub fn main() !void {
 
     var cli = try Cli.init(allocator);
     try cli.parse();
+    defer cli.deinit();
 
     if (!cli.matches.containsArgs()) {
         try cli.app.displayHelp();
@@ -17,5 +18,7 @@ pub fn main() !void {
     }
 
     var oizys = try Oizys.init(allocator, cli.matches, cli.forward);
+    defer oizys.deinit();
     try oizys.run();
+
 }

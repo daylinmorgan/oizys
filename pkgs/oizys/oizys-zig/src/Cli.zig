@@ -7,8 +7,9 @@ const Allocator = std.mem.Allocator;
 
 allocator: Allocator,
 app: App,
-forward: ?[][]const u8 = null,
 matches: *const yazap.ArgMatches = undefined,
+forward: ?[][]const u8 = null,
+process_args: ?[]const [:0]u8 = null,
 
 pub fn init(allocator: Allocator) !Cli {
     var app = App.init(allocator, "oizys", "nix begat oizys");
@@ -43,31 +44,32 @@ pub fn init(allocator: Allocator) !Cli {
     };
 }
 
-fn get_forward_args(self: *Cli, args: [][]const u8) !usize {
+fn get_forward_args(self: *Cli, args: []const [:0]u8) !usize {
     var forward = std.ArrayList([]const u8).init(self.allocator);
-    var delim_idx: usize = args.len;
 
-    for (args, 0..) |arg, i|
-        if (std.mem.eql(u8, "--", arg)) {
-            for (args[i + 1 ..]) |fwd|
-                try forward.append(try self.allocator.dupe(u8, fwd));
-            delim_idx = i;
-            break;
-        };
+    const delim_idx: usize = delim_lookup: for (args, 0..) |arg, i| {
+        if (std.mem.eql(u8, "--", arg)) break :delim_lookup i;
+    } else args.len;
+
+    if (args.len > delim_idx)
+        for (args[delim_idx + 1 ..]) |fwd|
+            try forward.append(fwd);
 
     self.forward = try forward.toOwnedSlice();
     return delim_idx;
 }
 
 pub fn parse(self: *Cli) !void {
-    const args = try std.process.argsAlloc(self.allocator);
-    defer std.process.argsFree(self.allocator, args);
-    const delim_idx = try self.get_forward_args(args);
-    self.matches = try self.app.parseFrom(args[1..delim_idx]);
+    self.process_args = try std.process.argsAlloc(self.allocator);
+    const delim_idx = try self.get_forward_args(self.process_args.?);
+    self.matches = try self.app.parseFrom(self.process_args.?[1..delim_idx]);
 }
 
 pub fn deinit(self: *Cli) void {
+    std.process.argsFree(self.allocator, self.process_args.?);
+    if (self.forward) |fwd| {
+        for (fwd) |arg| self.allocator.free(arg);
+        self.allocator.free(fwd);
+    }
     self.app.deinit();
-    for (self.forward) |arg| self.allocator.free(arg);
-    self.allocator.free(self.forward);
 }
