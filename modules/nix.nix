@@ -24,6 +24,7 @@
   environment.systemPackages = with pkgs; [
     nil
     alejandra
+    nixfmt-rfc-style
 
     self.packages.${pkgs.system}.default
     inputs.pinix.packages.${pkgs.system}.default
