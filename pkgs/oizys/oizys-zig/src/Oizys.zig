@@ -119,24 +119,14 @@ pub fn cache(self: *Oizys) !void {
 
 pub fn run(self: *Oizys) !void {
     switch (self.cmd) {
-        .@"switch" => {
-            try self.runNixCmd(NixCmd.NixosRebuild, &.{ "switch", "--flake", self.flake });
-        },
-        .boot => {
-            try self.runNixCmd(NixCmd.NixosRebuild, &.{ "boot", "--flake", self.flake });
-        },
-        .dry => {
-            try self.runNixCmd(NixCmd.Nix, &.{ "build", self.output, "--dry-run" });
-        },
-        .build => {
-            try self.runNixCmd(NixCmd.Nix, &.{ "build", self.output });
-        },
+        .@"switch" => try self.runNixCmd(NixCmd.NixosRebuild, &.{ "switch", "--flake", self.flake }),
+        .boot => try self.runNixCmd(NixCmd.NixosRebuild, &.{ "boot", "--flake", self.flake }),
+        .dry => try self.runNixCmd(NixCmd.Nix, &.{ "build", self.output, "--dry-run" }),
+        .build => try self.runNixCmd(NixCmd.Nix, &.{ "build", self.output }),
         .output => {
             const stdout = std.io.getStdOut().writer();
             try stdout.print("{s}\n", .{self.output});
         },
-        .cache => {
-            try self.cache();
-        },
+        .cache => try self.cache(),
     }
 }
