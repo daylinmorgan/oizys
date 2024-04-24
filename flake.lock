@@ -689,11 +689,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1713229822,
-        "narHash": "sha256-ORV6WvzcQ24gjyIOpH29EgV/S273U68djDcBNBOiV4w=",
+        "lastModified": 1713576181,
+        "narHash": "sha256-vYvot66I7+58YjWaQldcZfNh4H2Mj2eE+PpYTjncBac=",
         "owner": "Cloudef",
         "repo": "zig2nix",
-        "rev": "37d64bb83c26bd8ac0e505cd78889ce9afa6775e",
+        "rev": "59edca8316d1c395ac05474489b8ea9f26ebd53c",
         "type": "github"
       },
       "original": {
