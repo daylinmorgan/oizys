@@ -33,6 +33,9 @@ in {
     runeKind = "ascii";
   };
 
+  networking.hostName = "othalan";
+  time.timeZone = "US/Central";
+
   # catppuccin/tty move to "module"
   boot.kernelParams = [
     "vt.default_red=30,243,166,249,137,245,148,186,88,243,166,249,137,245,148,166"
@@ -40,8 +43,8 @@ in {
     "vt.default_blu=46,168,161,175,250,231,213,222,112,168,161,175,250,231,213,200"
   ];
 
-  networking.hostName = "othalan";
-  time.timeZone = "US/Central";
+  boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
+
   boot.loader = {
     systemd-boot =
       enabled

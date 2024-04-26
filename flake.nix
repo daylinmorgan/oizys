@@ -4,18 +4,18 @@
   outputs = inputs: (import ./lib inputs).oizysFlake;
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     stable.url = "github:nixos/nixpkgs/nixos-23.11";
 
     tsm.url = "github:daylinmorgan/tsm?dir=nix";
     tsm.inputs.nixpkgs.follows = "nixpkgs";
 
     hyprland.url = "github:hyprwm/Hyprland/main";
-    hyprland.inputs.nixpkgs.follows = "nixpkgs";
+    # hyprland.inputs.nixpkgs.follows = "nixpkgs";
     hyprland-contrib.url = "github:hyprwm/contrib";
-    hyprland-contrib.inputs.nixpkgs.follows = "nixpkgs";
+    # hyprland-contrib.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
-    nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
+    # nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
 
     pinix.url = "github:remi-dupre/pinix";
     pinix.inputs.nixpkgs.follows = "nixpkgs";
@@ -24,13 +24,13 @@
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
     zig2nix.url = "github:Cloudef/zig2nix";
-    zig2nix.inputs.nixpkgs.follows = "nixpkgs";
+    # zig2nix.inputs.nixpkgs.follows = "nixpkgs";
 
     zls.url = "github:zigtools/zls";
     zls.inputs.nixpkgs.follows = "nixpkgs";
 
     f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
-    f1multiviewer.inputs.nixpkgs.follows = "nixpkgs";
+    # f1multiviewer.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   nixConfig = {
