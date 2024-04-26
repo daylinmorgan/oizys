@@ -11,11 +11,8 @@
     tsm.inputs.nixpkgs.follows = "nixpkgs";
 
     hyprland.url = "github:hyprwm/Hyprland/main";
-    # hyprland.inputs.nixpkgs.follows = "nixpkgs";
     hyprland-contrib.url = "github:hyprwm/contrib";
-    # hyprland-contrib.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
-    # nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
 
     pinix.url = "github:remi-dupre/pinix";
     pinix.inputs.nixpkgs.follows = "nixpkgs";
@@ -24,13 +21,12 @@
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
     zig2nix.url = "github:Cloudef/zig2nix";
-    # zig2nix.inputs.nixpkgs.follows = "nixpkgs";
+    zig2nix.inputs.nixpkgs.follows = "nixpkgs";
 
     zls.url = "github:zigtools/zls";
     zls.inputs.nixpkgs.follows = "nixpkgs";
 
     f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
-    # f1multiviewer.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   nixConfig = {
@@ -38,13 +34,13 @@
       "https://hyprland.cachix.org"
       "https://nixpkgs-wayland.cachix.org"
       "https://daylin.cachix.org"
-      "https://cache.garnix.io"
+   #   "https://cache.garnix.io"
     ];
     extra-trusted-public-keys = [
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
       "daylin.cachix.org-1:fLdSnbhKjtOVea6H9KqXeir+PyhO+sDSPhEW66ClE/k="
-      "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+   #   "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
     ];
   };
 }
