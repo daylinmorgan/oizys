@@ -22,8 +22,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-    nil
-    alejandra
+    nixd
     nixfmt-rfc-style
 
     self.packages.${pkgs.system}.default

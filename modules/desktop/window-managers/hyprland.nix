@@ -14,7 +14,7 @@
 #       swaylock -c 1e1e2e
 #     '';
 #   };
-let inherit (lib) enabled; 
+let inherit (lib) enabled;
 in
   mkOizysModule config "hyprland" {
     programs.hyprland = enabled // {

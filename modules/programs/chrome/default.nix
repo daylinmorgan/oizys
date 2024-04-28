@@ -16,10 +16,18 @@ mkOizysModule config "chrome" {
       "clngdbkpkpeebahjckkjfobafhncgmne" # stylus
       "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
       "ekhagklcjbdpajgpjgmbionohlpdbjgc" # zotero connector
+
+      "bkkmolkhemgaeaeggcmfbghljjjoofoh" # catppuccin-chrome-theme-m
     ];
   };
 
   environment.systemPackages = with pkgs; [
+    (chromium.override{
+      commandLineArgs = [
+        "--force-dark-mode"
+      ];
+    })
+
     (google-chrome.override {
       commandLineArgs = [
         "--force-dark-mode"
