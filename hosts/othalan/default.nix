@@ -1,10 +1,8 @@
 {
   pkgs,
-  lib,
+  enabled,
   ...
-}: let
-  inherit (lib) enabled;
-in {
+}: {
   oizys = {
     desktop = enabled;
     hyprland = enabled;

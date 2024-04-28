@@ -1,10 +1,9 @@
 {
   pkgs,
-  lib,
+  enabled,
+  mkRune,
   ...
-}: let
-  inherit (lib) enabled;
-in {
+}: {
   networking.networkmanager = enabled;
   services.printing = enabled;
   services.fwupd = enabled;
@@ -28,7 +27,7 @@ in {
     pamixer
   ];
 
-  services.getty.greetingLine = lib.mkRune {
+  services.getty.greetingLine = mkRune {
     rune = "othalan";
     runeKind = "ascii";
   };

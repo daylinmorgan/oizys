@@ -1,11 +1,9 @@
 {
   self,
   pkgs,
-  lib,
+  enabled,
   ...
-}: let
-  inherit (lib) enabled;
-in {
+}: {
   imports = with self.nixosModules; [
     restic
   ];

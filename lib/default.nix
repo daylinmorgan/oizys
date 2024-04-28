@@ -3,7 +3,7 @@ inputs: let
   lib = nixpkgs.lib.extend (import ./extended.nix);
 
   inherit (builtins) mapAttrs readDir filter listToAttrs;
-  inherit (lib) nixosSystem genAttrs isNixFile mkDefaultOizysModule mkOizysModule;
+  inherit (lib) nixosSystem genAttrs isNixFile mkDefaultOizysModule mkOizysModule enabled mkRune;
   inherit (lib.filesystem) listFilesRecursive;
 
   inherit (import ./find-modules.nix {inherit lib;}) findModulesList;
@@ -26,7 +26,7 @@ in rec {
         isNixFile
         (listFilesRecursive (../. + "/hosts/${hostname}"));
 
-      specialArgs = {inherit inputs lib self mkDefaultOizysModule mkOizysModule;};
+      specialArgs = {inherit inputs lib self mkDefaultOizysModule mkOizysModule enabled mkRune;};
     };
 
   oizysHosts = mapAttrs (name: _: mkSystem name) (readDir ../hosts);

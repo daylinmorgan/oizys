@@ -22,7 +22,7 @@ mkOizysModule config "chrome" {
   };
 
   environment.systemPackages = with pkgs; [
-    (chromium.override{
+    (chromium.override {
       commandLineArgs = [
         "--force-dark-mode"
       ];

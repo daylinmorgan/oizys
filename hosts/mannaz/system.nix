@@ -1,12 +1,11 @@
 {
   config,
   pkgs,
-  lib,
+  enabled,
+  mkRune,
   ...
-}: let
-  inherit (lib) enabled;
-in {
-  users.motd = lib.mkRune {
+}: {
+  users.motd = mkRune {
     number = "2";
     rune = "mannaz";
   };

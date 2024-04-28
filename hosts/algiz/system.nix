@@ -1,6 +1,8 @@
-{lib, ...}: let
-  inherit (lib) enabled;
-in {
+{
+  lib,
+  enabled,
+  ...
+}: {
   users.motd = lib.mkRune {
     number = "6";
     rune = "algiz";

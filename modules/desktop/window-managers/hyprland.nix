@@ -3,9 +3,9 @@
   pkgs,
   config,
   mkOizysModule,
-  lib,
+  enabled,
   ...
-}: 
+}:
 # let
 #   lock = pkgs.writeShellApplication {
 #     name = "lock";
@@ -14,49 +14,49 @@
 #       swaylock -c 1e1e2e
 #     '';
 #   };
-let inherit (lib) enabled;
-in
-  mkOizysModule config "hyprland" {
-    programs.hyprland = enabled // {
+mkOizysModule config "hyprland" {
+  programs.hyprland =
+    enabled
+    // {
       package = inputs.hyprland.packages.${pkgs.system}.default;
     };
-    security.pam.services.swaylock = {};
-    # Optional, hint electron apps to use wayland:
-    environment.sessionVariables.NIXOS_OZONE_WL = "1";
+  security.pam.services.swaylock = {};
+  # Optional, hint electron apps to use wayland:
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-    environment.systemPackages = with pkgs; [
-      wlr-randr
-      kanshi
+  environment.systemPackages = with pkgs; [
+    wlr-randr
+    kanshi
 
-      brightnessctl
-      udiskie
-      eww
+    brightnessctl
+    udiskie
+    eww
 
-      # notifications
-      libnotify
-      dunst
+    # notifications
+    libnotify
+    dunst
 
-      # utils
-      grimblast
-      ksnip
-      wl-clipboard
-      rofi-wayland
-      pavucontrol
+    # utils
+    grimblast
+    ksnip
+    wl-clipboard
+    rofi-wayland
+    pavucontrol
 
-      catppuccin-cursors.mochaDark
+    catppuccin-cursors.mochaDark
 
-      #hypr ecosystem
-      hyprlock
-      hypridle
+    #hypr ecosystem
+    hyprlock
+    hypridle
 
-      swww
-    ];
+    swww
+  ];
 
-    nixpkgs.overlays = [
-      inputs.hyprland-contrib.overlays.default
-      inputs.nixpkgs-wayland.overlay
-      # when this was active I was forced to recompile VirtualBox myself, which would just fail to compile...
-      # Must have been one of the other non-hyprland packages modified in the overlay
-      # inputs.hyprland.overlays.default
-    ];
-  }
+  nixpkgs.overlays = [
+    inputs.hyprland-contrib.overlays.default
+    inputs.nixpkgs-wayland.overlay
+    # when this was active I was forced to recompile VirtualBox myself, which would just fail to compile...
+    # Must have been one of the other non-hyprland packages modified in the overlay
+    # inputs.hyprland.overlays.default
+  ];
+}
