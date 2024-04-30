@@ -5,11 +5,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1712592932,
-        "narHash": "sha256-G44hEGn5+PvjkY9YvUoWnFz9FZOtRKwEc6W/7EjzOgs=",
+        "lastModified": 1714485953,
+        "narHash": "sha256-v6KYvjSdSPI0okx772Yuq7Pj23ng6kBzTI6uUD+M57Y=",
         "owner": "daylinmorgan",
         "repo": "f1multiviewer-flake",
-        "rev": "189b84de363cfa1d95cc77093e4e3bcd1ff1e492",
+        "rev": "0e2225d43eef6e28295554236d0ab079389f8485",
         "type": "github"
       },
       "original": {
