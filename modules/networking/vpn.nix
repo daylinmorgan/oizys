@@ -16,5 +16,5 @@ mkOizysModule config "vpn" {
       autoStart = false;
       updateResolvConf = true;
     };
-};
+  };
 }

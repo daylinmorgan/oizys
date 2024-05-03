@@ -35,7 +35,8 @@ in rec {
       oizys-zig = pkgs.callPackage ../pkgs/oizys/oizys-zig {zig2nix = inputs.zig2nix;};
       oizys-nim = pkgs.callPackage ../pkgs/oizys/oizys-nim {};
       oizys-rs = pkgs.callPackage ../pkgs/oizys/oizys-rs {};
-      default = oizys-zig;
+      oizys-go = pkgs.callPackage ../pkgs/oizys/oizys-go {};
+      default = oizys-go;
     }
   );
   devShells = forAllSystems (
