@@ -9,7 +9,7 @@
   ];
 
   nixpkgs.config.allowUnfree = true;
-  nix.package = pkgs.nixUnstable;
+  nix.package = pkgs.nixVersions.latest;
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
@@ -21,10 +21,9 @@
     options = "--delete-older-than 7d";
   };
 
-  environment.systemPackages = with pkgs; [
-    nixd
-    nixfmt-rfc-style
-
+  environment.systemPackages = [
+    pkgs.nixd
+    pkgs.nixfmt-rfc-style
     self.packages.${pkgs.system}.default
     inputs.pinix.packages.${pkgs.system}.default
   ];
