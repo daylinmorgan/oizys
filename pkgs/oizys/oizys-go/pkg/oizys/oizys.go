@@ -74,10 +74,9 @@ func NixosRebuild(subcmd string, flake string, rest ...string) {
 	args := []string{
 		"nixos-rebuild",
 		subcmd,
-    "--flake",
-    flake,
+		"--flake",
+		flake,
 	}
-  fmt.Println(args)
 	args = append(args, rest...)
 	cmd := exec.Command("sudo", args...)
 	runCommand(cmd)
@@ -94,7 +93,6 @@ func runCommand(cmd *exec.Cmd) {
 func NixBuild(path string, rest ...string) {
 	args := []string{"build", path}
 	args = append(args, rest...)
-	fmt.Println(args)
 	cmd := exec.Command("nix", args...)
 	runCommand(cmd)
 }
