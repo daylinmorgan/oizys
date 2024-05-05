@@ -1,9 +1,7 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
-	"io/fs"
 	"log"
 	"os"
 
@@ -20,10 +18,6 @@ func setFlake() {
 		} else {
 			flake = oizysDir
 		}
-	}
-
-	if _, err := os.Stat(flake); errors.Is(err, fs.ErrNotExist) {
-		log.Fatalln("path to flake:", flake, "does not exist")
 	}
 }
 
@@ -68,7 +62,6 @@ var rootCmd = &cobra.Command{
 		setHost()
 	},
 }
-
 
 func init() {
 	rootCmd.CompletionOptions.HiddenDefaultCmd = true

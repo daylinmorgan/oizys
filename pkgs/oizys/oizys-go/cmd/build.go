@@ -5,17 +5,15 @@ import (
 	"oizys/pkg/oizys"
 )
 
-
 var buildCmd = &cobra.Command{
 	Use:   "build",
 	Short: "A brief description of your command",
 	Run: func(cmd *cobra.Command, args []string) {
+		oizys.CheckFlake(flake)
 		oizys.NixBuild(oizys.Output(flake, host), args...)
 	},
 }
 
-
-
 func init() {
-  rootCmd.AddCommand(buildCmd)
+	rootCmd.AddCommand(buildCmd)
 }

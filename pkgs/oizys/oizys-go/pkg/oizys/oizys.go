@@ -1,7 +1,9 @@
 package oizys
 
 import (
+	"errors"
 	"fmt"
+	"io/fs"
 	"log"
 	"os"
 	"os/exec"
@@ -106,6 +108,12 @@ func CacheBuild(path string, cache string, rest ...string) {
 	args = append(args, rest...)
 	cmd := exec.Command("cachix", args...)
 	runCommand(cmd)
+}
+
+func CheckFlake(flake string) {
+	if _, err := os.Stat(flake); errors.Is(err, fs.ErrNotExist) {
+		log.Fatalln("path to flake:", flake, "does not exist")
+	}
 }
 
 func Output(flake string, host string) string {
