@@ -54,7 +54,9 @@ mkOizysModule config "hyprland" {
 
   nixpkgs.overlays = [
     inputs.hyprland-contrib.overlays.default
-    inputs.nixpkgs-wayland.overlay
+    # some issue with dunst?
+    # inputs.nixpkgs-wayland.overlay
+    
     # when this was active I was forced to recompile VirtualBox myself, which would just fail to compile...
     # Must have been one of the other non-hyprland packages modified in the overlay
     # inputs.hyprland.overlays.default
