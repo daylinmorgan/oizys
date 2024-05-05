@@ -9,7 +9,6 @@ import (
 
 	cc "github.com/ivanpirog/coloredcobra"
 	"github.com/spf13/cobra"
-	"oizys/pkg/oizys"
 )
 
 func setFlake() {
@@ -70,65 +69,9 @@ var rootCmd = &cobra.Command{
 	},
 }
 
-var dryCmd = &cobra.Command{
-	Use:   "dry",
-	Short: "poor man's nix flake check",
-	Run: func(cmd *cobra.Command, args []string) {
-		oizys.NixDryRun(oizys.Output(flake, host))
-	},
-}
-
-var outputCmd = &cobra.Command{
-	Use:   "output",
-	Short: "show nixosConfiguration attr",
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Print(oizys.Output(flake, host))
-	},
-}
-
-var bootCmd = &cobra.Command{
-	Use:   "boot",
-	Short: "nixos rebuild boot",
-	Run: func(cmd *cobra.Command, args []string) {
-		oizys.NixosRebuild("boot", flake)
-	},
-}
-
-var switchCmd = &cobra.Command{
-	Use:   "switch",
-	Short: "nixos rebuild switch",
-	Run: func(cmd *cobra.Command, args []string) {
-		oizys.NixosRebuild("switch", flake, args...)
-	},
-}
-
-var cacheCmd = &cobra.Command{
-	Use:   "cache",
-	Short: "build and push to cachix",
-	Run: func(cmd *cobra.Command, args []string) {
-    oizys.CacheBuild(oizys.Output(flake, host), cacheName, args...)
-	},
-}
-
-var buildCmd = &cobra.Command{
-	Use:   "build",
-	Short: "A brief description of your command",
-	Run: func(cmd *cobra.Command, args []string) {
-		oizys.NixBuild(oizys.Output(flake, host), args...)
-	},
-}
-
-
 
 func init() {
 	rootCmd.CompletionOptions.HiddenDefaultCmd = true
 	rootCmd.PersistentFlags().StringVar(&flake, "flake", "", "path to flake ($OIZYS_DIR or $HOME/oizys)")
 	rootCmd.PersistentFlags().StringVar(&host, "host", "", "host to build (current host)")
-	rootCmd.AddCommand(dryCmd)
-	rootCmd.AddCommand(outputCmd)
-	rootCmd.AddCommand(bootCmd)
-	rootCmd.AddCommand(buildCmd)
-	rootCmd.AddCommand(switchCmd)
-	rootCmd.AddCommand(cacheCmd)
-	cacheCmd.Flags().StringVarP(&cacheName, "cache", "c", "daylin", "name of cachix binary cache")
 }
