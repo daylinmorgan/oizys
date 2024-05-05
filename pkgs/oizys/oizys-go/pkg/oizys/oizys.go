@@ -27,10 +27,10 @@ func TerminalSize() (int, int) {
 func ParseDryRunOutput(nixOutput string) {
 	output := termenv.NewOutput(os.Stdout)
 	parts := strings.Split(nixOutput, "\nthese")
-  if len(parts) != 3 {
-    log.Println("no changes...")
-    return
-  }
+	if len(parts) != 3 {
+		log.Println("no changes...")
+		return
+	}
 	built := strings.Split(strings.TrimSpace(parts[1]), "\n")[1:]
 	fetched := strings.Split(strings.TrimSpace(parts[2]), "\n")[1:]
 
@@ -71,9 +71,15 @@ func NixDryRun(path string) {
 }
 
 func NixosRebuild(subcmd string, flake string, rest ...string) {
-	args := []string{subcmd, "--flake"}
+	args := []string{
+		"nixos-rebuild",
+		subcmd,
+    "--flake",
+    flake,
+	}
+  fmt.Println(args)
 	args = append(args, rest...)
-	cmd := exec.Command("nixos-rebuild", args...)
+	cmd := exec.Command("sudo", args...)
 	runCommand(cmd)
 }
 
