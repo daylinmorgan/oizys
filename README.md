@@ -42,21 +42,26 @@ nix run "github:daylinmorgan/oizys"
 ```
 
 ```
-oizys <cmd> [opts]
+nix begat oizys
 
-commands:
-  dry     poor man's nix flake check
-  boot    nixos-rebuild boot
-  switch  nixos-rebuild switch
-  cache   build and push to cachix
-  build   build system flake
+Usage:
+  oizys [command]
 
-options:
-  -h|--help      show this help
-     --host      hostname (current host)
-  -f|--flake     path to flake ($FLAKE_PATH or $HOME/oizys)
-  -c|--cache     name of cachix binary cache (daylin)
-     --no-pinix  don't use pinix
+Available Commands:
+  boot                    nixos rebuild boot
+  build                   A brief description of your command
+  cache                   build and push to cachix
+  dry                     poor man's nix flake check
+  help                    Help about any command
+  output                  show nixosConfiguration attr
+  switch                  nixos rebuild switch
+
+Flags:
+      --flake string   path to flake ($OIZYS_DIR or $HOME/oizys)
+  -h, --help           help for oizys
+      --host string    host to build (current host)
+
+Use "oizys [command] --help" for more information about a command.
 ```
 
 ## oizys?
