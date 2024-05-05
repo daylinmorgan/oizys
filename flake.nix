@@ -10,7 +10,9 @@
     tsm.url = "github:daylinmorgan/tsm?dir=nix";
     tsm.inputs.nixpkgs.follows = "nixpkgs";
 
-    hyprland.url = "github:hyprwm/Hyprland/main";
+    # hyprland.url = "github:hyprwm/Hyprland/main";
+    # https://github.com/hyprwm/Hyprland/issues/5891
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
     hyprland-contrib.url = "github:hyprwm/contrib";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
 
