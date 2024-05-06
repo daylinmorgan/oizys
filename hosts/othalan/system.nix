@@ -27,9 +27,12 @@
     pamixer
   ];
 
-  services.getty.greetingLine = mkRune {
-    rune = "othalan";
-    runeKind = "ascii";
+  services.getty = {
+    greetingLine = mkRune {
+      rune = "othalan";
+      runeKind = "ascii";
+    };
+    helpLine = "";
   };
 
   networking.hostName = "othalan";
