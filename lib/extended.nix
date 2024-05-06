@@ -7,7 +7,6 @@ let
     mkOption
     types
     ;
-  runes = import ../modules/runes;
 in
 rec {
   enabled = {
@@ -38,13 +37,6 @@ rec {
 
   isNixFile = path: hasSuffix ".nix" path;
   mkIfIn = name: list: prev.mkIf (builtins.elem name list);
-  mkRune =
-    {
-      rune,
-      number ? "6",
-      runeKind ? "braille",
-    }:
-    "[1;3${number}m\n" + runes.${rune}.${runeKind} + "\n[0m";
 
   mkOizysModule = config: attr: content: {
     options.oizys.${attr}.enable = mkEnableOption "enable ${attr} support";

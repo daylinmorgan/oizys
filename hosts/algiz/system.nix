@@ -1,10 +1,5 @@
-{ lib, enabled, ... }:
+{ enabled, ... }:
 {
-  users.motd = lib.mkRune {
-    number = "6";
-    rune = "algiz";
-  };
-
   services.resolved = enabled;
 
   services.fail2ban = {

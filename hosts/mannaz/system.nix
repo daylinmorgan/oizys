@@ -2,15 +2,9 @@
   config,
   pkgs,
   enabled,
-  mkRune,
   ...
 }:
 {
-  users.motd = mkRune {
-    number = "2";
-    rune = "mannaz";
-  };
-
   # Use the systemd-boot EFI boot loader.
   boot.loader = {
     systemd-boot = enabled;

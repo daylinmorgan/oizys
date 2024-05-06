@@ -5,6 +5,7 @@
   oizys = {
     desktop = enabled;
     nix-ld = enabled;
+    rune.motd = enabled;
   };
 
   # Enable the X11 windowing system.

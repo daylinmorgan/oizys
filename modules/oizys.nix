@@ -5,7 +5,9 @@ in
 {
   imports = with self.nixosModules; [
     users
+    runes
     nix
+
     cli
     dev
     nvim

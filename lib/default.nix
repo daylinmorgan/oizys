@@ -16,7 +16,6 @@ let
     mkDefaultOizysModule
     mkOizysModule
     enabled
-    mkRune
     ;
   inherit (lib.filesystem) listFilesRecursive;
 
@@ -46,7 +45,6 @@ rec {
           mkDefaultOizysModule
           mkOizysModule
           enabled
-          mkRune
           ;
       };
     };

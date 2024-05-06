@@ -13,6 +13,7 @@
       "node" # for docker langservers
       "python"
     ];
+    rune.motd = enabled;
 
     docker = enabled;
     backups = enabled;

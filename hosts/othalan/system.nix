@@ -1,9 +1,4 @@
-{
-  pkgs,
-  enabled,
-  mkRune,
-  ...
-}:
+{ pkgs, enabled, ... }:
 {
   networking.networkmanager = enabled;
   services.printing = enabled;
@@ -27,14 +22,6 @@
   };
 
   environment.systemPackages = with pkgs; [ pamixer ];
-
-  services.getty = {
-    greetingLine = mkRune {
-      rune = "othalan";
-      runeKind = "ascii";
-    };
-    helpLine = "";
-  };
 
   networking.hostName = "othalan";
   time.timeZone = "US/Central";

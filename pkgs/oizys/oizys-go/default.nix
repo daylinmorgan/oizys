@@ -1,5 +1,4 @@
 {
-
   installShellFiles,
   buildGoModule,
   lib,
