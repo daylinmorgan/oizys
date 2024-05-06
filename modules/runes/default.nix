@@ -7,6 +7,7 @@
 let
   inherit (lib)
     types
+    mkMerge
     mkOption
     mkIf
     mkEnableOption
@@ -18,11 +19,11 @@ let
   };
   mkRune =
     {
-      rune,
+      name,
       number ? "6",
-      runeKind ? "braille",
+      kind ? "braille",
     }:
-    "[1;3${number}m\n" + runes.${rune}.${runeKind} + "\n[0m";
+    "[1;3${number}m\n" + runes.${name}.${kind} + "\n[0m";
   cfg = config.oizys.rune;
 in
 {
@@ -50,19 +51,21 @@ in
     };
   };
 
-  config =
-    mkIf cfg.enable {
+  config = mkMerge [
+    (mkIf cfg.enable {
       environment.etc.issue = {
         source = pkgs.writeText "issue" (mkRune {
-          rune = cfg.name;
-          runeKind = cfg.kind;
+          name = cfg.name;
+          kind = cfg.kind;
         });
       };
-    }
-    // mkIf cfg.motd.enable {
+    })
+    (mkIf cfg.motd.enable {
       users.motd = mkRune {
         number = "2"; # todo: autogenerate based on hostname?
-        rune = cfg.name;
+        name = cfg.name;
       };
-    };
+
+    })
+  ];
 }
