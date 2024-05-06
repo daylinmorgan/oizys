@@ -4,9 +4,11 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   inherit (lib) mkIf;
-in {
+in
+{
   config = mkIf config.oizys.desktop.enable {
     environment.systemPackages = with pkgs; [
       wezterm
@@ -23,7 +25,7 @@ in {
       hunspell # spell check for libreoffice
 
       (catppuccin-gtk.override {
-        accents = ["rosewater"];
+        accents = [ "rosewater" ];
         variant = "mocha";
       })
 

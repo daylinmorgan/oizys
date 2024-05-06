@@ -3,13 +3,15 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   inherit (lib) mkIf;
-in {
+in
+{
   config = mkIf config.oizys.desktop.enable {
     fonts.fontconfig.enable = true;
     fonts.packages = with pkgs; [
-      (nerdfonts.override {fonts = ["FiraCode"];})
+      (nerdfonts.override { fonts = [ "FiraCode" ]; })
       recursive
     ];
   };

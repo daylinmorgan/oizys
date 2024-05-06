@@ -1,11 +1,6 @@
+{ pkgs, self, ... }:
 {
-  pkgs,
-  self,
-  ...
-}: {
-  imports = with self.nixosModules; [
-    git
-  ];
+  imports = with self.nixosModules; [ git ];
   programs.zsh.enable = true;
   environment.systemPackages = with pkgs; [
     tmux

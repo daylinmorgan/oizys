@@ -3,11 +3,14 @@
   enabled,
   mkRune,
   ...
-}: {
+}:
+{
   networking.networkmanager = enabled;
   services.printing = enabled;
   services.fwupd = enabled;
-  hardware.bluetooth = enabled // {powerOnBoot = true;};
+  hardware.bluetooth = enabled // {
+    powerOnBoot = true;
+  };
 
   # https://github.com/NixOS/nixos-hardware/blob/c478b3d56969006e015e55aaece4931f3600c1b2/lenovo/thinkpad/x1/9th-gen/default.nix
   # https://github.com/NixOS/nixos-hardware/blob/c478b3d56969006e015e55aaece4931f3600c1b2/common/pc/ssd/default.nix
@@ -15,17 +18,15 @@
 
   # rtkit is optional but recommended
   security.rtkit = enabled;
-  services.pipewire =
-    enabled
-    // {
-      audio = enabled;
-      pulse = enabled;
-      alsa = enabled // {support32Bit = true;};
+  services.pipewire = enabled // {
+    audio = enabled;
+    pulse = enabled;
+    alsa = enabled // {
+      support32Bit = true;
     };
+  };
 
-  environment.systemPackages = with pkgs; [
-    pamixer
-  ];
+  environment.systemPackages = with pkgs; [ pamixer ];
 
   services.getty = {
     greetingLine = mkRune {
@@ -48,11 +49,9 @@
   boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
 
   boot.loader = {
-    systemd-boot =
-      enabled
-      // {
-        consoleMode = "max";
-      };
+    systemd-boot = enabled // {
+      consoleMode = "max";
+    };
     efi.canTouchEfiVariables = true;
   };
 

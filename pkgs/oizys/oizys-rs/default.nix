@@ -11,8 +11,8 @@ rustPlatform.buildRustPackage {
     lockFile = ./Cargo.lock;
   };
 
-  nativeBuildInputs = [installShellFiles];
-  buildInputs = [nix-output-monitor];
+  nativeBuildInputs = [ installShellFiles ];
+  buildInputs = [ nix-output-monitor ];
 
   postInstall = ''
     installShellCompletion --cmd oizys \

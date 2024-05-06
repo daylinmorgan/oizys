@@ -3,10 +3,12 @@
   lib,
   config,
   ...
-}: let
+}:
+let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.oizys.nix-ld;
-in {
+in
+{
   options.oizys.nix-ld.enable = mkEnableOption "enable nix-ld support";
   config = mkIf cfg.enable {
     programs.nix-ld.enable = true;

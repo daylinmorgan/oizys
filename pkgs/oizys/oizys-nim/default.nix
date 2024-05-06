@@ -1,4 +1,4 @@
-{buildNimPackage}:
+{ buildNimPackage }:
 buildNimPackage {
   pname = "oizys";
   version = "unstable";

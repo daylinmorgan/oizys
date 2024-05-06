@@ -1,11 +1,6 @@
+{ self, enabled, ... }:
 {
-  self,
-  enabled,
-  ...
-}: {
-  imports = with self.nixosModules; [
-    nix-ld
-  ];
+  imports = with self.nixosModules; [ nix-ld ];
 
   oizys = {
     desktop = enabled;
@@ -19,5 +14,5 @@
     windowManager.qtile.enable = true;
   };
 
-  users.users.daylin.extraGroups = ["docker"];
+  users.users.daylin.extraGroups = [ "docker" ];
 }

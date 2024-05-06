@@ -1,4 +1,5 @@
-{...}: (final: prev: {
+{ ... }:
+(final: prev: {
   nimlsp = prev.nimlsp.overrideNimAttrs {
     requiredNimVersion = 2;
     nimFlags = [

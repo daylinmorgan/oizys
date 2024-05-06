@@ -5,7 +5,10 @@
   ...
 }:
 mkOizysModule config "vpn" {
-  environment.systemPackages = with pkgs; [openconnect openvpn];
+  environment.systemPackages = with pkgs; [
+    openconnect
+    openvpn
+  ];
 
   services.openvpn.servers = {
     express-ny = {

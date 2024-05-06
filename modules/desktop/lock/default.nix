@@ -3,15 +3,21 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   inherit (lib) mkIf;
   cfg = config.services.xserver.windowManager.qtile;
   lock = pkgs.writeShellApplication {
     name = "lock";
-    runtimeInputs = with pkgs; [i3lock-color figlet procps];
+    runtimeInputs = with pkgs; [
+      i3lock-color
+      figlet
+      procps
+    ];
     text = builtins.readFile ./lock.sh;
   };
-in {
+in
+{
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       xss-lock
@@ -19,9 +25,9 @@ in {
     ];
 
     systemd.services.i3lock = {
-      wantedBy = ["sleep.target"];
+      wantedBy = [ "sleep.target" ];
       description = "Lock the screen using a custom lock script";
-      before = ["suspend.target"];
+      before = [ "suspend.target" ];
       serviceConfig = {
         User = "daylin";
         Type = "forking";

@@ -3,10 +3,9 @@
   pkgs,
   enabled,
   ...
-}: {
-  imports = with self.nixosModules; [
-    restic
-  ];
+}:
+{
+  imports = with self.nixosModules; [ restic ];
 
   oizys = {
     languages = [
@@ -31,14 +30,18 @@
     rcloneConfigFile = "/home/daylin/.config/rclone/rclone.conf";
     repository = "rclone:g:archives/algiz";
     passwordFile = "/home/daylin/.config/restic/algiz-pass";
-    paths = ["/home/daylin/services/git/" "/home/daylin/services/gotosocial/" "home/daylin/services/caddy"];
+    paths = [
+      "/home/daylin/services/git/"
+      "/home/daylin/services/gotosocial/"
+      "home/daylin/services/caddy"
+    ];
   };
 
   security.sudo.wheelNeedsPassword = false;
 
   users.users = {
     daylin = {
-      extraGroups = ["docker"];
+      extraGroups = [ "docker" ];
     };
 
     git = {

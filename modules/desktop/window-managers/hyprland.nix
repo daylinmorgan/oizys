@@ -15,12 +15,10 @@
 #     '';
 #   };
 mkOizysModule config "hyprland" {
-  programs.hyprland =
-    enabled
-    // {
-      package = inputs.hyprland.packages.${pkgs.system}.default;
-    };
-  security.pam.services.swaylock = {};
+  programs.hyprland = enabled // {
+    package = inputs.hyprland.packages.${pkgs.system}.default;
+  };
+  security.pam.services.swaylock = { };
   # Optional, hint electron apps to use wayland:
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
@@ -56,7 +54,7 @@ mkOizysModule config "hyprland" {
     inputs.hyprland-contrib.overlays.default
     # some issue with dunst?
     # inputs.nixpkgs-wayland.overlay
-    
+
     # when this was active I was forced to recompile VirtualBox myself, which would just fail to compile...
     # Must have been one of the other non-hyprland packages modified in the overlay
     # inputs.hyprland.overlays.default

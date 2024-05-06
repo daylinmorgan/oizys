@@ -1,6 +1,8 @@
-{pkgs, ...}: let
+{ pkgs, ... }:
+let
   notes-git = ''${pkgs.git}/bin/git -C /home/daylin/stuff/notes'';
-in {
+in
+{
   systemd.services.notes-bot = {
     description = "auto commit changes to notes";
     serviceConfig = {
@@ -13,7 +15,7 @@ in {
   };
   systemd.timers.notes-bot-timer = {
     description = "run notes commit service";
-    wantedBy = ["timers.target"];
+    wantedBy = [ "timers.target" ];
     timerConfig = {
       OnCalendar = "daily";
       Persistent = true;

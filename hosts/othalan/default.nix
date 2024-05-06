@@ -1,8 +1,5 @@
+{ pkgs, enabled, ... }:
 {
-  pkgs,
-  enabled,
-  ...
-}: {
   oizys = {
     desktop = enabled;
     hyprland = enabled;
@@ -31,7 +28,10 @@
     user = "daylin";
     repository = "rclone:g:archives/othalan";
     passwordFile = "/home/daylin/.config/restic/othalan-pass";
-    paths = ["/home/daylin/stuff/" "/home/daylin/dev/"];
+    paths = [
+      "/home/daylin/stuff/"
+      "/home/daylin/dev/"
+    ];
   };
 
   users.users.daylin.extraGroups = [

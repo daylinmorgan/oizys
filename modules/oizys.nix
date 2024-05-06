@@ -1,10 +1,8 @@
-{
-  lib,
-  self,
-  ...
-}: let
+{ lib, self, ... }:
+let
   inherit (lib) mkEnableOption;
-in {
+in
+{
   imports = with self.nixosModules; [
     users
     nix

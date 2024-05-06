@@ -3,10 +3,12 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   inherit (lib) mkOption mkIf types;
   cfg = config.users.defaultUser;
-in {
+in
+{
   options.users.defaultUser = mkOption {
     default = true;
     type = types.bool;

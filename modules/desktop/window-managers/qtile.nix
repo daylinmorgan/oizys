@@ -3,10 +3,12 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   inherit (lib) mkIf;
   cfg = config.services.xserver.windowManager.qtile;
-in {
+in
+{
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       brightnessctl

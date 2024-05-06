@@ -3,10 +3,12 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   inherit (lib) mkIfIn;
   cfg = config.oizys.languages;
-in {
+in
+{
   config = mkIfIn "node" cfg {
     environment.systemPackages = with pkgs; [
       nodejs

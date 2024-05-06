@@ -3,10 +3,9 @@
   self,
   pkgs,
   ...
-}: {
-  imports = [
-    inputs.nix-index-database.nixosModules.nix-index
-  ];
+}:
+{
+  imports = [ inputs.nix-index-database.nixosModules.nix-index ];
 
   nixpkgs.config.allowUnfree = true;
   nix.package = pkgs.nixVersions.latest;
@@ -34,7 +33,7 @@
   programs.command-not-found.enable = false;
 
   nix.settings = {
-    trusted-users = ["@wheel"];
+    trusted-users = [ "@wheel" ];
     accept-flake-config = true;
 
     # substituters = [

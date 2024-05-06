@@ -1,8 +1,5 @@
+{ lib, enabled, ... }:
 {
-  lib,
-  enabled,
-  ...
-}: {
   users.motd = lib.mkRune {
     number = "6";
     rune = "algiz";
@@ -23,15 +20,16 @@
   # networking.nameservers = [ "8.8.8.8"];
 
   # allow tcp connections for revsere proxy
-  networking.firewall =
-    enabled
-    // {
-      allowedTCPPorts = [80 443];
-    };
+  networking.firewall = enabled // {
+    allowedTCPPorts = [
+      80
+      443
+    ];
+  };
 
-  services.openssh =
-    enabled
-    // {settings.PasswordAuthentication = false;};
+  services.openssh = enabled // {
+    settings.PasswordAuthentication = false;
+  };
 
   # users.mutableUsers = false;
 

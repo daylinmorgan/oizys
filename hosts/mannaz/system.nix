@@ -4,7 +4,8 @@
   enabled,
   mkRune,
   ...
-}: {
+}:
+{
   users.motd = mkRune {
     number = "2";
     rune = "mannaz";
@@ -27,31 +28,25 @@
     }
   ];
 
-  hardware.opengl =
-    enabled
-    // {
-      driSupport = true;
-      driSupport32Bit = true;
-      extraPackages = with pkgs; [
-        libGL
-      ];
-      setLdLibraryPath = true;
-    };
+  hardware.opengl = enabled // {
+    driSupport = true;
+    driSupport32Bit = true;
+    extraPackages = with pkgs; [ libGL ];
+    setLdLibraryPath = true;
+  };
   # Load nvidia driver for Xorg and Wayland
-  services.xserver.videoDrivers = ["nvidia"];
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
     # Modesetting is required.
     modesetting = enabled;
 
     # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
-    powerManagement =
-      enabled
-      // {
-        # Fine-grained power management. Turns off GPU when not in use.
-        # Experimental and only works on modern Nvidia GPUs (Turing or newer).
-        finegrained = false;
-      };
+    powerManagement = enabled // {
+      # Fine-grained power management. Turns off GPU when not in use.
+      # Experimental and only works on modern Nvidia GPUs (Turing or newer).
+      finegrained = false;
+    };
 
     # Use the NVidia open source kernel module (not to be confused with the
     # independent third-party "nouveau" open source driver).

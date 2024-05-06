@@ -3,15 +3,19 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   inherit (lib) mkIfIn;
   cfg = config.oizys.languages;
-in {
+in
+{
   config = mkIfIn "python" cfg {
-    environment.systemPackages = let
-      python = pkgs.python3.withPackages (ps: with ps; [pip]);
-    in
-      with pkgs; [
+    environment.systemPackages =
+      let
+        python = pkgs.python3.withPackages (ps: with ps; [ pip ]);
+      in
+      with pkgs;
+      [
         # https://github.com/Mic92/nix-ld?tab=readme-ov-file#my-pythonnodejsrubyinterpreter-libraries-do-not-find-the-libraries-configured-by-nix-ld
         (pkgs.writeShellScriptBin "python" ''
           export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH
@@ -23,7 +27,7 @@ in {
           exec ${python}/bin/python "$@"
         '')
 
-        (python3.withPackages (ps: with ps; [pip]))
+        (python3.withPackages (ps: with ps; [ pip ]))
         micromamba
         pixi
       ];
