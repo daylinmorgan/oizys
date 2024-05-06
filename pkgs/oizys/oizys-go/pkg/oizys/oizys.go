@@ -12,6 +12,9 @@ import (
 	"github.com/charmbracelet/bubbles/table"
 	"github.com/muesli/termenv"
 	"golang.org/x/term"
+
+	"github.com/briandowns/spinner"
+	"time"
 )
 
 func TerminalSize() (int, int) {
@@ -65,7 +68,14 @@ func ParseDryRunOutput(nixOutput string) {
 
 func NixDryRun(path string) {
 	cmd := exec.Command("nix", "build", path, "--dry-run")
+	s := spinner.New(
+		spinner.CharSets[14],
+		100*time.Millisecond,
+		spinner.WithSuffix(" evaluating derivation for: "+path),
+		spinner.WithColor("fgHiMagenta"))
+	s.Start()
 	output, err := cmd.CombinedOutput()
+	s.Stop()
 	if err != nil {
 		log.Fatal(err)
 	}
