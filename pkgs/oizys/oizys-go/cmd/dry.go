@@ -11,7 +11,7 @@ var dryCmd = &cobra.Command{
 	Short: "poor man's nix flake check",
 	Run: func(cmd *cobra.Command, args []string) {
 		oizys.CheckFlake(flake)
-		oizys.NixDryRun(oizys.Output(flake, host))
+		oizys.NixDryRun(flake, host)
 	},
 }
 

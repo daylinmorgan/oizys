@@ -66,7 +66,8 @@ func ParseDryRunOutput(nixOutput string) {
 	ShowTable(columns, rows)
 }
 
-func NixDryRun(path string) {
+func NixDryRun(flake string, host string) {
+	path := Output(flake, host)
 	cmd := exec.Command("nix", "build", path, "--dry-run")
 	s := spinner.New(
 		spinner.CharSets[14],
@@ -77,6 +78,7 @@ func NixDryRun(path string) {
 	output, err := cmd.CombinedOutput()
 	s.Stop()
 	if err != nil {
+		fmt.Println(string(output))
 		log.Fatal(err)
 	}
 	ParseDryRunOutput(string(output))
