@@ -8,7 +8,7 @@
   imports = [ inputs.nix-index-database.nixosModules.nix-index ];
 
   nixpkgs.config.allowUnfree = true;
-  nix.package = pkgs.nixVersions.latest;
+  # nix.package = pkgs.nixVersions.latest;
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
