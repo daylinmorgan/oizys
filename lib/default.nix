@@ -32,10 +32,15 @@ rec {
     hostname:
     nixosSystem {
       system = "x86_64-linux";
-      modules = [
-        ../modules/oizys.nix
-        ../overlays
-      ] ++ filter isNixFile (listFilesRecursive (../. + "/hosts/${hostname}"));
+      modules =
+        [
+          ../modules/oizys.nix
+          ../overlays
+          inputs.lix-module.nixosModules.default
+        ]
+        ++ filter
+        isNixFile
+        (listFilesRecursive (../. + "/hosts/${hostname}"));
 
       specialArgs = {
         inherit
