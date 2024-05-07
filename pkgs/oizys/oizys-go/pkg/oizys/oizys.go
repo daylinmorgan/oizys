@@ -67,21 +67,25 @@ func ParseDryRunOutput(nixOutput string) {
 }
 
 func NixDryRun(flake string, host string) {
+	output := termenv.NewOutput(os.Stdout)
 	path := Output(flake, host)
 	cmd := exec.Command("nix", "build", path, "--dry-run")
 	s := spinner.New(
 		spinner.CharSets[14],
 		100*time.Millisecond,
-		spinner.WithSuffix(" evaluating derivation for: "+path),
+		spinner.WithSuffix(
+			fmt.Sprintf("%s %s", " evaluating derivation for:",
+				output.String(host).Bold().Foreground(output.Color("6")),
+			)),
 		spinner.WithColor("fgHiMagenta"))
 	s.Start()
-	output, err := cmd.CombinedOutput()
+	result, err := cmd.CombinedOutput()
 	s.Stop()
 	if err != nil {
-		fmt.Println(string(output))
+		fmt.Println(string(result))
 		log.Fatal(err)
 	}
-	ParseDryRunOutput(string(output))
+	ParseDryRunOutput(string(result))
 }
 
 func NixosRebuild(subcmd string, flake string, rest ...string) {
