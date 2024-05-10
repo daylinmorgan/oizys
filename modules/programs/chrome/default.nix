@@ -22,7 +22,10 @@ mkOizysModule config "chrome" {
   };
 
   environment.systemPackages = with pkgs; [
-    (chromium.override { commandLineArgs = [ "--force-dark-mode" ]; })
+    (chromium.override {
+      commandLineArgs = [ "--force-dark-mode" ];
+      enableWideVine = true;
+    })
 
     (google-chrome.override { commandLineArgs = [ "--force-dark-mode" ]; })
   ];
