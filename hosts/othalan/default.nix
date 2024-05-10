@@ -1,5 +1,19 @@
-{ pkgs, enabled, ... }:
 {
+  inputs,
+  pkgs,
+  enabled,
+  ...
+}:
+{
+  inputs,
+  pkgs,
+  enabled,
+  ...
+}:
+let
+roc = inputs.roc.packages.${pkgs.system}.default
+
+in {
   oizys = {
     desktop = enabled;
     hyprland = enabled;
@@ -22,6 +36,7 @@
   environment.systemPackages = with pkgs; [
     zk
     quarto
+    inpurs.roc.packages.${pkgs.system}.default
   ];
 
   services.restic.backups.gdrive = {

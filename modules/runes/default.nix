@@ -65,7 +65,6 @@ in
         number = "2"; # todo: autogenerate based on hostname?
         name = cfg.name;
       };
-
     })
   ];
 }

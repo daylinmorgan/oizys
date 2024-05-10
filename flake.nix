@@ -29,6 +29,7 @@
     zls.inputs.nixpkgs.follows = "nixpkgs";
 
     f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
+    roc.url = "github:roc-lang/roc";
   };
 
   nixConfig = {
