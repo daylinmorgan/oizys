@@ -24,7 +24,6 @@
     pkgs.nixd
     pkgs.nixfmt-rfc-style
     self.packages.${pkgs.system}.default
-    inputs.pinix.packages.${pkgs.system}.default
   ];
 
   programs.nix-index-database.comma.enable = true;
