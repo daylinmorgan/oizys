@@ -1,7 +1,5 @@
-{ self, enabled, ... }:
+{ enabled, ... }:
 {
-  imports = with self.nixosModules; [ nix-ld ];
-
   oizys = {
     desktop = enabled;
     nix-ld = enabled;

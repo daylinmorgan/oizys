@@ -1,4 +1,9 @@
-{ lib, self, ... }:
+{
+  lib,
+  self,
+  hostName,
+  ...
+}:
 let
   inherit (lib) mkEnableOption;
 in
@@ -35,4 +40,8 @@ in
   ];
 
   options.oizys.desktop.enable = mkEnableOption "is desktop";
+  config = {
+    networking.hostName = hostName;
+    time.timeZone = "US/Central";
+  };
 }

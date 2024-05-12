@@ -59,10 +59,8 @@
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
-  programs.nix-ld = enabled;
   services.openssh = enabled;
 
-  networking.hostName = "mannaz";
   # networking.wireless.enable = true;
   # networking.networkmanager.enable = true;
 
@@ -71,7 +69,6 @@
     7860
   ];
 
-  time.timeZone = "America/Chicago";
   security.sudo.wheelNeedsPassword = false;
 
   # don't delete this you foo bar

@@ -29,18 +29,14 @@ rec {
   nixosModules = listToAttrs (findModulesList ../modules);
 
   mkSystem =
-    hostname:
+    hostName:
     nixosSystem {
       system = "x86_64-linux";
-      modules =
-        [
-          ../modules/oizys.nix
-          ../overlays
-          inputs.lix-module.nixosModules.default
-        ]
-        ++ filter
-        isNixFile
-        (listFilesRecursive (../. + "/hosts/${hostname}"));
+      modules = [
+        ../modules/oizys.nix
+        ../overlays
+        inputs.lix-module.nixosModules.default
+      ] ++ filter isNixFile (listFilesRecursive (../. + "/hosts/${hostName}"));
 
       specialArgs = {
         inherit
@@ -50,6 +46,7 @@ rec {
           mkDefaultOizysModule
           mkOizysModule
           enabled
+          hostName
           ;
       };
     };

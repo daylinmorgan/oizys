@@ -8,9 +8,6 @@
     bantime = "24h";
   };
 
-  time.timeZone = "America/Chicago";
-
-  networking.hostName = "algiz";
   # # added to make using `pip install` work in docker build
   # networking.nameservers = [ "8.8.8.8"];
 

@@ -23,9 +23,6 @@
 
   environment.systemPackages = with pkgs; [ pamixer ];
 
-  networking.hostName = "othalan";
-  time.timeZone = "US/Central";
-
   # catppuccin/tty move to "module"
   boot.kernelParams = [
     "vt.default_red=30,243,166,249,137,245,148,186,88,243,166,249,137,245,148,166"
