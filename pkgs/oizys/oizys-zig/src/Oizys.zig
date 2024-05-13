@@ -9,7 +9,6 @@ host: []const u8,
 cache_name: []const u8,
 output: []const u8,
 cmd: OizysCmd,
-no_pinix: bool,
 debug: bool = false,
 forward: ?[][]const u8,
 
@@ -41,7 +40,6 @@ pub fn init(allocator: std.mem.Allocator, matches: *const ArgMatches, forward: ?
         ),
         .cmd = std.meta.stringToEnum(OizysCmd, cmd).?,
         .cache_name = flags.getSingleValue("cache") orelse "daylin",
-        .no_pinix = flags.containsArg("no-pinix"),
         .forward = forward,
     };
 }
@@ -52,13 +50,6 @@ pub fn deinit(self: *Oizys) void {
     self.allocator.free(self.output);
 }
 
-pub fn nix(self: *Oizys) []const u8 {
-    return if (self.no_pinix) "nix" else "pix";
-}
-
-pub fn nixos_rebuild(self: *Oizys) []const u8 {
-    return if (self.no_pinix) "nixos-rebuild" else "pixos-rebuild";
-}
 
 pub fn getDefaultHostName(allocator: Allocator) ![]const u8 {
     var name_buffer: [std.posix.HOST_NAME_MAX]u8 = undefined;
@@ -89,8 +80,8 @@ pub fn runNixCmd(self: *Oizys, cmd: NixCmd, argv: []const []const u8) !void {
     defer args.deinit();
 
     switch (cmd) {
-        NixCmd.Nix => try args.append(self.nix()),
-        NixCmd.NixosRebuild => try args.appendSlice(&.{ "sudo", self.nixos_rebuild() }),
+        NixCmd.Nix => try args.append("nix"),
+        NixCmd.NixosRebuild => try args.appendSlice(&.{ "sudo", "nixos-rebuild"}),
     }
     try args.appendSlice(argv);
     if (self.forward) |fwd| try args.appendSlice(fwd);
@@ -119,10 +110,10 @@ pub fn cache(self: *Oizys) !void {
 
 pub fn run(self: *Oizys) !void {
     switch (self.cmd) {
-        .@"switch" => try self.runNixCmd(NixCmd.NixosRebuild, &.{ "switch", "--flake", self.flake }),
-        .boot => try self.runNixCmd(NixCmd.NixosRebuild, &.{ "boot", "--flake", self.flake }),
-        .dry => try self.runNixCmd(NixCmd.Nix, &.{ "build", self.output, "--dry-run" }),
-        .build => try self.runNixCmd(NixCmd.Nix, &.{ "build", self.output }),
+        .@"switch" => try self.runNixCmd(.NixosRebuild, &.{ "switch", "--flake", self.flake }),
+        .boot => try self.runNixCmd(.NixosRebuild, &.{ "boot", "--flake", self.flake }),
+        .dry => try self.runNixCmd(.Nix, &.{ "build", self.output, "--dry-run" }),
+        .build => try self.runNixCmd(.Nix, &.{ "build", self.output }),
         .output => {
             const stdout = std.io.getStdOut().writer();
             try stdout.print("{s}\n", .{self.output});

@@ -34,7 +34,6 @@ pub fn init(allocator: Allocator) !Cli {
         try subcmd.addArg(Arg.positional("forward", null, null));
         try subcmd.addArg(Arg.singleValueOption("flake", 'f', "path to flake"));
         try subcmd.addArg(Arg.singleValueOption("host", null, "hostname (default: current host)"));
-        try subcmd.addArg(Arg.booleanOption("no-pinix", null, "don't use pinix"));
         try oizys.addSubcommand(subcmd.*);
     }
 
