@@ -2,6 +2,7 @@ const Oizys = @This();
 const std = @import("std");
 const ArgMatches = @import("yazap").ArgMatches;
 const Allocator = std.mem.Allocator;
+const Donuts = @import("donuts").Donuts;
 
 allocator: Allocator,
 flake: []const u8,
@@ -178,10 +179,17 @@ const DryResult = struct {
 };
 
 pub fn dry(self: *Oizys) !void {
+    var sp = Donuts(std.io.getStdOut()).init(
+        "evaluating...",
+        .{ .style = .dots },
+        .{},
+    );
+    try sp.start();
     const cmd_output = try std.ChildProcess.run(.{
         .allocator = self.allocator,
         .argv = &.{ "nix", "build", self.output, "--dry-run" },
     });
+    try sp.stop(.{ .message = "done." });
     defer self.allocator.free(cmd_output.stdout);
     defer self.allocator.free(cmd_output.stderr);
     var result = try DryResult.parse(self.allocator, cmd_output.stderr);

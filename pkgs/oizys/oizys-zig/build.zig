@@ -11,7 +11,8 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
-    exe.root_module.addImport("yazap", b.dependency("yazap", .{ .target = target }).module("yazap"));
+    exe.root_module.addImport("yazap", b.dependency("yazap", .{}).module("yazap"));
+    exe.root_module.addImport("donuts", b.dependency("donuts", .{}).module("donuts"));
     b.installArtifact(exe);
 
     const run_cmd = b.addRunArtifact(exe);

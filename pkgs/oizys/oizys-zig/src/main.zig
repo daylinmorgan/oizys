@@ -24,5 +24,4 @@ pub fn main() !void {
     var oizys = try Oizys.init(allocator, cli.matches, cli.forward);
     defer oizys.deinit();
     try oizys.run();
-
 }
