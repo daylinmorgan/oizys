@@ -1,6 +1,6 @@
 inputs:
 let
-  inherit (inputs) nixpkgs self;
+  inherit (inputs) nixpkgs self zig2nix;
   lib = nixpkgs.lib.extend (import ./extended.nix);
 
   inherit (builtins)
@@ -53,7 +53,7 @@ rec {
 
   oizysHosts = mapAttrs (name: _: mkSystem name) (readDir ../hosts);
   oizysPkg = forAllSystems (pkgs: rec {
-    oizys-zig = pkgs.callPackage ../pkgs/oizys/oizys-zig { zig2nix = inputs.zig2nix; };
+    oizys-zig = pkgs.callPackage ../pkgs/oizys/oizys-zig { inherit zig2nix; };
     oizys-nim = pkgs.callPackage ../pkgs/oizys/oizys-nim { };
     oizys-rs = pkgs.callPackage ../pkgs/oizys/oizys-rs { };
     oizys-go = pkgs.callPackage ../pkgs/oizys/oizys-go { };
