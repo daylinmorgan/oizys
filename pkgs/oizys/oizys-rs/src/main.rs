@@ -1,7 +1,7 @@
 use clap::{CommandFactory, Parser, Subcommand};
 use clap_complete::{generate, Generator, Shell};
-use std::{env, io, path::PathBuf, process::Command};
 use spinoff::{spinners, Color, Spinner};
+use std::{env, io, path::PathBuf, process::Command};
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
@@ -62,6 +62,25 @@ struct Oizys {
     verbose: u8,
 }
 
+fn trim_hashes(buf: &str, trim_drv: bool) -> Vec<String> {
+    buf.lines()
+        .skip(1)
+        .map(|line| {
+            line.split_once('-')
+                .map(|x| {
+                    format!("  {}", {
+                        if trim_drv {
+                            x.1.replace(".drv", "")
+                        } else {
+                            x.1.to_string()
+                        }
+                    })
+                })
+                .expect("failed to trim derivation")
+        })
+        .collect()
+}
+
 impl Oizys {
     fn from(cli: &Cli) -> Oizys {
         let host = cli
@@ -94,17 +113,21 @@ impl Oizys {
 
     fn parse_dry_output(self: &Oizys, output: &str) {
         let parts: Vec<&str> = output.split("\nthese").collect();
+        // TODO: handle more cases of output
+        // currently fails if nothing to fetch
         if parts.len() != 3 {
             eprintln!("couldn't parse dry output into three parts");
+            eprintln!("{}", output);
             std::process::exit(1);
         }
-        let to_build: Vec<&str> = parts[1].lines().skip(1).collect();
-        let to_fetch: Vec<&str> = parts[2].lines().skip(1).collect();
-        println!("To build: {}", to_build.len());
-        println!("To fetch: {}",to_fetch.len());
+        let to_build: Vec<String> = trim_hashes(parts[1], true);
+        let to_fetch: Vec<String> = trim_hashes(parts[2], false);
         if self.verbose > 0 {
-            println!("TO BUILD: \n{}\n", to_build.join("\n"));
-            println!("TO FETCH: \n{}\n", to_fetch.join("\n"));
+            println!("TO BUILD: {}\n{}\n", to_build.len(), to_build.join("\n"));
+            println!("TO FETCH: {}\n{}\n", to_fetch.len(), to_fetch.join("\n"));
+        } else {
+            println!("To build: {}", to_build.len());
+            println!("To fetch: {}", to_fetch.len());
         }
     }
 
@@ -119,7 +142,12 @@ impl Oizys {
         let output = String::from_utf8(cmd.output().expect("failed to run nix build").stderr)
             .expect("faild to parse nix build --dry-run output");
         spinner.stop_with_message("evaluating finished");
-        self.parse_dry_output(&output);
+
+        if output.contains("derivations will be built") {
+            self.parse_dry_output(&output);
+        } else {
+            println!("{} up to date", self.host)
+        }
     }
 
     fn build(self: &Oizys) {
