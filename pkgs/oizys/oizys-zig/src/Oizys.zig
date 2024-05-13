@@ -24,32 +24,53 @@ pub const OizysCmd = enum {
 pub fn init(allocator: std.mem.Allocator, matches: *const ArgMatches, forward: ?[][]const u8) !Oizys {
     const cmd = matches.subcommand.?.name;
     const flags = matches.subcommandMatches(cmd).?;
-    const host = flags.getSingleValue("host") orelse
-        try Oizys.getDefaultHostName(allocator);
-    const flake = flags.getSingleValue("flake") orelse
-        try Oizys.getDefaultFlake(allocator);
-
-    return Oizys{
+    var oizys = Oizys{
         .allocator = allocator,
-        .host = host,
-        .flake = flake,
-        .output = try std.fmt.allocPrint(
-            allocator,
-            "{s}#nixosConfigurations.{s}.config.system.build.toplevel",
-            .{ flake, host },
-        ),
+        .host = undefined,
+        .flake = undefined,
+        .output = undefined,
         .cmd = std.meta.stringToEnum(OizysCmd, cmd).?,
         .cache_name = flags.getSingleValue("cache") orelse "daylin",
         .forward = forward,
     };
+    if (flags.getSingleValue("host")) |host| {
+        oizys.host = try allocator.dupe(u8, host);
+    } else {
+        oizys.host = try Oizys.getDefaultHostName(allocator);
+    }
+    if (flags.getSingleValue("flake")) |flake| {
+        oizys.flake = try allocator.dupe(u8, flake);
+    } else {
+        oizys.flake = try Oizys.getDefaultFlake(allocator);
+    }
+
+    oizys.output = try std.fmt.allocPrint(
+        allocator,
+        "{s}#nixosConfigurations.{s}.config.system.build.toplevel",
+        .{ oizys.flake, oizys.host },
+    );
+
+    return oizys;
+    // return Oizys{
+    //     .allocator = allocator,
+    //     .host = host,
+    //     .flake = flake,
+    //     .output = try std.fmt.allocPrint(
+    //         allocator,
+    //         "{s}#nixosConfigurations.{s}.config.system.build.toplevel",
+    //         .{ flake, host },
+    //     ),
+    //     .cmd = std.meta.stringToEnum(OizysCmd, cmd).?,
+    //     .cache_name = flags.getSingleValue("cache") orelse "daylin",
+    //     .forward = forward,
+    // };
 }
 
 pub fn deinit(self: *Oizys) void {
     self.allocator.free(self.flake);
-    self.allocator.free(self.host);
     self.allocator.free(self.output);
+    self.allocator.free(self.host);
 }
-
 
 pub fn getDefaultHostName(allocator: Allocator) ![]const u8 {
     var name_buffer: [std.posix.HOST_NAME_MAX]u8 = undefined;
@@ -81,7 +102,7 @@ pub fn runNixCmd(self: *Oizys, cmd: NixCmd, argv: []const []const u8) !void {
 
     switch (cmd) {
         NixCmd.Nix => try args.append("nix"),
-        NixCmd.NixosRebuild => try args.appendSlice(&.{ "sudo", "nixos-rebuild"}),
+        NixCmd.NixosRebuild => try args.appendSlice(&.{ "sudo", "nixos-rebuild" }),
     }
     try args.appendSlice(argv);
     if (self.forward) |fwd| try args.appendSlice(fwd);
@@ -108,11 +129,76 @@ pub fn cache(self: *Oizys) !void {
     _ = try p.spawnAndWait();
 }
 
+const DryResult = struct {
+    allocator: Allocator,
+    fetch: [][]const u8,
+    build: [][]const u8,
+
+    pub fn parse(allocator: Allocator, output: []const u8) !DryResult {
+        var it = std.mem.splitSequence(u8, output, ":\n");
+        _ = it.next();
+        var fetch = std.ArrayList([]const u8).init(allocator);
+        var build = std.ArrayList([]const u8).init(allocator);
+
+        if (it.next()) |x| {
+            try parseLines(x, &fetch);
+        } else {
+            return error.DryParseError;
+        }
+
+        if (it.next()) |x| {
+            try parseLines(x, &build);
+        } else {
+            return error.DryParseError;
+        }
+
+        return .{
+            .allocator = allocator,
+            .fetch = try fetch.toOwnedSlice(),
+            .build = try build.toOwnedSlice(),
+        };
+    }
+
+    pub fn deinit(self: *DryResult) void {
+        self.allocator.free(self.fetch);
+        self.allocator.free(self.build);
+        // for (self.fetch) |item| {
+        // self.allocator.free(item);
+        // }
+        // for (self.build) |item| {
+        //     self.allocator.free(item);
+        // }
+    }
+    fn parseLines(buffer: []const u8, list: *std.ArrayList([]const u8)) !void {
+        var lines = std.mem.splitSequence(u8, buffer, "\n");
+        while (lines.next()) |line| {
+            try list.append(line);
+        }
+    }
+};
+
+pub fn dry(self: *Oizys) !void {
+    const cmd_output = try std.ChildProcess.run(.{
+        .allocator = self.allocator,
+        .argv = &.{ "nix", "build", self.output, "--dry-run" },
+    });
+    defer self.allocator.free(cmd_output.stdout);
+    defer self.allocator.free(cmd_output.stderr);
+    var result = try DryResult.parse(self.allocator, cmd_output.stderr);
+    defer result.deinit();
+
+    std.debug.print(
+        "to fetch: {d}\nto build: {d}\n",
+        .{ result.fetch.len, result.build.len },
+    );
+}
+
 pub fn run(self: *Oizys) !void {
     switch (self.cmd) {
         .@"switch" => try self.runNixCmd(.NixosRebuild, &.{ "switch", "--flake", self.flake }),
+
         .boot => try self.runNixCmd(.NixosRebuild, &.{ "boot", "--flake", self.flake }),
-        .dry => try self.runNixCmd(.Nix, &.{ "build", self.output, "--dry-run" }),
+        .dry => try self.dry(),
         .build => try self.runNixCmd(.Nix, &.{ "build", self.output }),
         .output => {
             const stdout = std.io.getStdOut().writer();
