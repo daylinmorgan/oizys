@@ -29,11 +29,12 @@ func TerminalSize() (int, int) {
 	return w, h
 }
 
-func ParseDryRunOutput(nixOutput string) {
+func ParseDryRunOutput(nixOutput string, verbose bool) {
 	output := termenv.NewOutput(os.Stdout)
 	parts := strings.Split(nixOutput, "\nthese")
 	if len(parts) != 3 {
 		log.Println("no changes...")
+		log.Println(output)
 		return
 	}
 	built := strings.Split(strings.TrimSpace(parts[1]), "\n")[1:]
@@ -58,15 +59,18 @@ func ParseDryRunOutput(nixOutput string) {
 		rows = append(rows, table.Row{hash, name})
 	}
 
-	w, _ := TerminalSize()
-	columns := []table.Column{
-		{Title: "hash", Width: 34},
-		{Title: "pkg", Width: int(w / 4)},
+	if verbose {
+
+		w, _ := TerminalSize()
+		columns := []table.Column{
+			{Title: "hash", Width: 34},
+			{Title: "pkg", Width: int(w / 4)},
+		}
+		ShowTable(columns, rows)
 	}
-	ShowTable(columns, rows)
 }
 
-func NixDryRun(flake string, host string) {
+func NixDryRun(flake string, host string, verbose bool) {
 	output := termenv.NewOutput(os.Stdout)
 	path := Output(flake, host)
 	cmd := exec.Command("nix", "build", path, "--dry-run")
@@ -85,7 +89,7 @@ func NixDryRun(flake string, host string) {
 		fmt.Println(string(result))
 		log.Fatal(err)
 	}
-	ParseDryRunOutput(string(result))
+	ParseDryRunOutput(string(result), verbose)
 }
 
 func NixosRebuild(subcmd string, flake string, rest ...string) {
