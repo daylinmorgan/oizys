@@ -12,15 +12,8 @@ var dryCmd = &cobra.Command{
 	},
 }
 
-var verbose bool
 
 func init() {
 	rootCmd.AddCommand(dryCmd)
-	dryCmd.Flags().BoolVarP(
-		&verbose,
-		"verbose",
-		"v",
-		false,
-		"show verbose output",
-	)
+	
 }

@@ -18,9 +18,10 @@ import (
 )
 
 type Oizys struct {
-	flake string
-	host  string
-	cache string
+	flake   string
+	host    string
+	cache   string
+	verbose bool
 }
 
 var output = termenv.NewOutput(os.Stdout)
@@ -50,7 +51,7 @@ func (o *Oizys) Output() string {
 	)
 }
 
-func (o *Oizys) Update(flake string, host string, cache string) {
+func (o *Oizys) Update(flake string, host string, cache string, verbose bool) {
 	if host != "" {
 		o.host = host
 	}
@@ -60,6 +61,7 @@ func (o *Oizys) Update(flake string, host string, cache string) {
 	if cache != "" {
 		o.cache = cache
 	}
+	o.verbose = verbose
 }
 
 func terminalSize() (int, int) {
@@ -137,13 +139,48 @@ func (p *packages) summary() {
 	)
 }
 
+func (o *Oizys) git(rest ...string) *exec.Cmd {
+	args := []string{"-C", o.flake}
+	args = append(args, rest...)
+	if o.verbose {
+		fmt.Println("CMD:", "git", strings.Join(args, " "))
+	}
+	return exec.Command("git", args...)
+}
+
+func showFailedOutput(buf []byte) {
+	arrow := output.String("->").Bold().Foreground(output.Color("9"))
+	for _, line := range strings.Split(strings.TrimSpace(string(buf)), "\n") {
+		fmt.Println(arrow, line)
+	}
+}
+
+func (o *Oizys) GitPull() {
+
+	cmdOutput, err := o.git("status", "--porcelain").Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if len(cmdOutput) > 0 {
+		fmt.Println("unstaged commits, cowardly exiting...")
+		showFailedOutput(cmdOutput)
+		os.Exit(1)
+	}
+
+	if cmdOutput, err := o.git("pull").CombinedOutput(); err != nil {
+		showFailedOutput(cmdOutput)
+		log.Fatal(err)
+	}
+}
+
 func ParseDryRunOutput(nixOutput string, verbose bool) {
-	parts := strings.Split("\n" + nixOutput, "\nthese")
+	parts := strings.Split("\n"+nixOutput, "\nthese")
 
 	if len(parts) != 3 {
 		log.Println("no changes...")
 		log.Println("or I failed to parse it into the expected number of parts")
-    fmt.Println(parts)
+		fmt.Println(parts)
 		return
 	}
 	toBuild := parsePackages(parts[1], "packages to build")
