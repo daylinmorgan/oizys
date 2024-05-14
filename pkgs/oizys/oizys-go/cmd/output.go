@@ -4,15 +4,13 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"oizys/pkg/oizys"
 )
 
 var outputCmd = &cobra.Command{
 	Use:   "output",
 	Short: "show nixosConfiguration attr",
 	Run: func(cmd *cobra.Command, args []string) {
-		oizys.CheckFlake(flake)
-		fmt.Println(oizys.Output(flake, host))
+		fmt.Println(oizys.Output())
 	},
 }
 

@@ -2,15 +2,13 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"oizys/pkg/oizys"
 )
 
 var bootCmd = &cobra.Command{
 	Use:   "boot",
 	Short: "nixos rebuild boot",
 	Run: func(cmd *cobra.Command, args []string) {
-		oizys.CheckFlake(flake)
-		oizys.NixosRebuild("boot", flake)
+		oizys.NixosRebuild("boot", args...)
 	},
 }
 

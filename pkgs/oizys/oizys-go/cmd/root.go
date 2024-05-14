@@ -1,43 +1,20 @@
 package cmd
 
 import (
-	"fmt"
-	"log"
 	"os"
 
 	cc "github.com/ivanpirog/coloredcobra"
 	"github.com/spf13/cobra"
+	o "oizys/pkg"
 )
-
-func setFlake() {
-	if flake == "" {
-		oizysDir, ok := os.LookupEnv("OIZYS_DIR")
-		if !ok {
-			home := os.Getenv("HOME")
-			flake = fmt.Sprintf("%s/%s", home, "oizys")
-		} else {
-			flake = oizysDir
-		}
-	}
-}
-
-func setHost() {
-	if host == "" {
-		hostname, err := os.Hostname()
-		if err != nil {
-			log.Fatal(err)
-		}
-		host = hostname
-	}
-}
 
 func Execute() {
 	cc.Init(&cc.Config{
 		RootCmd:         rootCmd,
-		Headings:        cc.HiCyan + cc.Bold,
+		Headings:        cc.HiMagenta + cc.Bold,
 		Commands:        cc.HiYellow + cc.Bold,
 		Example:         cc.Italic,
-		ExecName:        cc.Bold,
+		ExecName:        cc.HiYellow + cc.Bold,
 		Flags:           cc.Bold,
 		NoExtraNewlines: true,
 		NoBottomNewline: true,
@@ -54,12 +31,14 @@ var (
 	cacheName string
 )
 
+var oizys = o.NewOizys()
+
 var rootCmd = &cobra.Command{
 	Use:   "oizys",
 	Short: "nix begat oizys",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		setFlake()
-		setHost()
+		oizys.Update(flake, host, cacheName)
+		oizys.CheckFlake()
 	},
 }
 

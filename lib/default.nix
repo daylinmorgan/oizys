@@ -57,7 +57,7 @@ rec {
     oizys-nim = pkgs.callPackage ../pkgs/oizys/oizys-nim { };
     oizys-rs = pkgs.callPackage ../pkgs/oizys/oizys-rs { };
     oizys-go = pkgs.callPackage ../pkgs/oizys/oizys-go { };
-    default = oizys-rs;
+    default = oizys-go;
   });
   devShells = forAllSystems (pkgs: {
     default = pkgs.mkShell {
