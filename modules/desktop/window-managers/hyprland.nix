@@ -52,9 +52,8 @@ mkOizysModule config "hyprland" {
 
   nixpkgs.overlays = [
     inputs.hyprland-contrib.overlays.default
-    # some issue with dunst?
     inputs.nixpkgs-wayland.overlay
 
-    inputs.hyprland.overlays.default
+    # inputs.hyprland.overlays.default
   ];
 }
