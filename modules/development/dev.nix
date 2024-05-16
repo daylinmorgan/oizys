@@ -5,6 +5,7 @@
   environment.systemPackages = with pkgs; [
     tmux
     unzip
+    zip
     less
     gnumake
     gcc
