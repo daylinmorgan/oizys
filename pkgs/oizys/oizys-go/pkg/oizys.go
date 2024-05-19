@@ -51,7 +51,10 @@ func (o *Oizys) Output() string {
 	)
 }
 
-func (o *Oizys) Update(flake string, host string, cache string, verbose bool) {
+func (o *Oizys) Update(
+	flake, host, cache string,
+	verbose bool,
+) {
 	if host != "" {
 		o.host = host
 	}
@@ -82,11 +85,10 @@ type packages struct {
 	desc  string
 }
 
-func parsePackages(buf string, desc string) *packages {
+func parsePackages(lines []string, desc string) *packages {
 	w, _ := terminalSize()
 	maxAcceptable := (w / 4) - 1
 	maxLen := 0
-	lines := strings.Split(strings.TrimSpace(buf), "\n")[1:]
 	names := make([]string, len(lines))
 	for i, pkg := range lines {
 		s := strings.SplitN(pkg, "-", 2)
@@ -174,34 +176,32 @@ func (o *Oizys) GitPull() {
 	}
 }
 
-func ParseDryRunOutput(nixOutput string, verbose bool) {
-	parts := strings.Split("\n"+nixOutput, "\nthese")
+func parseDryRun(buf string) (*packages, *packages) {
+	lines := strings.Split(strings.TrimSpace(buf), "\n")
+	var parts [2][]string
+	i := 0
+	for _, line := range lines {
+		if strings.Contains(line, "fetch") {
+			i++
+		}
+		if strings.HasPrefix(line, "  ") {
+			parts[i] = append(parts[i], line)
+		}
+	}
 
-	if len(parts) != 3 {
+  if len(parts[0]) + len(parts[1]) == 0 {
 		log.Println("no changes...")
 		log.Println("or I failed to parse it into the expected number of parts")
-		fmt.Println(parts)
-		return
+		log.Fatalln("failed to parse nix build --dry-run output")
 	}
-	toBuild := parsePackages(parts[1], "packages to build")
-	toFetch := parsePackages(parts[2], "packages to fetch")
 
-	toBuild.show(verbose)
-	toFetch.show(verbose)
+	return  parsePackages(parts[0], "packages to build"),  parsePackages(parts[1], "packages to fetch")
 }
 
-func nixSpinner(host string) *spinner.Spinner {
-	msg := fmt.Sprintf("%s %s", " evaluating derivation for:",
-		output.String(host).Bold().Foreground(output.Color("6")),
-	)
-	s := spinner.New(
-		spinner.CharSets[14],
-		100*time.Millisecond,
-		spinner.WithSuffix(msg),
-		spinner.WithColor("fgHiMagenta"),
-	)
-	s.Start()
-	return s
+func showDryRunResult(nixOutput string, verbose bool) {
+  toBuild, toFetch := parseDryRun(nixOutput)
+	toBuild.show(verbose)
+	toFetch.show(verbose)
 }
 
 func (o *Oizys) NixDryRun(verbose bool, rest ...string) {
@@ -217,7 +217,7 @@ func (o *Oizys) NixDryRun(verbose bool, rest ...string) {
 		fmt.Println(string(result))
 		log.Fatal(err)
 	}
-	ParseDryRunOutput(string(result), verbose)
+	showDryRunResult(string(result), verbose)
 }
 
 func (o *Oizys) NixosRebuild(subcmd string, rest ...string) {
@@ -258,11 +258,6 @@ func (o *Oizys) CacheBuild(rest ...string) {
 	runCommand(cmd)
 }
 
-func CheckFlake(flake string) {
-	if _, err := os.Stat(flake); errors.Is(err, fs.ErrNotExist) {
-		log.Fatalln("path to flake:", flake, "does not exist")
-	}
-}
 
 func (o *Oizys) CheckFlake() {
 	if _, err := os.Stat(o.flake); errors.Is(err, fs.ErrNotExist) {
@@ -276,4 +271,18 @@ func Output(flake string, host string) string {
 		flake,
 		host,
 	)
+}
+
+func nixSpinner(host string) *spinner.Spinner {
+	msg := fmt.Sprintf("%s %s", " evaluating derivation for:",
+		output.String(host).Bold().Foreground(output.Color("6")),
+	)
+	s := spinner.New(
+		spinner.CharSets[14],
+		100*time.Millisecond,
+		spinner.WithSuffix(msg),
+		spinner.WithColor("fgHiMagenta"),
+	)
+	s.Start()
+	return s
 }
