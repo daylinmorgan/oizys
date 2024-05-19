@@ -6,7 +6,7 @@ import (
 
 var buildCmd = &cobra.Command{
 	Use:   "build",
-	Short: "A brief description of your command",
+	Short: "nix build",
 	Run: func(cmd *cobra.Command, args []string) {
 		oizys.NixBuild(args...)
 	},
