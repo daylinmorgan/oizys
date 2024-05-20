@@ -32,7 +32,7 @@ mkOizysModule config "hyprland" {
 
     # notifications
     libnotify
-    dunst
+    mako
 
     # utils
     grimblast
