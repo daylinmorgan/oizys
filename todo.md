@@ -2,7 +2,6 @@
 
 - [ ] go back to latest kernel when VirtualBox Upgrade is merged
   - [PR #311362](https://github.com/NixOS/nixpkgs/pull/311362)
-- [ ] figure out why dunst notifications are so large
 
 - [ ] monitor the presence of these kernel messages on `othalan`,
       possibly resolved with latest kernel, see above
