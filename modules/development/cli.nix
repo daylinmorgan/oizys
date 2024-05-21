@@ -11,11 +11,12 @@ mkDefaultOizysModule config "cli" {
     DIRENV_LOG_FORMAT = "[2mdirenv: %s[0m";
   };
 
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = (with pkgs; [
     chezmoi
     zoxide
     lsd
     fzf
+    eza
 
     # utils
     fd
@@ -25,6 +26,8 @@ mkDefaultOizysModule config "cli" {
 
     glow
     btop
-    inputs.tsm.packages.${pkgs.system}.tsm
-  ];
+  ]
+    ) ++ [
+    inputs.tsm.packages.${pkgs.system}.tsm]
+  ;
 }
