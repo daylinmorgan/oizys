@@ -7,9 +7,6 @@
 }:
 mkDefaultOizysModule config "cli" {
   programs.direnv.enable = true;
-  environment.sessionVariables = {
-    DIRENV_LOG_FORMAT = "[2mdirenv: %s[0m";
-  };
 
   environment.systemPackages = (with pkgs; [
     chezmoi
