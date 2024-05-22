@@ -1,0 +1,42 @@
+name: Build NixOS (on demand)
+
+on:
+  workflow_dispatch:
+    inputs:
+      host:
+        description: 'host name to build'
+        required: true
+        default: 'othalan'
+        type: string
+      lockFile:
+        description: 'flake.lock file'
+        required: true
+        type: string
+
+# TODO: add concurrency check to cancel in-progress builds
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # free up some space
+      - run: sudo rm -rf /opt&
+
+      - uses: actions/checkout@v4
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@v2
+
+      - uses: cachix/cachix-action@v14
+        with:
+          name: daylin
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+
+      - name: write lock file
+        run: |
+          echo '${{ inputs.lockFile }}' > flake.lock
+          git diff
+
+
+      - name: Build
+        run: |
+          nix run . --accept-flake-config -- cache --host "${{ inputs.host }}" --flake .
