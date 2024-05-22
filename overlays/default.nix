@@ -11,6 +11,7 @@ let
 in
 {
   nixpkgs.overlays = defaultOverlays ++ [
+    inputs.pixi.overlays.default
     (final: _prev: {
       stable = import inputs.stable {
         system = final.system;

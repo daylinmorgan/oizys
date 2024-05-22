@@ -625,6 +625,44 @@
         "type": "github"
       }
     },
+    "pixi": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "pixi-source": "pixi-source"
+      },
+      "locked": {
+        "lastModified": 1716407993,
+        "narHash": "sha256-PepVzzmXTZc5FNjU7qtLgmCaQC0jWcKbBFwFPSSLT48=",
+        "owner": "daylinmorgan",
+        "repo": "pixi-flake",
+        "rev": "89505eb8e06e18e207cb647892df4f524654ba64",
+        "type": "github"
+      },
+      "original": {
+        "owner": "daylinmorgan",
+        "repo": "pixi-flake",
+        "type": "github"
+      }
+    },
+    "pixi-source": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1715601530,
+        "narHash": "sha256-fTASWWvqaBn4XH7FL0fhdSphKFKhIOddKwsbDmln1g8=",
+        "owner": "prefix-dev",
+        "repo": "pixi",
+        "rev": "c6d5bafdef8125a696294a1c6260bd69a614fd89",
+        "type": "github"
+      },
+      "original": {
+        "owner": "prefix-dev",
+        "ref": "v0.22.0",
+        "repo": "pixi",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "f1multiviewer": "f1multiviewer",
@@ -635,6 +673,7 @@
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs_5",
         "nixpkgs-wayland": "nixpkgs-wayland",
+        "pixi": "pixi",
         "stable": "stable",
         "tsm": "tsm",
         "zig2nix": "zig2nix",
