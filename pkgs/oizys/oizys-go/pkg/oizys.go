@@ -117,7 +117,7 @@ func ellipsis(s string, maxLen int) string {
 
 func (p *packages) show(verbose bool) {
 	p.summary()
-	if !verbose {
+  if !verbose || (len(p.names) == 0) {
 		return
 	}
 
@@ -127,7 +127,7 @@ func (p *packages) show(verbose bool) {
 	fmt.Printf("%s\n", strings.Repeat("-", w))
 	for i, pkg := range pkgs {
 		fmt.Printf("%-*s", p.pad, pkg)
-		if i%nCols == 0 {
+		if (i+1)%nCols == 0 {
 			fmt.Println()
 		}
 	}
@@ -189,17 +189,18 @@ func parseDryRun(buf string) (*packages, *packages) {
 		}
 	}
 
-  if len(parts[0]) + len(parts[1]) == 0 {
+	if len(parts[0])+len(parts[1]) == 0 {
 		log.Println("no changes...")
 		log.Println("or I failed to parse it into the expected number of parts")
 		log.Fatalln("failed to parse nix build --dry-run output")
 	}
 
-	return  parsePackages(parts[0], "packages to build"),  parsePackages(parts[1], "packages to fetch")
+	return parsePackages(parts[0], "packages to build"),
+		parsePackages(parts[1], "packages to fetch")
 }
 
 func showDryRunResult(nixOutput string, verbose bool) {
-  toBuild, toFetch := parseDryRun(nixOutput)
+	toBuild, toFetch := parseDryRun(nixOutput)
 	toBuild.show(verbose)
 	toFetch.show(verbose)
 }
@@ -257,7 +258,6 @@ func (o *Oizys) CacheBuild(rest ...string) {
 	cmd := exec.Command("cachix", args...)
 	runCommand(cmd)
 }
-
 
 func (o *Oizys) CheckFlake() {
 	if _, err := os.Stat(o.flake); errors.Is(err, fs.ErrNotExist) {
