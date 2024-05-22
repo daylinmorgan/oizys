@@ -17,6 +17,7 @@ import (
 	"github.com/briandowns/spinner"
 )
 
+// verbose vs debug?
 type Oizys struct {
 	flake   string
 	host    string
@@ -229,6 +230,10 @@ func (o *Oizys) NixosRebuild(subcmd string, rest ...string) {
 		o.flake,
 	}
 	args = append(args, rest...)
+  if o.verbose {
+    args = append(args, "--verbose")
+		fmt.Println("CMD:", "sudo", strings.Join(args, " "))
+  }
 	cmd := exec.Command("sudo", args...)
 	runCommand(cmd)
 }
