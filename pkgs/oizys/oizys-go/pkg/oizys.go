@@ -231,7 +231,7 @@ func (o *Oizys) NixosRebuild(subcmd string, rest ...string) {
 	}
 	args = append(args, rest...)
   if o.verbose {
-    args = append(args, "--verbose")
+    args = append(args, "--print-build-logs")
 		fmt.Println("CMD:", "sudo", strings.Join(args, " "))
   }
 	cmd := exec.Command("sudo", args...)
