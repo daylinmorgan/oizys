@@ -35,7 +35,6 @@
     f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
 
     pixi.url = "github:daylinmorgan/pixi-flake";
-    pixi.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   nixConfig = {

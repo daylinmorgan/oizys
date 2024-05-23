@@ -1,4 +1,5 @@
 {
+  inputs,
   config,
   lib,
   pkgs,
@@ -13,6 +14,7 @@ in
     environment.systemPackages =
       let
         python = pkgs.python3.withPackages (ps: with ps; [ pip ]);
+        pixi = inputs.pixi.packages.${pkgs.system}.default;
       in
       with pkgs;
       [

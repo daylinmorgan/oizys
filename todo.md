@@ -10,4 +10,6 @@
 
 - [ ] make desktop application file for win10 vm
 
+- [ ] find out why pixi on GHA is different from local (possibly from the fetch git step?)
+
 <!-- generated with <3 by daylinmorgan/todo -->
