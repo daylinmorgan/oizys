@@ -38,7 +38,7 @@ var rootCmd = &cobra.Command{
 	Use:   "oizys",
 	Short: "nix begat oizys",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		oizys.Update(flake, host, cacheName, verbose)
+    oizys.Set(flake, host, cacheName, verbose)
 		oizys.CheckFlake()
 	},
 }

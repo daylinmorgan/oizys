@@ -52,7 +52,7 @@ func (o *Oizys) Output() string {
 	)
 }
 
-func (o *Oizys) Update(
+func (o *Oizys) Set (
 	flake, host, cache string,
 	verbose bool,
 ) {
@@ -81,9 +81,9 @@ func terminalSize() (int, int) {
 }
 
 type packages struct {
+	desc  string
 	names []string
 	pad   int
-	desc  string
 }
 
 func parsePackages(lines []string, desc string) *packages {
@@ -171,11 +171,13 @@ func (o *Oizys) GitPull() {
 		os.Exit(1)
 	}
 
-	if cmdOutput, err := o.git("pull").CombinedOutput(); err != nil {
+  cmdOutput, err = o.git("pull").CombinedOutput()
+	if err != nil {
 		showFailedOutput(cmdOutput)
 		log.Fatal(err)
 	}
 }
+
 
 func parseDryRun(buf string) (*packages, *packages) {
 	lines := strings.Split(strings.TrimSpace(buf), "\n")
