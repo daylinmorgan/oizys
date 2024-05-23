@@ -12,4 +12,6 @@
 
 - [ ] find out why pixi on GHA is different from local (possibly from the fetch git step?)
 
+- [ ] rework CI so it's not building all systems on every pull
+
 <!-- generated with <3 by daylinmorgan/todo -->

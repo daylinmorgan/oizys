@@ -14,7 +14,10 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        host: ["othalan", "mannaz", "algiz"]
+        host:
+          - othalan
+          # - mannaz
+          # - algiz
     steps:
       # free up some space
       - run: sudo rm -rf /opt&

@@ -10,11 +10,19 @@ on:
         type: string
       lockFile:
         description: 'flake.lock file'
-        required: true
         type: string
 
+  workflow_call:
+    inputs:
+      host:
+        description: 'host name to build'
+        required: true
+        default: 'othalan'
+        type: string
+
+
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.host }}
   cancel-in-progress: true
 
 jobs:
@@ -23,10 +31,9 @@ jobs:
     steps:
       # free up some space
       - run: sudo rm -rf /opt&
-
       - uses: actions/checkout@v4
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
+
+      - uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@v2
 
       - uses: cachix/cachix-action@v14
@@ -35,10 +42,10 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
       - name: write lock file
+        if: "${{ inputs.lockFile != '' }}"
         run: |
           echo '${{ inputs.lockFile }}' > flake.lock
           git diff
-
 
       - name: Build
         run: |
