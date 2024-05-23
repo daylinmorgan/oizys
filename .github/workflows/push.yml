@@ -1,0 +1,23 @@
+name: Build NixOS
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    strategy:
+      max-parallel: 1
+      matrix:
+        host:
+          - othalan
+          # - mannaz
+          # - algiz
+    uses: ./.github/workflows/build.yml
+    with:
+      host: "${{ matrix.host }}"
+    secrets: inherit
