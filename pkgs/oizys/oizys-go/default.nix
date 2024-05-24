@@ -1,7 +1,9 @@
 {
+  lib,
   installShellFiles,
   buildGoModule,
-  lib,
+  makeWrapper,
+  gh,
   ...
 }:
 buildGoModule {
@@ -11,10 +13,18 @@ buildGoModule {
   src = lib.cleanSource ./.;
   vendorHash = "sha256-NCHU491j6fRfSk6LA9tS9yiuT/gZhPic46mNTVf1Jeg=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   postInstall = ''
     installShellCompletion --cmd oizys \
-      --zsh <($out/bin/oizys completion zsh)
+      --zsh <(OIZYS_SKIP_CHECK=true $out/bin/oizys completion zsh)
+  '';
+  
+  postFixup = ''
+    wrapProgram $out/bin/oizys \
+      --prefix PATH ${lib.makeBinPath [ gh ]}
   '';
 }

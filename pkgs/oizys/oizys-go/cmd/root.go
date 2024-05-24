@@ -3,9 +3,10 @@ package cmd
 import (
 	"os"
 
+	o "oizys/pkg"
+
 	cc "github.com/ivanpirog/coloredcobra"
 	"github.com/spf13/cobra"
-	o "oizys/pkg"
 )
 
 func Execute() {

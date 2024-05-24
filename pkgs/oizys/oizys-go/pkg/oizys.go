@@ -8,11 +8,10 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"time"
 
 	"github.com/muesli/termenv"
 	"golang.org/x/term"
-
-	"time"
 
 	"github.com/briandowns/spinner"
 )
@@ -52,7 +51,7 @@ func (o *Oizys) Output() string {
 	)
 }
 
-func (o *Oizys) Set (
+func (o *Oizys) Set(
 	flake, host, cache string,
 	verbose bool,
 ) {
@@ -118,7 +117,7 @@ func ellipsis(s string, maxLen int) string {
 
 func (p *packages) show(verbose bool) {
 	p.summary()
-  if !verbose || (len(p.names) == 0) {
+	if !verbose || (len(p.names) == 0) {
 		return
 	}
 
@@ -159,7 +158,6 @@ func showFailedOutput(buf []byte) {
 }
 
 func (o *Oizys) GitPull() {
-
 	cmdOutput, err := o.git("status", "--porcelain").Output()
 	if err != nil {
 		log.Fatal(err)
@@ -171,13 +169,12 @@ func (o *Oizys) GitPull() {
 		os.Exit(1)
 	}
 
-  cmdOutput, err = o.git("pull").CombinedOutput()
+	cmdOutput, err = o.git("pull").CombinedOutput()
 	if err != nil {
 		showFailedOutput(cmdOutput)
 		log.Fatal(err)
 	}
 }
-
 
 func parseDryRun(buf string) (*packages, *packages) {
 	lines := strings.Split(strings.TrimSpace(buf), "\n")
@@ -232,10 +229,10 @@ func (o *Oizys) NixosRebuild(subcmd string, rest ...string) {
 		o.flake,
 	}
 	args = append(args, rest...)
-  if o.verbose {
-    args = append(args, "--print-build-logs")
+	if o.verbose {
+		args = append(args, "--print-build-logs")
 		fmt.Println("CMD:", "sudo", strings.Join(args, " "))
-  }
+	}
 	cmd := exec.Command("sudo", args...)
 	runCommand(cmd)
 }
@@ -267,9 +264,18 @@ func (o *Oizys) CacheBuild(rest ...string) {
 }
 
 func (o *Oizys) CheckFlake() {
-	if _, err := os.Stat(o.flake); errors.Is(err, fs.ErrNotExist) {
-		log.Fatalln("path to flake:", o.flake, "does not exist")
+	if _, ok := os.LookupEnv("OIZYS_SKIP_CHECK"); !ok {
+		if _, err := os.Stat(o.flake); errors.Is(err, fs.ErrNotExist) {
+			log.Fatalln("path to flake:", o.flake, "does not exist")
+		}
 	}
+}
+
+func (o *Oizys) CI(rest ...string) {
+  args := []string{"workflow", "run", "build.yml", "-F", fmt.Sprintf("host=%s", o.host)}
+  args = append(args, rest...)
+  cmd := exec.Command("gh", args...)
+  runCommand(cmd)
 }
 
 func Output(flake string, host string) string {
