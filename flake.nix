@@ -4,6 +4,9 @@
   outputs = inputs: (import ./lib inputs).oizysFlake;
 
   inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    stable.url = "github:nixos/nixpkgs/nixos-23.11";
+
     lix.url = "git+https://git@git.lix.systems/lix-project/lix?ref=refs/tags/2.90-beta.1";
     lix.flake = false;
 
@@ -11,11 +14,7 @@
     lix-module.inputs.lix.follows = "lix";
     # lix-module.inputs.nixpkgs.follows = "nixpkgs";
 
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    stable.url = "github:nixos/nixpkgs/nixos-23.11";
-
-    tsm.url = "github:daylinmorgan/tsm?dir=nix";
-    tsm.inputs.nixpkgs.follows = "nixpkgs";
+    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
 
     # see todo.md
     hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1&rev=4cdddcfe466cb21db81af0ac39e51cc15f574da9";
@@ -31,8 +30,9 @@
     zls.url = "github:zigtools/zls";
     zls.inputs.nixpkgs.follows = "nixpkgs";
 
+    tsm.url = "github:daylinmorgan/tsm?dir=nix";
+    tsm.inputs.nixpkgs.follows = "nixpkgs";
     f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
-
     pixi.url = "github:daylinmorgan/pixi-flake";
   };
 

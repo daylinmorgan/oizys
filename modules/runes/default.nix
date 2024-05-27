@@ -16,6 +16,7 @@ let
     othalan = import ./othalan.nix;
     algiz = import ./algiz.nix;
     mannaz = import ./mannaz.nix;
+    naudiz = import ./naudiz.nix;
   };
   mkRune =
     {
