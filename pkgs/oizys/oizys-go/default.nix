@@ -22,7 +22,7 @@ buildGoModule {
     installShellCompletion --cmd oizys \
       --zsh <(OIZYS_SKIP_CHECK=true $out/bin/oizys completion zsh)
   '';
-  
+
   postFixup = ''
     wrapProgram $out/bin/oizys \
       --prefix PATH ${lib.makeBinPath [ gh ]}

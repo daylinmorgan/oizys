@@ -1,8 +1,4 @@
-{
-  inputs,
-  enabled,
-  ...
-}:
+{ inputs, enabled, ... }:
 
 {
   imports = [ inputs.nixos-wsl.nixosModules.default ];
