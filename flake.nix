@@ -14,7 +14,7 @@
     lix-module.inputs.lix.follows = "lix";
     # lix-module.inputs.nixpkgs.follows = "nixpkgs";
 
-    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
+    nixos-wsl.url = "github:nix-community/NixOS-WSL";
 
     # see todo.md
     # hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1&rev=4cdddcfe466cb21db81af0ac39e51cc15f574da9";
@@ -44,14 +44,12 @@
       "https://nixpkgs-wayland.cachix.org"
       "https://daylin.cachix.org"
       "https://cache.lix.systems"
-      #   "https://cache.garnix.io"
     ];
     extra-trusted-public-keys = [
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
       "daylin.cachix.org-1:fLdSnbhKjtOVea6H9KqXeir+PyhO+sDSPhEW66ClE/k="
       "cache.lix.systems:aBnZUw8zA7H35Cz2RyKFVs3H4PlGTLawyY5KRbvJR8o="
-      #   "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
     ];
   };
 }
