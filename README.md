@@ -22,15 +22,19 @@ See below for the currently maintained hosts.
 <tr>
   <td><img src="https://upload.wikimedia.org/wikipedia/commons/d/df/Runic_letter_algiz.svg"></td>
   <td>algiz</td>
-  <td>Hetzner Cloud hosting forgejo,soft-serve & gts</td>
+  <td>Hetzner VPS hosting forgejo, soft-serve & gts</td>
 </tr>
 <tr>
   <td><img src="https://upload.wikimedia.org/wikipedia/commons/5/57/Runic_letter_mannaz.svg"></td>
   <td>mannaz</td>
   <td>Custom AMD Tower with Nvidia 1050ti</td>
 </tr>
+<tr>
+  <td><img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Runic_letter_naudiz.svg"></td>
+  <td>naudiz</td>
+  <td>Nixos-WSL for those times I'm trapped on windows</td>
+</tr>
 </table>
-
 
 
 ## oizys cli
