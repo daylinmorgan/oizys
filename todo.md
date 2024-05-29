@@ -12,8 +12,6 @@
 
 - [ ] find out why pixi on GHA is different from local (possibly from the fetch git step?)
 
-- [ ] rework CI so it's not building all systems on every pull
-
 - [ ] hyprland isn't doing alright with Xwayland and friends:
   > https://github.com/hyprwm/Hyprland/issues/6133
   > for now reverting to the commit vaxerski mentions in 6210
