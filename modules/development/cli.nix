@@ -28,11 +28,11 @@ mkDefaultOizysModule config "cli" {
       # utils
       fd
       bat
-      delta
       ripgrep
 
       glow
       btop
+      gdu
     ])
     ++ [ inputs.tsm.packages.${pkgs.system}.tsm ];
 }

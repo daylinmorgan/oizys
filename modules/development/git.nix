@@ -6,5 +6,6 @@
 
     gh
     lazygit
+    delta
   ];
 }
