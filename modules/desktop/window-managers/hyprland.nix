@@ -22,33 +22,35 @@ mkOizysModule config "hyprland" {
   # Optional, hint electron apps to use wayland:
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-  environment.systemPackages = with pkgs; [
-    wlr-randr
-    kanshi
+  environment.systemPackages =
+    (with pkgs; [
+      wlr-randr
+      kanshi
 
-    brightnessctl
-    udiskie
-    eww
+      brightnessctl
+      udiskie
+      eww
 
-    # notifications
-    libnotify
-    mako
+      # notifications
+      libnotify
+      mako
 
-    # utils
-    grimblast
-    ksnip
-    wl-clipboard
-    rofi-wayland
-    pavucontrol
+      # utils
+      grimblast
+      ksnip
+      wl-clipboard
+      rofi-wayland
+      pavucontrol
 
-    catppuccin-cursors.mochaDark
+      catppuccin-cursors.mochaDark
 
-    #hypr ecosystem
-    hyprlock
-    hypridle
+      #hypr ecosystem
+      hyprlock
+      hypridle
 
-    swww
-  ];
+      swww
+    ])
+    ++ [ inputs.hyprman.packages.${pkgs.system}.default ];
 
   nixpkgs.overlays = [
     inputs.hyprland-contrib.overlays.default

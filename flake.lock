@@ -355,6 +355,26 @@
         "type": "github"
       }
     },
+    "hyprman": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1717185053,
+        "narHash": "sha256-Ve57FpjYukpmRoNJsiDyCiKy9wRbnCCbWe2PsO0aD7M=",
+        "ref": "refs/heads/main",
+        "rev": "42ac8bee8c3fc78f6a8a2d3aee11a62c63bc556a",
+        "revCount": 4,
+        "type": "git",
+        "url": "https://git.dayl.in/daylin/hyprman.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://git.dayl.in/daylin/hyprman.git"
+      }
+    },
     "hyprwayland-scanner": {
       "inputs": {
         "nixpkgs": [
@@ -755,6 +775,7 @@
         "f1multiviewer": "f1multiviewer",
         "hyprland": "hyprland",
         "hyprland-contrib": "hyprland-contrib",
+        "hyprman": "hyprman",
         "lix": "lix",
         "lix-module": "lix-module",
         "nix-index-database": "nix-index-database",

@@ -34,6 +34,10 @@
 
     tsm.url = "github:daylinmorgan/tsm?dir=nix";
     tsm.inputs.nixpkgs.follows = "nixpkgs";
+
+    hyprman.url = "git+https://git.dayl.in/daylin/hyprman.git";
+    hyprman.inputs.nixpkgs.follows = "nixpkgs";
+
     f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
     pixi.url = "github:daylinmorgan/pixi-flake";
   };
