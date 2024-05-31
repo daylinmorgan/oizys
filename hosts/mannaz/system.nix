@@ -11,8 +11,9 @@
     efi.canTouchEfiVariables = true;
   };
 
+  # latest kernel was hanging on boot?
   # boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
+  # boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
 
   # this device doesn't have enough ram :/
   swapDevices = [
