@@ -12,8 +12,4 @@
 
 - [ ] find out why pixi on GHA is different from local (possibly from the fetch git step?)
 
-- [ ] hyprland isn't doing alright with Xwayland and friends:
-  > https://github.com/hyprwm/Hyprland/issues/6133
-  > for now reverting to the commit vaxerski mentions in 6210
-
 <!-- generated with <3 by daylinmorgan/todo -->
