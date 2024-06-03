@@ -11,7 +11,7 @@ buildGoModule {
   version = "unstable";
 
   src = lib.cleanSource ./.;
-  vendorHash = "sha256-NCHU491j6fRfSk6LA9tS9yiuT/gZhPic46mNTVf1Jeg=";
+  vendorHash = "sha256-9dfEWPq4dVksv7b2TobnWUc3MwMnKEA40UVTDOSDREg=";
 
   nativeBuildInputs = [
     installShellFiles

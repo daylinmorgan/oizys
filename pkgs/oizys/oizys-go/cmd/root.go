@@ -3,7 +3,7 @@ package cmd
 import (
 	"os"
 
-	o "oizys/pkg"
+	o "oizys/internal"
 
 	cc "github.com/ivanpirog/coloredcobra"
 	"github.com/spf13/cobra"

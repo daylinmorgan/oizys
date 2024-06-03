@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/muesli/termenv"
+	"github.com/charmbracelet/lipgloss"
 	"golang.org/x/term"
 
 	"github.com/briandowns/spinner"
@@ -24,7 +24,6 @@ type Oizys struct {
 	verbose bool
 }
 
-var output = termenv.NewOutput(os.Stdout)
 
 func NewOizys() *Oizys {
 	hostname, err := os.Hostname()
@@ -137,7 +136,10 @@ func (p *packages) show(verbose bool) {
 func (p *packages) summary() {
 	fmt.Printf("%s: %s\n",
 		p.desc,
-		output.String(fmt.Sprint(len(p.names))).Bold().Foreground(output.Color("6")),
+		lipgloss.NewStyle().
+			Bold(true).
+			Foreground(lipgloss.Color("6")).
+			Render(fmt.Sprint(len(p.names))),
 	)
 }
 
@@ -151,7 +153,7 @@ func (o *Oizys) git(rest ...string) *exec.Cmd {
 }
 
 func showFailedOutput(buf []byte) {
-	arrow := output.String("->").Bold().Foreground(output.Color("9"))
+	arrow := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("9")).Render("->")
 	for _, line := range strings.Split(strings.TrimSpace(string(buf)), "\n") {
 		fmt.Println(arrow, line)
 	}
@@ -272,10 +274,10 @@ func (o *Oizys) CheckFlake() {
 }
 
 func (o *Oizys) CI(rest ...string) {
-  args := []string{"workflow", "run", "build.yml", "-F", fmt.Sprintf("host=%s", o.host)}
-  args = append(args, rest...)
-  cmd := exec.Command("gh", args...)
-  runCommand(cmd)
+	args := []string{"workflow", "run", "build.yml", "-F", fmt.Sprintf("host=%s", o.host)}
+	args = append(args, rest...)
+	cmd := exec.Command("gh", args...)
+	runCommand(cmd)
 }
 
 func Output(flake string, host string) string {
@@ -288,7 +290,7 @@ func Output(flake string, host string) string {
 
 func nixSpinner(host string) *spinner.Spinner {
 	msg := fmt.Sprintf("%s %s", " evaluating derivation for:",
-		output.String(host).Bold().Foreground(output.Color("6")),
+    lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("6")).Render(host),
 	)
 	s := spinner.New(
 		spinner.CharSets[14],
