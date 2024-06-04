@@ -193,8 +193,7 @@ func parseDryRun(buf string) (*packages, *packages) {
 
 	if len(parts[0])+len(parts[1]) == 0 {
 		log.Println("no changes...")
-		log.Println("or I failed to parse it into the expected number of parts")
-		log.Fatalln("failed to parse nix build --dry-run output")
+		log.Fatalln("or failed to parse nix build --dry-run output")
 	}
 
 	return parsePackages(parts[0], "packages to build"),
