@@ -6,5 +6,5 @@
 }:
 mkOizysModule config "docker" {
   virtualisation.docker.enable = true;
-  environment.systemPackages = with pkgs; [ lazydocker];
+  environment.systemPackages = with pkgs; [ lazydocker ];
 }
