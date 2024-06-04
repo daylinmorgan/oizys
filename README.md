@@ -53,17 +53,20 @@ Usage:
 
 Available Commands:
   boot                    nixos rebuild boot
-  build                   A brief description of your command
+  build                   nix build
   cache                   build and push to cachix
+  ci                      offload build to GHA
   dry                     poor man's nix flake check
   help                    Help about any command
   output                  show nixosConfiguration attr
   switch                  nixos rebuild switch
+  update                  update and run nixos rebuild
 
 Flags:
       --flake string   path to flake ($OIZYS_DIR or $HOME/oizys)
   -h, --help           help for oizys
       --host string    host to build (current host)
+  -v, --verbose        show verbose output
 
 Use "oizys [command] --help" for more information about a command.
 ```
@@ -76,4 +79,5 @@ Oizys was birthed by the goddess Nyx/Nix and embodies suffering and misery. Whic
 
 > [!NOTE]
 > I don't use home-manager to manager my shell/user configs. You can find those in my separate `chezmoi`-managed [`dotfiles`](https://git.dayl.in/daylin/dotfiles) repository.
+
 
