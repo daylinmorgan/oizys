@@ -9,6 +9,7 @@ var updateCmd = &cobra.Command{
 	Short: "update and run nixos rebuild",
 	Run: func(cmd *cobra.Command, args []string) {
 		oizys.GitPull()
+		oizys.NixosRebuild("switch", args...)
 	},
 }
 
