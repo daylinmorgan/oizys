@@ -362,11 +362,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1717223303,
-        "narHash": "sha256-8i6f08zocjg9PUOxlhLksa5Ll63tqPS22aEEjk/YGPM=",
+        "lastModified": 1717698695,
+        "narHash": "sha256-sH1UrHts0zygySKpAiSyyx+yNVrgvTD5JqZBSB4BCP0=",
         "ref": "refs/heads/main",
-        "rev": "a32a141867476033bfb477966daef86a6126752c",
-        "revCount": 9,
+        "rev": "b31326b5291d711b97baafa892846f227317b986",
+        "revCount": 13,
         "type": "git",
         "url": "https://git.dayl.in/daylin/hyprman.git"
       },
