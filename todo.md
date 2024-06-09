@@ -1,5 +1,7 @@
 # oizys todo's
 
+- [ ] lid closed does not engage hyprlock?
+
 - [ ] go back to latest kernel when VirtualBox Upgrade is merged
   - [PR #311362](https://github.com/NixOS/nixpkgs/pull/311362)
 
@@ -7,8 +9,6 @@
       possibly resolved with latest kernel, see above
   > kernel: ucsi_acpi USBC000:00: possible UCSI driver bug 2
   > kernel: ucsi_acpi USBC000:00: error -EINVAL: PPM init failed
-
-- [ ] make desktop application file for win10 vm
 
 - [ ] find out why pixi on GHA is different from local (possibly from the fetch git step?)
 
