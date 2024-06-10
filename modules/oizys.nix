@@ -13,8 +13,8 @@ in
     runes
     nix
 
+    essentials
     cli
-    dev
     nvim
     vpn
     gpg

@@ -1,7 +1,12 @@
-{ pkgs, self, ... }:
+{
+  pkgs,
+  self,
+  enabled,
+  ...
+}:
 {
   imports = with self.nixosModules; [ git ];
-  programs.zsh.enable = true;
+  programs.zsh = enabled;
   environment.systemPackages = with pkgs; [
     tmux
     unzip
@@ -9,6 +14,7 @@
     less
     gnumake
     gcc
+    file
 
     jq
 
