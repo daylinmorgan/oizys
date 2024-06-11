@@ -2,6 +2,7 @@
   inputs,
   self,
   pkgs,
+  enabled,
   ...
 }:
 {
@@ -26,7 +27,7 @@
     self.packages.${pkgs.system}.default
   ];
 
-  programs.nix-index-database.comma.enable = true;
+  programs.nix-index-database.comma = enabled;
 
   # nix-index didn't like this being enabled?
   programs.command-not-found.enable = false;
@@ -34,12 +35,5 @@
   nix.settings = {
     trusted-users = [ "@wheel" ];
     accept-flake-config = true;
-
-    # substituters = [
-    #   "https://daylin.cachix.org"
-    # ];
-    # trusted-public-keys = [
-    #   "daylin.cachix.org-1:fLdSnbhKjtOVea6H9KqXeir+PyhO+sDSPhEW66ClE/k="
-    # ];
   };
 }
