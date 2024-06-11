@@ -42,7 +42,7 @@ mkOizysModule config "hyprland" {
       rofi-wayland
       pavucontrol
 
-      catppuccin-cursors.mochaDark
+      # catppuccin-cursors.mochaDark
 
       #hypr ecosystem
       hyprlock
