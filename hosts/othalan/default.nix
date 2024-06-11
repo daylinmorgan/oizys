@@ -11,10 +11,11 @@
     backups = enabled;
     languages = [
       "misc"
-      "python"
       "nim"
-      "tex"
       "node"
+      "nushell"
+      "python"
+      "tex"
       "zig"
     ];
   };

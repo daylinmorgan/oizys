@@ -9,11 +9,12 @@ let
 in
 {
   imports = [
-    ./nim.nix
-    ./tex.nix
     ./misc.nix
+    ./nim.nix
     ./node.nix
+    ./nushell.nix
     ./python.nix
+    ./tex.nix
     ./zig.nix
   ];
   options.oizys.languages = mkOption {
