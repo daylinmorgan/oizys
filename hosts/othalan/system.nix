@@ -30,10 +30,7 @@
     "vt.default_blu=46,168,161,175,250,231,213,222,112,168,161,175,250,231,213,200"
   ];
 
-  # Virtual Box doesn't compile with latest kernel
-  # try latest after this PR is merged
-  # https://github.com/NixOS/nixpkgs/pull/311362
-  # boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
+  boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
 
   boot.loader = {
     systemd-boot = enabled // {
