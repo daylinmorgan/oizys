@@ -32,6 +32,11 @@
   # nix-index didn't like this being enabled?
   programs.command-not-found.enable = false;
 
+  # I'm getting errors related to a non-existent nix-index?
+  programs.nix-index.enableZshIntegration = false;
+  programs.nix-index.enableBashIntegration =false;
+  programs.nix-index.enableFishIntegration = false;
+
   nix.settings = {
     trusted-users = [ "@wheel" ];
     accept-flake-config = true;
