@@ -12,6 +12,7 @@ in
   config = mkIfIn "nushell" cfg {
     environment.systemPackages = with pkgs; [
       nushell
+      nufmt
       nushellPlugins.polars
     ];
   };
