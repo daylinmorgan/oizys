@@ -1,15 +1,20 @@
 # oizys todo's
 
-- [ ] lid closed does not engage hyprlock?
 
-- [ ] go back to latest kernel when VirtualBox Upgrade is merged
-  - [PR #311362](https://github.com/NixOS/nixpkgs/pull/311362)
+## nix expr
+
+- [ ] find out why pixi on GHA is different from local (possibly from the fetch git step?)
+
+## software
+
+- [ ] lid closed does not engage hyprlock?
+- [ ] include langservers for enabled languages?
+
+## hardware
 
 - [ ] monitor the presence of these kernel messages on `othalan`,
       possibly resolved with latest kernel, see above
   > kernel: ucsi_acpi USBC000:00: possible UCSI driver bug 2
   > kernel: ucsi_acpi USBC000:00: error -EINVAL: PPM init failed
-
-- [ ] find out why pixi on GHA is different from local (possibly from the fetch git step?)
 
 <!-- generated with <3 by daylinmorgan/todo -->
