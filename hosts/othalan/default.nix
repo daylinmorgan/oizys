@@ -15,6 +15,7 @@
       "node"
       "nushell"
       "python"
+      "roc"
       "tex"
       "zig"
     ];
