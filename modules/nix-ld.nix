@@ -15,7 +15,7 @@ in
 
     # Packages that need at least something in this list:
     # Geneious Prime
-    # https://github.com/Mic92/dotfiles/blob/cb180bdd3805b373e556a93ccb275b7f0f902a3b/nixos/modules/nix-ld.nix#L9C3-L60C5
+    # list from https://github.com/Mic92/dotfiles/blob/cb180bdd3805b373e556a93ccb275b7f0f902a3b/nixos/modules/nix-ld.nix#L9C3-L60C5
     programs.nix-ld.libraries = with pkgs; [
       alsa-lib
       at-spi2-atk
@@ -48,7 +48,7 @@ in
       nss
       openssl
       pango
-      pipewire
+      # pipewire
       stdenv.cc.cc
       systemd
       vulkan-loader
