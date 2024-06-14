@@ -1,6 +1,16 @@
 name: 'Maximize build disk space'
 description: 'Maximize the available disk space by removing unneeded software'
 
+inputs:
+  purge-packages:
+    description: whether to remove apt packages
+    required: false
+    default: 'true'
+  apt-manifest-url:
+    description: url to apt-package manifest (default ubuntu-22.04.4)
+    required: false
+    default: 'https://releases.ubuntu.com/jammy/ubuntu-22.04.4-live-server-amd64.manifest'
+
 runs:
   using: "composite"
   steps:
@@ -10,39 +20,40 @@ runs:
           echo "==> Available space before cleanup"
           echo
           df -h
-          # sudo du /usr/local -h --max-depth=1 | sort -rh || true
 
     - name: Maximize build disk space
       shell: bash
       run: |
           set -euo pipefail
 
+          non_manifest_packages() {
+            comm -2 -3 \
+              <(sudo apt-mark showmanual | sort) \
+              <(curl --silent "${{ inputs.apt-manifest-url }}" | grep --perl-regexp --only-matching '^[\w-.+]+' | sort)
+          }
+
           echo "Removing unwanted software... "
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /usr/local/lib/android
-          sudo rm -rf /opt
-          sudo rm -rf /opt/ghc
-          sudo rm -rf /usr/local/.ghcup
-          sudo rm -rf /opt/hostedtoolcache
-          sudo docker image prune --all --force > /dev/null
-          sudo rm -rf /usr/local
 
-          sudo apt-get remove -y '^aspnetcore-.*' > /dev/null
-          sudo apt-get remove -y '^dotnet-.*' > /dev/null
-          sudo apt-get remove -y '^llvm-.*' > /dev/null
-          sudo apt-get remove -y 'php.*' > /dev/null
-          sudo apt-get remove -y '^mongodb-.*' > /dev/null
-          sudo apt-get remove -y '^mysql-.*' > /dev/null
-          sudo apt-get remove -y azure-cli google-chrome-stable firefox powershell mono-devel libgl1-mesa-dri --fix-missing > /dev/null
-          sudo apt-get remove -y google-cloud-sdk --fix-missing > /dev/null
-          sudo apt-get remove -y google-cloud-cli --fix-missing > /dev/null
-          sudo apt-get autoremove -y > /dev/null
-          sudo apt-get clean > /dev/null
-          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          sudo rm -rf /opt &
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY" &
 
-          sudo swapoff -a
-          sudo rm -f /mnt/swapfile
-          free -h
+          if [[ "${{ inputs.purge-packages }}" == 'true' ]]; then
+            sudo apt-get purge \
+              --allow-remove-essential \
+              -q \
+              $(non_manifest_packages) &
+          fi
+
+          wait
+
+          sudo rm -rf /var/lib/docker &
+          sudo rm -rf /usr/{local,share} &
+          {
+            sudo swapoff -a
+            sudo rm -f /mnt/swapfile
+          } &
+
+          wait
           echo "... done"
 
     - name: Disk space report after modification
