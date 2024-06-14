@@ -24,6 +24,7 @@
   environment.systemPackages = with pkgs; [
     zk
     quarto
+    cachix
   ];
 
   services.restic.backups.gdrive = {
