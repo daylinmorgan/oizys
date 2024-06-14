@@ -9,6 +9,10 @@ on:
       - main
 
 jobs:
+  checks:
+    uses: ./.github/workflows/checks.yml
+    secrets: inherit
+
   build:
     strategy:
       max-parallel: 1

@@ -1,0 +1,50 @@
+name: Run Nix Flake Checks
+
+on:
+  workflow_dispatch:
+    inputs:
+      lockFile:
+        description: 'flake.lock file'
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.host }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # The default disk size of these runners is ~14GB
+      # Cleanup the disk, see upstream discussion https://github.com/actions/runner-images/issues/2840.
+      - name: Cleanup Disk Space
+        run: |
+          echo "Before removing files:"
+          df -h
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          echo "After removing files:"
+          df -h
+
+      - uses: actions/checkout@v4
+
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@v2
+
+      - uses: cachix/cachix-action@v14
+        with:
+          name: daylin
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+
+      - name: write lock file
+        if: "${{ inputs.lockFile != '' }}"
+        run: |
+          echo '${{ inputs.lockFile }}' > flake.lock
+          git diff
+
+      - name: Build
+        run: |
+          cachix watch-exec daylin -- nix build '.#checks.x86_64-linux.packageCheck'

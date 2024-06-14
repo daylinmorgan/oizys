@@ -28,6 +28,17 @@ rec {
 
   nixosModules = listToAttrs (findModulesList ../modules);
 
+  mkPackageCheck =
+    { packages, pkgs }:
+    pkgs.runCommandLocal "build-third-party"
+      {
+        src = ./.;
+        nativeBuildInputs = [ packages ];
+      }
+      ''
+        mkdir "$out"
+      '';
+
   mkSystem =
     hostName:
     nixosSystem {
@@ -74,5 +85,18 @@ rec {
     packages = oizysPkg;
     devShells = devShells;
     formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
+    checks = forAllSystems (pkgs: {
+      packageCheck = mkPackageCheck {
+        inherit pkgs;
+        # make sure lix is in this?
+        packages = [
+          pkgs.pixi
+          pkgs.swww
+
+          inputs.roc.packages.${pkgs.system}.full
+          inputs.roc.packages.${pkgs.system}.lang-server
+        ];
+      };
+    });
   };
 }
