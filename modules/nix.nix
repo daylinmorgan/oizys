@@ -34,7 +34,7 @@
 
   # I'm getting errors related to a non-existent nix-index?
   programs.nix-index.enableZshIntegration = false;
-  programs.nix-index.enableBashIntegration =false;
+  programs.nix-index.enableBashIntegration = false;
   programs.nix-index.enableFishIntegration = false;
 
   nix.settings = {

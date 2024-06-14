@@ -1,7 +1,6 @@
 { lib, ... }:
 let
-  inherit (builtins)
-  filter;
+  inherit (builtins) filter;
   inherit (lib)
     isNixFile
     mkOption
@@ -9,8 +8,7 @@ let
     literalExpression
     mdDoc
     ;
-    inherit (lib.filesystem)
-    listFilesRecursive;
+  inherit (lib.filesystem) listFilesRecursive;
 in
 {
   imports = filter (f: (f != ./default.nix) && (isNixFile f)) (listFilesRecursive ./.);
