@@ -48,4 +48,4 @@ jobs:
 
       - name: Build
         run: |
-          cachix watch-exec daylin -- nix build '.#checks.x86_64-linux.packageCheck'
+          cachix watch-exec daylin -- nix build --accept-flake-config '.#checks.x86_64-linux.packageCheck'
