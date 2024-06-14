@@ -93,6 +93,9 @@ rec {
           pkgs.pixi
           pkgs.swww
 
+          inputs.tsm.packages.${pkgs.system}.default
+          inputs.hyprman.packages.${pkgs.system}.default
+
           inputs.roc.packages.${pkgs.system}.full
           inputs.roc.packages.${pkgs.system}.lang-server
 

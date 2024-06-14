@@ -16,8 +16,6 @@
 
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
 
-    # see todo.md
-    # hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1&rev=4cdddcfe466cb21db81af0ac39e51cc15f574da9";
     hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
 
     hyprland-contrib.url = "github:hyprwm/contrib";
