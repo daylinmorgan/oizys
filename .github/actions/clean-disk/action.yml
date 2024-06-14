@@ -1,0 +1,53 @@
+name: 'Maximize build disk space'
+description: 'Maximize the available disk space by removing unneeded software'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Disk space report before modification
+      shell: bash
+      run: |
+          echo "==> Available space before cleanup"
+          echo
+          df -h
+          # sudo du /usr/local -h --max-depth=1 | sort -rh || true
+
+    - name: Maximize build disk space
+      shell: bash
+      run: |
+          set -euo pipefail
+
+          echo "Removing unwanted software... "
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/.ghcup
+          sudo rm -rf /opt/hostedtoolcache
+          sudo docker image prune --all --force > /dev/null
+          sudo rm -rf /usr/local
+
+          sudo apt-get remove -y '^aspnetcore-.*' > /dev/null
+          sudo apt-get remove -y '^dotnet-.*' > /dev/null
+          sudo apt-get remove -y '^llvm-.*' > /dev/null
+          sudo apt-get remove -y 'php.*' > /dev/null
+          sudo apt-get remove -y '^mongodb-.*' > /dev/null
+          sudo apt-get remove -y '^mysql-.*' > /dev/null
+          sudo apt-get remove -y azure-cli google-chrome-stable firefox powershell mono-devel libgl1-mesa-dri --fix-missing > /dev/null
+          sudo apt-get remove -y google-cloud-sdk --fix-missing > /dev/null
+          sudo apt-get remove -y google-cloud-cli --fix-missing > /dev/null
+          sudo apt-get autoremove -y > /dev/null
+          sudo apt-get clean > /dev/null
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
+          sudo swapoff -a
+          sudo rm -f /mnt/swapfile
+          free -h
+          echo "... done"
+
+    - name: Disk space report after modification
+      shell: bash
+      run: |
+          echo "==> Available space after cleanup"
+          echo
+          df -h
