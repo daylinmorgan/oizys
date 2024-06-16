@@ -25,19 +25,7 @@ let
 in
 rec {
   forAllSystems = f: genAttrs supportedSystems (system: f (import nixpkgs { inherit system; }));
-
-  nixosModules = listToAttrs (findModulesList ../modules);
-
-  mkPackageCheck =
-    { packages, pkgs }:
-    pkgs.runCommandLocal "build-third-party"
-      {
-        src = ./.;
-        nativeBuildInputs = [ packages ];
-      }
-      ''
-        mkdir "$out"
-      '';
+  oizysModules = listToAttrs (findModulesList ../modules);
 
   mkSystem =
     hostName:
@@ -70,7 +58,7 @@ rec {
     oizys-go = pkgs.callPackage ../pkgs/oizys/oizys-go { };
     default = oizys-go;
   });
-  devShells = forAllSystems (pkgs: {
+  oizysShells = forAllSystems (pkgs: {
     default = pkgs.mkShell {
       packages = with pkgs; [
         git
@@ -79,30 +67,34 @@ rec {
     };
   });
 
+  oizysChecks = forAllSystems (pkgs: import ./checks.nix { inherit pkgs inputs; });
+  oizysFormatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
   oizysFlake = {
-    nixosModules = nixosModules;
+    nixosModules = oizysModules;
     nixosConfigurations = oizysHosts;
     packages = oizysPkg;
-    devShells = devShells;
-    formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
-    checks = forAllSystems (pkgs: {
-      packageCheck = mkPackageCheck {
-        inherit pkgs;
-        # make sure lix is in this?
-        packages = [
-          pkgs.pixi
-          pkgs.swww
-
-          inputs.tsm.packages.${pkgs.system}.default
-          inputs.hyprman.packages.${pkgs.system}.default
-
-          inputs.roc.packages.${pkgs.system}.full
-          inputs.roc.packages.${pkgs.system}.lang-server
-
-          inputs.zls.outputs.packages.${pkgs.system}.default
-          inputs.zig2nix.outputs.packages.${pkgs.system}.zig.master.bin
-        ];
-      };
-    });
+    devShells = oizysShells;
+    formatter = oizysFormatter;
+    checks = oizysChecks;
+    # checks = forAllSystems (pkgs: {
+    #   packageCheck = mkPackageCheck {
+    #     inherit pkgs;
+    #     # make sure lix is in this?
+    #     packages = [
+    #       pkgs.pixi
+    #       pkgs.swww
+    #
+    #       inputs.tsm.packages.${pkgs.system}.default
+    #       inputs.hyprman.packages.${pkgs.system}.default
+    #
+    #       inputs.roc.packages.${pkgs.system}.full
+    #       inputs.roc.packages.${pkgs.system}.lang-server
+    #
+    #       inputs.zls.outputs.packages.${pkgs.system}.default
+    #       inputs.zig2nix.outputs.packages.${pkgs.system}.zig.master.bin
+    #     ];
+    #
+    #   };
+    # });
   };
 }
