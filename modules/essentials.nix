@@ -7,7 +7,6 @@
 {
   imports = with self.nixosModules; [ git ];
   programs.zsh = enabled;
-  programs.fish = enabled;
   environment.systemPackages = with pkgs; [
     tmux
     unzip
