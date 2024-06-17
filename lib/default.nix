@@ -34,7 +34,6 @@ let
         ../overlays
         inputs.lix-module.nixosModules.default
       ] ++ filter isNixFile (listFilesRecursive (../. + "/hosts/${hostName}"));
-
       specialArgs = {
         inherit
           inputs
@@ -68,7 +67,13 @@ in
         ];
       };
     });
-    checks = forAllSystems (pkgs: import ./checks.nix { inherit pkgs inputs; });
+    checks = forAllSystems (
+      pkgs:
+      import ./checks.nix {
+        inherit inputs;
+        system = pkgs.system;
+      }
+    );
     formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
 
   };

@@ -1,6 +1,15 @@
-{ inputs, pkgs }:
+{ inputs, system }:
+let
+  pkgs = import inputs.nixpkgs {
+    inherit system;
+    overlays = [
+      inputs.lix-module.overlays.default
+      inputs.hyprland-contrib.overlays.default
+      inputs.nixpkgs-wayland.overlay
+    ];
+  };
+in
 {
-
   makePackages =
     pkgs.runCommandLocal "build-third-party"
       {
@@ -8,6 +17,8 @@
         nativeBuildInputs = [
           pkgs.pixi
           pkgs.swww
+          pkgs.xdg-desktop-portal-hyprland
+          pkgs.nixVersions.stable
 
           inputs.tsm.packages.${pkgs.system}.default
           inputs.hyprman.packages.${pkgs.system}.default
