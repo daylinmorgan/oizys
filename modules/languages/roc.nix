@@ -13,8 +13,7 @@ in
 {
   config = mkIfIn "roc" cfg {
     environment.systemPackages = with rocPkgs; [
-      full
-      lang-server
+      full # cli + lang_server
     ];
   };
 }
