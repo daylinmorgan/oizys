@@ -56,7 +56,7 @@ in
       oizys-zig = pkgs.callPackage ../pkgs/oizys/oizys-zig { inherit zig2nix; };
       oizys-nim = pkgs.callPackage ../pkgs/oizys/oizys-nim { };
       oizys-rs = pkgs.callPackage ../pkgs/oizys/oizys-rs { };
-      oizys-go = pkgs.callPackage ../pkgs/oizys/oizys-go { };
+      oizys-go = pkgs.callPackage ../pkgs/oizys/oizys-go { inherit self;};
       default = oizys-go;
     });
     devShells = forAllSystems (pkgs: {

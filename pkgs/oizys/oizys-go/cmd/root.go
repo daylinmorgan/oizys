@@ -31,6 +31,7 @@ var (
 	host      string
 	cacheName string
 	verbose   bool
+  nom bool
 )
 
 var oizys = o.NewOizys()

@@ -1,6 +1,7 @@
 package oizys
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/fs"
@@ -23,7 +24,6 @@ type Oizys struct {
 	cache   string
 	verbose bool
 }
-
 
 func NewOizys() *Oizys {
 	hostname, err := os.Hostname()
@@ -246,11 +246,57 @@ func runCommand(cmd *exec.Cmd) {
 	}
 }
 
-func (o *Oizys) NixBuild(rest ...string) {
-	args := []string{"build", o.Output()}
-	args = append(args, rest...)
-	cmd := exec.Command("nix", args...)
+// func runBuildWithNom(buildCmd *exec.Cmd) {
+//   log.Println("starting build?")
+// 	nomCmd := exec.Command("nom","--json")
+// 	var err error
+// 	buildCmd.Args = append(buildCmd.Args, "--log-format", "internal-json", "-v")
+// 	nomCmd.Stdin, err = buildCmd.StderrPipe()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	nomCmd.Stdout = os.Stdout
+// 	nomCmd.Start()
+//   log.Println("starting buildcmd?")
+// 	buildCmd.Run()
+// 	nomCmd.Wait()
+// }
+
+func (o *Oizys) NixBuild(nom bool, rest ...string) {
+	var cmdName string
+	if nom {
+		cmdName = "nom"
+	} else {
+		cmdName = "nix"
+	}
+	cmd := exec.Command(cmdName, "build")
+	cmd.Args = append(cmd.Args, rest...)
 	runCommand(cmd)
+}
+
+func (o *Oizys) getChecks() []string {
+	attrName := fmt.Sprintf("%s#%s", o.flake, "checks.x86_64-linux")
+	cmd := exec.Command("nix", "eval", attrName, "--apply", "builtins.attrNames", "--json")
+	out, err := cmd.Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+	var checks []string
+	if err := json.Unmarshal(out, &checks); err != nil {
+		log.Fatal(err)
+	}
+	return checks
+}
+
+func (o *Oizys) checkPath(name string) string {
+	return fmt.Sprintf("%s#checks.x86_64-linux.%s", o.flake, name)
+}
+
+func (o *Oizys) Checks(nom bool, rest ...string) {
+	checks := o.getChecks()
+	for _, check := range checks {
+		o.NixBuild(nom, o.checkPath(check))
+	}
 }
 
 func (o *Oizys) CacheBuild(rest ...string) {
@@ -289,7 +335,7 @@ func Output(flake string, host string) string {
 
 func nixSpinner(host string) *spinner.Spinner {
 	msg := fmt.Sprintf("%s %s", " evaluating derivation for:",
-    lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("6")).Render(host),
+		lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("6")).Render(host),
 	)
 	s := spinner.New(
 		spinner.CharSets[14],
