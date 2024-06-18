@@ -19,10 +19,11 @@ import (
 
 // verbose vs debug?
 type Oizys struct {
-	flake   string
-	host    string
-	cache   string
-	verbose bool
+	flake      string
+	host       string
+	cache      string
+	verbose    bool
+	systemPath bool
 }
 
 func NewOizys() *Oizys {
@@ -42,7 +43,44 @@ func NewOizys() *Oizys {
 	return &Oizys{flake: flake, host: hostname, cache: "daylin"}
 }
 
-func (o *Oizys) Output() string {
+type Derivation struct {
+	InputDrvs map[string]interface{}
+}
+
+func parseSystemPath(derivation map[string]Derivation) (string, error) {
+	for _, nixosDrv := range derivation {
+		for drv := range nixosDrv.InputDrvs {
+			if strings.HasSuffix(drv, "system-path.drv") {
+				return drv, nil
+			}
+		}
+	}
+	return "", errors.New("failed to find path for system-path.drv")
+}
+
+// recreating this command
+// nix derivation show `oizys output` | jq -r '.[].inputDrvs | with_entries(select(.key|match("system-path";"i"))) | keys | .[]'
+func (o *Oizys) getSystemPath() string {
+	cmd := exec.Command("nix", "derivation", "show", o.nixosConfigAttr())
+	log.Println("evaluating to get system-path")
+	cmd.Stderr = os.Stderr
+	out, err := cmd.Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var derivation map[string]Derivation
+	if err := json.Unmarshal(out, &derivation); err != nil {
+		log.Fatal(err)
+	}
+	systemPath, err := parseSystemPath(derivation)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return systemPath
+}
+
+func (o *Oizys) nixosConfigAttr() string {
 	return fmt.Sprintf(
 		"%s#nixosConfigurations.%s.config.system.build.toplevel",
 		o.flake,
@@ -50,9 +88,17 @@ func (o *Oizys) Output() string {
 	)
 }
 
+func (o *Oizys) Output() string {
+	if o.systemPath {
+		return o.getSystemPath()
+	} else {
+		return o.nixosConfigAttr()
+	}
+}
+
 func (o *Oizys) Set(
 	flake, host, cache string,
-	verbose bool,
+	verbose, systemPath bool,
 ) {
 	if host != "" {
 		o.host = host
@@ -64,6 +110,7 @@ func (o *Oizys) Set(
 		o.cache = cache
 	}
 	o.verbose = verbose
+	o.systemPath = systemPath
 }
 
 func terminalSize() (int, int) {
@@ -153,7 +200,11 @@ func (o *Oizys) git(rest ...string) *exec.Cmd {
 }
 
 func showFailedOutput(buf []byte) {
-	arrow := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("9")).Render("->")
+	arrow := lipgloss.
+		NewStyle().
+		Bold(true).
+		Foreground(lipgloss.Color("9")).
+		Render("->")
 	for _, line := range strings.Split(strings.TrimSpace(string(buf)), "\n") {
 		fmt.Println(arrow, line)
 	}
@@ -208,7 +259,7 @@ func showDryRunResult(nixOutput string, verbose bool) {
 
 func (o *Oizys) NixDryRun(verbose bool, rest ...string) {
 	args := []string{
-		"build", o.Output(), "--dry-run",
+		"build", o.nixosConfigAttr(), "--dry-run",
 	}
 	args = append(args, rest...)
 	cmd := exec.Command("nix", args...)
@@ -302,7 +353,7 @@ func (o *Oizys) Checks(nom bool, rest ...string) {
 func (o *Oizys) CacheBuild(rest ...string) {
 	args := []string{
 		"watch-exec", o.cache, "--", "nix",
-		"build", o.Output(), "--print-build-logs",
+		"build", o.nixosConfigAttr(), "--print-build-logs",
 		"--accept-flake-config",
 	}
 	args = append(args, rest...)
@@ -323,14 +374,6 @@ func (o *Oizys) CI(rest ...string) {
 	args = append(args, rest...)
 	cmd := exec.Command("gh", args...)
 	runCommand(cmd)
-}
-
-func Output(flake string, host string) string {
-	return fmt.Sprintf(
-		"%s#nixosConfigurations.%s.config.system.build.toplevel",
-		flake,
-		host,
-	)
 }
 
 func nixSpinner(host string) *spinner.Spinner {

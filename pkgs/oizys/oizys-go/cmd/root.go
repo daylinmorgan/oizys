@@ -27,11 +27,12 @@ func Execute() {
 }
 
 var (
-	flake     string
-	host      string
-	cacheName string
-	verbose   bool
-  nom bool
+	flake      string
+	host       string
+	cacheName  string
+	verbose    bool
+	nom        bool
+	systemPath bool
 )
 
 var oizys = o.NewOizys()
@@ -40,7 +41,7 @@ var rootCmd = &cobra.Command{
 	Use:   "oizys",
 	Short: "nix begat oizys",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-    oizys.Set(flake, host, cacheName, verbose)
+		oizys.Set(flake, host, cacheName, verbose, systemPath)
 		oizys.CheckFlake()
 	},
 }
