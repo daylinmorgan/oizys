@@ -8,20 +8,14 @@
   nix-output-monitor,
   ...
 }:
-let 
-mkDate =
-    longDate:
-    (lib.concatStringsSep "-" [
-      (builtins.substring 0 4 longDate)
-      (builtins.substring 4 2 longDate)
-      (builtins.substring 6 2 longDate)
-    ]);
+let
+  inherit (lib) mkDate cleanSource makeBinPath;
 in
 buildGoModule {
   pname = "oizys";
-  version = "date=${mkDate self.lastModifiedDate}";
+  version = "d${mkDate self.lastModifiedDate}";
 
-  src = lib.cleanSource ./.;
+  src = cleanSource ./.;
   vendorHash = "sha256-Geqcp0/7I1IF2IfaYyIChz7SOCF+elIEdcz2VsAU0hQ=";
 
   nativeBuildInputs = [
@@ -36,6 +30,11 @@ buildGoModule {
 
   postFixup = ''
     wrapProgram $out/bin/oizys \
-      --prefix PATH ':' ${lib.makeBinPath [ gh nix-output-monitor ]}
+      --prefix PATH ':' ${
+        makeBinPath [
+          gh
+          nix-output-monitor
+        ]
+      }
   '';
 }

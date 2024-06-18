@@ -1,12 +1,14 @@
 final: prev:
 let
   inherit (final)
+    concatStringsSep
     hasSuffix
     mkEnableOption
     mkIf
     mkOption
     types
     ;
+  inherit (builtins) listToAttrs substring;
 in
 rec {
   enabled = {
@@ -19,7 +21,7 @@ rec {
   # ["a" "b"] -> {a.enable = true; b.enable = true;}
   enableAttrs =
     attrs:
-    builtins.listToAttrs (
+    listToAttrs (
       map (attr: {
         name = attr;
         value = enabled;
@@ -28,7 +30,7 @@ rec {
   # ["a" "b"] -> {a.enable = false; b.enable = false;}
   disableAttrs =
     attrs:
-    builtins.listToAttrs (
+    listToAttrs (
       map (attr: {
         name = attr;
         value = disabled;
@@ -50,4 +52,13 @@ rec {
     };
     config = mkIf config.oizys.${attr}.enable content;
   };
+
+  # generate date string with '-' from long date
+  mkDate =
+    longDate:
+    (concatStringsSep "-" [
+      (substring 0 4 longDate)
+      (substring 4 2 longDate)
+      (substring 6 2 longDate)
+    ]);
 }

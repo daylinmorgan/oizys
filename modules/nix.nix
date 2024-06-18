@@ -26,7 +26,6 @@
     pkgs.nixfmt-rfc-style
     pkgs.nix-output-monitor
 
-
     self.packages.${pkgs.system}.default
   ];
 
