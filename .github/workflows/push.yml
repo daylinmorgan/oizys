@@ -8,6 +8,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.host }}
+  cancel-in-progress: true
+
 jobs:
   checks:
     uses: ./.github/workflows/checks.yml

@@ -8,12 +8,8 @@ on:
         description: 'flake.lock file'
         type: string
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.host }}
-  cancel-in-progress: true
-
 jobs:
-  build:
+  checks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,6 +19,9 @@ jobs:
           purge-packages: false
 
       - uses: DeterminateSystems/nix-installer-action@main
+        with:
+          extra-conf: |
+            accept-flake-config = true
       - uses: DeterminateSystems/magic-nix-cache-action@v7
 
       - uses: cachix/cachix-action@v15
@@ -38,4 +37,12 @@ jobs:
 
       - name: Build
         run: |
-          cachix watch-exec daylin -- nix build --accept-flake-config '.#checks.x86_64-linux.makePackages'
+          set -euo pipefail
+          # cachix watch-exec daylin -- nix build '.#checks.x86_64-linux.makePackages'
+          host=othalan
+          system_attr=$(nix run . -- output --host "$host" --flake .)
+          system_path=$(nix derivation show $system_attr | jq -r '.[].inputDrvs | with_entries(select(.key|match("system-path";"i"))) | keys | .[]')
+
+          echo "path to system-path drv ==> $system_path"
+          cachix watch-exec daylin -- nix build --print-build-logs "$system_path^*"
+
