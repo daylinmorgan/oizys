@@ -42,21 +42,26 @@ var rootCmd = &cobra.Command{
 	Use:   "oizys",
 	Short: "nix begat oizys",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		if verbose {
+			log.Info("running with verbose mode")
+			log.SetLevel(log.DebugLevel)
+		}
 		oizys.Set(flake, host, cacheName, verbose, systemPath)
 		oizys.CheckFlake()
 	},
 }
 
 func setupLogger() {
-  log.SetReportTimestamp(false)
-  styles := log.DefaultStyles()
-  for k, v := range styles.Levels {
-    styles.Levels[k] = v.MaxWidth(10)
-  }
+	log.SetReportTimestamp(false)
+	styles := log.DefaultStyles()
+	for k, v := range styles.Levels {
+		styles.Levels[k] = v.MaxWidth(10)
+	}
+  log.SetStyles(styles)
 }
 
 func init() {
-  setupLogger()
+	setupLogger()
 
 	rootCmd.CompletionOptions.HiddenDefaultCmd = true
 	rootCmd.PersistentFlags().StringVar(&flake, "flake", "", "path to flake ($OIZYS_DIR or $HOME/oizys)")

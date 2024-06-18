@@ -193,10 +193,9 @@ func (p *packages) summary() {
 func (o *Oizys) git(rest ...string) *exec.Cmd {
 	args := []string{"-C", o.flake}
 	args = append(args, rest...)
-	if o.verbose {
-		fmt.Println("CMD:", "git", strings.Join(args, " "))
-	}
-	return exec.Command("git", args...)
+	cmd := exec.Command("git", args...)
+	logCmd(cmd)
+	return cmd
 }
 
 func showFailedOutput(buf []byte) {
@@ -257,6 +256,10 @@ func showDryRunResult(nixOutput string, verbose bool) {
 	toFetch.show(verbose)
 }
 
+func logCmd(cmd *exec.Cmd) {
+	log.Debugf("CMD: %s %s", cmd.Path, strings.Join(cmd.Args, " "))
+}
+
 func (o *Oizys) NixDryRun(verbose bool, rest ...string) {
 	args := []string{
 		"build", o.nixosConfigAttr(), "--dry-run",
@@ -273,19 +276,19 @@ func (o *Oizys) NixDryRun(verbose bool, rest ...string) {
 	showDryRunResult(string(result), verbose)
 }
 
+// / Setup command completely differently here
 func (o *Oizys) NixosRebuild(subcmd string, rest ...string) {
-	args := []string{
+	cmd := exec.Command("sudo",
 		"nixos-rebuild",
 		subcmd,
 		"--flake",
 		o.flake,
-	}
-	args = append(args, rest...)
+	)
+	cmd.Args = append(cmd.Args, rest...)
 	if o.verbose {
-		args = append(args, "--print-build-logs")
-		fmt.Println("CMD:", "sudo", strings.Join(args, " "))
+		cmd.Args = append(cmd.Args, "--print-build-logs")
 	}
-	cmd := exec.Command("sudo", args...)
+	logCmd(cmd)
 	runCommand(cmd)
 }
 
@@ -296,22 +299,6 @@ func runCommand(cmd *exec.Cmd) {
 		log.Fatal(err)
 	}
 }
-
-// func runBuildWithNom(buildCmd *exec.Cmd) {
-//   log.Println("starting build?")
-// 	nomCmd := exec.Command("nom","--json")
-// 	var err error
-// 	buildCmd.Args = append(buildCmd.Args, "--log-format", "internal-json", "-v")
-// 	nomCmd.Stdin, err = buildCmd.StderrPipe()
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	nomCmd.Stdout = os.Stdout
-// 	nomCmd.Start()
-//   log.Println("starting buildcmd?")
-// 	buildCmd.Run()
-// 	nomCmd.Wait()
-// }
 
 func (o *Oizys) NixBuild(nom bool, rest ...string) {
 	var cmdName string
