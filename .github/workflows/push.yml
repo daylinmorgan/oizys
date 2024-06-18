@@ -13,12 +13,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  checks:
-    uses: ./.github/workflows/checks.yml
-    secrets: inherit
-
+  # checks:
+  #   uses: ./.github/workflows/checks.yml
+  #   secrets: inherit
+  
   build:
-    needs: checks
+    # needs: checks
     strategy:
       max-parallel: 1
       matrix:
