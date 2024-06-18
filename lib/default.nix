@@ -33,6 +33,7 @@ let
         ../modules/oizys.nix
         ../overlays
         inputs.lix-module.nixosModules.default
+        inputs.hyprland.nixosModules.default
       ] ++ filter isNixFile (listFilesRecursive (../. + "/hosts/${hostName}"));
       specialArgs = {
         inherit

@@ -17,8 +17,10 @@ in
         nativeBuildInputs = [
           pkgs.pixi
           pkgs.swww
-          pkgs.xdg-desktop-portal-hyprland
           pkgs.nixVersions.stable
+
+          inputs.hyprland.packages.${pkgs.system}.default
+          inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland
 
           inputs.tsm.packages.${pkgs.system}.default
           inputs.hyprman.packages.${pkgs.system}.default
