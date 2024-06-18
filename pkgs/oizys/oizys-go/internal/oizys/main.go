@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io/fs"
-	"log"
 	"os"
 	"os/exec"
 	"strings"
@@ -15,6 +14,7 @@ import (
 	"golang.org/x/term"
 
 	"github.com/briandowns/spinner"
+	"github.com/charmbracelet/log"
 )
 
 // verbose vs debug?
@@ -62,7 +62,7 @@ func parseSystemPath(derivation map[string]Derivation) (string, error) {
 // nix derivation show `oizys output` | jq -r '.[].inputDrvs | with_entries(select(.key|match("system-path";"i"))) | keys | .[]'
 func (o *Oizys) getSystemPath() string {
 	cmd := exec.Command("nix", "derivation", "show", o.nixosConfigAttr())
-	log.Println("evaluating to get system-path")
+	log.Info("evaluating to get system-path")
 	cmd.Stderr = os.Stderr
 	out, err := cmd.Output()
 	if err != nil {
@@ -139,7 +139,7 @@ func parsePackages(lines []string, desc string) *packages {
 	for i, pkg := range lines {
 		s := strings.SplitN(pkg, "-", 2)
 		if len(s) != 2 {
-			log.Fatalln("failed to trim hash path from this line: ", pkg)
+			log.Fatalf("failed to trim hash path from this line: %s\n ", pkg)
 		}
 		name := ellipsis(strings.Replace(s[1], ".drv", "", 1), maxAcceptable)
 		if nameLen := len(name); nameLen > maxLen {
@@ -243,8 +243,8 @@ func parseDryRun(buf string) (*packages, *packages) {
 	}
 
 	if len(parts[0])+len(parts[1]) == 0 {
-		log.Println("no changes...")
-		log.Fatalln("or failed to parse nix build --dry-run output")
+		log.Info("no changes...")
+		log.Fatal("or failed to parse nix build --dry-run output")
 	}
 
 	return parsePackages(parts[0], "packages to build"),
@@ -364,7 +364,7 @@ func (o *Oizys) CacheBuild(rest ...string) {
 func (o *Oizys) CheckFlake() {
 	if _, ok := os.LookupEnv("OIZYS_SKIP_CHECK"); !ok {
 		if _, err := os.Stat(o.flake); errors.Is(err, fs.ErrNotExist) {
-			log.Fatalln("path to flake:", o.flake, "does not exist")
+			log.Fatalf("path to flake: %s does not exist", o.flake)
 		}
 	}
 }

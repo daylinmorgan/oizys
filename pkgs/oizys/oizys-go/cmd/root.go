@@ -5,6 +5,7 @@ import (
 
 	o "oizys/internal/oizys"
 
+	"github.com/charmbracelet/log"
 	cc "github.com/ivanpirog/coloredcobra"
 	"github.com/spf13/cobra"
 )
@@ -46,7 +47,17 @@ var rootCmd = &cobra.Command{
 	},
 }
 
+func setupLogger() {
+  log.SetReportTimestamp(false)
+  styles := log.DefaultStyles()
+  for k, v := range styles.Levels {
+    styles.Levels[k] = v.MaxWidth(10)
+  }
+}
+
 func init() {
+  setupLogger()
+
 	rootCmd.CompletionOptions.HiddenDefaultCmd = true
 	rootCmd.PersistentFlags().StringVar(&flake, "flake", "", "path to flake ($OIZYS_DIR or $HOME/oizys)")
 	rootCmd.PersistentFlags().StringVar(&host, "host", "", "host to build (current host)")

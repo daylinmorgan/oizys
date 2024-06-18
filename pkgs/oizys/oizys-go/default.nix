@@ -16,7 +16,7 @@ buildGoModule {
   version = "d${mkDate self.lastModifiedDate}";
 
   src = cleanSource ./.;
-  vendorHash = "sha256-Geqcp0/7I1IF2IfaYyIChz7SOCF+elIEdcz2VsAU0hQ=";
+  vendorHash = "sha256-/JVXhXrU2np/ty7AGFy+LPZCo1NaLYl9NAyD9+FJYBI=";
 
   nativeBuildInputs = [
     installShellFiles
