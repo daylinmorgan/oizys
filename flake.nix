@@ -12,7 +12,7 @@
 
     lix-module.url = "git+https://git.lix.systems/lix-project/nixos-module";
     lix-module.inputs.lix.follows = "lix";
-    # lix-module.inputs.nixpkgs.follows = "nixpkgs";
+    lix-module.inputs.nixpkgs.follows = "nixpkgs";
 
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
 
