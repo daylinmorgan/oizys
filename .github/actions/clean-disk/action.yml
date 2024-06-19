@@ -40,7 +40,7 @@ runs:
           if [[ "${{ inputs.purge-packages }}" == 'true' ]]; then
             sudo apt-get purge \
               --allow-remove-essential \
-              -q \
+              -qq \
               $(non_manifest_packages) &
           fi
 
