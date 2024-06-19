@@ -26,7 +26,7 @@ in
         "wheel" # sudo
         "docker"
       ];
-      initialPassword = "nix";
+      initialHashedPassword = "$2b$05$mGMrDFzf2cXLaoOlVQbGvOBV7UZlDt9dLg9Xqxutb/uHpjF5VrTBO";
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKkezPIhB+QW37G15ZV3bewydpyEcNlYxfHLlzuk3PH9"
       ];
