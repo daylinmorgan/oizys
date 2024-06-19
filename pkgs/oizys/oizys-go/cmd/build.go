@@ -15,4 +15,5 @@ var buildCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(buildCmd)
 	buildCmd.Flags().BoolVar(&nom, "nom", false, "display result with nom")
+	buildCmd.Flags().BoolVar(&systemPath, "system-path", false, "show system-path drv")
 }

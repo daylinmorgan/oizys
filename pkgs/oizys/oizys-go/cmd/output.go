@@ -14,8 +14,7 @@ var outputCmd = &cobra.Command{
 	},
 }
 
-
 func init() {
 	rootCmd.AddCommand(outputCmd)
-  outputCmd.Flags().BoolVar(&systemPath, "system-path", false, "show system-path drv")
+	outputCmd.Flags().BoolVar(&systemPath, "system-path", false, "show system-path drv")
 }

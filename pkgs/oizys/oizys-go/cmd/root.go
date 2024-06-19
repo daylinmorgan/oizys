@@ -57,7 +57,7 @@ func setupLogger() {
 	for k, v := range styles.Levels {
 		styles.Levels[k] = v.MaxWidth(10)
 	}
-  log.SetStyles(styles)
+	log.SetStyles(styles)
 }
 
 func init() {

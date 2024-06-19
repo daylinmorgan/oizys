@@ -62,7 +62,8 @@ func parseSystemPath(derivation map[string]Derivation) (string, error) {
 // nix derivation show `oizys output` | jq -r '.[].inputDrvs | with_entries(select(.key|match("system-path";"i"))) | keys | .[]'
 func (o *Oizys) getSystemPath() string {
 	cmd := exec.Command("nix", "derivation", "show", o.nixosConfigAttr())
-	log.Info("evaluating to get system-path")
+	logCmd(cmd)
+	// TODO: add spinner?
 	cmd.Stderr = os.Stderr
 	out, err := cmd.Output()
 	if err != nil {
@@ -189,6 +190,9 @@ func (p *packages) summary() {
 			Render(fmt.Sprint(len(p.names))),
 	)
 }
+func logCmd(cmd *exec.Cmd) {
+	log.Debugf("CMD: %s", strings.Join(cmd.Args, " "))
+}
 
 func (o *Oizys) git(rest ...string) *exec.Cmd {
 	args := []string{"-C", o.flake}
@@ -256,10 +260,6 @@ func showDryRunResult(nixOutput string, verbose bool) {
 	toFetch.show(verbose)
 }
 
-func logCmd(cmd *exec.Cmd) {
-	log.Debugf("CMD: %s %s", cmd.Path, strings.Join(cmd.Args, " "))
-}
-
 func (o *Oizys) NixDryRun(verbose bool, rest ...string) {
 	args := []string{
 		"build", o.nixosConfigAttr(), "--dry-run",
@@ -288,11 +288,11 @@ func (o *Oizys) NixosRebuild(subcmd string, rest ...string) {
 	if o.verbose {
 		cmd.Args = append(cmd.Args, "--print-build-logs")
 	}
-	logCmd(cmd)
 	runCommand(cmd)
 }
 
 func runCommand(cmd *exec.Cmd) {
+	logCmd(cmd)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
@@ -308,6 +308,9 @@ func (o *Oizys) NixBuild(nom bool, rest ...string) {
 		cmdName = "nix"
 	}
 	cmd := exec.Command(cmdName, "build")
+	if o.systemPath {
+		cmd.Args = append(cmd.Args, fmt.Sprintf("%s^*", o.getSystemPath()))
+	}
 	cmd.Args = append(cmd.Args, rest...)
 	runCommand(cmd)
 }

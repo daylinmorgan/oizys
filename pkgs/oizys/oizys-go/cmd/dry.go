@@ -12,8 +12,7 @@ var dryCmd = &cobra.Command{
 	},
 }
 
-
 func init() {
 	rootCmd.AddCommand(dryCmd)
-	
+
 }
