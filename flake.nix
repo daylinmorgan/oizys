@@ -6,38 +6,50 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     stable.url = "github:nixos/nixpkgs/nixos-23.11";
-
-    lix.url = "git+https://git@git.lix.systems/lix-project/lix?ref=refs/tags/2.90-beta.1";
-    lix.flake = false;
-
-    lix-module.url = "git+https://git.lix.systems/lix-project/nixos-module";
-    lix-module.inputs.lix.follows = "lix";
-    lix-module.inputs.nixpkgs.follows = "nixpkgs";
-
+    nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    lix = {
+      url = "git+https://git@git.lix.systems/lix-project/lix?ref=refs/tags/2.90-beta.1";
+      flake = false;
+    };
+    lix-module = {
+      url = "git+https://git.lix.systems/lix-project/nixos-module";
+      inputs = {
+        lix.follows = "lix";
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
 
     hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
-
     hyprland-contrib.url = "github:hyprwm/contrib";
-    nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
 
-    nix-index-database.url = "github:nix-community/nix-index-database";
-    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
-
-    zig2nix.url = "github:Cloudef/zig2nix";
-    zig2nix.inputs.nixpkgs.follows = "nixpkgs";
-    zls.url = "github:zigtools/zls";
-    zls.inputs.nixpkgs.follows = "nixpkgs";
-
-    roc.url = "github:roc-lang/roc";
-    roc.inputs.nixpkgs.follows = "nixpkgs";
-
-    tsm.url = "github:daylinmorgan/tsm?dir=nix";
-    tsm.inputs.nixpkgs.follows = "nixpkgs";
-    hyprman.url = "git+https://git.dayl.in/daylin/hyprman.git";
-    hyprman.inputs.nixpkgs.follows = "nixpkgs";
-    f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
+    zig2nix = {
+      url = "github:Cloudef/zig2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    zls = {
+      url = "github:zigtools/zls";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    roc = {
+      url = "github:roc-lang/roc";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     pixi.url = "github:daylinmorgan/pixi-flake";
+
+    f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
+    tsm = {
+      url = "github:daylinmorgan/tsm?dir=nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    hyprman = {
+      url = "git+https://git.dayl.in/daylin/hyprman.git";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   nixConfig = {

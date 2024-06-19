@@ -8,9 +8,7 @@
 }:
 
 mkOizysModule config "hyprland" {
-  programs.hyprland = enabled; #// {
-  #   package = inputs.hyprland.packages.${pkgs.system}.default;
-  # };
+  programs.hyprland = enabled;
   security.pam.services.swaylock = { };
   # Optional, hint electron apps to use wayland:
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
