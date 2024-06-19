@@ -55,6 +55,7 @@ Available Commands:
   boot                    nixos rebuild boot
   build                   nix build
   cache                   build and push to cachix
+  checks                  nix build checks
   ci                      offload build to GHA
   dry                     poor man's nix flake check
   help                    Help about any command
