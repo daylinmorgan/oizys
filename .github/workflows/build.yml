@@ -53,6 +53,9 @@ jobs:
       - name: Build
         run: |
           for host in ${{ inputs.host }}; do
-            cachix watch-exec daylin -- nix build --print-build-logs "$(nix run . -- output --system-path --host "$host" --flake .)^*"
-            # nix run . --accept-flake-config -- cache --host "$host" --flake .
+            cachix watch-exec daylin -- \
+              oizys build --system-path \
+              --host "$host" \
+              --flake . -- \
+              --print-build-logs
           done
