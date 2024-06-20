@@ -16,7 +16,7 @@ on:
     inputs:
       hosts:
         description: 'list of hosts to build'
-        default: 'othalan aligz'
+        default: 'othalan algiz'
         type: string
 
 # concurrency:
