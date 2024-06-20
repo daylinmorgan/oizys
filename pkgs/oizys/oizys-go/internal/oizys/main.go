@@ -365,7 +365,7 @@ func (o *Oizys) CheckFlake() {
 }
 
 func (o *Oizys) CI(rest ...string) {
-	args := []string{"workflow", "run", "build.yml", "-F", fmt.Sprintf("host=%s", o.host)}
+	args := []string{"workflow", "run", "build.yml", "-F", fmt.Sprintf("hosts=%s", o.host)}
 	args = append(args, rest...)
 	cmd := exec.Command("gh", args...)
 	runCommand(cmd)
