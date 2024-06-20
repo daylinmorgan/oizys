@@ -13,20 +13,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # checks:
-  #   uses: ./.github/workflows/checks.yml
-  #   secrets: inherit
-  
   build:
-    # needs: checks
-    strategy:
-      max-parallel: 1
-      matrix:
-        host:
-          - othalan
-          # - mannaz
-          # - algiz
     uses: ./.github/workflows/build.yml
-    with:
-      host: "${{ matrix.host }}"
     secrets: inherit

@@ -41,7 +41,7 @@ runs:
             sudo apt-get purge \
               --allow-remove-essential \
               -qq \
-              $(non_manifest_packages) &
+              $(non_manifest_packages) > /dev/null &
           fi
 
           wait

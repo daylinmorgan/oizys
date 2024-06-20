@@ -3,7 +3,7 @@ name: Build NixOS (on demand)
 on:
   workflow_dispatch:
     inputs:
-      host:
+      hosts:
         description: 'list of hosts to build'
         required: true
         default: 'othalan algiz'
@@ -14,15 +14,14 @@ on:
 
   workflow_call:
     inputs:
-      host:
+      hosts:
         description: 'list of hosts to build'
-        required: true
         default: 'othalan aligz'
         type: string
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.host }}
-  cancel-in-progress: true
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.host }}
+#   cancel-in-progress: true
 
 jobs:
   build:
@@ -52,10 +51,12 @@ jobs:
 
       - name: Build
         run: |
-          for host in ${{ inputs.host }}; do
-            cachix watch-exec daylin -- \
-              oizys build --system-path \
-              --host "$host" \
-              --flake . -- \
-              --print-build-logs
+          for host in ${{ inputs.hosts }}; do
+            nix run . \
+              -- \
+              build --system-path \
+                --host "$host" \
+                --flake . \
+                -- \
+                --print-build-logs
           done
