@@ -190,6 +190,7 @@ func (p *packages) summary() {
 			Render(fmt.Sprint(len(p.names))),
 	)
 }
+
 func logCmd(cmd *exec.Cmd) {
 	log.Debugf("CMD: %s", strings.Join(cmd.Args, " "))
 }
@@ -237,9 +238,13 @@ func parseDryRun(buf string) (*packages, *packages) {
 	var parts [2][]string
 	i := 0
 	for _, line := range lines {
-		if strings.Contains(line, "fetch") {
+		if strings.Contains(line, "fetch") && strings.HasSuffix(line, ":") {
 			i++
 		}
+		if i == 2 {
+			log.Fatal("failed to parse output", "output", buf)
+		}
+
 		if strings.HasPrefix(line, "  ") {
 			parts[i] = append(parts[i], line)
 		}
@@ -247,7 +252,7 @@ func parseDryRun(buf string) (*packages, *packages) {
 
 	if len(parts[0])+len(parts[1]) == 0 {
 		log.Info("no changes...")
-		log.Fatal("or failed to parse nix build --dry-run output")
+		os.Exit(0)
 	}
 
 	return parsePackages(parts[0], "packages to build"),

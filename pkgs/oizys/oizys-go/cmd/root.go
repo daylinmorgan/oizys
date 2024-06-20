@@ -55,7 +55,7 @@ func setupLogger() {
 	log.SetReportTimestamp(false)
 	styles := log.DefaultStyles()
 	for k, v := range styles.Levels {
-		styles.Levels[k] = v.MaxWidth(10)
+		styles.Levels[k] = v.Width(5).MaxWidth(5)
 	}
 	log.SetStyles(styles)
 }
