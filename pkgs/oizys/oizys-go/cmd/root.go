@@ -6,6 +6,7 @@ import (
 	o "oizys/internal/oizys"
 
 	"github.com/charmbracelet/log"
+	"github.com/charmbracelet/lipgloss"
 	cc "github.com/ivanpirog/coloredcobra"
 	"github.com/spf13/cobra"
 )

@@ -1,4 +1,5 @@
 {
+  self,
   lib,
   installShellFiles,
   buildGoModule,
@@ -12,7 +13,7 @@ let
 in
 buildGoModule {
   pname = "oizys";
-  version = "unstable";
+  version = "${self.shortRev or "dirty"}";
 
   src = cleanSource ./.;
   vendorHash = "sha256-/JVXhXrU2np/ty7AGFy+LPZCo1NaLYl9NAyD9+FJYBI=";
