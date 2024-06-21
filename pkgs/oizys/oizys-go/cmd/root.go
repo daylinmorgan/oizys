@@ -54,8 +54,15 @@ var rootCmd = &cobra.Command{
 func setupLogger() {
 	log.SetReportTimestamp(false)
 	styles := log.DefaultStyles()
-	for k, v := range styles.Levels {
-		styles.Levels[k] = v.Width(5).MaxWidth(5)
+	colors := map[log.Level]string{
+		log.DebugLevel: "8",
+		log.InfoLevel:  "6",
+		log.WarnLevel:  "3",
+		log.ErrorLevel: "1",
+		log.FatalLevel: "1",
+	}
+	for k, v := range colors {
+		styles.Levels[k] = styles.Levels[k].MaxWidth(5).Width(5).Foreground(lipgloss.Color(v))
 	}
 	log.SetStyles(styles)
 }
