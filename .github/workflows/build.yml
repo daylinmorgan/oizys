@@ -57,6 +57,7 @@ jobs:
               build --system-path \
                 --host "$host" \
                 --flake . \
+                --verbose \
                 -- \
                 --print-build-logs
           done

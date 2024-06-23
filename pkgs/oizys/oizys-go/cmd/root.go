@@ -5,8 +5,8 @@ import (
 
 	o "oizys/internal/oizys"
 
-	"github.com/charmbracelet/log"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/charmbracelet/log"
 	cc "github.com/ivanpirog/coloredcobra"
 	"github.com/spf13/cobra"
 )
@@ -35,6 +35,7 @@ var (
 	verbose    bool
 	nom        bool
 	systemPath bool
+	resetCache bool
 )
 
 var oizys = o.NewOizys()
@@ -47,7 +48,7 @@ var rootCmd = &cobra.Command{
 			log.Info("running with verbose mode")
 			log.SetLevel(log.DebugLevel)
 		}
-		oizys.Set(flake, host, cacheName, verbose, systemPath)
+		oizys.Set(flake, host, cacheName, verbose, systemPath, resetCache)
 		oizys.CheckFlake()
 	},
 }
@@ -75,4 +76,5 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&flake, "flake", "", "path to flake ($OIZYS_DIR or $HOME/oizys)")
 	rootCmd.PersistentFlags().StringVar(&host, "host", "", "host to build (current host)")
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "show verbose output")
+	rootCmd.PersistentFlags().BoolVar(&resetCache, "reset-cache", false, "set narinfo-cache-negative-ttl to 0")
 }

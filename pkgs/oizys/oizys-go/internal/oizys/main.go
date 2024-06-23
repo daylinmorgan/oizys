@@ -19,28 +19,35 @@ import (
 
 // verbose vs debug?
 type Oizys struct {
-	flake      string
-	host       string
-	cache      string
-	verbose    bool
-	systemPath bool
+	flake         string
+	host          string
+	cache         string
+	githubSummary string
+	inCI          bool
+	verbose       bool
+	systemPath    bool
+	resetCache    bool
 }
 
 func NewOizys() *Oizys {
+	o := new(Oizys)
+	o.cache = "daylin"
 	hostname, err := os.Hostname()
 	if err != nil {
 		log.Fatal(err)
 	}
-	flake := ""
+	o.host = hostname
 	oizysDir, ok := os.LookupEnv("OIZYS_DIR")
 	if !ok {
 		home := os.Getenv("HOME")
-		flake = fmt.Sprintf("%s/%s", home, "oizys")
+		o.flake = fmt.Sprintf("%s/%s", home, "oizys")
 	} else {
-		flake = oizysDir
+		o.flake = oizysDir
 	}
+	o.githubSummary = os.Getenv("GITHUB_STEP_SUMMARY")
+	o.inCI = o.githubSummary != ""
 
-	return &Oizys{flake: flake, host: hostname, cache: "daylin"}
+	return o
 }
 
 type Derivation struct {
@@ -66,7 +73,6 @@ func (o *Oizys) getSystemPath() string {
 	// TODO: add spinner?
 	// cmd.Stderr = os.Stderr
 	s := nixSpinner(o.host)
-	// result, err := cmd.CombinedOutput()
 	out, err := cmd.Output()
 	s.Stop()
 	if err != nil {
@@ -102,7 +108,7 @@ func (o *Oizys) Output() string {
 
 func (o *Oizys) Set(
 	flake, host, cache string,
-	verbose, systemPath bool,
+	verbose, systemPath, resetCache bool,
 ) {
 	if host != "" {
 		o.host = host
@@ -115,12 +121,16 @@ func (o *Oizys) Set(
 	}
 	o.verbose = verbose
 	o.systemPath = systemPath
+	o.resetCache = resetCache
 }
 
+// TODO: seperate parsing and displaying of packages
 func terminalSize() (int, int) {
 	fd := os.Stdout.Fd()
 	if !term.IsTerminal(int(fd)) {
-		log.Fatal("failed to get terminal size")
+    log.Error("failed to get terminal size")
+    return 80, 0
+		// log.Fatal("failed to get terminal size")
 	}
 	w, h, err := term.GetSize(int(fd))
 	if err != nil {
@@ -320,7 +330,42 @@ func (o *Oizys) NixBuild(nom bool, rest ...string) {
 		cmd.Args = append(cmd.Args, fmt.Sprintf("%s^*", o.getSystemPath()))
 	}
 	cmd.Args = append(cmd.Args, rest...)
+	if o.resetCache {
+		cmd.Args = append(cmd.Args, "--narinfo-cache-positive-ttl", "0")
+	}
+	if o.inCI {
+		o.ciPreBuild(cmd)
+	}
 	runCommand(cmd)
+}
+
+func (o *Oizys) writeToGithubStepSummary(txt string) {
+	f, err := os.OpenFile(o.githubSummary, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if _, err := f.Write([]byte(txt)); err != nil {
+		log.Fatal(err)
+	}
+	if err := f.Close(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func (o *Oizys) ciPreBuild(cmd *exec.Cmd) {
+	// TODO: is this exec.Command call necessary?
+	ciCmd := exec.Command(cmd.Args[0], cmd.Args[1:]...)
+	ciCmd.Args = append(ciCmd.Args, "--dry-run")
+	logCmd(ciCmd)
+	output, err := ciCmd.CombinedOutput()
+	if err != nil {
+		showFailedOutput(output)
+		log.Fatal(err)
+	}
+	toBuild, _ := parseDryRun(string(output))
+	o.writeToGithubStepSummary(
+		fmt.Sprintf("# %s\n\n%s", o.host, strings.Join(toBuild.names, "\n")),
+	)
 }
 
 func (o *Oizys) getChecks() []string {
