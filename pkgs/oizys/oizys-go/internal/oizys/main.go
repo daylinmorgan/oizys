@@ -64,8 +64,11 @@ func (o *Oizys) getSystemPath() string {
 	cmd := exec.Command("nix", "derivation", "show", o.nixosConfigAttr())
 	logCmd(cmd)
 	// TODO: add spinner?
-	cmd.Stderr = os.Stderr
+	// cmd.Stderr = os.Stderr
+	s := nixSpinner(o.host)
+	// result, err := cmd.CombinedOutput()
 	out, err := cmd.Output()
+	s.Stop()
 	if err != nil {
 		log.Fatal(err)
 	}
