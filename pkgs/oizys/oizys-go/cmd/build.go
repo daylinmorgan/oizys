@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"oizys/internal/oizys"
+
 	"github.com/spf13/cobra"
 )
 
@@ -12,11 +14,8 @@ var buildCmd = &cobra.Command{
 	},
 }
 
-var minimal bool
-
 func init() {
 	rootCmd.AddCommand(buildCmd)
 	buildCmd.Flags().BoolVar(&nom, "nom", false, "display result with nom")
-	// buildCmd.Flags().BoolVar(&systemPath, "system-path", false, "build system path derivation")
 	buildCmd.Flags().BoolVar(&minimal, "minimal", false, "use system dry-run to make build args")
 }

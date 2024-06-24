@@ -3,7 +3,7 @@ package cmd
 import (
 	"os"
 
-	o "oizys/internal/oizys"
+	"oizys/internal/oizys"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/log"
@@ -31,14 +31,12 @@ func Execute() {
 var (
 	flake      string
 	host       string
-	cacheName  string
 	verbose    bool
 	nom        bool
 	systemPath bool
 	resetCache bool
+	minimal    bool
 )
-
-var oizys = o.NewOizys()
 
 var rootCmd = &cobra.Command{
 	Use:   "oizys",
@@ -48,7 +46,12 @@ var rootCmd = &cobra.Command{
 			log.Info("running with verbose mode")
 			log.SetLevel(log.DebugLevel)
 		}
-		oizys.Set(flake, host, cacheName, verbose, systemPath, resetCache)
+		oizys.SetFlake(flake)
+		oizys.SetHost(host)
+		oizys.SetCache(cacheName) // TODO: move
+		oizys.SetVerbose(verbose)
+		oizys.SetResetCache(resetCache)
+
 		oizys.CheckFlake()
 	},
 }

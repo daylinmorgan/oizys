@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"oizys/internal/oizys"
+
 	"github.com/spf13/cobra"
 )
 
