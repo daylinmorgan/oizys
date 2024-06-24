@@ -5,7 +5,7 @@ inputs:
   purge-packages:
     description: whether to remove apt packages
     required: false
-    default: 'true'
+    default: 'false'
   apt-manifest-url:
     description: url to apt-package manifest (default ubuntu-22.04.4)
     required: false
