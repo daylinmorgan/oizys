@@ -22,12 +22,15 @@
     }
   ];
 
-  hardware.opengl = enabled // {
-    driSupport = true;
-    driSupport32Bit = true;
-    extraPackages = with pkgs; [ libGL ];
-    setLdLibraryPath = true;
-  };
+  # deprecated?
+  # hardware.opengl = enabled // {
+  #   driSupport = true;
+  #   driSupport32Bit = true;
+  #   extraPackages = with pkgs; [ libGL ];
+  #   setLdLibraryPath = true;
+  # };
+ 
+
   # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = [ "nvidia" ];
 
