@@ -54,7 +54,7 @@ jobs:
           for host in ${{ inputs.hosts }}; do
             nix run . \
               -- \
-              build --system-path \
+              build --minimal \
                 --host "$host" \
                 --flake . \
                 --verbose \

@@ -7,6 +7,7 @@ import (
 	"io/fs"
 	"os"
 	"os/exec"
+	"sort"
 	"strings"
 	"time"
 
@@ -70,13 +71,11 @@ func parseSystemPath(derivation map[string]Derivation) (string, error) {
 func (o *Oizys) getSystemPath() string {
 	cmd := exec.Command("nix", "derivation", "show", o.nixosConfigAttr())
 	logCmd(cmd)
-	// TODO: add spinner?
-	// cmd.Stderr = os.Stderr
 	s := nixSpinner(o.host)
 	out, err := cmd.Output()
 	s.Stop()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("failed to evalute nixosConfiguration for system-path.drv", "err", err)
 	}
 
 	var derivation map[string]Derivation
@@ -128,8 +127,8 @@ func (o *Oizys) Set(
 func terminalSize() (int, int) {
 	fd := os.Stdout.Fd()
 	if !term.IsTerminal(int(fd)) {
-    log.Error("failed to get terminal size")
-    return 80, 0
+		log.Error("failed to get terminal size")
+		return 80, 0
 		// log.Fatal("failed to get terminal size")
 	}
 	w, h, err := term.GetSize(int(fd))
@@ -272,6 +271,30 @@ func parseDryRun(buf string) (*packages, *packages) {
 		parsePackages(parts[1], "packages to fetch")
 }
 
+// TODO: Refactor this and above
+func parseDryRun2(buf string) ([]string, []string) {
+	lines := strings.Split(strings.TrimSpace(buf), "\n")
+	var parts [2][]string
+	i := 0
+	for _, line := range lines {
+		if strings.Contains(line, "fetch") && strings.HasSuffix(line, ":") {
+			i++
+		}
+		if i == 2 {
+			log.Fatal("failed to parse output", "output", buf)
+		}
+		if strings.HasPrefix(line, "  ") {
+			parts[i] = append(parts[i], strings.TrimSpace(line))
+		}
+	}
+
+	if len(parts[0])+len(parts[1]) == 0 {
+		log.Info("no changes...")
+		os.Exit(0)
+	}
+	return parts[0], parts[1]
+}
+
 func showDryRunResult(nixOutput string, verbose bool) {
 	toBuild, toFetch := parseDryRun(nixOutput)
 	toBuild.show(verbose)
@@ -318,7 +341,7 @@ func runCommand(cmd *exec.Cmd) {
 	}
 }
 
-func (o *Oizys) NixBuild(nom bool, rest ...string) {
+func (o *Oizys) NixBuild(nom bool, minimal bool, rest ...string) {
 	var cmdName string
 	if nom {
 		cmdName = "nom"
@@ -326,17 +349,121 @@ func (o *Oizys) NixBuild(nom bool, rest ...string) {
 		cmdName = "nix"
 	}
 	cmd := exec.Command(cmdName, "build")
-	if o.systemPath {
-		cmd.Args = append(cmd.Args, fmt.Sprintf("%s^*", o.getSystemPath()))
-	}
+
 	cmd.Args = append(cmd.Args, rest...)
 	if o.resetCache {
 		cmd.Args = append(cmd.Args, "--narinfo-cache-positive-ttl", "0")
 	}
-	if o.inCI {
-		o.ciPreBuild(cmd)
+	// if o.inCI {
+	// 	o.ciPreBuild(cmd)
+	// }
+	if minimal {
+		log.Debug("populating args with derivations not already built")
+		drvs := o.systemPathDrvsToBuild()
+		if len(drvs) == 0 {
+			log.Info("nothing to build. exiting...")
+			os.Exit(0)
+		}
+		cmd.Args = append(cmd.Args, drvs...)
 	}
+
 	runCommand(cmd)
+}
+
+var ignoredMap = stringSliceToMap(
+	[]string{
+		"builder.pl",
+		"profile",
+		"system-path",
+
+		"nixos-install",
+		"nixos-version",
+		"nixos-manual-html",
+		"nixos-configuration-reference-manpage",
+		"nixos-rebuild",
+		"nixos-help",
+		"nixos-generate-config",
+
+		"nixos-wsl-version",
+		"nixos-wsl-welcome-message",
+		"nixos-wsl-welcome",
+
+		// trivial packages
+		"restic-gdrive",
+		"gitea",
+		"lock",
+	},
+)
+
+func drvIsIgnored(drv string) bool {
+	s := strings.SplitN(strings.Replace(drv, ".drv", "", 1), "-", 2)
+	_, ok := ignoredMap[s[len(s)-1]]
+	return ok
+}
+
+func stringSliceToMap(slice []string) map[string]struct{} {
+	hashMap := make(map[string]struct{}, len(slice))
+	for _, s := range slice {
+		hashMap[s] = struct{}{}
+	}
+	return hashMap
+}
+
+func drvsToInputs(derivation map[string]Derivation) []string {
+	var drvs []string
+	for _, drv := range derivation {
+		for name := range drv.InputDrvs {
+			drvs = append(drvs, name)
+		}
+	}
+	return drvs
+}
+
+// v2
+func (o *Oizys) systemPathDrvsToBuild() []string {
+	log.Debug("getting system-path build-only deps")
+	systemPathDrv := fmt.Sprintf("%s^*", o.getSystemPath())
+	derivationCmd := exec.Command("nix", "derivation", "show", systemPathDrv)
+	logCmd(derivationCmd)
+	output, err := derivationCmd.Output()
+	if err != nil {
+		log.Fatal("failed to evaluate", "drv", systemPathDrv)
+	}
+
+	// TODO: abstract this?
+	var derivation map[string]Derivation
+	if err := json.Unmarshal(output, &derivation); err != nil {
+		log.Fatal(err)
+	}
+	systemPathInputDrvs := stringSliceToMap(drvsToInputs(derivation))
+
+	// get to build packages for full system
+	systemCmd := exec.Command("nix", "build", o.nixosConfigAttr(), "--dry-run")
+	logCmd(systemCmd)
+	result, err := systemCmd.CombinedOutput()
+	if err != nil {
+		log.Fatal("failed to dry-run build full system", "err", err)
+	}
+	toBuild, _ := parseDryRun2(string(result))
+
+	var toActuallyBuild []string
+	for _, drv := range toBuild {
+		_, ok := systemPathInputDrvs[drv]
+		if ok && !drvIsIgnored(drv) {
+			toActuallyBuild = append(toActuallyBuild, drv)
+		}
+	}
+
+	drvs := make([]string, len(toActuallyBuild))
+	for i, pkg := range toActuallyBuild {
+		drvs[i] = fmt.Sprintf("%s^*", strings.TrimSpace(pkg))
+	}
+	return drvs
+}
+
+func contains(s []string, search string) bool {
+	i := sort.SearchStrings(s, search)
+	return i < len(s) && s[i] == search
 }
 
 func (o *Oizys) writeToGithubStepSummary(txt string) {
@@ -389,7 +516,7 @@ func (o *Oizys) checkPath(name string) string {
 func (o *Oizys) Checks(nom bool, rest ...string) {
 	checks := o.getChecks()
 	for _, check := range checks {
-		o.NixBuild(nom, o.checkPath(check))
+		o.NixBuild(nom, false, o.checkPath(check))
 	}
 }
 
