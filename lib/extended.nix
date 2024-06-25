@@ -1,5 +1,6 @@
 final: prev:
 let
+  inherit (builtins) listToAttrs substring;
   inherit (final)
     concatStringsSep
     hasSuffix
@@ -8,9 +9,8 @@ let
     mkOption
     types
     ;
-  inherit (builtins) listToAttrs substring;
 in
-rec {
+let
   enabled = {
     enable = true;
   };
@@ -37,13 +37,13 @@ rec {
       }) attrs
     );
 
-  isNixFile = path: hasSuffix ".nix" path;
   mkIfIn = name: list: prev.mkIf (builtins.elem name list);
 
   mkOizysModule = config: attr: content: {
     options.oizys.${attr}.enable = mkEnableOption "enable ${attr} support";
     config = mkIf config.oizys.${attr}.enable content;
   };
+
   mkDefaultOizysModule = config: attr: content: {
     options.oizys.${attr}.enable = mkOption {
       default = true;
@@ -61,4 +61,19 @@ rec {
       (substring 4 2 longDate)
       (substring 6 2 longDate)
     ]);
+  isNixFile = path: hasSuffix ".nix" path;
+
+in
+{
+  inherit
+    enabled
+    disabled
+    enableAttrs
+    disableAttrs
+    mkOizysModule
+    mkDefaultOizysModule
+    mkDate
+    isNixFile
+    mkIfIn
+    ;
 }

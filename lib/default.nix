@@ -1,6 +1,6 @@
 inputs:
 let
-  inherit (inputs) nixpkgs self zig2nix;
+  inherit (inputs) nixpkgs self;
   lib = nixpkgs.lib.extend (import ./extended.nix);
 
   inherit (builtins)

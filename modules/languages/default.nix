@@ -1,18 +1,20 @@
 { lib, ... }:
 let
-  inherit (builtins) filter;
   inherit (lib)
-    isNixFile
     mkOption
     types
+    isNixFile
     literalExpression
     mdDoc
     ;
   inherit (lib.filesystem) listFilesRecursive;
+  inherit (builtins) filter;
+
+  listNixFilesRecursive =
+    dir: filter (f: (f != ./default.nix) && (isNixFile f)) (listFilesRecursive dir);
 in
 {
-  imports = filter (f: (f != ./default.nix) && (isNixFile f)) (listFilesRecursive ./.);
-
+  imports = listNixFilesRecursive ./.;
   options.oizys.languages = mkOption {
     type = with types; (listOf str);
     description = mdDoc ''
