@@ -318,6 +318,10 @@ var ignoredMap = stringSliceToMap(
 		"nixos-rebuild",
 		"nixos-help",
 		"nixos-generate-config",
+		"nixos-enter",
+		"nixos-container",
+		"nixos-build-vms",
+		"ld-library-path",
 
 		"nixos-wsl-version",
 		"nixos-wsl-welcome-message",
