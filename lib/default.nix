@@ -54,10 +54,7 @@ in
     nixosModules = listToAttrs (findModulesList ../modules);
     nixosConfigurations = mapAttrs (name: _: mkSystem name) (readDir ../hosts);
     packages = forAllSystems (pkgs: rec {
-      # oizys-zig = pkgs.callPackage ../pkgs/oizys/oizys-zig { inherit zig2nix; };
-      # oizys-nim = pkgs.callPackage ../pkgs/oizys/oizys-nim { };
-      # oizys-rs = pkgs.callPackage ../pkgs/oizys/oizys-rs { };
-      oizys-go = pkgs.callPackage ../pkgs/oizys/oizys-go { inherit self; };
+      oizys-go = pkgs.callPackage ../pkgs/oizys {};
       default = oizys-go;
     });
     devShells = forAllSystems (pkgs: {
@@ -76,7 +73,5 @@ in
       }
     );
     formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
-
   };
-
 }
