@@ -1,6 +1,6 @@
 final: prev:
 let
-  inherit (builtins) listToAttrs substring;
+  inherit (builtins) listToAttrs substring filter;
   inherit (final)
     concatStringsSep
     hasSuffix
@@ -9,6 +9,7 @@ let
     mkOption
     types
     ;
+  inherit (final.filesystem) listFilesRecursive;
 in
 let
   enabled = {
@@ -61,7 +62,11 @@ let
       (substring 4 2 longDate)
       (substring 6 2 longDate)
     ]);
-  isNixFile = path: hasSuffix ".nix" path;
+
+  isNixFile = p: hasSuffix ".nix" p;
+  isDefaultNixFile = p: hasSuffix "default.nix" p;
+  filterNotDefaultNixFile = paths: filter (p: !(isDefaultNixFile p) && (isNixFile p)) paths;
+  listNixFilesRecursive = dir: filterNotDefaultNixFile (listFilesRecursive dir);
 
 in
 {
@@ -73,7 +78,8 @@ in
     mkOizysModule
     mkDefaultOizysModule
     mkDate
-    isNixFile
     mkIfIn
+    isNixFile
+    listNixFilesRecursive
     ;
 }

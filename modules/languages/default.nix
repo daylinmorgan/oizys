@@ -3,15 +3,11 @@ let
   inherit (lib)
     mkOption
     types
-    isNixFile
     literalExpression
-    mdDoc
-    ;
-  inherit (lib.filesystem) listFilesRecursive;
-  inherit (builtins) filter;
 
-  listNixFilesRecursive =
-    dir: filter (f: (f != ./default.nix) && (isNixFile f)) (listFilesRecursive dir);
+    mdDoc
+    listNixFilesRecursive
+    ;
 in
 {
   imports = listNixFilesRecursive ./.;
