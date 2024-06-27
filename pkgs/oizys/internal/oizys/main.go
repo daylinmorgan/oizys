@@ -11,7 +11,6 @@ import (
 
 	"github.com/charmbracelet/lipgloss"
 
-	"github.com/briandowns/spinner"
 	"github.com/charmbracelet/log"
 )
 
@@ -55,8 +54,18 @@ func New() *Oizys {
 }
 
 func SetFlake(path string) {
+	// Check path exists
 	if path != "" {
 		o.flake = path
+	}
+	// check local path exists
+	if !strings.HasPrefix(o.flake, "github") && !strings.HasPrefix(o.flake, "git+") {
+		if _, ok := os.LookupEnv("OIZYS_SKIP_CHECK"); !ok {
+			if _, err := os.Stat(o.flake); errors.Is(err, fs.ErrNotExist) {
+				log.Warnf("path to flake %s does not exist, using remote as fallback", o.flake)
+				o.flake = "github:daylinmorgan/oizys"
+			}
+		}
 	}
 }
 
@@ -130,24 +139,6 @@ func Output() string {
 		return o.nixosConfigAttr()
 	}
 }
-
-// func (o *Oizys) Set(
-// 	flake, host, cache string,
-// 	verbose, systemPath, resetCache bool,
-// ) {
-// 	if host != "" {
-// 		o.host = host
-// 	}
-// 	if flake != "" {
-// 		o.flake = flake
-// 	}
-// 	if cache != "" {
-// 		o.cache = cache
-// 	}
-// 	o.verbose = verbose
-// 	o.systemPath = systemPath
-// 	o.resetCache = resetCache
-// }
 
 func git(rest ...string) *exec.Cmd {
 	args := []string{"-C", o.flake}
@@ -497,11 +488,6 @@ func CacheBuild(rest ...string) {
 }
 
 func CheckFlake() {
-	if _, ok := os.LookupEnv("OIZYS_SKIP_CHECK"); !ok {
-		if _, err := os.Stat(o.flake); errors.Is(err, fs.ErrNotExist) {
-			log.Fatalf("path to flake: %s does not exist", o.flake)
-		}
-	}
 }
 
 func CI(rest ...string) {
@@ -511,10 +497,10 @@ func CI(rest ...string) {
 	exitWithCommand(cmd)
 }
 
-// TODO: deprecate
-func nixSpinner(host string) *spinner.Spinner {
-	msg := fmt.Sprintf("%s %s", " evaluating derivation for:",
-		lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("6")).Render(host),
-	)
-	return startSpinner(msg)
-}
+// // TODO: deprecate
+// func nixSpinner(host string) *spinner.Spinner {
+// 	msg := fmt.Sprintf("%s %s", " evaluating derivation for:",
+// 		lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("6")).Render(host),
+// 	)
+// 	return startSpinner(msg)
+// }

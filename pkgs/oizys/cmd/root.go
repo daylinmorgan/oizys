@@ -48,11 +48,8 @@ var rootCmd = &cobra.Command{
 		}
 		oizys.SetFlake(flake)
 		oizys.SetHost(host)
-		oizys.SetCache(cacheName) // TODO: move
 		oizys.SetVerbose(verbose)
 		oizys.SetResetCache(resetCache)
-
-		oizys.CheckFlake()
 	},
 }
 
