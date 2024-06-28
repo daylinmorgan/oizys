@@ -305,11 +305,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1719350558,
-        "narHash": "sha256-oACeKBS762XSJbN/rz5Y2xPYGzWQHhwDqn+CeODuWsM=",
+        "lastModified": 1719526850,
+        "narHash": "sha256-GPqjH+P9PPmln5KQbyCKm3kfL1NCykIPLejhUel//w4=",
         "ref": "refs/heads/main",
-        "rev": "e4d09aa3a9de9a9e71c10bf4b6800585b3db9a4c",
-        "revCount": 4891,
+        "rev": "b7f42a1e88a5b6c9d2dbdba31e0f35f6a02461e7",
+        "revCount": 4893,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/hyprwm/Hyprland/"
@@ -677,11 +677,11 @@
         "nixpkgs": "nixpkgs_7"
       },
       "locked": {
-        "lastModified": 1719422118,
-        "narHash": "sha256-lM5QMm2Ig1eurRIQFVAg7KAcg4H+tMKN+M/eyraze+A=",
+        "lastModified": 1719566311,
+        "narHash": "sha256-oH6+liiG3n0SMng5pu1/QbGvcSZpyWb67MpV2PSqjyc=",
         "owner": "nix-community",
         "repo": "nixpkgs-wayland",
-        "rev": "3d5a11c31e5815dcf6a66451e63a2f4631ecbf7a",
+        "rev": "7bee18635843298c20461c7cbec733461c34b9fb",
         "type": "github"
       },
       "original": {
@@ -740,11 +740,11 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1719317636,
-        "narHash": "sha256-bu0xbu2Z6DDzA9LGV81yJunIti6r7tjUImeR8orAL/I=",
+        "lastModified": 1719468428,
+        "narHash": "sha256-vN5xJAZ4UGREEglh3lfbbkIj+MPEYMuqewMn4atZFaQ=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "9c513fc6fb75142f6aec6b7545cb8af2236b80f5",
+        "rev": "1e3deb3d8a86a870d925760db1a5adecc64d329d",
         "type": "github"
       },
       "original": {
@@ -849,11 +849,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1719383847,
-        "narHash": "sha256-MhKnV9IHpeMbiARX5e+6LLXYJenNNx0YNFGCVtmufu8=",
+        "lastModified": 1719577036,
+        "narHash": "sha256-OGizrODxLNpyYUlVg7gT5EkeC4BnBnGsn+X1TguY/4Y=",
         "owner": "roc-lang",
         "repo": "roc",
-        "rev": "f8c6786502bc253ab202a55e2bccdcc693e549c8",
+        "rev": "93f45de1e79e4752e807fbb999ba46a85287f351",
         "type": "github"
       },
       "original": {
@@ -1147,11 +1147,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1719364424,
-        "narHash": "sha256-EGpIcuGfpx+NQJGUho8vK5Q3TFHdaHtTLoqV/V+n4oY=",
+        "lastModified": 1719537599,
+        "narHash": "sha256-SDal8AzkCFLLu97AUSr/Xpj7M5VmbNWBCB1TZJhBC5M=",
         "owner": "Cloudef",
         "repo": "zig2nix",
-        "rev": "67d44febbeb1fad4c861a5c4d67a8f6719f7f763",
+        "rev": "13a64a338baa44d3c5ffc3a7a4dfe23e342ecad4",
         "type": "github"
       },
       "original": {
