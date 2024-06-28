@@ -54,7 +54,7 @@ in
     nixosModules = listToAttrs (findModulesList ../modules);
     nixosConfigurations = mapAttrs (name: _: mkSystem name) (readDir ../hosts);
     packages = forAllSystems (pkgs: rec {
-      oizys-go = pkgs.callPackage ../pkgs/oizys {};
+      oizys-go = pkgs.callPackage ../pkgs/oizys { };
       default = oizys-go;
     });
     devShells = forAllSystems (pkgs: {
