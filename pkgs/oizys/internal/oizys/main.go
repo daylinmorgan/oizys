@@ -178,7 +178,6 @@ func parseDryRun(buf string) (*packages, *packages) {
 		if i == 2 {
 			log.Fatal("failed to parse output", "output", buf)
 		}
-
 		if strings.HasPrefix(line, "  ") {
 			parts[i] = append(parts[i], line)
 		}
@@ -209,7 +208,6 @@ func parseDryRun2(buf string) ([]string, []string) {
 			parts[i] = append(parts[i], strings.TrimSpace(line))
 		}
 	}
-
 	if len(parts[0])+len(parts[1]) == 0 {
 		log.Info("no changes...")
 		os.Exit(0)
@@ -261,10 +259,11 @@ func NixosRebuild(subcmd string, rest ...string) {
 		"--flake",
 		o.flake,
 	)
-	cmd.Args = append(cmd.Args, rest...)
+	cmd.Args = append(cmd.Args, "--log-format", "multiline")
 	if o.verbose {
 		cmd.Args = append(cmd.Args, "--print-build-logs")
 	}
+	cmd.Args = append(cmd.Args, rest...)
 	exitWithCommand(cmd)
 }
 
@@ -276,7 +275,6 @@ func NixBuild(nom bool, minimal bool, rest ...string) {
 		cmdName = "nix"
 	}
 	cmd := exec.Command(cmdName, "build")
-	cmd.Args = append(cmd.Args, rest...)
 	if o.resetCache {
 		cmd.Args = append(cmd.Args, "--narinfo-cache-positive-ttl", "0")
 	}
@@ -292,7 +290,8 @@ func NixBuild(nom bool, minimal bool, rest ...string) {
 		}
 		cmd.Args = append(cmd.Args, drvs...)
 	}
-
+  cmd.Args = append(cmd.Args, "--log-format", "multiline")
+	cmd.Args = append(cmd.Args, rest...)
 	exitWithCommand(cmd)
 }
 
