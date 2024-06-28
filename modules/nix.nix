@@ -12,6 +12,7 @@
   # nix.package = pkgs.nixVersions.latest;
   nix.extraOptions = ''
     experimental-features = nix-command flakes
+    use-xdg-base-directories = true
   '';
 
   nix.optimise.automatic = true;
