@@ -231,7 +231,6 @@ func Dry(verbose bool, minimal bool, rest ...string) {
 			log.Info("no packages in minimal set to build")
 			os.Exit(0)
 		}
-		cmd.Args = append(cmd.Args, append(drvs, "--no-link")...)
 		spinnerMsg = "evaluting for minimal build needs"
 	} else {
 		log.Debug("evalutating full nixosConfiguration")
@@ -280,9 +279,6 @@ func NixBuild(nom bool, minimal bool, rest ...string) {
 	if o.resetCache {
 		cmd.Args = append(cmd.Args, "--narinfo-cache-positive-ttl", "0")
 	}
-	// if o.inCI {
-	// 	o.ciPreBuild(cmd)
-	// }
 	if minimal {
 		log.Debug("populating args with derivations not already built")
 		drvs := systemPathDrvsToBuild()
@@ -290,9 +286,11 @@ func NixBuild(nom bool, minimal bool, rest ...string) {
 			log.Info("nothing to build. exiting...")
 			os.Exit(0)
 		}
-		cmd.Args = append(cmd.Args, drvs...)
+		cmd.Args = append(cmd.Args, append(drvs, "--no-link")...)
 	}
-	cmd.Args = append(cmd.Args, "--log-format", "multiline")
+  if !o.inCI {
+		cmd.Args = append(cmd.Args, "--log-format", "multiline")
+	}
 	cmd.Args = append(cmd.Args, rest...)
 	exitWithCommand(cmd)
 }
