@@ -259,7 +259,9 @@ func NixosRebuild(subcmd string, rest ...string) {
 		"--flake",
 		o.flake,
 	)
-	cmd.Args = append(cmd.Args, "--log-format", "multiline")
+	if !o.inCI {
+		cmd.Args = append(cmd.Args, "--log-format", "multiline")
+	}
 	if o.verbose {
 		cmd.Args = append(cmd.Args, "--print-build-logs")
 	}
@@ -290,7 +292,7 @@ func NixBuild(nom bool, minimal bool, rest ...string) {
 		}
 		cmd.Args = append(cmd.Args, drvs...)
 	}
-  cmd.Args = append(cmd.Args, "--log-format", "multiline")
+	cmd.Args = append(cmd.Args, "--log-format", "multiline")
 	cmd.Args = append(cmd.Args, rest...)
 	exitWithCommand(cmd)
 }

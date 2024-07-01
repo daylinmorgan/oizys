@@ -44,16 +44,6 @@ jobs:
           name: daylin
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
-      - name: Swap Lix for nix
-        run: |
-          which nix
-          sudo nix run \
-              --experimental-features "nix-command flakes" \
-              --extra-substituters https://cache.lix.systems --extra-trusted-public-keys "cache.lix.systems:aBnZUw8zA7H35Cz2RyKFVs3H4PlGTLawyY5KRbvJR8o=" \
-              'git+https://git@git.lix.systems/lix-project/lix?ref=refs/tags/2.90.0-rc1' -- \
-              upgrade-nix \
-              --extra-substituters https://cache.lix.systems --extra-trusted-public-keys "cache.lix.systems:aBnZUw8zA7H35Cz2RyKFVs3H4PlGTLawyY5KRbvJR8o="
-
       - name: write lock file
         if: "${{ inputs.lockFile != '' }}"
         run: |
