@@ -23,7 +23,6 @@
       inputs.lix.follows = "lix";
     };
 
-
     hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
     hyprland-contrib.url = "github:hyprwm/contrib";
 

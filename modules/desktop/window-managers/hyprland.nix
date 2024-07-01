@@ -41,12 +41,21 @@ mkOizysModule config "hyprland" {
 
       swww
     ])
-    ++ [ inputs.hyprman.packages.${pkgs.system}.default ];
+    ++ [ inputs.hyprman.packages.${pkgs.system}.default ]
+
+    # swww-git isbroken
+    ++ (with inputs.nixpkgs-wayland.packages.${pkgs.system}; [
+      mako
+      eww
+      wlr-randr
+      # swww
+      #
+      # dunst
+    ]);
 
   nixpkgs.overlays = [
     inputs.hyprland-contrib.overlays.default
-    inputs.nixpkgs-wayland.overlay
-
+    # inputs.nixpkgs-wayland.overlay
     # inputs.hyprland.overlays.default
   ];
 }
