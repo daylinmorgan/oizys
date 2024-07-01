@@ -7,6 +7,7 @@
   modulesPath,
   ...
 }:
+
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
@@ -14,8 +15,7 @@
     "xhci_pci"
     "thunderbolt"
     "nvme"
-    "usb_storage"
-    "sd_mod"
+    "usbhid"
   ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
@@ -29,6 +29,10 @@
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/FF65-E2AC";
     fsType = "vfat";
+    options = [
+      "fmask=0022"
+      "dmask=0022"
+    ];
   };
 
   swapDevices = [ { device = "/dev/disk/by-uuid/bd64a1ba-f259-4b64-88cd-5585b9345f5a"; } ];
@@ -38,6 +42,9 @@
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
+  # networking.interfaces.docker0.useDHCP = lib.mkDefault true;
+  # networking.interfaces.enp0s13f0u3u1.useDHCP = lib.mkDefault true;
+  # networking.interfaces.vboxnet0.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlp0s20f3.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
