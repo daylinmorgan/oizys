@@ -30,6 +30,7 @@ type Oizys struct {
 	verbose       bool
 	systemPath    bool
 	resetCache    bool
+	debug         bool
 }
 
 func New() *Oizys {
@@ -68,6 +69,8 @@ func SetFlake(path string) {
 		}
 	}
 }
+
+func SetDebug(debug bool) { o.debug = debug }
 
 func SetCache(name string) {
 	if name != "" {
@@ -215,10 +218,11 @@ func parseDryRun2(buf string) ([]string, []string) {
 	return parts[0], parts[1]
 }
 
+// TODO: refactor to account for --debug and not --verbose?
 func showDryRunResult(nixOutput string, verbose bool) {
 	toBuild, toFetch := parseDryRun(nixOutput)
-	toBuild.show(verbose)
-	toFetch.show(verbose)
+	toFetch.show(o.debug)
+	toBuild.show(true)
 }
 
 func Dry(verbose bool, minimal bool, rest ...string) {
@@ -288,7 +292,7 @@ func NixBuild(nom bool, minimal bool, rest ...string) {
 		}
 		cmd.Args = append(cmd.Args, append(drvs, "--no-link")...)
 	}
-  if !o.inCI {
+	if !o.inCI {
 		cmd.Args = append(cmd.Args, "--log-format", "multiline")
 	}
 	cmd.Args = append(cmd.Args, rest...)

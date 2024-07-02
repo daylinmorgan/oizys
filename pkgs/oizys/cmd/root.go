@@ -31,6 +31,7 @@ func Execute() {
 var (
 	flake      string
 	host       string
+	debug      bool
 	verbose    bool
 	nom        bool
 	systemPath bool
@@ -42,7 +43,7 @@ var rootCmd = &cobra.Command{
 	Use:   "oizys",
 	Short: "nix begat oizys",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		if verbose {
+		if debug {
 			log.Info("running with verbose mode")
 			log.SetLevel(log.DebugLevel)
 		}
@@ -50,6 +51,7 @@ var rootCmd = &cobra.Command{
 		oizys.SetHost(host)
 		oizys.SetVerbose(verbose)
 		oizys.SetResetCache(resetCache)
+		oizys.SetDebug(debug)
 	},
 }
 
@@ -76,5 +78,6 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&flake, "flake", "", "path to flake ($OIZYS_DIR or $HOME/oizys)")
 	rootCmd.PersistentFlags().StringVar(&host, "host", "", "host to build (current host)")
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "show verbose output")
+	rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "show debug output")
 	rootCmd.PersistentFlags().BoolVar(&resetCache, "reset-cache", false, "set narinfo-cache-negative-ttl to 0")
 }
