@@ -16,6 +16,7 @@ let
     mkDefaultOizysModule
     mkOizysModule
     enabled
+    enableAttrs
     ;
   inherit (lib.filesystem) listFilesRecursive;
 
@@ -43,6 +44,7 @@ let
           mkDefaultOizysModule
           mkOizysModule
           enabled
+          enableAttrs
           hostName
           ;
       };

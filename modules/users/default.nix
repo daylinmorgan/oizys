@@ -5,8 +5,10 @@
   ...
 }:
 let
-  inherit (lib) mkOption mkIf types;
+  inherit (lib) mkOption mkIf types optional;
   cfg = config.users.defaultUser;
+  isDocker = config.oizys.docker.enable;
+  isDesktop = config.oizys.desktop.enable;
 in
 {
   options.users.defaultUser = mkOption {
@@ -22,10 +24,8 @@ in
       isNormalUser = true;
 
       shell = pkgs.zsh;
-      extraGroups = [
-        "wheel" # sudo
-        "docker"
-      ];
+      extraGroups = [ "wheel" ] ++ optional isDesktop "audio" ++ optional isDocker "docker";
+
       initialHashedPassword = "$2b$05$mGMrDFzf2cXLaoOlVQbGvOBV7UZlDt9dLg9Xqxutb/uHpjF5VrTBO";
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKkezPIhB+QW37G15ZV3bewydpyEcNlYxfHLlzuk3PH9"

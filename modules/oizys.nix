@@ -40,6 +40,7 @@ in
   ];
 
   options.oizys.desktop.enable = mkEnableOption "is desktop";
+  options.oizys.docker.enable = mkEnableOption "enable docker support";
   config = {
     networking.hostName = hostName;
     time.timeZone = "US/Central";

@@ -1,10 +1,16 @@
 {
   pkgs,
   config,
-  mkOizysModule,
+  lib,
   ...
 }:
-mkOizysModule config "docker" {
-  virtualisation.docker.enable = true;
-  environment.systemPackages = with pkgs; [ lazydocker ];
+let
+  inherit (lib) mkIf;
+  cfg = config.oizys.docker;
+in
+{
+  config = mkIf cfg.enable {
+    virtualisation.docker.enable = true;
+    environment.systemPackages = with pkgs; [ lazydocker ];
+  };
 }

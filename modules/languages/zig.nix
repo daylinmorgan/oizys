@@ -10,7 +10,7 @@ let
   cfg = config.oizys.languages;
   zig = inputs.zig2nix.outputs.packages.${pkgs.system}.zig.default.bin;
   zls = inputs.zls.outputs.packages.${pkgs.system}.default.overrideAttrs {
-    nativeBuildInputs = [zig];
+    nativeBuildInputs = [ zig ];
   };
 in
 {
