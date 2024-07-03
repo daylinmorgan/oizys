@@ -5,7 +5,12 @@
   ...
 }:
 let
-  inherit (lib) mkOption mkIf types optional;
+  inherit (lib)
+    mkOption
+    mkIf
+    types
+    optional
+    ;
   cfg = config.users.defaultUser;
   isDocker = config.oizys.docker.enable;
   isDesktop = config.oizys.desktop.enable;
