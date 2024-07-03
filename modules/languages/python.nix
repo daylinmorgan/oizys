@@ -25,8 +25,10 @@ in
         export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH
         exec ${python}/bin/python "$@"
       '')
-
       pixi
+
+      # needed for viv to work
+      pkgs.python3Packages.pip
       pkgs.micromamba
     ];
   };
