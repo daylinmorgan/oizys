@@ -235,6 +235,7 @@ func Dry(verbose bool, minimal bool, rest ...string) {
 			log.Info("no packages in minimal set to build")
 			os.Exit(0)
 		}
+		cmd.Args = append(cmd.Args, append(drvs, "--no-link")...)
 		spinnerMsg = "evaluting for minimal build needs"
 	} else {
 		log.Debug("evalutating full nixosConfiguration")
