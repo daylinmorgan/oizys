@@ -810,11 +810,11 @@
         "pixi-source": "pixi-source"
       },
       "locked": {
-        "lastModified": 1718732897,
-        "narHash": "sha256-VMxOQWs7c7A5/YV6ZApLwOwHUiH8CS9C3V8KeN9NeqA=",
+        "lastModified": 1720214426,
+        "narHash": "sha256-XYct3lgUeSTmUuhWrlfsOtyRKdiHEoLRdRiKy8zO6gg=",
         "owner": "daylinmorgan",
         "repo": "pixi-flake",
-        "rev": "f06ebb992e0c8dddcf353f06cfae5fa5015f5c33",
+        "rev": "499a51e5680ea6cc2ecba745acf6dac99a6d6df1",
         "type": "github"
       },
       "original": {
@@ -826,16 +826,16 @@
     "pixi-source": {
       "flake": false,
       "locked": {
-        "lastModified": 1718376652,
-        "narHash": "sha256-Qlr4CcrCq29ig3FPFWCR5oOtFrbREm/7zyGXUB3XL98=",
+        "lastModified": 1720188477,
+        "narHash": "sha256-V/Q4r3z/Qa5EKottQNEgZuxhhUk8C/j4shEiHmBNs/A=",
         "owner": "prefix-dev",
         "repo": "pixi",
-        "rev": "84b1322ed07bb1adf6516c33dce4ab5a5703e7d8",
+        "rev": "3b586c5cd00a3b05e68ba6f6fa08c5e8e2481541",
         "type": "github"
       },
       "original": {
         "owner": "prefix-dev",
-        "ref": "v0.24.2",
+        "ref": "v0.25.0",
         "repo": "pixi",
         "type": "github"
       }
