@@ -228,6 +228,9 @@ func showDryRunResult(nixOutput string, verbose bool) {
 func Dry(verbose bool, minimal bool, rest ...string) {
 	cmd := exec.Command("nix", "build", "--dry-run")
 	cmd.Args = append(cmd.Args, rest...)
+	if o.resetCache {
+		cmd.Args = append(cmd.Args, "--narinfo-cache-positive-ttl", "0")
+	}
 	var spinnerMsg string
 	if minimal {
 		drvs := systemPathDrvsToBuild()
