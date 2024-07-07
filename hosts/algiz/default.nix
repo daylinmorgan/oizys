@@ -17,6 +17,7 @@
 
     docker = enabled;
     backups = enabled;
+    nix-ld = enabled;
   };
 
   environment.systemPackages = with pkgs; [
