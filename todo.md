@@ -2,11 +2,6 @@
 
 ## oizys
 
-- [ ] make interoperable with a single command so first installation can be ran by root as:
-  ```sh
-  nix --extra-experimental-features 'flakes nix-command' run "github:daylinmorgan/oiyzs" switch --host <host>
-  ```
-
 ## software
 
 - [ ] lid closed does not engage hyprlock?

@@ -29,13 +29,14 @@ let
         }
       )
     ];
-      specialArgs = {
-        inherit
-          inputs
-          lib
-          self
-          enabled;
-        };
+    specialArgs = {
+      inherit
+        inputs
+        lib
+        self
+        enabled
+        ;
+    };
   };
   mkSystem =
     hostName:

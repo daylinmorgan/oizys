@@ -1,28 +1,27 @@
-{ enableAttrs, ... }:
+{ enabled, ... }:
 {
-  oizys =
-    (enableAttrs [
-      "vpn"
-      "desktop"
-      "hyprland"
-      "chrome"
-      "docker"
-      "nix-ld"
-      "vbox"
-      "backups"
-    ])
-    // {
-      languages = [
-        "misc"
-        "nim"
-        "node"
-        "nushell"
-        "python"
-        "roc"
-        "tex"
-        "zig"
-      ];
+  oizys = {
+    vpn = enabled;
+    desktop = enabled;
+    hyprland = enabled;
+    chrome = enabled;
+    docker = enabled;
+    nix-ld = enabled // {
+      overkill = enabled;
     };
+    vbox = enabled;
+    backups = enabled;
+    languages = [
+      "misc"
+      "nim"
+      "node"
+      "nushell"
+      "python"
+      "roc"
+      "tex"
+      "zig"
+    ];
+  };
 
   services.restic.backups.gdrive = {
     user = "daylin";
