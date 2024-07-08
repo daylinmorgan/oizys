@@ -59,6 +59,7 @@ jobs:
                 --host "$host" \
                 --flake . \
                 --verbose \
+                --debug \
                 -- \
                 --print-build-logs
           done
