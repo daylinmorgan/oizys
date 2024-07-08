@@ -35,7 +35,8 @@
     paths = [
       "/home/daylin/services/git/"
       "/home/daylin/services/gotosocial/"
-      "home/daylin/services/caddy"
+      "/home/daylin/services/caddy/"
+      "/home/daylin/services/wedding-website/"
     ];
   };
 
