@@ -3,6 +3,7 @@ package oizys
 import (
 	"fmt"
 	"os"
+	"sort"
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
@@ -46,6 +47,7 @@ func parsePackages(lines []string, desc string) *packages {
 		}
 		names[i] = name
 	}
+	sort.Strings(names)
 	return &packages{names: names, pad: maxLen + 1, desc: desc}
 }
 
