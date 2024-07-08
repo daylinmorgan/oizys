@@ -229,7 +229,7 @@ func Dry(verbose bool, minimal bool, rest ...string) {
 	cmd := exec.Command("nix", "build", "--dry-run")
 	cmd.Args = append(cmd.Args, rest...)
 	if o.resetCache {
-		cmd.Args = append(cmd.Args, "--narinfo-cache-positive-ttl", "0")
+		cmd.Args = append(cmd.Args, "--narinfo-cache-negative-ttl", "0")
 	}
 	var spinnerMsg string
 	if minimal {
@@ -285,7 +285,7 @@ func NixBuild(nom bool, minimal bool, rest ...string) {
 	}
 	cmd := exec.Command(cmdName, "build")
 	if o.resetCache {
-		cmd.Args = append(cmd.Args, "--narinfo-cache-positive-ttl", "0")
+		cmd.Args = append(cmd.Args, "--narinfo-cache-negative-ttl", "0")
 	}
 	if minimal {
 		log.Debug("populating args with derivations not already built")
@@ -388,6 +388,9 @@ func filter[T any](ss []T, test func(T) bool) (ret []T) {
 
 func toBuildNixosConfiguration() []string {
 	systemCmd := exec.Command("nix", "build", o.nixosConfigAttr(), "--dry-run")
+  if o.resetCache {
+		systemCmd.Args = append(systemCmd.Args, "--narinfo-cache-negative-ttl", "0")
+  }
 	result, err := cmdOutputWithSpinner(
 		systemCmd,
 		fmt.Sprintf("running dry build for: %s", o.nixosConfigAttr()),
