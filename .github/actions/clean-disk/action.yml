@@ -42,9 +42,9 @@ runs:
               --allow-remove-essential \
               -qq \
               $(non_manifest_packages) > /dev/null &
+            wait
           fi
 
-          wait
 
           sudo rm -rf /var/lib/docker &
           sudo rm -rf /usr/{local,share} &
