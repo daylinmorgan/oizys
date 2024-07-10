@@ -3,7 +3,7 @@
   services.resolved = enabled;
 
   services.fail2ban = {
-    package = pkgs.callPackage ../../pkgs/fail2ban {};
+    package = pkgs.callPackage ../../pkgs/fail2ban { };
     enable = true;
     maxretry = 5;
     bantime = "24h";

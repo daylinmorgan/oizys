@@ -22,10 +22,15 @@ let
       self.nixosModules.nix
       self.nixosModules.essentials
       (
-        { pkgs, modulesPath, ... }:
+        {
+          self,
+          pkgs,
+          modulesPath,
+          ...
+        }:
         {
           imports = [ (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix") ];
-          environment.systemPackages = with pkgs; [ neovim ];
+          environment.systemPackages = (with pkgs; [ neovim ]) ++ [ self.packages.${pkgs.system}.default ];
         }
       )
     ];
@@ -38,6 +43,7 @@ let
         ;
     };
   };
+
   mkSystem =
     hostName:
     nixosSystem {
