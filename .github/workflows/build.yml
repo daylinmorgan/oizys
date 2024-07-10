@@ -52,14 +52,12 @@ jobs:
 
       - name: Build
         run: |
-          for host in ${{ inputs.hosts }}; do
-            nix run . \
+          nix run . \
+            -- \
+            build --minimal \
+              --host "${{ inputs.hosts }}" \
+              --flake . \
+              --verbose \
+              --debug \
               -- \
-              build --minimal \
-                --host "$host" \
-                --flake . \
-                --verbose \
-                --debug \
-                -- \
-                --print-build-logs
-          done
+              --print-build-logs
