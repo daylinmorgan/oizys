@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  enabled,
   ...
 }:
 let
@@ -101,13 +102,14 @@ in
   };
 
   config =
-    mkIf cfg.enable
-
-      {
-        programs.nix-ld.enable = true;
-        programs.nix-ld.libraries =
-
-          defaultLibraries ++ cfg.extra-libraries ++ (if cfg.overkill.enable then overkillLibraries else [ ]);
+    let
+      libs =
+        defaultLibraries ++ cfg.extra-libraries ++ (if cfg.overkill.enable then overkillLibraries else [ ]);
+    in
+    mkIf cfg.enable {
+      programs.nix-ld = enabled // {
+        package = pkgs.nix-ld-rs;
+        libraries = libs;
       };
-
+    };
 }
