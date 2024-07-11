@@ -1,0 +1,47 @@
+name: Build NixOS (on demand)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 0 * * *
+
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.host }}
+#   cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/clean-disk
+
+      - uses: DeterminateSystems/nix-installer-action@v12
+        with:
+          extra-conf: |
+            accept-flake-config = true
+
+      - uses: DeterminateSystems/magic-nix-cache-action@v7
+
+      - uses: cachix/cachix-action@v15
+        with:
+          name: daylin
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+
+      - name: Update nix flake
+        run:
+          nix flake update >> $GITHUB_STEP_SUMMARY
+
+      - name: Build
+        run: |
+          nix run . \
+            -- \
+            build --minimal \
+              --host "othalan" \
+              --flake . \
+              --verbose \
+              --debug \
+              -- \
+              --print-build-logs
