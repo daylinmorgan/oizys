@@ -94,5 +94,3 @@ jobs:
               --debug \
               -- \
               --print-build-logs
-          echo "build complete"
-          [[ "$?" -ne 0 ]] && git push origin :flake-lock
