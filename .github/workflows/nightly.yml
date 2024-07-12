@@ -1,4 +1,4 @@
-name: Build NixOS (on demand)
+name: Build NixOS (Nightly)
 
 on:
   workflow_dispatch:
