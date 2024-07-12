@@ -84,10 +84,10 @@ jobs:
 
       - name: Build
         run: |
+          system_attr=$(nix run . -- output --host "othalan" --flake .)
           nix run . \
             -- \
-            build \
-              --host "othalan" \
+            build $system_attr \
               --flake . \
               --verbose \
               --debug \
