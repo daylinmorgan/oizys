@@ -54,7 +54,7 @@ jobs:
               --print-build-logs
 
       - name: Commit Updates
-        run: git push
+        run: git push --set-upstream origin flake-lock
 
   build-full:
     needs: build-minimal
@@ -62,12 +62,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Setup Git Bot
-        run: |
-          git --version
-          git config user.name 'github-actions[bot]'
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
+        with:
+          ref: flake-lock
+      
+      # - name: Setup Git Bot
+      #   run: |
+      #     git --version
+      #     git config user.name 'github-actions[bot]'
+      #     git config user.email 'github-actions[bot]@users.noreply.github.com'
 
       - uses: DeterminateSystems/nix-installer-action@v12
         with:
