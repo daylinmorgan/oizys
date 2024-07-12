@@ -37,7 +37,7 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
       - name: Update nix flake
-        run:
+        run: |
           git checkout -B flake-lock
           nix flake update --commit-lock-file 2>> $GITHUB_STEP_SUMMARY
 
