@@ -8,15 +8,21 @@ on:
 # concurrency:
 #   group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.host }}
 #   cancel-in-progress: true
+permissions:
+  contents: write
 
 jobs:
-  build:
+  build-minimal:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: ./.github/actions/clean-disk
+      - name: Setup Git Bot
+        run: |
+          git --version
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
 
       - uses: DeterminateSystems/nix-installer-action@v12
         with:
@@ -32,13 +38,53 @@ jobs:
 
       - name: Update nix flake
         run:
-          nix flake update >> $GITHUB_STEP_SUMMARY
+          git checkout -B flake-lock
+          nix flake update --commit-lock-file 2>> $GITHUB_STEP_SUMMARY
 
       - name: Build
         run: |
           nix run . \
             -- \
             build --minimal \
+              --host "othalan" \
+              --flake . \
+              --verbose \
+              --debug \
+              -- \
+              --print-build-logs
+
+      - name: Commit Updates
+        run: git push
+
+  build-full:
+    needs: build-minimal
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Git Bot
+        run: |
+          git --version
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - uses: DeterminateSystems/nix-installer-action@v12
+        with:
+          extra-conf: |
+            accept-flake-config = true
+
+      - uses: DeterminateSystems/magic-nix-cache-action@v7
+
+      - uses: ./.github/actions/clean-disk
+        with:
+          purge-packages: 'true'
+
+      - name: Build
+        run: |
+          nix run . \
+            -- \
+            build \
               --host "othalan" \
               --flake . \
               --verbose \
