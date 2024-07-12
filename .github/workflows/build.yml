@@ -30,7 +30,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: ./.github/actions/clean-disk
+      # - uses: ./.github/actions/clean-disk
 
       - uses: DeterminateSystems/nix-installer-action@v12
         with:
