@@ -93,3 +93,4 @@ jobs:
               --debug \
               -- \
               --print-build-logs
+          [[ $? -ne 0 ]] && git push origin :flake-lock
