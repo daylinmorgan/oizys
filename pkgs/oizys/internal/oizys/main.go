@@ -10,8 +10,10 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
-
 	"github.com/charmbracelet/log"
+
+	e "oizys/internal/exec"
+	"oizys/internal/ui"
 )
 
 var o *Oizys
@@ -129,7 +131,7 @@ func git(rest ...string) *exec.Cmd {
 	args := []string{"-C", o.flake}
 	args = append(args, rest...)
 	cmd := exec.Command("git", args...)
-	logCmd(cmd)
+	e.LogCmd(cmd)
 	return cmd
 }
 
@@ -141,18 +143,18 @@ func GitPull() {
 
 	if len(cmdOutput) > 0 {
 		fmt.Println("unstaged commits, cowardly exiting...")
-		showFailedOutput(cmdOutput)
+		ui.ShowFailedOutput(cmdOutput)
 		os.Exit(1)
 	}
 
 	cmdOutput, err = git("pull").CombinedOutput()
 	if err != nil {
-		showFailedOutput(cmdOutput)
+		ui.ShowFailedOutput(cmdOutput)
 		log.Fatal(err)
 	}
 }
 
-func parseDryRun(buf string) (*packages, *packages) {
+func parseDryRun(buf string) (*ui.Packages, *ui.Packages) {
 	lines := strings.Split(strings.TrimSpace(buf), "\n")
 	var parts [2][]string
 	i := 0
@@ -173,8 +175,8 @@ func parseDryRun(buf string) (*packages, *packages) {
 		os.Exit(0)
 	}
 
-	return parsePackages(parts[0], "packages to build"),
-		parsePackages(parts[1], "packages to fetch")
+	return ui.ParsePackages(parts[0], "packages to build"),
+		ui.ParsePackages(parts[1], "packages to fetch")
 }
 
 // TODO: Refactor this and above
@@ -203,8 +205,8 @@ func parseDryRun2(buf string) ([]string, []string) {
 // TODO: refactor to account for --debug and not --verbose?
 func showDryRunResult(nixOutput string, verbose bool) {
 	toBuild, toFetch := parseDryRun(nixOutput)
-	toFetch.show(o.debug)
-	toBuild.show(true)
+	toFetch.Show(o.debug)
+	toBuild.Show(true)
 }
 
 func Dry(verbose bool, minimal bool, rest ...string) {
@@ -229,7 +231,7 @@ func Dry(verbose bool, minimal bool, rest ...string) {
 			lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("6")).Render(o.host),
 		)
 	}
-	result, err := cmdOutputWithSpinner(cmd, spinnerMsg, true)
+	result, err := e.CmdOutputWithSpinner(cmd, spinnerMsg, true)
 	if err != nil {
 		log.Fatal("failed to dry-run nix build", "err", err, "output", string(result))
 	}
@@ -255,7 +257,7 @@ func NixosRebuild(subcmd string, rest ...string) {
 		cmd.Args = append(cmd.Args, "--print-build-logs")
 	}
 	cmd.Args = append(cmd.Args, rest...)
-	exitWithCommand(cmd)
+	e.ExitWithCommand(cmd)
 }
 
 func NixBuild(nom bool, minimal bool, rest ...string) {
@@ -282,7 +284,7 @@ func NixBuild(nom bool, minimal bool, rest ...string) {
 		cmd.Args = append(cmd.Args, "--log-format", "multiline")
 	}
 	cmd.Args = append(cmd.Args, rest...)
-	exitWithCommand(cmd)
+	e.ExitWithCommand(cmd)
 }
 
 func (o *Oizys) writeToGithubStepSummary(txt string) {
@@ -332,12 +334,12 @@ func CacheBuild(rest ...string) {
 	args = append(args, NixosConfigAttrs()...)
 	args = append(args, rest...)
 	cmd := exec.Command("cachix", args...)
-	exitWithCommand(cmd)
+	e.ExitWithCommand(cmd)
 }
 
 func CI(rest ...string) {
 	args := []string{"workflow", "run", "build.yml", "-F", fmt.Sprintf("hosts=%s", o.host)}
 	args = append(args, rest...)
 	cmd := exec.Command("gh", args...)
-	exitWithCommand(cmd)
+	e.ExitWithCommand(cmd)
 }

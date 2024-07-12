@@ -11,12 +11,12 @@ import (
 	"github.com/charmbracelet/log"
 )
 
-func logCmd(cmd *exec.Cmd) {
+func LogCmd(cmd *exec.Cmd) {
 	log.Debugf("CMD: %s", strings.Join(cmd.Args, " "))
 }
 
-func cmdOutputWithSpinner(cmd *exec.Cmd, msg string, stderr bool) (output []byte, err error) {
-	logCmd(cmd)
+func CmdOutputWithSpinner(cmd *exec.Cmd, msg string, stderr bool) (output []byte, err error) {
+	LogCmd(cmd)
 	s := startSpinner(msg)
 	if stderr {
 		output, err = cmd.CombinedOutput()
@@ -38,8 +38,8 @@ func startSpinner(msg string) *spinner.Spinner {
 	return s
 }
 
-func exitWithCommand(cmd *exec.Cmd) {
-	logCmd(cmd)
+func ExitWithCommand(cmd *exec.Cmd) {
+	LogCmd(cmd)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {

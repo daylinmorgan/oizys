@@ -1,4 +1,4 @@
-package oizys
+package ui
 
 import (
 	"fmt"
@@ -10,6 +10,17 @@ import (
 	"github.com/charmbracelet/log"
 	"golang.org/x/term"
 )
+
+func ShowFailedOutput(buf []byte) {
+	arrow := lipgloss.
+		NewStyle().
+		Bold(true).
+		Foreground(lipgloss.Color("9")).
+		Render("->")
+	for _, line := range strings.Split(strings.TrimSpace(string(buf)), "\n") {
+		fmt.Println(arrow, line)
+	}
+}
 
 // TODO: seperate parsing and displaying of packages
 func terminalSize() (int, int) {
@@ -25,13 +36,13 @@ func terminalSize() (int, int) {
 	return w, h
 }
 
-type packages struct {
+type Packages struct {
 	desc  string
 	names []string
 	pad   int
 }
 
-func parsePackages(lines []string, desc string) *packages {
+func ParsePackages(lines []string, desc string) *Packages {
 	w, _ := terminalSize()
 	maxAcceptable := (w / 4) - 1
 	maxLen := 0
@@ -48,7 +59,7 @@ func parsePackages(lines []string, desc string) *packages {
 		names[i] = name
 	}
 	sort.Strings(names)
-	return &packages{names: names, pad: maxLen + 1, desc: desc}
+	return &Packages{names: names, pad: maxLen + 1, desc: desc}
 }
 
 func ellipsis(s string, maxLen int) string {
@@ -62,7 +73,7 @@ func ellipsis(s string, maxLen int) string {
 	return string(runes[0:maxLen-3]) + "..."
 }
 
-func (p *packages) show(verbose bool) {
+func (p *Packages) Show(verbose bool) {
 	p.summary()
 	if !verbose || (len(p.names) == 0) {
 		return
@@ -81,7 +92,7 @@ func (p *packages) show(verbose bool) {
 	fmt.Println()
 }
 
-func (p *packages) summary() {
+func (p *Packages) summary() {
 	fmt.Printf("%s: %s\n",
 		p.desc,
 		lipgloss.NewStyle().
@@ -89,15 +100,4 @@ func (p *packages) summary() {
 			Foreground(lipgloss.Color("6")).
 			Render(fmt.Sprint(len(p.names))),
 	)
-}
-
-func showFailedOutput(buf []byte) {
-	arrow := lipgloss.
-		NewStyle().
-		Bold(true).
-		Foreground(lipgloss.Color("9")).
-		Render("->")
-	for _, line := range strings.Split(strings.TrimSpace(string(buf)), "\n") {
-		fmt.Println(arrow, line)
-	}
 }

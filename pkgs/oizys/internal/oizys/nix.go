@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/log"
+	e "oizys/internal/exec"
 )
 
 var ignoredMap = stringSliceToMap(
@@ -128,7 +129,7 @@ func toBuildNixosConfiguration() []string {
 	if o.resetCache {
 		systemCmd.Args = append(systemCmd.Args, "--narinfo-cache-negative-ttl", "0")
 	}
-	result, err := cmdOutputWithSpinner(
+	result, err := e.CmdOutputWithSpinner(
 		systemCmd,
 		fmt.Sprintf("running dry build for: %s", strings.Join(NixosConfigAttrs(), " ")),
 		true,
@@ -143,7 +144,7 @@ func toBuildNixosConfiguration() []string {
 func evaluateDerivations(drvs ...string) map[string]Derivation {
 	cmd := exec.Command("nix", "derivation", "show", "-r")
 	cmd.Args = append(cmd.Args, drvs...)
-	out, err := cmdOutputWithSpinner(cmd,
+	out, err := e.CmdOutputWithSpinner(cmd,
 		fmt.Sprintf("evaluating derivations %s", strings.Join(drvs, " ")),
 		false)
 	if err != nil {
