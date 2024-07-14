@@ -64,9 +64,11 @@ Available Commands:
   update                  update and run nixos rebuild
 
 Flags:
+      --debug          show debug output
       --flake string   path to flake ($OIZYS_DIR or $HOME/oizys)
   -h, --help           help for oizys
-      --host string    host to build (current host)
+      --host string    host(s) to build (current host)
+      --reset-cache    set narinfo-cache-negative-ttl to 0
   -v, --verbose        show verbose output
 
 Use "oizys [command] --help" for more information about a command.
