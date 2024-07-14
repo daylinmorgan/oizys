@@ -56,7 +56,7 @@ jobs:
               --print-build-logs
 
       - name: Commit Updates
-        run: git push --set-upstream --force-with-lease origin flake-lock
+        run: git push --set-upstream --force origin flake-lock
 
   build-full:
     needs: build-minimal
