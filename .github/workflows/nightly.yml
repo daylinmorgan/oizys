@@ -111,5 +111,5 @@ jobs:
               --print-build-logs \
               --out-link updated
 
-
       - run: nix run "nixpkgs#nvd" current new
+      - run: df -h
