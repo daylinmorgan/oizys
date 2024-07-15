@@ -106,3 +106,10 @@ jobs:
 
       - run: nix run "nixpkgs#nvd" diff ./current ./updated
       - run: df -h
+
+      # is this necessary?
+      - run: cat $GITHUB_STEP_SUMMARY > summary.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: summary
+          path: summary.md
