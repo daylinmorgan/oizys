@@ -106,7 +106,9 @@ jobs:
               --print-build-logs \
               --out-link updated
 
-      - run: nix run "nixpkgs#nvd" diff ./current ./updated
+      - run: |
+          echo "# System Diff" >> $GITHUB_STEP_SUMMARY
+          nix run "nixpkgs#nvd" diff ./current ./updated | tee -a $GITHUB_STEP_SUMMARY
       - run: df -h
 
       # is this necessary?
