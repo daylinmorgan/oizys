@@ -64,20 +64,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - run: git checkout -B flake-lock
-
-      # - name: Setup Git Bot
-      #   run: |
-      #     git --version
-      #     git config user.name 'github-actions[bot]'
-      #     git config user.email 'github-actions[bot]@users.noreply.github.com'
 
       - uses: DeterminateSystems/nix-installer-action@v12
         with:
           extra-conf: |
             accept-flake-config = true
 
-      # - uses: DeterminateSystems/magic-nix-cache-action@v7
+      - uses: DeterminateSystems/magic-nix-cache-action@v7
 
       - uses: ./.github/actions/clean-disk
         with:
@@ -96,7 +89,7 @@ jobs:
               --print-build-logs \
               --out-link current
 
-      - run: git checkout -B flake-lock
+      - run: git checkout flake-lock
 
       - name: Build Updated
         run: |
