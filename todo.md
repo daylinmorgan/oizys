@@ -5,6 +5,7 @@
 ## software
 
 - [ ] lid closed does not engage hyprlock?
+  > check the logind conf in Nixos
 - [ ] include langservers for enabled languages?
 
 ## hardware
