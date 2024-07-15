@@ -33,7 +33,6 @@ var (
 	host       string
 	debug      bool
 	verbose    bool
-	nom        bool
 	systemPath bool
 	resetCache bool
 	minimal    bool

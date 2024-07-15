@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"sort"
@@ -100,4 +101,27 @@ func (p *Packages) summary() {
 			Foreground(lipgloss.Color("6")).
 			Render(fmt.Sprint(len(p.names))),
 	)
+}
+
+// Confirm asks the user for confirmation.
+// valid inputs are: y/yes,n/no case insensitive.
+func Confirm(s string) bool {
+	reader := bufio.NewReader(os.Stdin)
+
+	for {
+		fmt.Printf("%s [y/n]: ", s)
+
+		response, err := reader.ReadString('\n')
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		response = strings.ToLower(strings.TrimSpace(response))
+		switch response {
+		case "y", "yes":
+			return true
+		case "n", "no":
+			return false
+		}
+	}
 }

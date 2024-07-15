@@ -3,19 +3,17 @@
   installShellFiles,
   buildGoModule,
   makeWrapper,
-  gh,
-  nix-output-monitor,
   ...
 }:
 let
-  inherit (lib) cleanSource makeBinPath;
+  inherit (lib) cleanSource;
 in
 buildGoModule {
   pname = "oizys";
   version = "unstable";
 
   src = cleanSource ./.;
-  vendorHash = "sha256-/JVXhXrU2np/ty7AGFy+LPZCo1NaLYl9NAyD9+FJYBI=";
+  vendorHash = "sha256-+4OtpcKHfomBAXRrJOvkhQdCSwU0W6+5OJuS4o12r5E=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -27,13 +25,4 @@ buildGoModule {
       --zsh <(OIZYS_SKIP_CHECK=true $out/bin/oizys completion zsh)
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/oizys \
-      --prefix PATH ':' ${
-        makeBinPath [
-          gh
-          nix-output-monitor
-        ]
-      }
-  '';
-}
+  }

@@ -6,6 +6,7 @@ require (
 	github.com/briandowns/spinner v1.23.0
 	github.com/charmbracelet/lipgloss v0.11.0
 	github.com/charmbracelet/log v0.4.0
+	github.com/google/go-github/v63 v63.0.0
 	github.com/ivanpirog/coloredcobra v1.0.1
 	github.com/spf13/cobra v1.8.0
 	golang.org/x/term v0.21.0
@@ -16,6 +17,7 @@ require (
 	github.com/charmbracelet/x/ansi v0.1.2 // indirect
 	github.com/fatih/color v1.17.0 // indirect
 	github.com/go-logfmt/logfmt v0.6.0 // indirect
+	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect

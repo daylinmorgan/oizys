@@ -7,8 +7,9 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/charmbracelet/log"
 	e "oizys/internal/exec"
+
+	"github.com/charmbracelet/log"
 )
 
 var ignoredMap = stringSliceToMap(
@@ -16,16 +17,12 @@ var ignoredMap = stringSliceToMap(
 		// nix
 		"ld-library-path", "builder.pl", "profile", "system-path",
 		// nixos
-		"nixos-install",
-		"nixos-version",
-		"nixos-manual-html",
-		"nixos-configuration-reference-manpage",
-		"nixos-rebuild",
 		"nixos-help",
-		"nixos-generate-config",
-		"nixos-enter",
-		"nixos-container",
-		"nixos-build-vms",
+		"nixos-install", "nixos-version",
+		"nixos-manual-html", "nixos-rebuild",
+		"nixos-configuration-reference-manpage",
+		"nixos-generate-config", "nixos-enter",
+		"nixos-container", "nixos-build-vms",
 		"nixos-wsl-version", "nixos-wsl-welcome-message", "nixos-wsl-welcome",
 		// trivial packages
 		"restic-gdrive", "gitea", "lock", "code",

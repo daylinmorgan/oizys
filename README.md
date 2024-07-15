@@ -52,15 +52,14 @@ Usage:
   oizys [command]
 
 Available Commands:
-  boot                    nixos rebuild boot
   build                   nix build
   cache                   build and push to cachix
   checks                  nix build checks
   ci                      offload build to GHA
   dry                     poor man's nix flake check
   help                    Help about any command
+  os                      nixos-rebuild wrapper
   output                  show nixosConfiguration attr
-  switch                  nixos rebuild switch
   update                  update and run nixos rebuild
 
 Flags:
@@ -82,5 +81,6 @@ Oizys was birthed by the goddess Nyx/Nix and embodies suffering and misery. Whic
 
 > [!NOTE]
 > I don't use home-manager to manager my shell/user configs. You can find those in my separate `chezmoi`-managed [`dotfiles`](https://git.dayl.in/daylin/dotfiles) repository.
+
 
 

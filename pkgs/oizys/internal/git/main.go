@@ -1,16 +1,22 @@
-package oizys
+package git
 
 import (
 	"fmt"
+	"oizys/internal/ui"
 	"os"
 	"os/exec"
 
 	"github.com/charmbracelet/log"
-	"oizys/internal/ui"
 )
 
 type GitRepo struct {
 	path string
+}
+
+func NewRepo(path string) *GitRepo {
+	repo := new(GitRepo)
+	repo.path = path
+	return repo
 }
 
 func (g *GitRepo) git(rest ...string) *exec.Cmd {
@@ -21,8 +27,22 @@ func (g *GitRepo) git(rest ...string) *exec.Cmd {
 	return cmd
 }
 
-func GitPull(workDir string) {
-	g := GitRepo{workDir}
+func (g *GitRepo) Fetch() {
+	err := g.git("fetch").Run()
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func (g *GitRepo) Rebase(ref string) {
+	g.Status()
+	err := g.git("rebase", ref).Run()
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func (g *GitRepo) Status() {
 	cmdOutput, err := g.git("status", "--porcelain").Output()
 	if err != nil {
 		log.Fatal(err)
@@ -33,8 +53,11 @@ func GitPull(workDir string) {
 		ui.ShowFailedOutput(cmdOutput)
 		os.Exit(1)
 	}
+}
 
-	cmdOutput, err = g.git("pull").CombinedOutput()
+func (g *GitRepo) Pull() {
+	g.Status()
+	cmdOutput, err := g.git("pull").CombinedOutput()
 	if err != nil {
 		ui.ShowFailedOutput(cmdOutput)
 		log.Fatal(err)

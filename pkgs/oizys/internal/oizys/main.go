@@ -5,6 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"io/fs"
+	"oizys/internal/git"
+	"oizys/internal/ui"
 	"os"
 	"os/exec"
 	"strings"
@@ -13,7 +15,6 @@ import (
 	"github.com/charmbracelet/log"
 
 	e "oizys/internal/exec"
-	"oizys/internal/ui"
 )
 
 var o *Oizys
@@ -24,10 +25,13 @@ func init() {
 
 // verbose vs debug?
 type Oizys struct {
+	repo          *git.GitRepo
 	flake         string
 	host          string
 	cache         string
 	githubSummary string
+	githubToken   string
+	local         bool
 	inCI          bool
 	verbose       bool
 	systemPath    bool
@@ -52,8 +56,13 @@ func New() *Oizys {
 	}
 	o.githubSummary = os.Getenv("GITHUB_STEP_SUMMARY")
 	o.inCI = o.githubSummary != ""
-
+	o.githubToken = os.Getenv("GITHUB_TOKEN")
+	o.repo = git.NewRepo(o.flake)
 	return o
+}
+
+func GithubToken() string {
+	return o.githubToken
 }
 
 func SetFlake(path string) {
@@ -61,12 +70,15 @@ func SetFlake(path string) {
 	if path != "" {
 		o.flake = path
 	}
-	// check local path exists
+
+	// check if path is local and exists
 	if !strings.HasPrefix(o.flake, "github") && !strings.HasPrefix(o.flake, "git+") {
 		if _, ok := os.LookupEnv("OIZYS_SKIP_CHECK"); !ok {
 			if _, err := os.Stat(o.flake); errors.Is(err, fs.ErrNotExist) {
 				log.Warnf("path to flake %s does not exist, using remote as fallback", o.flake)
 				o.flake = "github:daylinmorgan/oizys"
+			} else {
+				o.local = true
 			}
 		}
 	}
@@ -124,33 +136,6 @@ func Output() {
 		for _, drv := range NixosConfigAttrs() {
 			fmt.Println(drv)
 		}
-	}
-}
-
-func git(rest ...string) *exec.Cmd {
-	args := []string{"-C", o.flake}
-	args = append(args, rest...)
-	cmd := exec.Command("git", args...)
-	e.LogCmd(cmd)
-	return cmd
-}
-
-func GitPull() {
-	cmdOutput, err := git("status", "--porcelain").Output()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	if len(cmdOutput) > 0 {
-		fmt.Println("unstaged commits, cowardly exiting...")
-		ui.ShowFailedOutput(cmdOutput)
-		os.Exit(1)
-	}
-
-	cmdOutput, err = git("pull").CombinedOutput()
-	if err != nil {
-		ui.ShowFailedOutput(cmdOutput)
-		log.Fatal(err)
 	}
 }
 
@@ -260,14 +245,8 @@ func NixosRebuild(subcmd string, rest ...string) {
 	e.ExitWithCommand(cmd)
 }
 
-func NixBuild(nom bool, minimal bool, rest ...string) {
-	var cmdName string
-	if nom {
-		cmdName = "nom"
-	} else {
-		cmdName = "nix"
-	}
-	cmd := exec.Command(cmdName, "build")
+func NixBuild(minimal bool, rest ...string) {
+	cmd := exec.Command("nix", "build")
 	if o.resetCache {
 		cmd.Args = append(cmd.Args, "--narinfo-cache-negative-ttl", "0")
 	}
@@ -318,10 +297,10 @@ func (o *Oizys) checkPath(name string) string {
 	return fmt.Sprintf("%s#checks.x86_64-linux.%s", o.flake, name)
 }
 
-func Checks(nom bool, rest ...string) {
+func Checks(rest ...string) {
 	checks := o.getChecks()
 	for _, check := range checks {
-		NixBuild(nom, false, o.checkPath(check))
+		NixBuild(false, o.checkPath(check))
 	}
 }
 
@@ -338,8 +317,17 @@ func CacheBuild(rest ...string) {
 }
 
 func CI(rest ...string) {
-	args := []string{"workflow", "run", "build.yml", "-F", fmt.Sprintf("hosts=%s", o.host)}
+	args := []string{
+		"workflow", "run", "build.yml",
+		"-F", fmt.Sprintf("hosts=%s", o.host),
+	}
 	args = append(args, rest...)
 	cmd := exec.Command("gh", args...)
 	e.ExitWithCommand(cmd)
+}
+
+func UpdateRepo() {
+	log.Info("rebasing HEAD on origin/flake-lock")
+	o.repo.Fetch()
+	o.repo.Rebase("origin/flake-lock")
 }
