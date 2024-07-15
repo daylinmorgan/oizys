@@ -93,7 +93,8 @@ jobs:
               --verbose \
               --debug \
               -- \
-              --print-build-logs
+              --print-build-logs \
+              --out-link current
 
       - run: git checkout -B flake-lock
 
@@ -107,6 +108,8 @@ jobs:
               --verbose \
               --debug \
               -- \
-              --print-build-logs
+              --print-build-logs \
+              --out-link updated
 
-      - run: ls /nix/var/nix/profiles/
+
+      - run: nix run "nixpkgs#nvd" current new
