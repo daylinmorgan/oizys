@@ -40,6 +40,12 @@
   programs.nix-index.enableBashIntegration = false;
   programs.nix-index.enableFishIntegration = false;
 
+  system.activationScripts.diff = ''
+    if [[ -e /run/current-system ]]; then
+      ${pkgs.nix}/bin/nix store diff-closures /run/current-system "$systemConfig"
+    fi
+  '';
+
   nix.settings = {
     trusted-users = [ "@wheel" ];
     accept-flake-config = true;
