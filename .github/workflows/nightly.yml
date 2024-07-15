@@ -94,3 +94,19 @@ jobs:
               --debug \
               -- \
               --print-build-logs
+
+      - run: git checkout -B flake-lock
+
+      - name: Build Updated
+        run: |
+          system_attr=$(nix run . -- output --host "othalan" --flake .)
+          nix run . \
+            -- \
+            build $system_attr \
+              --flake . \
+              --verbose \
+              --debug \
+              -- \
+              --print-build-logs
+
+      - run: ls /nix/var/nix/profiles/
