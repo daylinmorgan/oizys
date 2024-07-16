@@ -1,4 +1,4 @@
-name: Build NixOS (Nightly)
+name: Flake Update / Build
 
 on:
   workflow_dispatch:
