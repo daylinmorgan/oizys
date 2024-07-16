@@ -1160,6 +1160,7 @@
       "original": {
         "owner": "Cloudef",
         "repo": "zig2nix",
+        "rev": "b6655dcc31af1b20d4e112306c46c110ce5d967d",
         "type": "github"
       }
     },
@@ -1184,6 +1185,7 @@
       "original": {
         "owner": "zigtools",
         "repo": "zls",
+        "rev": "ef50085f7b7136c1e1b26438141bb005743f38c1",
         "type": "github"
       }
     }
