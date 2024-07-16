@@ -101,8 +101,11 @@ jobs:
 
       - run: |
           echo "# System Diff" >> $GITHUB_STEP_SUMMARY
-          # TODO: deal with store diff-closures ansi outputs...
-          nix store diff-closures ./current ./updated | tee -a $GITHUB_STEP_SUMMARY summary.md
+          diff=$(nix store diff-closures ./current ./updated)
+          echo $diff
+          echo $diff >> summary.md
+          echo $diff | sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' >> $GITHUB_STEP_SUMMARY
+
       - run: df -h
 
       - uses: actions/upload-artifact@v4
