@@ -112,7 +112,11 @@ jobs:
       - run: df -h
 
       # is this necessary?
+
+      - run: echo $GITHUB_STEP_SUMMARY
       - run: cat $GITHUB_STEP_SUMMARY > summary.md
+      - run: cat summary.md
+
       - uses: actions/upload-artifact@v4
         with:
           name: summary
