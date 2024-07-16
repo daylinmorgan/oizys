@@ -5,9 +5,6 @@ on:
   schedule:
     - cron: 0 0 * * *
 
-# concurrency:
-#   group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.host }}
-#   cancel-in-progress: true
 permissions:
   contents: write
 
@@ -29,8 +26,6 @@ jobs:
         with:
           extra-conf: |
             accept-flake-config = true
-
-      - uses: DeterminateSystems/magic-nix-cache-action@v7
 
       - uses: cachix/cachix-action@v15
         with:
@@ -71,8 +66,6 @@ jobs:
         with:
           extra-conf: |
             accept-flake-config = true
-
-      - uses: DeterminateSystems/magic-nix-cache-action@v7
 
       - uses: ./.github/actions/clean-disk
         with:
