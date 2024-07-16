@@ -102,9 +102,9 @@ jobs:
       - run: |
           echo "# System Diff" >> $GITHUB_STEP_SUMMARY
           diff=$(nix store diff-closures ./current ./updated)
-          echo $diff
-          echo $diff >> summary.md
-          echo $diff | sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' >> $GITHUB_STEP_SUMMARY
+          echo "$diff"
+          echo "$diff" >> summary.md
+          echo "$diff" | sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' >> $GITHUB_STEP_SUMMARY
 
       - run: df -h
 
