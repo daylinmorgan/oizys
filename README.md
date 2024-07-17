@@ -15,22 +15,30 @@ See below for the currently maintained hosts.
     <th>system</th>
   </tr>
 <tr>
-  <td><img src="https://upload.wikimedia.org/wikipedia/commons/7/70/Runic_letter_othalan.svg"></td>
+  <td>
+     <img src="https://upload.wikimedia.org/wikipedia/commons/1/16/Runic_letter_othalan.png" height="100">
+  </td>
   <td>othalan</td>
   <td>Thinkpad Carbon X1 Gen 9</td>
 </tr>
 <tr>
-  <td><img src="https://upload.wikimedia.org/wikipedia/commons/d/df/Runic_letter_algiz.svg"></td>
+  <td>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/Runic_letter_algiz.png" height="100">
+  </td>
   <td>algiz</td>
   <td>Hetzner VPS hosting forgejo, soft-serve & gts</td>
 </tr>
 <tr>
-  <td><img src="https://upload.wikimedia.org/wikipedia/commons/5/57/Runic_letter_mannaz.svg"></td>
+  <td>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Runic_letter_mannaz.png" height="100">
+  </td>
   <td>mannaz</td>
   <td>Custom AMD Tower with Nvidia 1050ti</td>
 </tr>
 <tr>
-  <td><img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Runic_letter_naudiz.svg"></td>
+  <td>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Runic_letter_naudiz.png" height="100">
+  </td>
   <td>naudiz</td>
   <td>Nixos-WSL for those times I'm trapped on windows</td>
 </tr>
