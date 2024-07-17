@@ -102,7 +102,7 @@ jobs:
       - run: |
           echo "# System Diff" >> $GITHUB_STEP_SUMMARY
           nix run "nixpkgs#nvd" -- --color always diff ./current ./updated >> summary.md
-          printf "```\n%s```\n" "$(nix run "nixpkgs#nvd" -- diff ./current ./updated)" >> $GITHUB_STEP_SUMMARY
+          printf '```\n%s```\n' "$(nix run "nixpkgs#nvd" -- diff ./current ./updated)" >> $GITHUB_STEP_SUMMARY
 
       - run: df -h
 
