@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/fs"
 	"oizys/internal/git"
+	// "oizys/internal/github"
 	"oizys/internal/ui"
 	"os"
 	"os/exec"
@@ -313,16 +314,6 @@ func CacheBuild(rest ...string) {
 	args = append(args, NixosConfigAttrs()...)
 	args = append(args, rest...)
 	cmd := exec.Command("cachix", args...)
-	e.ExitWithCommand(cmd)
-}
-
-func CI(rest ...string) {
-	args := []string{
-		"workflow", "run", "build.yml",
-		"-F", fmt.Sprintf("hosts=%s", o.host),
-	}
-	args = append(args, rest...)
-	cmd := exec.Command("gh", args...)
 	e.ExitWithCommand(cmd)
 }
 

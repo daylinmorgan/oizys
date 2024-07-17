@@ -152,3 +152,27 @@ func ReadMarkdownFromZip(zipData []byte, fileName string) (string, error) {
 	// Return the markdown content as string
 	return string(content), nil
 }
+
+// func CI(rest ...string) {
+// 	args := []string{
+// 		"workflow", "run", "build.yml",
+// 		"-F", fmt.Sprintf("hosts=%s", o.host),
+// 	}
+// 	args = append(args, rest...)
+// 	cmd := exec.Command("gh", args...)
+// 	e.ExitWithCommand(cmd)
+// }
+
+func CreateDispatch(workflowFileName string, ref string, inputs map[string]interface{}) {
+	event := github.CreateWorkflowDispatchEventRequest{Ref: ref, Inputs: inputs}
+	_, err := client.Actions.CreateWorkflowDispatchEventByFileName(
+		context.Background(),
+		"daylinmorgan",
+		"oizys",
+		workflowFileName,
+		event,
+	)
+	if err != nil {
+		log.Fatal("failed to dispatch event", "filename", workflowFileName, "err", err)
+	}
+}
