@@ -16,7 +16,7 @@ var updateCmd = &cobra.Command{
 	Short: "update and run nixos rebuild",
 	Run: func(cmd *cobra.Command, args []string) {
 		run := github.GetLastUpdateRun()
-		md, err := github.GetUpateSummary(run.GetID())
+		md, err := github.GetUpateSummary(run.GetID(), oizys.GetHost())
 		if err != nil {
 			log.Fatal(err)
 		}

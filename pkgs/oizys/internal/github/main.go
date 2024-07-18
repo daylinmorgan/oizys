@@ -60,10 +60,11 @@ func GetArtifacts(runID int64) (*github.ArtifactList, *github.Response) {
 	return artifactList, resp
 }
 
-func GetUpdateSummaryArtifact(runID int64) *github.Artifact {
+func GetUpdateSummaryArtifact(runID int64, host string) *github.Artifact {
+  artifactName := fmt.Sprintf("%s-summary", host)
 	artifactList, _ := GetArtifacts(runID)
 	for _, artifact := range artifactList.Artifacts {
-		if artifact.GetName() == "summary" {
+		if artifact.GetName() == artifactName {
 			return artifact
 		}
 	}
@@ -71,8 +72,8 @@ func GetUpdateSummaryArtifact(runID int64) *github.Artifact {
 	return nil
 }
 
-func GetUpdateSummaryUrl(runID int64) *url.URL {
-	artifact := GetUpdateSummaryArtifact(runID)
+func GetUpdateSummaryUrl(runID int64, host string) *url.URL {
+	artifact := GetUpdateSummaryArtifact(runID, host)
 	url, resp, err := client.Actions.DownloadArtifact(context.Background(), "daylinmorgan", "oizys", artifact.GetID(), 4)
 	if err != nil {
 		log.Fatal("failed to get update summary URL", "artifact", artifact.GetID(), "resp", resp)
@@ -109,8 +110,8 @@ func GetLastUpdateRun() *github.WorkflowRun {
 	return run
 }
 
-func GetUpateSummary(runID int64) (string, error) {
-	url := GetUpdateSummaryUrl(runID)
+func GetUpateSummary(runID int64, host string) (string, error) {
+	url := GetUpdateSummaryUrl(runID, host)
 	bytes := GetUpdateSummaryFromUrl(url)
 	md, err := ReadMarkdownFromZip(bytes, "summary.md")
 	return md, err

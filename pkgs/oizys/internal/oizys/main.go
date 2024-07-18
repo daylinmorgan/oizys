@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/fs"
 	"oizys/internal/git"
+
 	// "oizys/internal/github"
 	"oizys/internal/ui"
 	"os"
@@ -99,6 +100,7 @@ func SetHost(name string) {
 	}
 }
 
+func GetHost() string { return o.host }
 func SetVerbose(v bool) {
 	o.verbose = v
 }
