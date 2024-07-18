@@ -25,4 +25,4 @@ buildGoModule {
       --zsh <(OIZYS_SKIP_CHECK=true $out/bin/oizys completion zsh)
   '';
 
-  }
+}

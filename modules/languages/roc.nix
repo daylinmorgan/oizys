@@ -16,13 +16,14 @@ let
     inherit version;
 
   };
-  lang-server = rocPkgs.lang-server.overrideAttrs {
-    inherit version;
-  };
+  lang-server = rocPkgs.lang-server.overrideAttrs { inherit version; };
 
 in
 {
   config = mkIfIn "roc" cfg {
-    environment.systemPackages = [roc lang-server];
+    environment.systemPackages = [
+      roc
+      lang-server
+    ];
   };
 }

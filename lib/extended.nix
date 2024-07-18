@@ -64,9 +64,7 @@ let
     ]);
 
   flakeVer =
-    flake:
-      "${flake.shortRev or flake.dirtyShortRev}-${mkDate (toString flake.lastModifiedDate)}";
-
+    flake: "${flake.shortRev or flake.dirtyShortRev}-${mkDate (toString flake.lastModifiedDate)}";
 
   isNixFile = p: hasSuffix ".nix" p;
   isDefaultNixFile = p: hasSuffix "default.nix" p;
