@@ -11,13 +11,24 @@ mkOizysModule config "vpn" {
   ];
 
   services.openvpn.servers = {
-    express-ny = {
+    # subscription expired
+    # express-ny = {
+    #   config = ''
+    #     config /home/daylin/.config/openvpn/express-ny/config.ovpn
+    #     auth-user-pass /home/daylin/.config/openvpn/express-ny/credentials
+    #   '';
+    #   autoStart = false;
+    #   updateResolvConf = true;
+    # };
+    #
+  
+    mullvad-chi = {
       config = ''
-        config /home/${config.oizys.user}/.config/openvpn/express-ny/config.ovpn
-        auth-user-pass /home/${config.oizys.user}/.config/openvpn/express-ny/credentials
+        config /home/daylin/.config/openvpn/mullvad-chi/mullvad_us_chi.conf
       '';
       autoStart = false;
       updateResolvConf = true;
     };
   };
+
 }
