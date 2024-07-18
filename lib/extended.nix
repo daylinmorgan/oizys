@@ -63,6 +63,11 @@ let
       (substring 6 2 longDate)
     ]);
 
+  flakeVer =
+    flake:
+      "${flake.shortRev or flake.dirtyShortRev}-${mkDate (toString flake.lastModifiedDate)}";
+
+
   isNixFile = p: hasSuffix ".nix" p;
   isDefaultNixFile = p: hasSuffix "default.nix" p;
   filterNotDefaultNixFile = paths: filter (p: !(isDefaultNixFile p) && (isNixFile p)) paths;
@@ -81,5 +86,6 @@ in
     mkIfIn
     isNixFile
     listNixFilesRecursive
+    flakeVer
     ;
 }
