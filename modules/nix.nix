@@ -2,9 +2,13 @@
   inputs,
   self,
   pkgs,
+  lib,
   enabled,
   ...
 }:
+let
+  inherit (lib) makeBinPath;
+in
 {
   imports = [ inputs.nix-index-database.nixosModules.nix-index ];
 
@@ -42,7 +46,13 @@
 
   system.activationScripts.diff = ''
     if [[ -e /run/current-system ]]; then
-      ${pkgs.nvd}/bin/nvd diff /run/current-system "$systemConfig"
+      PATH=$PATH:${
+        makeBinPath [
+          pkgs.nvd
+          pkgs.nix
+        ]
+      }
+      nvd diff /run/current-system "$systemConfig"
     fi
   '';
 
