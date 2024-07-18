@@ -56,6 +56,13 @@ jobs:
   build-full:
     needs: build-minimal
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        host:
+          - othalan
+          - algiz
+          - mannaz
+          - naudiz
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -71,9 +78,10 @@ jobs:
         with:
           purge-packages: 'true'
 
+
       - name: Build
         run: |
-          system_attr=$(nix run . -- output --host "othalan" --flake .)
+          system_attr=$(nix run . -- output --host "${{ matrix.host }}" --flake .)
           nix run . \
             -- \
             build $system_attr \
@@ -88,7 +96,7 @@ jobs:
 
       - name: Build Updated
         run: |
-          system_attr=$(nix run . -- output --host "othalan" --flake .)
+          system_attr=$(nix run . -- output --host "${{ matrix.host }}" --flake .)
           nix run . \
             -- \
             build $system_attr \
@@ -108,5 +116,5 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: summary
+          name: ${{ matrix.host }}-summary
           path: summary.md
