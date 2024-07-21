@@ -23,7 +23,8 @@
       inputs.lix.follows = "lix";
     };
 
-    hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
+    # hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1&rev=300228b503b36e5977b0d58713c5b4cf1f07b8a9";
     hyprland-contrib.url = "github:hyprwm/contrib";
 
     zig2nix = {
