@@ -61,7 +61,7 @@ func GetArtifacts(runID int64) (*github.ArtifactList, *github.Response) {
 }
 
 func GetUpdateSummaryArtifact(runID int64, host string) *github.Artifact {
-  artifactName := fmt.Sprintf("%s-summary", host)
+	artifactName := fmt.Sprintf("%s-summary", host)
 	artifactList, _ := GetArtifacts(runID)
 	for _, artifact := range artifactList.Artifacts {
 		if artifact.GetName() == artifactName {
@@ -165,6 +165,7 @@ func ReadMarkdownFromZip(zipData []byte, fileName string) (string, error) {
 // }
 
 func CreateDispatch(workflowFileName string, ref string, inputs map[string]interface{}) {
+	log.Infof("creating dispatch event for %s", workflowFileName)
 	event := github.CreateWorkflowDispatchEventRequest{Ref: ref, Inputs: inputs}
 	_, err := client.Actions.CreateWorkflowDispatchEventByFileName(
 		context.Background(),

@@ -13,13 +13,14 @@ import (
 var ciCmd = &cobra.Command{
 	Use:   "ci",
 	Short: "offload build to GHA",
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		inputs := make(map[string]interface{})
 		if includeLock {
 			log.Debug("including lock file in inputs")
 			inputs["lockFile"] = readLockFile()
 		}
-		github.CreateDispatch("build.yml", ref, inputs)
+		github.CreateDispatch(args[0], ref, inputs)
 	},
 }
 
