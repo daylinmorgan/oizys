@@ -17,7 +17,8 @@ mkOizysModule config "chrome" {
       "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
       "ekhagklcjbdpajgpjgmbionohlpdbjgc" # zotero connector
 
-      "bkkmolkhemgaeaeggcmfbghljjjoofoh" # catppuccin-chrome-theme-m
+      "bkkmolkhemgaeaeggcmfbghljjjoofoh" # catppuccin chrome theme
+      "lnjaiaapbakfhlbjenjkhffcdpoompki" # catppuccin github file icons
     ];
   };
 
