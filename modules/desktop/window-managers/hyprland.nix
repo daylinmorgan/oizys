@@ -33,17 +33,19 @@ mkOizysModule config "hyprland" {
       rofi-wayland
       pavucontrol
 
-      # catppuccin-cursors.mochaDark
-
       #hypr ecosystem
       hyprlock
       hypridle
 
       swww
-    ])
-    ++ [ inputs.hyprman.packages.${pkgs.system}.default ]
 
-    # swww-git isbroken
+      catppuccin-cursors.mochaDark
+    ])
+    ++ [
+      inputs.hyprman.packages.${pkgs.system}.default
+    ]
+
+    # swww-git is broken
     ++ (with inputs.nixpkgs-wayland.packages.${pkgs.system}; [
       mako
       eww

@@ -307,7 +307,6 @@
       "locked": {
         "lastModified": 1721248202,
         "narHash": "sha256-VAhuQQ4EKbw/6z7K2IoR83+gXUdMksLWFQOhJNhSvQE=",
-        "ref": "refs/heads/main",
         "rev": "300228b503b36e5977b0d58713c5b4cf1f07b8a9",
         "revCount": 4930,
         "submodules": true,
@@ -499,11 +498,11 @@
     "lix": {
       "flake": false,
       "locked": {
-        "lastModified": 1721559271,
-        "narHash": "sha256-eUvPvpDLRl6553EsoUmzgNYES8X4CYYoWIJ64hhvfGg=",
-        "rev": "2d4aca25468184fdd2f6be034ab9aa9c28d2839e",
+        "lastModified": 1721756973,
+        "narHash": "sha256-M7Zb3UfjQ0o3qXHolhykIk+QzfhEBcEYK9QAPSiBtW4=",
+        "rev": "53f3e39815c3357c6465963359e94a6318b54af7",
         "type": "tarball",
-        "url": "https://git.lix.systems/api/v1/repos/lix-project/lix/archive/2d4aca25468184fdd2f6be034ab9aa9c28d2839e.tar.gz"
+        "url": "https://git.lix.systems/api/v1/repos/lix-project/lix/archive/53f3e39815c3357c6465963359e94a6318b54af7.tar.gz"
       },
       "original": {
         "type": "tarball",
@@ -680,11 +679,11 @@
         "nixpkgs": "nixpkgs_7"
       },
       "locked": {
-        "lastModified": 1721566265,
-        "narHash": "sha256-o1thi0iay9AfkqkopNsPfc70bfHD+NcsKOs3IYwRk/A=",
+        "lastModified": 1721691437,
+        "narHash": "sha256-z3h4XqAdE1sqCdZxI9+gxLDEEbgGOVHIWZRMIjQheDo=",
         "owner": "nix-community",
         "repo": "nixpkgs-wayland",
-        "rev": "6d34f9c34bdab180fd15185c87a44b3bd11cb4c0",
+        "rev": "79e1f9e956c60af6520c5f9d9e451e555a82da6f",
         "type": "github"
       },
       "original": {
@@ -743,11 +742,11 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1721559948,
-        "narHash": "sha256-cFgdjyK/VBM3hB1RfFHXcI/VOCBVAv813s1upHKX7bI=",
+        "lastModified": 1721782431,
+        "narHash": "sha256-UNDpwjYxNXQet/g3mgRLsQ9zxrbm9j2JEvP4ijF3AWs=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "c19d62ad2265b16e2199c5feb4650fe459ca1c46",
+        "rev": "4f02464258baaf54992debfd010a7a3662a25536",
         "type": "github"
       },
       "original": {
@@ -775,11 +774,11 @@
     },
     "nixpkgs_7": {
       "locked": {
-        "lastModified": 1721379653,
-        "narHash": "sha256-8MUgifkJ7lkZs3u99UDZMB4kbOxvMEXQZ31FO3SopZ0=",
+        "lastModified": 1721562059,
+        "narHash": "sha256-Tybxt65eyOARf285hMHIJ2uul8SULjFZbT9ZaEeUnP8=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "1d9c2c9b3e71b9ee663d11c5d298727dace8d374",
+        "rev": "68c9ed8bbed9dfce253cc91560bf9043297ef2fe",
         "type": "github"
       },
       "original": {
@@ -852,11 +851,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1721646716,
-        "narHash": "sha256-phUXaqhxxRoeLeLFMCszqrG3/dz6b0qfPmhdLqUrSng=",
+        "lastModified": 1721802603,
+        "narHash": "sha256-TbCSht10gPCF84/HpJs2Ji/AiqfCQiF+oUnUiLKVlWg=",
         "owner": "roc-lang",
         "repo": "roc",
-        "rev": "f40fab3da248eec17011b6f38528d3031c0d1bd7",
+        "rev": "d5db3137a3d8da46f92c31b6bf088bc495f759c2",
         "type": "github"
       },
       "original": {
@@ -1151,11 +1150,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1721611096,
-        "narHash": "sha256-YQub2pEdobdJfxrbK8+lMckNerPsmdaEPskxGpKGF34=",
+        "lastModified": 1721783839,
+        "narHash": "sha256-GSZLC56QpdenOqSY4SzvhzNDwOQsvCG3pNQQ6fYrIsQ=",
         "owner": "Cloudef",
         "repo": "zig2nix",
-        "rev": "8fd628f6d4ee1cfdfcb36f6a418400603f681f5e",
+        "rev": "9ec43c3e2cfd195bc7cbe3924037788e72a958e3",
         "type": "github"
       },
       "original": {
@@ -1175,11 +1174,11 @@
         "zig-overlay": "zig-overlay"
       },
       "locked": {
-        "lastModified": 1721500946,
-        "narHash": "sha256-nQ4XXLwYQlRhGFn2a5zjr53y+ZWNqJmIPF0JmLUg22E=",
+        "lastModified": 1721754521,
+        "narHash": "sha256-W8p4zc1JO4AOZmMbD3moBLb5gPZMXlUNwR1ZkXNxt1I=",
         "owner": "zigtools",
         "repo": "zls",
-        "rev": "aa9c9126e732aafed144ceea21c5868d33b2954d",
+        "rev": "adf3b839b19df88c09877526007d8347ec982abb",
         "type": "github"
       },
       "original": {
