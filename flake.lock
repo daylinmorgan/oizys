@@ -498,11 +498,11 @@
     "lix": {
       "flake": false,
       "locked": {
-        "lastModified": 1721756973,
-        "narHash": "sha256-M7Zb3UfjQ0o3qXHolhykIk+QzfhEBcEYK9QAPSiBtW4=",
-        "rev": "53f3e39815c3357c6465963359e94a6318b54af7",
+        "lastModified": 1721841700,
+        "narHash": "sha256-5aO0cXENUI/38xsG0ww0QSsVSlkvMvKfxbeYXYH08Es=",
+        "rev": "8d12e0fbb7306cbc58b12ef051d7067d703738de",
         "type": "tarball",
-        "url": "https://git.lix.systems/api/v1/repos/lix-project/lix/archive/53f3e39815c3357c6465963359e94a6318b54af7.tar.gz"
+        "url": "https://git.lix.systems/api/v1/repos/lix-project/lix/archive/8d12e0fbb7306cbc58b12ef051d7067d703738de.tar.gz"
       },
       "original": {
         "type": "tarball",
@@ -679,11 +679,11 @@
         "nixpkgs": "nixpkgs_7"
       },
       "locked": {
-        "lastModified": 1721691437,
-        "narHash": "sha256-z3h4XqAdE1sqCdZxI9+gxLDEEbgGOVHIWZRMIjQheDo=",
+        "lastModified": 1721918221,
+        "narHash": "sha256-y5whWNY6QegCurAwLAGkpRYL+9vjrQquVXC4Jfel1bU=",
         "owner": "nix-community",
         "repo": "nixpkgs-wayland",
-        "rev": "79e1f9e956c60af6520c5f9d9e451e555a82da6f",
+        "rev": "0d5730fd37f70c4e56f37ba6e81bfe0a89e9da26",
         "type": "github"
       },
       "original": {
@@ -774,11 +774,11 @@
     },
     "nixpkgs_7": {
       "locked": {
-        "lastModified": 1721562059,
-        "narHash": "sha256-Tybxt65eyOARf285hMHIJ2uul8SULjFZbT9ZaEeUnP8=",
+        "lastModified": 1721743106,
+        "narHash": "sha256-adRZhFpBTnHiK3XIELA3IBaApz70HwCYfv7xNrHjebA=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "68c9ed8bbed9dfce253cc91560bf9043297ef2fe",
+        "rev": "dc14ed91132ee3a26255d01d8fd0c1f5bff27b2f",
         "type": "github"
       },
       "original": {
@@ -1160,6 +1160,7 @@
       "original": {
         "owner": "Cloudef",
         "repo": "zig2nix",
+        "rev": "9ec43c3e2cfd195bc7cbe3924037788e72a958e3",
         "type": "github"
       }
     },
@@ -1184,6 +1185,7 @@
       "original": {
         "owner": "zigtools",
         "repo": "zls",
+        "rev": "adf3b839b19df88c09877526007d8347ec982abb",
         "type": "github"
       }
     }
