@@ -11,9 +11,8 @@ let
     overlays = map [
       "lix-module"
       "hyprland-contrib"
-      "nixpkgs-wayland"    ]
-      overlayFrom
-      ;
+      "nixpkgs-wayland"
+    ] overlayFrom;
   };
   pkgsFrom = pkgsFromSystem system;
   pkgFrom = pkgFromSystem system;

@@ -6,7 +6,7 @@
   enabled,
   pkgFrom,
   pkgsFrom,
-overlayFrom,
+  overlayFrom,
   ...
 }:
 
