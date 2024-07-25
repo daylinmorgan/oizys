@@ -4,6 +4,7 @@
   pkgs,
   lib,
   enabled,
+  pkgFrom,
   ...
 }:
 let
@@ -31,7 +32,7 @@ in
     pkgs.nixfmt-rfc-style
     pkgs.nix-output-monitor
 
-    self.packages.${pkgs.system}.default
+    (pkgFrom "self")
   ];
 
   programs.nix-index-database.comma = enabled;

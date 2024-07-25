@@ -13,8 +13,13 @@ let
     mkOizysModule
     enabled
     enableAttrs
+    pkgsFromSystem
+    pkgFromSystem
     ;
   inherit (lib.filesystem) listFilesRecursive;
+
+  pkgFrom = pkgFromSystem "x86_64-linux";
+  pkgsFrom = pkgsFromSystem "x86_64-linux";
 
   mkIso = nixosSystem {
     system = "x86_64-linux";
@@ -22,15 +27,10 @@ let
       self.nixosModules.nix
       self.nixosModules.essentials
       (
-        {
-          self,
-          pkgs,
-          modulesPath,
-          ...
-        }:
+        { pkgs, modulesPath, ... }:
         {
           imports = [ (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix") ];
-          environment.systemPackages = (with pkgs; [ neovim ]) ++ [ self.packages.${pkgs.system}.default ];
+          environment.systemPackages = (with pkgs; [ neovim ]) ++ [ (pkgFrom "self") ];
         }
       )
     ];
@@ -64,6 +64,8 @@ let
           enabled
           enableAttrs
           hostName
+          pkgFrom
+          pkgsFrom
           ;
       };
     };

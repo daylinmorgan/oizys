@@ -4,6 +4,8 @@
   config,
   mkOizysModule,
   enabled,
+  pkgFrom,
+  pkgsFrom,
   ...
 }:
 
@@ -41,12 +43,10 @@ mkOizysModule config "hyprland" {
 
       catppuccin-cursors.mochaDark
     ])
-    ++ [
-      inputs.hyprman.packages.${pkgs.system}.default
-    ]
+    ++ [ (pkgFrom "hyprman") ]
 
     # swww-git is broken
-    ++ (with inputs.nixpkgs-wayland.packages.${pkgs.system}; [
+    ++ (with (pkgsFrom "nixpkgs-wayland"); [
       mako
       eww
       wlr-randr

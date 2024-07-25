@@ -3,6 +3,7 @@
   pkgs,
   config,
   lib,
+  pkgFrom,
   ...
 }:
 let
@@ -10,26 +11,26 @@ let
 in
 {
   config = mkIf config.oizys.desktop.enable {
-    environment.systemPackages = with pkgs; [
-      wezterm
-      alacritty
+    environment.systemPackages =
+      [ (pkgFrom "f1multiviewer") ]
+      ++ (with pkgs; [
+        wezterm
+        alacritty
 
-      xfce.thunar
+        xfce.thunar
 
-      inkscape
-      gimp
+        inkscape
+        gimp
 
-      zotero
+        zotero
 
-      libreoffice-qt
-      hunspell # spell check for libreoffice
+        libreoffice-qt
+        hunspell # spell check for libreoffice
 
-      (catppuccin-gtk.override {
-        accents = [ "rosewater" ];
-        variant = "mocha";
-      })
-
-      inputs.f1multiviewer.outputs.packages.${pkgs.system}.default
-    ];
+        (catppuccin-gtk.override {
+          accents = [ "rosewater" ];
+          variant = "mocha";
+        })
+      ]);
   };
 }

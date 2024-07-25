@@ -3,6 +3,7 @@
   config,
   lib,
   pkgs,
+  pkgFrom,
   ...
 }:
 let
@@ -10,7 +11,7 @@ let
   cfg = config.oizys.languages;
 
   python = pkgs.python3.withPackages (ps: with ps; [ pip ]);
-  pixi = inputs.pixi.packages.${pkgs.system}.default;
+  pixi = pkgFrom "pixi";
 in
 {
   config = mkIfIn "python" cfg {

@@ -1,6 +1,6 @@
 inputs@{ nixpkgs, self, ... }:
 let
-  lib = nixpkgs.lib.extend (import ./extended.nix);
+  lib = nixpkgs.lib.extend (import ./extended.nix inputs);
 
   inherit (builtins) mapAttrs readDir listToAttrs;
   inherit (lib) genAttrs;
@@ -30,7 +30,7 @@ let
     checks = forAllSystems (
       pkgs:
       import ./checks.nix {
-        inherit inputs;
+        inherit inputs lib;
         system = pkgs.system;
       }
     );

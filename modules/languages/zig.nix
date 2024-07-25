@@ -1,17 +1,15 @@
 {
-  inputs,
   config,
   lib,
-  pkgs,
+  pkgsFrom,
+  pkgFrom,
   ...
 }:
 let
   inherit (lib) mkIfIn;
   cfg = config.oizys.languages;
-  zig = inputs.zig2nix.outputs.packages.${pkgs.system}.zig.master.bin;
-  zls = inputs.zls.outputs.packages.${pkgs.system}.default.overrideAttrs {
-    nativeBuildInputs = [ zig ];
-  };
+  zig = (pkgsFrom "zig2nix").zig.master.bin;
+  zls = (pkgFrom "zls").overrideAttrs { nativeBuildInputs = [ zig ]; };
 in
 {
   config = mkIfIn "zig" cfg {

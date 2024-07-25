@@ -4,6 +4,7 @@
   config,
   enabled,
   mkDefaultOizysModule,
+  pkgFrom,
   ...
 }:
 mkDefaultOizysModule config "cli" {
@@ -35,5 +36,5 @@ mkDefaultOizysModule config "cli" {
       btop
       gdu
     ])
-    ++ [ inputs.tsm.packages.${pkgs.system}.tsm ];
+    ++ [ (pkgFrom "tsm") ];
 }

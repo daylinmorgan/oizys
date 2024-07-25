@@ -1,5 +1,11 @@
-{ inputs, system }:
+{
+  inputs,
+  system,
+  lib,
+}:
 let
+  inherit (builtins) map;
+  inherit (lib) pkgFromSystem pkgsFromSystem;
   pkgs = import inputs.nixpkgs {
     inherit system;
     overlays = [
@@ -8,28 +14,33 @@ let
       inputs.nixpkgs-wayland.overlay
     ];
   };
+  pkgsFrom = pkgsFromSystem system;
+  pkgFrom = pkgFromSystem system;
 in
 {
   makePackages =
     pkgs.runCommandLocal "build-third-party"
       {
         src = ./.;
-        nativeBuildInputs = [
-          pkgs.pixi
-          pkgs.swww
-          pkgs.nixVersions.stable
-
-          inputs.hyprland.packages.${pkgs.system}.default
-          inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland
-
-          inputs.tsm.packages.${pkgs.system}.default
-          inputs.hyprman.packages.${pkgs.system}.default
-
-          inputs.roc.packages.${pkgs.system}.full # cli + lang_server
-
-          inputs.zls.outputs.packages.${pkgs.system}.default
-          inputs.zig2nix.outputs.packages.${pkgs.system}.zig.master.bin
-        ];
+        nativeBuildInputs =
+          [
+            pkgs.pixi
+            pkgs.swww
+            pkgs.nixVersions.stable
+          ]
+          ++ (map [
+            "tsm"
+            "hyprman"
+            "zls"
+          ] pkgFrom)
+          ++ (with pkgsFrom "hyprland"; [
+            default
+            xdg-desktop-portal-hyprland
+          ])
+          ++ [
+            (pkgsFrom "roc").full
+            (pkgsFrom "zig2nix").zig.master.bin
+          ];
       }
       ''
         mkdir "$out"

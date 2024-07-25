@@ -1,4 +1,4 @@
-final: prev:
+inputs: final: prev:
 let
   inherit (builtins) listToAttrs substring filter;
   inherit (final)
@@ -71,6 +71,10 @@ let
   filterNotDefaultNixFile = paths: filter (p: !(isDefaultNixFile p) && (isNixFile p)) paths;
   listNixFilesRecursive = dir: filterNotDefaultNixFile (listFilesRecursive dir);
 
+  # defaultLinuxPackage = flake: flake.packages.x86_64-linux.default;
+  # defaultPackageGeneric = system: flake: "${flake}.packages.${system}.default";
+  pkgsFromSystem = system: flake: inputs."${flake}".packages."${system}";
+  pkgFromSystem = system: flake: (pkgsFromSystem system flake).default;
 in
 {
   inherit
@@ -85,5 +89,7 @@ in
     isNixFile
     listNixFilesRecursive
     flakeVer
+    pkgsFromSystem
+    pkgFromSystem
     ;
 }
