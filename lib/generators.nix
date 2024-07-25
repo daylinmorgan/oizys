@@ -15,6 +15,7 @@ let
     enableAttrs
     pkgsFromSystem
     pkgFromSystem
+    overlayFrom
     ;
   inherit (lib.filesystem) listFilesRecursive;
 
@@ -66,6 +67,7 @@ let
           hostName
           pkgFrom
           pkgsFrom
+          overlayFrom
           ;
       };
     };
