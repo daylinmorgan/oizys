@@ -8,7 +8,6 @@ let
   inherit (builtins) filter;
   inherit (lib)
     nixosSystem
-    isNixFile
     mkDefaultOizysModule
     mkOizysModule
     enabled
@@ -16,11 +15,16 @@ let
     pkgsFromSystem
     pkgFromSystem
     overlayFrom
+    isNixFile
     ;
   inherit (lib.filesystem) listFilesRecursive;
 
   pkgFrom = pkgFromSystem "x86_64-linux";
   pkgsFrom = pkgsFromSystem "x86_64-linux";
+
+  hostPath = host: ../. + "/hosts/${host}";
+  # all nix files not including pkgs.nix
+  hostFiles = host: filter isNixFile (listFilesRecursive (hostPath host));
 
   mkIso = nixosSystem {
     system = "x86_64-linux";
@@ -54,7 +58,8 @@ let
         ../overlays
         inputs.lix-module.nixosModules.default
         inputs.hyprland.nixosModules.default
-      ] ++ filter isNixFile (listFilesRecursive (../. + "/hosts/${hostName}"));
+      ] ++ (hostFiles hostName);
+
       specialArgs = {
         inherit
           inputs

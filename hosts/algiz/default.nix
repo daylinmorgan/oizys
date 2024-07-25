@@ -1,12 +1,5 @@
+{ enabled, ... }:
 {
-  self,
-  pkgs,
-  enabled,
-  ...
-}:
-{
-  imports = with self.nixosModules; [ restic ];
-
   oizys = {
     languages = [
       "nim"
@@ -19,12 +12,6 @@
     backups = enabled;
     nix-ld = enabled;
   };
-
-  environment.systemPackages = with pkgs; [
-    (writeShellScriptBin "gitea" ''
-      ssh -p 2222 -o StrictHostKeyChecking=no git@127.0.0.1 "SSH_ORIGINAL_COMMAND=\"$SSH_ORIGINAL_COMMAND\" $0 $@"
-    '')
-  ];
 
   services.restic.backups.gdrive = {
     # directories created by gitea and soft-serve aren't world readable
