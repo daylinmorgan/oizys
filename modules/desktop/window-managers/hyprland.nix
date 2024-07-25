@@ -6,6 +6,7 @@
   enabled,
   pkgFrom,
   pkgsFrom,
+overlayFrom,
   ...
 }:
 
@@ -56,8 +57,8 @@ mkOizysModule config "hyprland" {
     ]);
 
   nixpkgs.overlays = [
-    inputs.hyprland-contrib.overlays.default
-    # inputs.nixpkgs-wayland.overlay
-    # inputs.hyprland.overlays.default
+    (overlayFrom "hyprland-contrib")
+    # (overlayFrom "nixpkgs-wayland")
+    # (overlayFrom "hyprland")
   ];
 }

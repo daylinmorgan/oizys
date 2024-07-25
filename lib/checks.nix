@@ -5,14 +5,15 @@
 }:
 let
   inherit (builtins) map;
-  inherit (lib) pkgFromSystem pkgsFromSystem;
+  inherit (lib) pkgFromSystem pkgsFromSystem overlayFrom;
   pkgs = import inputs.nixpkgs {
     inherit system;
-    overlays = [
-      inputs.lix-module.overlays.default
-      inputs.hyprland-contrib.overlays.default
-      inputs.nixpkgs-wayland.overlay
-    ];
+    overlays = map [
+      "lix-module"
+      "hyprland-contrib"
+      "nixpkgs-wayland"    ]
+      overlayFrom
+      ;
   };
   pkgsFrom = pkgsFromSystem system;
   pkgFrom = pkgFromSystem system;

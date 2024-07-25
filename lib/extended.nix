@@ -75,6 +75,7 @@ let
   # defaultPackageGeneric = system: flake: "${flake}.packages.${system}.default";
   pkgsFromSystem = system: flake: inputs."${flake}".packages."${system}";
   pkgFromSystem = system: flake: (pkgsFromSystem system flake).default;
+  overlayFrom = flake: inputs."${flake}".overlays.default;
 in
 {
   inherit
@@ -91,5 +92,6 @@ in
     flakeVer
     pkgsFromSystem
     pkgFromSystem
+    overlayFrom
     ;
 }
