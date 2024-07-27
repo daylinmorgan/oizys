@@ -16,12 +16,13 @@ let
     pkgFromSystem
     overlayFrom
     isNixFile
+    flakeFromSystem
     ;
   inherit (lib.filesystem) listFilesRecursive;
 
-  pkgFrom = pkgFromSystem "x86_64-linux";
-  pkgsFrom = pkgsFromSystem "x86_64-linux";
-
+  # pkgFrom = pkgFromSystem "x86_64-linux";
+  # pkgsFrom = pkgsFromSystem "x86_64-linux";
+  flake = flakeFromSystem "x86_64-linux";
   hostPath = host: ../. + "/hosts/${host}";
   # all nix files not including pkgs.nix
   hostFiles = host: filter isNixFile (listFilesRecursive (hostPath host));
@@ -35,7 +36,7 @@ let
         { pkgs, modulesPath, ... }:
         {
           imports = [ (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix") ];
-          environment.systemPackages = (with pkgs; [ neovim ]) ++ [ (pkgFrom "self") ];
+          environment.systemPackages = (with pkgs; [ neovim ]) ++ [ (flake.pkg "self") ];
         }
       )
     ];
@@ -70,9 +71,7 @@ let
           enabled
           enableAttrs
           hostName
-          pkgFrom
-          pkgsFrom
-          overlayFrom
+          flake
           ;
       };
     };

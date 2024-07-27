@@ -3,7 +3,7 @@
   config,
   enabled,
   mkDefaultOizysModule,
-  pkgFrom,
+flake,
   ...
 }:
 mkDefaultOizysModule config "cli" {
@@ -35,5 +35,5 @@ mkDefaultOizysModule config "cli" {
       btop
       gdu
     ])
-    ++ [ (pkgFrom "tsm") ];
+    ++ [ (flake.pkg "tsm") ];
 }

@@ -3,7 +3,7 @@
   pkgs,
   lib,
   enabled,
-  pkgFrom,
+flake,
   ...
 }:
 let
@@ -31,7 +31,7 @@ in
     pkgs.nixfmt-rfc-style
     pkgs.nix-output-monitor
 
-    (pkgFrom "self")
+    (flake.pkg "self")
   ];
 
   programs.nix-index-database.comma = enabled;

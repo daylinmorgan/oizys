@@ -2,7 +2,7 @@
   config,
   lib,
   pkgs,
-  pkgFrom,
+flake,
   ...
 }:
 let
@@ -10,7 +10,7 @@ let
   cfg = config.oizys.languages;
 
   python = pkgs.python3.withPackages (ps: with ps; [ pip ]);
-  pixi = pkgFrom "pixi";
+  pixi = flake.pkg "pixi";
 in
 {
   config = mkIfIn "python" cfg {

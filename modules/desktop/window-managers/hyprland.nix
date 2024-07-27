@@ -3,9 +3,7 @@
   config,
   mkOizysModule,
   enabled,
-  pkgFrom,
-  pkgsFrom,
-  overlayFrom,
+flake,
   ...
 }:
 
@@ -43,10 +41,10 @@ mkOizysModule config "hyprland" {
 
       catppuccin-cursors.mochaDark
     ])
-    ++ [ (pkgFrom "hyprman") ]
+    ++ [ (flake.pkg "hyprman") ]
 
     # swww-git is broken
-    ++ (with (pkgsFrom "nixpkgs-wayland"); [
+    ++ (with (flake.pkgs "nixpkgs-wayland"); [
       mako
       eww
       wlr-randr
@@ -56,7 +54,7 @@ mkOizysModule config "hyprland" {
     ]);
 
   nixpkgs.overlays = [
-    (overlayFrom "hyprland-contrib")
+    (flake.overlay "hyprland-contrib")
     # (overlayFrom "nixpkgs-wayland")
     # (overlayFrom "hyprland")
   ];

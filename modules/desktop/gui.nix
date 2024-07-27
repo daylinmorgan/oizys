@@ -2,7 +2,7 @@
   pkgs,
   config,
   lib,
-  pkgFrom,
+flake,
   ...
 }:
 let
@@ -11,7 +11,7 @@ in
 {
   config = mkIf config.oizys.desktop.enable {
     environment.systemPackages =
-      [ (pkgFrom "f1multiviewer") ]
+      [ (flake.pkg "f1multiviewer") ]
       ++ (with pkgs; [
         wezterm
         alacritty

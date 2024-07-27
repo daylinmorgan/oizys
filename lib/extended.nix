@@ -76,6 +76,11 @@ let
   pkgsFromSystem = system: flake: inputs."${flake}".packages."${system}";
   pkgFromSystem = system: flake: (pkgsFromSystem system flake).default;
   overlayFrom = flake: inputs."${flake}".overlays.default;
+  flakeFromSystem = system: {
+    overlay = overlayFrom;
+    pkgs = pkgsFromSystem system;
+    pkg = pkgFromSystem system;
+  };
 in
 {
   inherit
@@ -93,5 +98,6 @@ in
     pkgsFromSystem
     pkgFromSystem
     overlayFrom
+    flakeFromSystem
     ;
 }

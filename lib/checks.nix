@@ -5,17 +5,17 @@
 }:
 let
   inherit (builtins) map;
-  inherit (lib) pkgFromSystem pkgsFromSystem overlayFrom;
+  inherit (lib) flakeFromSystem;
+
+  flake = flakeFromSystem system;
   pkgs = import inputs.nixpkgs {
     inherit system;
     overlays = map [
       "lix-module"
       "hyprland-contrib"
       "nixpkgs-wayland"
-    ] overlayFrom;
+    ] flake.overlay;
   };
-  pkgsFrom = pkgsFromSystem system;
-  pkgFrom = pkgFromSystem system;
 in
 {
   makePackages =
@@ -32,14 +32,14 @@ in
             "tsm"
             "hyprman"
             "zls"
-          ] pkgFrom)
-          ++ (with pkgsFrom "hyprland"; [
+          ] flake.pkg)
+          ++ (with flake.pkgs "hyprland"; [
             default
             xdg-desktop-portal-hyprland
           ])
           ++ [
-            (pkgsFrom "roc").full
-            (pkgsFrom "zig2nix").zig.master.bin
+            (flake.pkgs "roc").full
+            (flake.pkgs "zig2nix").zig.master.bin
           ];
       }
       ''
