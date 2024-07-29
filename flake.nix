@@ -27,13 +27,12 @@
     hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1&rev=300228b503b36e5977b0d58713c5b4cf1f07b8a9";
     hyprland-contrib.url = "github:hyprwm/contrib";
 
-    # zls build failure?
     zig2nix = {
-      url = "github:Cloudef/zig2nix/9ec43c3e2cfd195bc7cbe3924037788e72a958e3";
+      url = "github:Cloudef/zig2nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     zls = {
-      url = "github:zigtools/zls/adf3b839b19df88c09877526007d8347ec982abb";
+      url = "github:zigtools/zls";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     roc = {
