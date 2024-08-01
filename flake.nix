@@ -12,19 +12,16 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    lix = {
-      url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
-      flake = false;
-    };
 
+    lix.url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
+    lix.flake = false;
     lix-module = {
       url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.lix.follows = "lix";
     };
 
-    # hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
-    hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1&rev=300228b503b36e5977b0d58713c5b4cf1f07b8a9";
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
     hyprland-contrib.url = "github:hyprwm/contrib";
 
     zig2nix = {
@@ -35,12 +32,13 @@
       url = "github:zigtools/zls";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     roc = {
       url = "github:roc-lang/roc";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    pixi.url = "github:daylinmorgan/pixi-flake";
 
+    pixi.url = "github:daylinmorgan/pixi-flake";
     f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
     tsm = {
       url = "github:daylinmorgan/tsm?dir=nix";
