@@ -16,6 +16,7 @@ jobs:
         uses: actions/checkout@v4
 
       - uses: daylin-bot/actions/setup@main
+      - uses: ./.github/actions/clean-disk
 
       - run: git checkout -B flake-lock
 
