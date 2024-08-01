@@ -10,7 +10,7 @@ var dryCmd = &cobra.Command{
 	Use:   "dry",
 	Short: "poor man's nix flake check",
 	Run: func(cmd *cobra.Command, args []string) {
-		oizys.Dry(verbose, minimal, args...)
+		oizys.Dry( minimal, args...)
 	},
 }
 

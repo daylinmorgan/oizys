@@ -191,13 +191,13 @@ func parseDryRun2(buf string) ([]string, []string) {
 }
 
 // TODO: refactor to account for --debug and not --verbose?
-func showDryRunResult(nixOutput string, verbose bool) {
+func showDryRunResult(nixOutput string) {
 	toBuild, toFetch := parseDryRun(nixOutput)
 	toFetch.Show(o.debug)
 	toBuild.Show(true)
 }
 
-func Dry(verbose bool, minimal bool, rest ...string) {
+func Dry(minimal bool, rest ...string) {
 	cmd := exec.Command("nix", "build", "--dry-run")
 	cmd.Args = append(cmd.Args, rest...)
 	if o.resetCache {
@@ -226,7 +226,7 @@ func Dry(verbose bool, minimal bool, rest ...string) {
 	if minimal {
 		fmt.Println(string(result))
 	} else {
-		showDryRunResult(string(result), verbose)
+		showDryRunResult(string(result))
 	}
 }
 
