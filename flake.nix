@@ -38,8 +38,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    pixi.url = "github:daylinmorgan/pixi-flake";
-    f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
+    pixi = {
+      url = "github:daylinmorgan/pixi-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    f1multiviewer = {
+      url = "github:daylinmorgan/f1multiviewer-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     tsm = {
       url = "github:daylinmorgan/tsm?dir=nix";
       inputs.nixpkgs.follows = "nixpkgs";
