@@ -35,7 +35,6 @@ type Oizys struct {
 	githubToken   string
 	local         bool
 	inCI          bool
-	verbose       bool
 	systemPath    bool
 	resetCache    bool
 	debug         bool
@@ -101,9 +100,6 @@ func SetHost(name string) {
 }
 
 func GetHost() string { return o.host }
-func SetVerbose(v bool) {
-	o.verbose = v
-}
 
 func SetResetCache(reset bool) {
 	o.resetCache = reset
@@ -241,7 +237,7 @@ func NixosRebuild(subcmd string, rest ...string) {
 	if !o.inCI {
 		cmd.Args = append(cmd.Args, "--log-format", "multiline")
 	}
-	if o.verbose {
+	if o.debug {
 		cmd.Args = append(cmd.Args, "--print-build-logs")
 	}
 	cmd.Args = append(cmd.Args, rest...)

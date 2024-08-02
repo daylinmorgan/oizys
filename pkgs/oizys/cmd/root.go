@@ -32,7 +32,6 @@ var (
 	flake      string
 	host       string
 	debug      bool
-	verbose    bool
 	systemPath bool
 	resetCache bool
 	minimal    bool
@@ -48,7 +47,6 @@ var rootCmd = &cobra.Command{
 		}
 		oizys.SetFlake(flake)
 		oizys.SetHost(host)
-		oizys.SetVerbose(verbose)
 		oizys.SetResetCache(resetCache)
 		oizys.SetDebug(debug)
 	},
@@ -76,7 +74,6 @@ func init() {
 	rootCmd.CompletionOptions.HiddenDefaultCmd = true
 	rootCmd.PersistentFlags().StringVar(&flake, "flake", "", "path to flake ($OIZYS_DIR or $HOME/oizys)")
 	rootCmd.PersistentFlags().StringVar(&host, "host", "", "host(s) to build (current host)")
-	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "show verbose output")
 	rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "show debug output")
 	rootCmd.PersistentFlags().BoolVar(&resetCache, "reset-cache", false, "set narinfo-cache-negative-ttl to 0")
 }
