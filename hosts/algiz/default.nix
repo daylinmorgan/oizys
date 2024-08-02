@@ -5,9 +5,9 @@
       "nim"
       "node" # for docker langservers
       "python"
+      "nushell"
     ];
     rune.motd = enabled;
-
     docker = enabled;
     backups = enabled;
     nix-ld = enabled;
