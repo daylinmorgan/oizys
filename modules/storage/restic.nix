@@ -12,8 +12,8 @@ mkOizysModule config "backups" {
     # workaround for now `mkdir ~/.conda && touch ~/.conda/environments.txt`
 
     extraBackupArgs = [
-      "--exclude-file /home/daylin/.config/restic/excludes.txt"
-      "--exclude-file /home/daylin/.conda/environments.txt"
+      "--exclude-file /home/${config.oizys.user}/.config/restic/excludes.txt"
+      "--exclude-file /home/${config.oizys.user}/.conda/environments.txt"
       "--verbose"
       "--one-file-system"
       "--tag systemd.timer"

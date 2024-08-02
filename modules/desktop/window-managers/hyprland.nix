@@ -3,7 +3,7 @@
   config,
   mkOizysModule,
   enabled,
-flake,
+  flake,
   ...
 }:
 

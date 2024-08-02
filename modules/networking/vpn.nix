@@ -13,8 +13,8 @@ mkOizysModule config "vpn" {
   services.openvpn.servers = {
     express-ny = {
       config = ''
-        config /home/daylin/.config/openvpn/express-ny/config.ovpn
-        auth-user-pass /home/daylin/.config/openvpn/express-ny/credentials
+        config /home/${config.oizys.user}/.config/openvpn/express-ny/config.ovpn
+        auth-user-pass /home/${config.oizys.user}/.config/openvpn/express-ny/credentials
       '';
       autoStart = false;
       updateResolvConf = true;

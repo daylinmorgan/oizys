@@ -3,7 +3,7 @@
   pkgs,
   lib,
   enabled,
-flake,
+  flake,
   ...
 }:
 let

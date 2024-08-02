@@ -3,7 +3,7 @@
   config,
   enabled,
   mkDefaultOizysModule,
-flake,
+  flake,
   ...
 }:
 mkDefaultOizysModule config "cli" {

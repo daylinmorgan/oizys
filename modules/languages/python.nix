@@ -2,7 +2,7 @@
   config,
   lib,
   pkgs,
-flake,
+  flake,
   ...
 }:
 let

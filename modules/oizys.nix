@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption;
+  inherit (lib) mkEnableOption mkOption;
 in
 {
   imports = with self.nixosModules; [
@@ -39,8 +39,15 @@ in
     restic
   ];
 
-  options.oizys.desktop.enable = mkEnableOption "is desktop";
-  options.oizys.docker.enable = mkEnableOption "enable docker support";
+  options.oizys = {
+    user = mkOption {
+      type = lib.types.string;
+      default = "daylin";
+      description = "main user account";
+    };
+    desktop.enable = mkEnableOption "is desktop";
+    docker.enable = mkEnableOption "enable docker support";
+  };
   config = {
     networking.hostName = hostName;
     time.timeZone = "US/Central";
