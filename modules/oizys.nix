@@ -41,7 +41,7 @@ in
 
   options.oizys = {
     user = mkOption {
-      type = lib.types.string;
+      type = lib.types.str;
       default = "daylin";
       description = "main user account";
     };
