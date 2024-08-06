@@ -14,16 +14,22 @@ in
 
   nixpkgs.config.allowUnfree = true;
   # nix.package = pkgs.nixVersions.latest;
-  nix.extraOptions = ''
-    experimental-features = nix-command flakes
-    use-xdg-base-directories = true
-  '';
+  nix = {
+    extraOptions = ''
+      experimental-features = nix-command flakes
+      use-xdg-base-directories = true
+    '';
 
-  nix.optimise.automatic = true;
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
+    optimise.automatic = true;
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
+
+    # use the same nixpkgs for nix run "nixpkgs#hello" style commands
+    registry.nixpkgs.flake = inputs.nixpkgs;
+
   };
 
   environment.systemPackages = [
