@@ -29,8 +29,13 @@ in
 
     # use the same nixpkgs for nix run "nixpkgs#hello" style commands
     registry.nixpkgs.flake = inputs.nixpkgs;
-
   };
+
+  # https://dataswamp.org/~solene/2022-07-20-nixos-flakes-command-sync-with-system.html#_nix-shell_vs_nix_shell
+  # use the same nixpkgs for nix-shell -p hello style commands
+  # I don't know that this is necesary...
+  # nix.nixPath = [ "nixpkgs=/etc/channels/nixpkgs" ];
+  # environment.etc."channels/nixpkgs".source = inputs.nixpkgs.outPath;
 
   environment.systemPackages = [
     pkgs.nixd
