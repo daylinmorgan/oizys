@@ -34,6 +34,7 @@ jobs:
 
       - uses: DeterminateSystems/nix-installer-action@v13
         with:
+          source-url: https://install.lix.systems/lix/lix-installer-x86_64-linux
           extra-conf: |
             accept-flake-config = true
 
@@ -59,4 +60,5 @@ jobs:
               --flake . \
               --debug \
               -- \
+              --keep-going \
               --print-build-logs
