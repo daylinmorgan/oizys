@@ -8,10 +8,7 @@
     stable.url = "github:nixos/nixpkgs/nixos-23.11";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
-    nix-index-database = {
-      url = "github:nix-community/nix-index-database";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nix-index-database.url = "github:nix-community/nix-index-database";
 
     lix.url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
     lix.flake = false;
@@ -23,37 +20,23 @@
 
     hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
     hyprland-contrib.url = "github:hyprwm/contrib";
+    roc.url = "github:roc-lang/roc";
+    zig2nix.url = "github:Cloudef/zig2nix";
+    zls.url = "github:zigtools/zls";
 
-    zig2nix = {
-      url = "github:Cloudef/zig2nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    zls = {
-      url = "github:zigtools/zls";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    pixi.url = "github:daylinmorgan/pixi-flake";
+    f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
+    tsm.url = "github:daylinmorgan/tsm?dir=nix";
+    hyprman.url = "git+https://git.dayl.in/daylin/hyprman.git";
 
-    roc = {
-      url = "github:roc-lang/roc";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    pixi = {
-      url = "github:daylinmorgan/pixi-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    f1multiviewer = {
-      url = "github:daylinmorgan/f1multiviewer-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    tsm = {
-      url = "github:daylinmorgan/tsm?dir=nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    hyprman = {
-      url = "git+https://git.dayl.in/daylin/hyprman.git";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    hyprman.inputs.nixpkgs.follows = "nixpkgs";
+    f1multiviewer.inputs.nixpkgs.follows = "nixpkgs";
+    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
+    pixi.inputs.nixpkgs.follows = "nixpkgs";
+    roc.inputs.nixpkgs.follows = "nixpkgs";
+    tsm.inputs.nixpkgs.follows = "nixpkgs";
+    zls.inputs.nixpkgs.follows = "nixpkgs";
+    zig2nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   nixConfig = {
