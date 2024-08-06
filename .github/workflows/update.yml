@@ -100,7 +100,6 @@ jobs:
             -- \
             build $system_attr \
               --flake . \
-              --verbose \
               --debug \
               -- \
               --keep-going \
