@@ -43,7 +43,6 @@ jobs:
             build --minimal \
               --host "othalan" \
               --flake . \
-              --verbose \
               --debug \
               -- \
               --print-build-logs
@@ -86,7 +85,6 @@ jobs:
             -- \
             build $system_attr \
               --flake . \
-              --verbose \
               --debug \
               -- \
               --print-build-logs \
