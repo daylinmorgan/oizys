@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"oizys/internal/oizys"
+	"strings"
 
 	"github.com/charmbracelet/log"
 	"github.com/google/go-github/v63/github"
@@ -154,17 +155,10 @@ func ReadMarkdownFromZip(zipData []byte, fileName string) (string, error) {
 	return string(content), nil
 }
 
-// func CI(rest ...string) {
-// 	args := []string{
-// 		"workflow", "run", "build.yml",
-// 		"-F", fmt.Sprintf("hosts=%s", o.host),
-// 	}
-// 	args = append(args, rest...)
-// 	cmd := exec.Command("gh", args...)
-// 	e.ExitWithCommand(cmd)
-// }
-
 func CreateDispatch(workflowFileName string, ref string, inputs map[string]interface{}) {
+	if !strings.HasSuffix(workflowFileName, ".yml") && !strings.HasSuffix(workflowFileName, ".yaml") {
+		workflowFileName = workflowFileName + ".yml"
+	}
 	log.Infof("creating dispatch event for %s", workflowFileName)
 	event := github.CreateWorkflowDispatchEventRequest{Ref: ref, Inputs: inputs}
 	_, err := client.Actions.CreateWorkflowDispatchEventByFileName(
