@@ -256,6 +256,11 @@ func NixBuild(minimal bool, rest ...string) {
 			log.Info("nothing to build. exiting...")
 			os.Exit(0)
 		}
+		if o.inCI {
+			o.writeToGithubStepSummary("# Building Derivations:\n")
+      // TODO: write as a markdown table with hash + name (without .drv)
+			o.writeToGithubStepSummary(strings.Join(drvs, "\n"))
+		}
 		cmd.Args = append(cmd.Args, append(drvs, "--no-link")...)
 	}
 	if !o.inCI {
