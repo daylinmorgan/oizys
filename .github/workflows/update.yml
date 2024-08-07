@@ -37,6 +37,9 @@ jobs:
           nix flake update --commit-lock-file 2>> $GITHUB_STEP_SUMMARY
           printf '```\n' >> $GITHUB_STEP_SUMMARY
 
+      - name: Pre-build oizys
+        run: nix build .
+
       - name: Build
         run: |
           nix run . \
@@ -79,6 +82,9 @@ jobs:
         with:
           purge-packages: 'true'
 
+      - name: Pre-build oizys
+        run: nix build .
+
 
       - name: Build
         run: |
@@ -93,6 +99,9 @@ jobs:
               --out-link current
 
       - run: git checkout flake-lock
+
+      - name: Pre-build oizys
+        run: nix build .
 
       - name: Build Updated
         run: |

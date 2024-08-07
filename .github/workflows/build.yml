@@ -51,6 +51,9 @@ jobs:
           echo '${{ inputs.lockFile }}' > flake.lock
           git diff
 
+      - name: Pre-build Oizys
+        run: nix build .
+
       - name: Build
         run: |
           nix run . \
