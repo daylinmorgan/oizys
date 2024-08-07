@@ -6,6 +6,13 @@
   flake,
   ...
 }:
+let
+  activate-snippet = ''
+    if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
+      exec Hyprland
+    fi
+  '';
+in
 
 mkOizysModule config "hyprland" {
   programs.hyprland = enabled;
@@ -52,6 +59,16 @@ mkOizysModule config "hyprland" {
       #
       # dunst
     ]);
+
+  services.getty = {
+    extraArgs = [ "--skip-login" ];
+    loginOptions = "-p -- ${config.oizys.user}";
+  };
+
+  environment.etc = {
+    "bashrc.local".text = activate-snippet;
+    "zshenv.local".text = activate-snippet;
+  };
 
   nixpkgs.overlays = [
     (flake.overlay "hyprland-contrib")
