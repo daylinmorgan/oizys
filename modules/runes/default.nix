@@ -25,6 +25,7 @@ let
       kind ? "braille",
     }:
     "[1;3${number}m\n" + runes.${name}.${kind} + "\n[0m";
+
   cfg = config.oizys.rune;
 in
 {

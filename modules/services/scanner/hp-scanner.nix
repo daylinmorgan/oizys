@@ -7,7 +7,7 @@
 }:
 mkOizysModule config "hp-scanner" {
 
-  environment.systemPackages = [ pkgs.skanpage ];
+  environment.systemPackages = [ pkgs.kdePackages.skanpage ];
 
   hardware.sane = enabled // {
     extraBackends = [ pkgs.hplipWithPlugin ];
