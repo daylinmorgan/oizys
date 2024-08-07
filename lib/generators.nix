@@ -12,9 +12,6 @@ let
     mkOizysModule
     enabled
     enableAttrs
-    pkgsFromSystem
-    pkgFromSystem
-    overlayFrom
     isNixFile
     flakeFromSystem
     ;
