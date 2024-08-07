@@ -1,4 +1,9 @@
-{ pkgs, enabled, ... }:
+{
+  pkgs,
+  enabled,
+  config,
+  ...
+}:
 {
   networking.networkmanager = enabled;
   services.fwupd = enabled;
@@ -7,13 +12,6 @@
   };
 
   services.printing = enabled;
-  hardware.sane = enabled // {
-    extraBackends = [ pkgs.hplipWithPlugin ];
-  };
-  users.users.daylin.extraGroups = [
-    "scanner"
-    "lp"
-  ];
 
   # https://github.com/NixOS/nixos-hardware/blob/c478b3d56969006e015e55aaece4931f3600c1b2/lenovo/thinkpad/x1/9th-gen/default.nix
   # https://github.com/NixOS/nixos-hardware/blob/c478b3d56969006e015e55aaece4931f3600c1b2/common/pc/ssd/default.nix

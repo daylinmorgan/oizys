@@ -28,6 +28,7 @@ in
 
     gui
     fonts
+    hp-scanner
 
     languages
 

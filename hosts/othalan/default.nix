@@ -1,4 +1,4 @@
-{ enabled, ... }:
+{ enabled, config, ... }:
 {
   oizys = {
     vpn = enabled;
@@ -11,6 +11,7 @@
     };
     vbox = enabled;
     backups = enabled;
+    hp-scanner = enabled;
     languages = [
       "misc"
       "nim"
@@ -33,5 +34,5 @@
     ];
   };
 
-  users.users.daylin.extraGroups = [ "audio" ];
+  users.users.${config.oizys.user}.extraGroups = [ "audio" ];
 }
