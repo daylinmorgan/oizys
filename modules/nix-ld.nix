@@ -12,6 +12,7 @@ let
     mkOption
     literalExpression
     types
+    optionals
     ;
   cfg = config.oizys.nix-ld;
 
@@ -103,8 +104,7 @@ in
 
   config =
     let
-      libs =
-        defaultLibraries ++ cfg.extra-libraries ++ (if cfg.overkill.enable then overkillLibraries else [ ]);
+      libs = defaultLibraries ++ cfg.extra-libraries ++ (optionals cfg.overkill.enable overkillLibraries);
     in
     mkIf cfg.enable {
       programs.nix-ld = enabled // {
