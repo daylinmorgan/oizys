@@ -47,6 +47,9 @@ mkOizysModule config "hyprland" {
       swww
 
       catppuccin-cursors.mochaDark
+
+      # not even clear why I need to add this but ¯\_(ツ)_/¯
+      kdePackages.qtwayland
     ])
     ++ [ (flake.pkg "hyprman") ]
 
