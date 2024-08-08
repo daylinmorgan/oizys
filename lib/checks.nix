@@ -10,12 +10,22 @@ let
   flake = flakeFromSystem system;
   pkgs = import inputs.nixpkgs {
     inherit system;
-    overlays = map [
-      "lix-module"
-      "hyprland-contrib"
-      "nixpkgs-wayland"
-    ] flake.overlay;
+    overlays = [
+      (flake.overlay "lix-module")
+      (flake.overlay "hyprland-contrib")
+      (flake.overlay "nixpkgs-wayland")
+    ];
   };
+  myPackages = map [
+    "tsm"
+    "hyprman"
+    "zls"
+  ] flake.pkg;
+
+  hyprPackages = with (flake.pkgs "hyprland"); [
+    default
+    xdg-desktop-portal-hyprland
+  ];
 in
 {
   makePackages =
@@ -23,24 +33,18 @@ in
       {
         src = ./.;
         nativeBuildInputs =
-          [
-            pkgs.pixi
-            pkgs.swww
-            pkgs.nixVersions.stable
-          ]
-          ++ (map [
-            "tsm"
-            "hyprman"
-            "zls"
-          ] flake.pkg)
-          ++ (with flake.pkgs "hyprland"; [
-            default
-            xdg-desktop-portal-hyprland
+          (with pkgs; [
+            pixi
+            swww
+            nixVersions.stable
           ])
           ++ [
             (flake.pkgs "roc").full
             (flake.pkgs "zig2nix").zig.master.bin
-          ];
+          ]
+          ++ myPackages
+          ++ hyprPackages;
+
       }
       ''
         mkdir "$out"
