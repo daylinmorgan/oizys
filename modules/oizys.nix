@@ -38,6 +38,8 @@ in
 
     nix-ld
     restic
+
+    llm
   ];
 
   options.oizys = {

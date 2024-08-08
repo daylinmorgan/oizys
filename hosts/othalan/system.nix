@@ -1,8 +1,4 @@
-{
-  pkgs,
-  enabled,
-  ...
-}:
+{ pkgs, enabled, ... }:
 {
   networking.networkmanager = enabled;
   services.fwupd = enabled;

@@ -22,6 +22,7 @@
       "tex"
       "zig"
     ];
+    llm = enabled;
   };
 
   services.restic.backups.gdrive = {
