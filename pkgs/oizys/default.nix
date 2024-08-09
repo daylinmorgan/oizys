@@ -24,5 +24,7 @@ buildGoModule {
     installShellCompletion --cmd oizys \
       --zsh <(OIZYS_SKIP_CHECK=true $out/bin/oizys completion zsh)
   '';
-
+  meta = {
+    description = "nix begat oizys";
+  };
 }

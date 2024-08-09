@@ -2,10 +2,10 @@
   inputs,
   system,
   lib,
+  self,
 }:
 let
-  inherit (builtins) map;
-  inherit (lib) flakeFromSystem;
+  inherit (lib) flakeFromSystem attrValues;
 
   flake = flakeFromSystem system;
   pkgs = import inputs.nixpkgs {
@@ -16,25 +16,23 @@ let
       (flake.overlay "nixpkgs-wayland")
     ];
   };
-  myPackages = map [
-    "tsm"
-    "hyprman"
-    "zls"
-  ] flake.pkg;
 
   hyprPackages = with (flake.pkgs "hyprland"); [
     default
     xdg-desktop-portal-hyprland
   ];
+
+  selfPackages = (attrValues self.packages.${pkgs.system});
 in
+# selfPackages = self.packages.${pkgs.system} |> attrValues;
 {
   makePackages =
     pkgs.runCommandLocal "build-third-party"
       {
         src = ./.;
         nativeBuildInputs =
+          # packages from overlays
           (with pkgs; [
-            pixi
             swww
             nixVersions.stable
           ])
@@ -42,9 +40,8 @@ in
             (flake.pkgs "roc").full
             (flake.pkgs "zig2nix").zig.master.bin
           ]
-          ++ myPackages
-          ++ hyprPackages;
-
+          ++ hyprPackages
+          ++ selfPackages;
       }
       ''
         mkdir "$out"
