@@ -22,6 +22,14 @@ let
   # all nix files not including pkgs.nix
   hostFiles = host: filter isNixFile (listFilesRecursive (hostPath host));
 
+  # hostFiles =
+  #   host:
+  #     filter isNixFile (
+  #       host
+  #       |> hostPath
+  #       |> listFilesRecursive
+  #     )
+  
   mkIso = nixosSystem {
     system = "x86_64-linux";
     modules = [
