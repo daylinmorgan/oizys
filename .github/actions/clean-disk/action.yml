@@ -41,11 +41,13 @@ runs:
               $(non_manifest_packages) # > /dev/null
           fi
 
-          sudo rm -rf /opt &
-          sudo rm -rf "$AGENT_TOOLSDIRECTORY" &
+          GLOBIGNORE="/usr/share/git-core/**/*"
+          sudo rm -rf \
+            /var/lib/docker/ \
+            "$AGENT_TOOLSDIRECTORY" \
+            /opt \
+            /usr/{local,share} &
 
-          sudo rm -rf /var/lib/docker &
-          sudo rm -rf /usr/{local,share} &
           {
             sudo swapoff -a
             sudo rm -f /mnt/swapfile
