@@ -17,8 +17,6 @@ let
     ;
   inherit (lib.filesystem) listFilesRecursive;
 
-  # pkgFrom = pkgFromSystem "x86_64-linux";
-  # pkgsFrom = pkgsFromSystem "x86_64-linux";
   flake = flakeFromSystem "x86_64-linux";
   hostPath = host: ../. + "/hosts/${host}";
   # all nix files not including pkgs.nix
@@ -27,13 +25,16 @@ let
   mkIso = nixosSystem {
     system = "x86_64-linux";
     modules = [
+      inputs.lix-module.nixosModules.default
       self.nixosModules.nix
       self.nixosModules.essentials
       (
         { pkgs, modulesPath, ... }:
         {
           imports = [ (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix") ];
-          environment.systemPackages = (with pkgs; [ neovim ]) ++ [ (flake.pkg "self") ];
+          environment.systemPackages = (with pkgs; [ neovim ]) ++ [ 
+            self.packages.${pkgs.system}.default
+          ];
         }
       )
     ];
