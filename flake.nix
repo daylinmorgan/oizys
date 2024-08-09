@@ -21,7 +21,7 @@
     hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
     hyprland-contrib.url = "github:hyprwm/contrib";
     roc.url = "github:roc-lang/roc";
-    zig2nix.url = "github:Cloudef/zig2nix";
+    zig-overlay.url = "github:mitchellh/zig-overlay";
     zls.url = "github:zigtools/zls";
 
     pixi.url = "github:daylinmorgan/pixi-flake";
@@ -36,7 +36,8 @@
     roc.inputs.nixpkgs.follows = "nixpkgs";
     tsm.inputs.nixpkgs.follows = "nixpkgs";
     zls.inputs.nixpkgs.follows = "nixpkgs";
-    zig2nix.inputs.nixpkgs.follows = "nixpkgs";
+    zls.inputs.zig-overlay.follows = "zig-overlay";
+    zig-overlay.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   nixConfig = {

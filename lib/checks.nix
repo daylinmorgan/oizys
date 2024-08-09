@@ -22,23 +22,24 @@ let
     xdg-desktop-portal-hyprland
   ];
 
+  # TODO: start using pipes once support lands in nixd
+  # selfPackages = self.packages.${pkgs.system} |> attrValues;
   selfPackages = (attrValues self.packages.${pkgs.system});
 in
-# selfPackages = self.packages.${pkgs.system} |> attrValues;
 {
   makePackages =
     pkgs.runCommandLocal "build-third-party"
       {
-        src = ./.;
         nativeBuildInputs =
           # packages from overlays
           (with pkgs; [
             swww
-            nixVersions.stable
+            # nixVersions.git
           ])
           ++ [
             (flake.pkgs "roc").full
-            (flake.pkgs "zig2nix").zig.master.bin
+            (flake.pkgs "zig-overlay").master
+            (flake.pkg "zls")
           ]
           ++ hyprPackages
           ++ selfPackages;
