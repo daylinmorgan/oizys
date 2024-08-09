@@ -56,7 +56,10 @@ func New() *Oizys {
 		o.flake = oizysDir
 	}
 	o.githubSummary = os.Getenv("GITHUB_STEP_SUMMARY")
-	o.inCI = o.githubSummary != ""
+	if o.githubSummary != "" {
+		o.inCI = true
+		log.Debug("running oizys in CI mode")
+	}
 	o.githubToken = os.Getenv("GITHUB_TOKEN")
 	o.repo = git.NewRepo(o.flake)
 	return o
@@ -244,6 +247,35 @@ func NixosRebuild(subcmd string, rest ...string) {
 	e.ExitWithCommand(cmd)
 }
 
+func splitDrv(drv string) (string, string) {
+	s := strings.SplitN(drv, "-", 2)
+	ss := strings.Split(s[0], "/")
+	hash := ss[len(ss)-1]
+	drvName := strings.Replace(s[1], ".drv^*", "", 1)
+	return drvName, hash
+}
+
+func writeDervationsToStepSummary(drvs []string) {
+	tableRows := make([]string, len(drvs))
+	for i, drv := range drvs {
+		name, hash := splitDrv(drv)
+		tableRows[i] = fmt.Sprintf(
+			"| %s | %s |",
+			name, hash,
+		)
+	}
+
+	o.writeToGithubStepSummary(
+		fmt.Sprintf(`# Building Derivations:
+| derivation | hash |
+|---|---|
+%s
+`,
+			strings.Join(tableRows, "\n"),
+		),
+	)
+}
+
 func NixBuild(minimal bool, rest ...string) {
 	cmd := exec.Command("nix", "build")
 	if o.resetCache {
@@ -257,9 +289,7 @@ func NixBuild(minimal bool, rest ...string) {
 			os.Exit(0)
 		}
 		if o.inCI {
-			o.writeToGithubStepSummary("# Building Derivations:\n")
-      // TODO: write as a markdown table with hash + name (without .drv)
-			o.writeToGithubStepSummary(strings.Join(drvs, "\n"))
+			writeDervationsToStepSummary(drvs)
 		}
 		cmd.Args = append(cmd.Args, append(drvs, "--no-link")...)
 	}
