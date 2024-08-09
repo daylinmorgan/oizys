@@ -266,7 +266,7 @@ func writeDervationsToStepSummary(drvs []string) {
 	}
 
 	o.writeToGithubStepSummary(
-		fmt.Sprintf(`# Building Derivations:
+		fmt.Sprintf(`# Building Derivations
 | derivation | hash |
 |---|---|
 %s
