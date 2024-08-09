@@ -3,7 +3,7 @@
   pkgs,
   lib,
   enabled,
-  flake,
+  self,
   ...
 }:
 let
@@ -15,10 +15,10 @@ in
   nixpkgs.config.allowUnfree = true;
   # nix.package = pkgs.nixVersions.latest;
   nix = {
-    extraOptions = ''
-      experimental-features = nix-command flakes pipe-operator
-      use-xdg-base-directories = true
-    '';
+    settings = {
+      experimental-features = [ "nix-command" "flakes" "pipe-operator"];
+      use-xdg-base-directories = true;
+    };
 
     optimise.automatic = true;
     gc = {
@@ -42,7 +42,7 @@ in
     pkgs.nixfmt-rfc-style
     pkgs.nix-output-monitor
 
-    (flake.pkg "self")
+    self.packages.${pkgs.system}.default
   ];
 
   programs.nix-index-database.comma = enabled;
