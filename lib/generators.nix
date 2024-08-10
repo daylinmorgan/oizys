@@ -21,8 +21,9 @@ let
   hostPath = host: ../. + "/hosts/${host}";
   # all nix files not including pkgs.nix
   # hostFiles = host: filter isNixFile (listFilesRecursive (hostPath host));
-
   hostFiles = host: host |> hostPath |> listFilesRecursive |> filter isNixFile;
+
+  commonSpecialArgs = {inherit self inputs lib enabled;};
 
   mkIso = nixosSystem {
     system = "x86_64-linux";
@@ -32,14 +33,7 @@ let
       self.nixosModules.essentials
       self.nixosModules.iso
     ];
-    specialArgs = {
-      inherit
-        inputs
-        lib
-        self
-        enabled
-        ;
-    };
+    specialArgs = commonSpecialArgs;
   };
 
   mkSystem =
@@ -53,14 +47,10 @@ let
         inputs.hyprland.nixosModules.default
       ] ++ (hostFiles hostName);
 
-      specialArgs = {
+      specialArgs = commonSpecialArgs // {
         inherit
-          inputs
-          lib
-          self
           mkDefaultOizysModule
           mkOizysModule
-          enabled
           enableAttrs
           hostName
           flake
