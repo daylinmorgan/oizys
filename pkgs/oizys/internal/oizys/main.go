@@ -255,6 +255,12 @@ func splitDrv(drv string) (string, string) {
 	return drvName, hash
 }
 
+const tableTmpl = `# Building Derivations
+| derivation | hash |
+|---|---|
+%s
+`
+
 func writeDervationsToStepSummary(drvs []string) {
 	tableRows := make([]string, len(drvs))
 	for i, drv := range drvs {
@@ -264,16 +270,7 @@ func writeDervationsToStepSummary(drvs []string) {
 			name, hash,
 		)
 	}
-
-	o.writeToGithubStepSummary(
-		fmt.Sprintf(`# Building Derivations
-| derivation | hash |
-|---|---|
-%s
-`,
-			strings.Join(tableRows, "\n"),
-		),
-	)
+	o.writeToGithubStepSummary(fmt.Sprintf(tableTmpl, strings.Join(tableRows, "\n")))
 }
 
 func NixBuild(minimal bool, rest ...string) {

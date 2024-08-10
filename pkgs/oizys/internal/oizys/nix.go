@@ -1,6 +1,7 @@
 package oizys
 
 import (
+  _ "embed"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -12,22 +13,21 @@ import (
 	"github.com/charmbracelet/log"
 )
 
-var ignoredMap = stringSliceToMap(
-	[]string{
-		// nix
-		"ld-library-path", "builder.pl", "profile", "system-path",
-		// nixos
-		"nixos-help",
-		"nixos-install", "nixos-version",
-		"nixos-manual-html", "nixos-rebuild",
-		"nixos-configuration-reference-manpage",
-		"nixos-generate-config", "nixos-enter",
-		"nixos-container", "nixos-build-vms",
-		"nixos-wsl-version", "nixos-wsl-welcome-message", "nixos-wsl-welcome",
-		// trivial packages
-		"restic-gdrive", "gitea", "lock", "code",
-	},
-)
+//go:embed ignored.txt
+var ignoredList string
+var ignoredMap = stringToMap(ignoredList)
+
+func stringToMap(s string) map[string]struct{} {
+  return stringSliceToMap(strings.Split(s, "\n"))
+}
+
+func stringSliceToMap(slice []string) map[string]struct{} {
+	hashMap := make(map[string]struct{}, len(slice))
+	for _, s := range slice {
+		hashMap[s] = struct{}{}
+	}
+	return hashMap
+}
 
 type Derivation struct {
 	InputDrvs map[string]interface{}
@@ -72,13 +72,7 @@ func drvNotIgnored(drv string) bool {
 	return !ok
 }
 
-func stringSliceToMap(slice []string) map[string]struct{} {
-	hashMap := make(map[string]struct{}, len(slice))
-	for _, s := range slice {
-		hashMap[s] = struct{}{}
-	}
-	return hashMap
-}
+
 
 func drvsToInputs(derivation map[string]Derivation) []string {
 	var drvs []string
