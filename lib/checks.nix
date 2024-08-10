@@ -24,7 +24,7 @@ let
 
   # TODO: start using pipes once support lands in nixd
   # selfPackages = self.packages.${pkgs.system} |> attrValues;
-  selfPackages = (attrValues self.packages.${pkgs.system});
+  selfPackages = attrValues self.packages.${pkgs.system};
 in
 {
   makePackages =
@@ -34,7 +34,7 @@ in
           # packages from overlays
           (with pkgs; [
             swww
-            # nixVersions.git
+            nixVersions.git
           ])
           ++ [
             (flake.pkgs "roc").full

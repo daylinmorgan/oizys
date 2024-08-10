@@ -23,7 +23,14 @@ let
   # hostFiles = host: filter isNixFile (listFilesRecursive (hostPath host));
   hostFiles = host: host |> hostPath |> listFilesRecursive |> filter isNixFile;
 
-  commonSpecialArgs = {inherit self inputs lib enabled;};
+  commonSpecialArgs = {
+    inherit
+      self
+      inputs
+      lib
+      enabled
+      ;
+  };
 
   mkIso = nixosSystem {
     system = "x86_64-linux";
