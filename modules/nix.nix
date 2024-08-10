@@ -16,7 +16,11 @@ in
   # nix.package = pkgs.nixVersions.latest;
   nix = {
     settings = {
-      experimental-features = [ "nix-command" "flakes" "pipe-operator"];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+        "pipe-operator"
+      ];
       use-xdg-base-directories = true;
     };
 

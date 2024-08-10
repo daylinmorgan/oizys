@@ -1,6 +1,6 @@
 inputs: final: prev:
 let
-  inherit (builtins) listToAttrs substring filter;
+  inherit (builtins) listToAttrs substring;
   inherit (final)
     concatStringsSep
     hasSuffix
@@ -12,6 +12,7 @@ let
   inherit (final.filesystem) listFilesRecursive;
 in
 let
+
   enabled = {
     enable = true;
   };
@@ -68,7 +69,7 @@ let
 
   isNixFile = p: hasSuffix ".nix" p;
   isDefaultNixFile = p: hasSuffix "default.nix" p;
-  filterNotDefaultNixFile = paths: filter (p: !(isDefaultNixFile p) && (isNixFile p)) paths;
+  filterNotDefaultNixFile = paths: builtins.filter (p: !(isDefaultNixFile p) && (isNixFile p)) paths;
   listNixFilesRecursive = dir: filterNotDefaultNixFile (listFilesRecursive dir);
 
   # defaultLinuxPackage = flake: flake.packages.x86_64-linux.default;
@@ -80,6 +81,10 @@ let
     overlay = overlayFrom;
     pkgs = pkgsFromSystem system;
     pkg = pkgFromSystem system;
+  };
+
+  functional = {
+    filterF = list: f: builtins.filter f list;
   };
 in
 {
@@ -99,5 +104,6 @@ in
     pkgFromSystem
     overlayFrom
     flakeFromSystem
+    functional
     ;
 }
