@@ -1,6 +1,6 @@
 inputs: final: prev:
 let
-  inherit (builtins) listToAttrs substring;
+  inherit (builtins) listToAttrs substring filter;
   inherit (final)
     concatStringsSep
     hasSuffix
@@ -67,10 +67,14 @@ let
   flakeVer =
     flake: "${flake.shortRev or flake.dirtyShortRev}-${mkDate (toString flake.lastModifiedDate)}";
 
-  isNixFile = p: hasSuffix ".nix" p;
-  isDefaultNixFile = p: hasSuffix "default.nix" p;
-  filterNotDefaultNixFile = paths: builtins.filter (p: !(isDefaultNixFile p) && (isNixFile p)) paths;
-  listNixFilesRecursive = dir: filterNotDefaultNixFile (listFilesRecursive dir);
+  isNixFile = p: p |> hasSuffix ".nix";
+  isDefaultNixFile = p: p |> hasSuffix "default.nix";
+  # filterNotDefaultNixFile = paths: filter (p: !(isDefaultNixFile p) && (isNixFile p)) paths;
+  filterNotDefaultNixFile = paths: 
+    paths |> filter (p: !(isDefaultNixFile p) && (isNixFile p));
+  # listNixFilesRecursive = dir: filterNotDefaultNixFile (listFilesRecursive dir);
+  listNixFilesRecursive = dir:
+    dir |> listFilesRecursive |> filterNotDefaultNixFile;
 
   # defaultLinuxPackage = flake: flake.packages.x86_64-linux.default;
   # defaultPackageGeneric = system: flake: "${flake}.packages.${system}.default";
