@@ -1,39 +1,17 @@
-{ enabled, config, ... }:
+{
+  lib,
+  config,
+  enabled,
+  enableAttrs,
+  pipeList,
+  ...
+}:
 {
   oizys = {
-    vpn = enabled;
-    desktop = enabled;
-    hyprland = enabled;
-    chrome = enabled;
-    docker = enabled;
     nix-ld = enabled // {
       overkill = enabled;
     };
-    vbox = enabled;
-    backups = enabled;
-    hp-scanner = enabled;
-    languages = [
-      "misc"
-      "nim"
-      "node"
-      "nushell"
-      "python"
-      "roc"
-      "tex"
-      "zig"
-    ];
-    llm = enabled;
-  };
+    languages = "misc|nim|node|nushell|python|roc|tex|zig" |> pipeList;
+  } // ("vpn|desktop|hyprland|chrome|docker|vbox|backups|hp-scanner|llm" |> pipeList |> enableAttrs);
 
-  services.restic.backups.gdrive = {
-    user = "daylin";
-    repository = "rclone:g:archives/othalan";
-    passwordFile = "/home/daylin/.config/restic/othalan-pass";
-    paths = [
-      "/home/daylin/stuff/"
-      "/home/daylin/dev/"
-    ];
-  };
-
-  users.users.${config.oizys.user}.extraGroups = [ "audio" ];
 }

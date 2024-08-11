@@ -3,6 +3,16 @@ let
   notes-git = ''${pkgs.git}/bin/git -C /home/daylin/stuff/notes'';
 in
 {
+  services.restic.backups.gdrive = {
+    user = "daylin";
+    repository = "rclone:g:archives/othalan";
+    passwordFile = "/home/daylin/.config/restic/othalan-pass";
+    paths = [
+      "/home/daylin/stuff/"
+      "/home/daylin/dev/"
+    ];
+  };
+
   systemd.services.notes-bot = {
     description = "auto commit changes to notes";
     serviceConfig = {

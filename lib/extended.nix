@@ -1,6 +1,11 @@
 inputs: final: prev:
 let
-  inherit (builtins) listToAttrs substring filter;
+  inherit (builtins)
+    listToAttrs
+    substring
+    filter
+    replaceStrings
+    ;
   inherit (final)
     concatStringsSep
     hasSuffix
@@ -8,6 +13,7 @@ let
     mkIf
     mkOption
     types
+    splitString
     ;
   inherit (final.filesystem) listFilesRecursive;
 in
@@ -19,6 +25,9 @@ let
   disabled = {
     enable = false;
   };
+
+  # "opt1|opt2" |> pipeList -> ["opt1" "opt2"]
+  pipeList = s: s |> replaceStrings [ "\n" ] [ "|" ] |> splitString "|" |> filter (s': s' != "");
 
   # ["a" "b"] -> {a.enable = true; b.enable = true;}
   enableAttrs =
@@ -70,11 +79,9 @@ let
   isNixFile = p: p |> hasSuffix ".nix";
   isDefaultNixFile = p: p |> hasSuffix "default.nix";
   # filterNotDefaultNixFile = paths: filter (p: !(isDefaultNixFile p) && (isNixFile p)) paths;
-  filterNotDefaultNixFile = paths: 
-    paths |> filter (p: !(isDefaultNixFile p) && (isNixFile p));
+  filterNotDefaultNixFile = paths: paths |> filter (p: !(isDefaultNixFile p) && (isNixFile p));
   # listNixFilesRecursive = dir: filterNotDefaultNixFile (listFilesRecursive dir);
-  listNixFilesRecursive = dir:
-    dir |> listFilesRecursive |> filterNotDefaultNixFile;
+  listNixFilesRecursive = dir: dir |> listFilesRecursive |> filterNotDefaultNixFile;
 
   # defaultLinuxPackage = flake: flake.packages.x86_64-linux.default;
   # defaultPackageGeneric = system: flake: "${flake}.packages.${system}.default";
@@ -87,9 +94,6 @@ let
     pkg = pkgFromSystem system;
   };
 
-  functional = {
-    filterF = list: f: builtins.filter f list;
-  };
 in
 {
   inherit
@@ -108,6 +112,6 @@ in
     pkgFromSystem
     overlayFrom
     flakeFromSystem
-    functional
+    pipeList
     ;
 }

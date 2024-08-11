@@ -4,14 +4,13 @@
     desktop = enabled;
     nix-ld = enabled;
     rune.motd = enabled;
+    docker = enabled;
   };
 
   # Enable the X11 windowing system.
-  services.xserver = {
-    enable = true;
-    displayManager.startx.enable = true;
-    windowManager.qtile.enable = true;
+  services.xserver = enabled // {
+    displayManager.startx = enabled;
+    windowManager.qtile = enabled;
   };
 
-  users.users.daylin.extraGroups = [ "docker" ];
 }

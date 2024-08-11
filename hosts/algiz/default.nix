@@ -1,17 +1,14 @@
-{ enabled, ... }:
+{
+  enabled,
+  enableAttrs,
+  pipeList,
+  ...
+}:
 {
   oizys = {
-    languages = [
-      "nim"
-      "node" # for docker langservers
-      "python"
-      "nushell"
-    ];
     rune.motd = enabled;
-    docker = enabled;
-    backups = enabled;
-    nix-ld = enabled;
-  };
+    languages = "nim|node|python|nushell" |> pipeList;
+  } // ("docker|backups|nix-ld" |> pipeList |> enableAttrs);
 
   services.restic.backups.gdrive = {
     # directories created by gitea and soft-serve aren't world readable
@@ -27,15 +24,6 @@
     ];
   };
 
-  security.sudo.wheelNeedsPassword = false;
-
-  users.users = {
-    daylin = {
-      extraGroups = [ "docker" ];
-    };
-
-    git = {
-      isNormalUser = true;
-    };
-  };
+  # git user handles the forgjo ssh authentication
+  users.users.git.isNormalUser = true;
 }

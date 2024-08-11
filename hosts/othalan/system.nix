@@ -1,4 +1,9 @@
-{ pkgs, enabled, ... }:
+{
+  config,
+  pkgs,
+  enabled,
+  ...
+}:
 {
   networking.networkmanager = enabled;
   services.fwupd = enabled;
@@ -21,7 +26,7 @@
       support32Bit = true;
     };
   };
-
+  users.users.${config.oizys.user}.extraGroups = [ "audio" ];
   environment.systemPackages = with pkgs; [ pamixer ];
 
   # catppuccin/tty move to "module"

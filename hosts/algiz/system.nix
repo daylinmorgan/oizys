@@ -1,9 +1,10 @@
 { enabled, ... }:
 {
+
+  security.sudo.wheelNeedsPassword = false;
   services.resolved = enabled;
 
-  services.fail2ban = {
-    enable = true;
+  services.fail2ban = enabled // {
     maxretry = 5;
     bantime = "24h";
   };
@@ -26,8 +27,9 @@
   # users.mutableUsers = false;
 
   # Use the GRUB 2 boot loader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
+  boot.loader.grub = enabled // {
+    device = "/dev/sda"; # or "nodev" for efi only
+  };
 
   # don't delete this you foo bar
   system.stateVersion = "23.11"; # Did you read the comment?
