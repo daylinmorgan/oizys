@@ -1,14 +1,14 @@
 {
   enabled,
   enableAttrs,
-  pipeList,
+  listify,
   ...
 }:
 {
   oizys = {
     rune.motd = enabled;
-    languages = "nim|node|python|nushell" |> pipeList;
-  } // ("docker|backups|nix-ld" |> pipeList |> enableAttrs);
+    languages = "nim|node|python|nushell" |> listify;
+  } // ("docker|backups|nix-ld" |> listify |> enableAttrs);
 
   services.restic.backups.gdrive = {
     # directories created by gitea and soft-serve aren't world readable

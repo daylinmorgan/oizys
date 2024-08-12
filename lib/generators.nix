@@ -14,7 +14,7 @@ let
     enableAttrs
     isNixFile
     flakeFromSystem
-    pipeList
+    listify
     ;
   inherit (lib.filesystem) listFilesRecursive;
 
@@ -59,7 +59,7 @@ let
         inherit
           mkDefaultOizysModule
           mkOizysModule
-          pipeList
+          listify
           enableAttrs
           hostName
           flake

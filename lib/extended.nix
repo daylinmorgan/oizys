@@ -14,6 +14,7 @@ let
     mkOption
     types
     splitString
+    trim
     ;
   inherit (final.filesystem) listFilesRecursive;
 in
@@ -26,8 +27,19 @@ let
     enable = false;
   };
 
-  # "opt1|opt2" |> pipeList -> ["opt1" "opt2"]
-  pipeList = s: s |> replaceStrings [ "\n" ] [ "|" ] |> splitString "|" |> filter (s': s' != "");
+  # split a string on newlines and pipes to generate list
+  # "opt1|opt2" |> listify -> ["opt1" "opt2"]
+  # ''
+  # opt1
+  # opt2|opt3
+  # '' |> listify ["opt1" "opt2" "opt3"]
+  listify =
+    s:
+    s
+    |> replaceStrings [ "\n" ] [ "|" ]
+    |> splitString "|"
+    |> filter (s': s' != "")
+    |> map (s': trim s');
 
   # ["a" "b"] -> {a.enable = true; b.enable = true;}
   enableAttrs =
@@ -112,6 +124,6 @@ in
     pkgFromSystem
     overlayFrom
     flakeFromSystem
-    pipeList
+    listify
     ;
 }
