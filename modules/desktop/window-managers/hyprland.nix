@@ -62,11 +62,12 @@ mkOizysModule config "hyprland" {
   ];
   # using the below to autostart Hyprland
   # broke my keybindings that were working before  
-  # services.getty = {
-  #   extraArgs = [ "--skip-login" ];
-  #   loginOptions = "-p -- ${config.oizys.user}";
-  # };
-  #
+
+  services.getty = {
+    extraArgs = [ "--skip-login" ];
+    loginOptions = "-p -- ${config.oizys.user}";
+  };
+
   # environment.etc =
   #   let
   #     activate-snippet = ''

@@ -21,7 +21,7 @@ mkOizysModule config "vpn" {
     #   updateResolvConf = true;
     # };
     #
-  
+
     mullvad-chi = {
       config = ''
         config /home/daylin/.config/openvpn/mullvad-chi/mullvad_us_chi.conf
