@@ -1,16 +1,28 @@
 { inputs, ... }:
 let
-  defaultOverlays =
-    # execute and import all overlay files in the current
-    # directory with the given args
-    builtins.map
-      # execute and import the overlay file
-      (f: (import (./. + "/${f}") { inherit inputs; }))
-      # find all overlay files in the current directory
-      (builtins.filter (f: f != "default.nix") (builtins.attrNames (builtins.readDir ./.)));
+  inherit (builtins)
+    map
+    filter
+    attrNames
+    readDir
+    ;
+  # execute and import all overlay files in the current
+  # directory with the given args
+  # overlays =
+  #    map
+  #     (f: (import (./. + "/${f}") { inherit inputs; }))
+  #     (filter (f: f != "default.nix") (attrNames (readDir ./.)));
+  overlays =
+    readDir ./.
+    |> attrNames
+    |> filter (f: f != "default.nix")
+    |> map (f: import (./. + "/${f}") { inherit inputs; });
+  # map
+  #  (f: (import (./. + "/${f}") { inherit inputs; }))
+  #  (filter (f: f != "default.nix") (attrNames (readDir ./.)));
 in
 {
-  nixpkgs.overlays = defaultOverlays ++ [
+  nixpkgs.overlays = overlays ++ [
     (final: _prev: {
       stable = import inputs.stable {
         system = final.system;
