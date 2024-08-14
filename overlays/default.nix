@@ -17,9 +17,6 @@ let
     |> attrNames
     |> filter (f: f != "default.nix")
     |> map (f: import (./. + "/${f}") { inherit inputs; });
-  # map
-  #  (f: (import (./. + "/${f}") { inherit inputs; }))
-  #  (filter (f: f != "default.nix") (attrNames (readDir ./.)));
 in
 {
   nixpkgs.overlays = overlays ++ [
