@@ -13,10 +13,9 @@ in
     environment.systemPackages =
       [ (flake.pkg "f1multiviewer") ]
       ++ (with pkgs; [
+        pcmanfm
         wezterm
         alacritty
-
-        xfce.thunar
 
         inkscape
         gimp
