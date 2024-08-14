@@ -2,6 +2,8 @@
 
 ## oizys
 
+- [ ] write a flake template that includes the systems boilerplate
+
 ## software
 
 - [ ] lid closed does not engage hyprlock?
