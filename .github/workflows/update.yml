@@ -127,6 +127,7 @@ jobs:
           echo "# System Diff" >> $GITHUB_STEP_SUMMARY
           nix run "nixpkgs#nvd" -- --color always diff ./current ./updated >> summary.md
           printf '```\n%s```\n' "$(nix run "nixpkgs#nvd" -- diff ./current ./updated)" >> $GITHUB_STEP_SUMMARY
+          nix run "nixpkgs#nvd" -- --color always diff ./current ./updated | nix run "nixpkgs#charm-freeze" -- --output diff.svg
 
       - run: df -h
 
@@ -134,3 +135,13 @@ jobs:
         with:
           name: ${{ matrix.host }}-summary
           path: summary.md
+
+      # https://github.com/actions/upload-artifact/issues/50#issuecomment-1856471599
+      - uses: actions/upload-artifact@v4
+        id: diff-upload
+        with:
+          name: ${{ matrix.host }}-diff
+          path: diff.svg
+
+      - name: Output artifact URL
+        run: echo 'Artifact URL is ${{ steps.diff-upload.outputs.artifact-url }}'
