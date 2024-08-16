@@ -868,6 +868,7 @@
         "roc": "roc",
         "stable": "stable",
         "tsm": "tsm",
+        "utils": "utils",
         "zig-overlay": "zig-overlay",
         "zls": "zls"
       }
@@ -1060,6 +1061,26 @@
         "owner": "daylinmorgan",
         "repo": "tsm",
         "type": "github"
+      }
+    },
+    "utils": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1723840834,
+        "narHash": "sha256-GGxqfcJ7utcqaC7dVHQLWLLdZb0yrlGxhpzpZ8hqiWg=",
+        "ref": "refs/heads/main",
+        "rev": "d92e70162fdc052148eae8d07066ba1c33eab6b0",
+        "revCount": 5,
+        "type": "git",
+        "url": "https://git.dayl.in/daylin/utils.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://git.dayl.in/daylin/utils.git"
       }
     },
     "xdph": {

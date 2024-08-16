@@ -10,8 +10,10 @@
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     nix-index-database.url = "github:nix-community/nix-index-database";
 
-    lix.url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
-    lix.flake = false;
+    lix = {
+      url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
+      flake = false;
+    };
     lix-module = {
       url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -28,6 +30,7 @@
     f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
     tsm.url = "github:daylinmorgan/tsm?dir=nix";
     hyprman.url = "git+https://git.dayl.in/daylin/hyprman.git";
+    utils.url = "git+https://git.dayl.in/daylin/utils.git";
 
     hyprman.inputs.nixpkgs.follows = "nixpkgs";
     f1multiviewer.inputs.nixpkgs.follows = "nixpkgs";
@@ -35,6 +38,7 @@
     pixi.inputs.nixpkgs.follows = "nixpkgs";
     roc.inputs.nixpkgs.follows = "nixpkgs";
     tsm.inputs.nixpkgs.follows = "nixpkgs";
+    utils.inputs.nixpkgs.follows = "nixpkgs";
     zls.inputs.nixpkgs.follows = "nixpkgs";
     zls.inputs.zig-overlay.follows = "zig-overlay";
     zig-overlay.inputs.nixpkgs.follows = "nixpkgs";
