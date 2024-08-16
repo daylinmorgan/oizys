@@ -15,7 +15,7 @@ in
 
       nim-atlas
       nimble
-      nimlsp
+      nimlangserver
     ];
   };
 }
