@@ -20,11 +20,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1723920171,
-        "narHash": "sha256-dVCMrAe+D/5S91erhwQj2DSzHOVzAanWqoy+vPWB9DY=",
+        "lastModified": 1724006173,
+        "narHash": "sha256-1ROh0buuxiMyc6eIb3CIbJsmYO7PhLqSYs55mOx1XTk=",
         "owner": "hyprwm",
         "repo": "aquamarine",
-        "rev": "71d49670fe246cdaff4860b0effba0ab9f163b72",
+        "rev": "7f8df01d4297b9068a9592400f16044602844f86",
         "type": "github"
       },
       "original": {
@@ -323,11 +323,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1724005153,
-        "narHash": "sha256-DxvcCVsQd5wjypD4MXG33GMQuMftafzXta4mYDOJPqs=",
+        "lastModified": 1724016119,
+        "narHash": "sha256-ricYM9Ethzai2l2qCK6Bkgfg53FtzWuzaVIDzZ7Ve1Y=",
         "ref": "refs/heads/main",
-        "rev": "50348a3ddbb6bc3367300c9bba2ff682e4a356e3",
-        "revCount": 5105,
+        "rev": "83d88fa56467a2b749fb2320e1595281107bd326",
+        "revCount": 5111,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/hyprwm/Hyprland/"
@@ -516,11 +516,11 @@
     "lix": {
       "flake": false,
       "locked": {
-        "lastModified": 1724000209,
-        "narHash": "sha256-cj/VN1t7pQyjtan6QvX+pJ0MG5uSiolKFJq7s0UP0qA=",
-        "rev": "007211e7a27a512cb343060e8b363c9f66ef67af",
+        "lastModified": 1724021051,
+        "narHash": "sha256-80mohEXTDXE5aWwMw3a9U9YzQkBdhJAzVYUQBZ3SNvY=",
+        "rev": "5cbca8553581a358f9b5067bc8def24b1c7b37cc",
         "type": "tarball",
-        "url": "https://git.lix.systems/api/v1/repos/lix-project/lix/archive/007211e7a27a512cb343060e8b363c9f66ef67af.tar.gz?rev=007211e7a27a512cb343060e8b363c9f66ef67af"
+        "url": "https://git.lix.systems/api/v1/repos/lix-project/lix/archive/5cbca8553581a358f9b5067bc8def24b1c7b37cc.tar.gz?rev=5cbca8553581a358f9b5067bc8def24b1c7b37cc"
       },
       "original": {
         "type": "tarball",
