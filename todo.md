@@ -9,6 +9,11 @@
 - [ ] lid closed does not engage hyprlock?
   > check the logind conf in Nixos
 - [ ] include langservers for enabled languages?
+- [ ] wezterm is broken...something to do with fonts?
+  I tried used the nix flake and that didn't help
+  [tracking issue](https://github.com/wez/wezterm/issues/5990)
+
+
 
 ## hardware
 
