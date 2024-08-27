@@ -37,7 +37,7 @@
   ];
 
   boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
-
+  boot.tmp.cleanOnBoot = true;
   boot.loader = {
     systemd-boot = enabled // {
       consoleMode = "max";
