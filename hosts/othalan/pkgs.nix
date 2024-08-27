@@ -7,5 +7,6 @@
       quarto
       cachix
       graphviz
+      typst
     ]);
 }
