@@ -47,15 +47,16 @@ jobs:
         run: nix build .
 
       - name: Build
-        run: |
-          nix run . \
-            -- \
-            build --minimal \
-              --host "othalan" \
-              --flake . \
-              --debug \
-              -- \
-              --print-build-logs
+        run: >
+          nix run .
+          --
+          build --minimal
+          --host "othalan"
+          --flake .
+          --debug
+          --
+          --print-build-logs
+          --keep-going
 
       - name: Commit Updates
         uses: daylin-bot/actions/commit-and-push@main
