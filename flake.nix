@@ -26,6 +26,7 @@
     zig-overlay.url = "github:mitchellh/zig-overlay";
     zls.url = "github:zigtools/zls";
 
+    nim2nix.url = "github:daylinmorgan/nim2nix";
     pixi.url = "github:daylinmorgan/pixi-flake";
     f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
     tsm.url = "github:daylinmorgan/tsm?dir=nix";

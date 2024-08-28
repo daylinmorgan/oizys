@@ -9,7 +9,10 @@ let
   inherit (import ./generators.nix { inherit lib self inputs; }) mkIso mkSystem;
   #supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
   supportedSystems = [ "x86_64-linux" ];
-  forAllSystems = f: genAttrs supportedSystems (system: f (import nixpkgs { inherit system; }));
+  forAllSystems = f: genAttrs supportedSystems (system: f (import nixpkgs {
+    inherit system;
+    overlays = [inputs.nim2nix.overlays.default];
+     }));
 
   inheritFlakePkgs =
     pkgs: flakes:
@@ -27,6 +30,7 @@ let
       pkgs:
       rec {
         default = oizys-cli;
+        oizys-nim = pkgs.callPackage ../pkgs/oizys-nim { };
         oizys-cli = pkgs.callPackage ../pkgs/oizys { };
         iso = mkIso.config.system.build.isoImage;
         roc = (pkgsFromSystem pkgs.system "roc").full;
@@ -39,10 +43,11 @@ let
     );
 
     devShells = forAllSystems (pkgs: {
-      default = pkgs.mkShell {
+      oizys = pkgs.mkShell {
         packages = with pkgs; [
-          git
-          deadnix
+          openssl
+          nim 
+          nimble
         ];
       };
     });
