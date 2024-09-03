@@ -40,9 +40,9 @@ overlay:
     ## nix build
     nixBuild(minimal, rest)
 
-  proc cache(name: string = "daylin") =
-    ## *TBI* build and push to cachix
-    fatal "not implemented"
+  proc cache(minimal: bool = false, name: string = "daylin") =
+    ## build and push to cachix
+    nixBuildWithCache(minimal, name, rest)
 
   proc osCmd() =
     ## nixos-rebuild
@@ -56,7 +56,7 @@ overlay:
     nixosRebuild(subcmd, rest[1..^1])
 
   proc ci(`ref`: string = "main") =
-    ## *TBD* trigger GHA update flow
+    ## trigger GHA update flow
     if rest.len == 0:
       fatal "expected workflow file name"; quit QuitFailure
     createDispatch(rest[0], `ref`)

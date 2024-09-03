@@ -203,15 +203,48 @@ proc nixBuildHostDry*(minimal: bool, rest: seq[string]) =
       quit "exiting...", QuitSuccess
     cmd.addArgs drvs
     cmd.addArg "--no-link"
+
     if isCi():
       writeDervationsToStepSummary drvs
   else:
     cmd.addArgs nixosConfigAttrs()
+
   cmd.addArg "--dry-run"
   cmd.addArgs rest
   let (_, err) =
     runCmdCaptWithSpinner(cmd, "evaluating derivation for: " & getHosts().join(" "))
   let output = parseDryRunOutput err
   display output
+
+# TODO: Add to bbansi
+template `bbfmt`(pattern: static string): untyped =
+  bb(fmt(pattern))
+
+proc nixBuildWithCache*(minimal: bool, name: string, rest:seq[string]) =
+  if findExe("cachix") == "":
+    fatal "is cachix installed?"; quit QuitFailure
+  info bbfmt"building and pushing to cache: [b]{name}"
+  var cmd = "cachix"
+  cmd.addArgs ["watch-exec","--"]
+  cmd.addArg "nix build"
+  if minimal:
+    debug "populating args with derivations not built/cached"
+    let drvs = systemPathDrvsToBuild()
+    if drvs.len == 0:
+      info "nothing to build"
+      quit "exiting...", QuitSuccess
+    cmd.addArgs drvs
+    cmd.addArg "--no-link"
+  else:
+    cmd.addArgs nixosConfigAttrs()
+  cmd.addArgs rest
+  debug cmd
+  quit QuitSuccess
+  let err = runCmd(cmd)
+  quit err
+
+
+
+
 
 

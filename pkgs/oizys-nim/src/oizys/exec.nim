@@ -6,7 +6,7 @@ import std/[
 import ./spin
 
 
-func addArgs*(cmd: var string, args: seq[string]) =
+func addArgs*(cmd: var string, args: openArray[string]) =
   cmd &= " " & args.join(" ")
 
 func addArg*(cmd: var string, arg: string) =
