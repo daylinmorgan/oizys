@@ -8,5 +8,6 @@
       cachix
       graphviz
       typst
+      charm-freeze
     ]);
 }
