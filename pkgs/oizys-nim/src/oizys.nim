@@ -33,7 +33,7 @@ overlay:
     echo nixosConfigAttrs().join(" ")
 
   proc update(yes: bool = false) =
-    ## *TBD* update and run nixos-rebuild
+    ## *TBI* update and run nixos-rebuild
     fatal "not implemented"
 
   proc build(minimal: bool = false) =
@@ -41,7 +41,7 @@ overlay:
     nixBuild(minimal, rest)
 
   proc cache(name: string = "daylin") =
-    ## *TBD* build and push to cachix
+    ## *TBI* build and push to cachix
     fatal "not implemented"
 
   proc osCmd() =
@@ -52,8 +52,7 @@ overlay:
       error (
         &"unknown nixos-rebuild subcmd: {subcmd}\nexpected one of: \n" &
         nixosSubcmds.mapIt("  " & it).join("\n")
-      )
-      quit QuitFailure
+      ); quit QuitFailure
     nixosRebuild(subcmd, rest[1..^1])
 
   proc ci(`ref`: string = "main") =
@@ -67,7 +66,7 @@ proc checkExes() =
     quit("oizys requires nix", QuitFailure)
 
 proc `//`(t1: Table[string, string], t2: Table[string, string]): Table[string, string] =
-  # nix style table merge
+  # nix style shallow table merge
   for k, v in t1.pairs(): result[k] = v
   for k, v in t2.pairs(): result[k] = v
 

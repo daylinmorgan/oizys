@@ -38,7 +38,7 @@ const defaultFlushThreshold = lvlAll
 proc genFmtStr(
   fmtPrefix, fmtSep, fmtSuffix, levelBb: string,
   level: Level
-  ): string =
+): string =
   var parts: seq[string]
   if fmtPrefix != "": parts.add fmtPrefix
   parts.add $LevelNames[level].bb(levelBb)
@@ -58,8 +58,8 @@ proc newFancyConsoleLogger*(
   warnBb: string = "bold yellow",
   errorBb: string = "bold red",
   fatalBb: string = "bold red"
-  ): FancyConsoleLogger =
-  ## Creates a new `ColoredConsoleLogger<#ConsoleLogger>`_.
+): FancyConsoleLogger =
+  ## Creates a new `FancyConsoleLogger<#ConsoleLogger>`_.
   new result
   let fmtStrs: array[Level, string] = [
       genFmtStr(fmtPrefix,fmtSep, fmtSuffix, "", lvlAll),
