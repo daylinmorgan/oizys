@@ -66,11 +66,11 @@ proc parseDryRunOutput(err: string): DryRunOutput =
     of 1:
       let idx = theseLines[0]
       let line = lines[idx]
-      let drvs = lines[idx .. ^1].toDerivations()
+      let drvs = lines[idx + 1 .. ^1].toDerivations()
       if line.contains("built:"):
         result.toBuild = drvs
       elif line.contains("will be fetched"):
-        result.toFetch =drvs
+        result.toFetch = drvs
       else:
         fatal "expected on of the lines to contain built or fetched check the output below"
         stderr.writeLine err
