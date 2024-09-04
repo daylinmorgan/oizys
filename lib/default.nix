@@ -9,10 +9,20 @@ let
   inherit (import ./generators.nix { inherit lib self inputs; }) mkIso mkSystem;
   #supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
   supportedSystems = [ "x86_64-linux" ];
-  forAllSystems = f: genAttrs supportedSystems (system: f (import nixpkgs {
-    inherit system;
-    overlays = [inputs.nim2nix.overlays.default];
-     }));
+  forAllSystems =
+    f:
+    genAttrs supportedSystems (
+      system:
+      f (
+        import nixpkgs {
+          inherit system;
+          overlays = [
+            inputs.nim2nix.overlays.default
+            (import ../overlays/nimble { inherit inputs; })
+          ];
+        }
+      )
+    );
 
   inheritFlakePkgs =
     pkgs: flakes:
@@ -46,7 +56,7 @@ let
       oizys = pkgs.mkShell {
         packages = with pkgs; [
           openssl
-          nim 
+          nim
           nimble
         ];
       };

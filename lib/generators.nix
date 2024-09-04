@@ -49,8 +49,8 @@ let
     nixosSystem {
       system = "x86_64-linux";
       modules = [
-        ../modules/oizys.nix
         ../overlays
+        ../modules/oizys.nix
         inputs.lix-module.nixosModules.default
         inputs.hyprland.nixosModules.default
       ] ++ (hostFiles hostName);
