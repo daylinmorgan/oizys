@@ -3,10 +3,11 @@
 ## oizys
 
 - [ ] write a flake template that includes the systems boilerplate
+- [ ] include all of the defined overlays from `./overlays` in the `forAllSystems` nixpkgs
 
 ## software
 
-- [ ] there seems tot be multiple version of mako
+- [ ] check if there are multiple version of mako?
 - [ ] lid closed does not engage hyprlock?
   > check the logind conf in Nixos
 - [ ] include langservers for enabled languages?
