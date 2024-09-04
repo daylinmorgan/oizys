@@ -53,7 +53,7 @@ jobs:
           git diff
 
       - name: Pre-build Oizys
-        run: nix build .
+        run: nix build . --print-build-logs
 
       - name: Build
         run: |
