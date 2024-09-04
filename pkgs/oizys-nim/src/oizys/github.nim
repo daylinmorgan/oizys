@@ -19,14 +19,13 @@ proc postGhApi(url: string, body: JsonNode) =
     "Authorization"       : fmt"Bearer {ghToken}",
     "X-GitHub-Api-Version": "2022-11-28",
   })
-  echo $body
   let response = client.post(url, body = $body)
   info fmt"Status: {response.status}"
 
 proc createDispatch*(workflowFileName: string, `ref`: string) =
   ## https://docs.github.com/en/rest/actions/workflows?apiVersion=2022-11-28#create-a-workflow-dispatch-event
   var workflow =
-    if workflowFileName.endsWith(".yml") or workflowFileName.endsWith(".yaml"): workflowFileName 
+    if workflowFileName.endsWith(".yml") or workflowFileName.endsWith(".yaml"): workflowFileName
     else: workflowFileName & ".yml"
   info fmt"creating dispatch event for {workflow}"
   postGhApi(
