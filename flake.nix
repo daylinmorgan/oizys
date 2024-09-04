@@ -33,11 +33,6 @@
     hyprman.url = "git+https://git.dayl.in/daylin/hyprman.git";
     utils.url = "git+https://git.dayl.in/daylin/utils.git";
 
-    utils.inputs = {
-      nixpkgs.follows = "nixpkgs";
-      nim2nix.follows = "nim2nix";
-    };
-
     nim2nix.inputs.nixpkgs.follows = "nixpkgs";
     hyprman.inputs.nixpkgs.follows = "nixpkgs";
     f1multiviewer.inputs.nixpkgs.follows = "nixpkgs";
