@@ -1,6 +1,6 @@
 import std/[
   algorithm, json,
-  enumerate, os, osproc, sequtils, strformat,
+  enumerate, os, sequtils, strformat,
   strutils, sugar, logging, tables
 ]
 import bbansi, jsony
@@ -110,8 +110,11 @@ proc toBuildNixosConfiguration(): seq[string] =
   var cmd = nixCommand("build")
   cmd.addArg "--dry-run"
   cmd.addArgs nixosConfigAttrs()
-  # let (_, err) = runCmdCaptWithSpinner(cmd, "running dry run build for: " & getHosts().join(" "))
-  let (_, err, _) = runCmdCapt(cmd, {CaptStderr})
+  let (_, err) = runCmdCaptWithSpinner(
+    cmd,
+    "running dry run build for: " & getHosts().join(" "),
+    capture ={CaptStderr}
+  )
   let output = parseDryRunOutput err
   return output.toBuild.mapIt(it.storePath)
 
@@ -120,12 +123,12 @@ type
     inputDrvs: Table[string, JsonNode]
     name: string
 
-proc evaluateDerivations(drvs: seq[string]): Table[string,NixDerivation] =
+proc evaluateDerivations(drvs: seq[string]): Table[string, NixDerivation] =
   var cmd = "nix derivation show -r"
   cmd.addArgs drvs
   let (output, _) =
     runCmdCaptWithSpinner(cmd, "evaluating derivations")
-  output.fromJson(Table[string,NixDerivation])
+  fromJson(output, Table[string,NixDerivation])
 
 
 # TODO: replace asserts in this proc
