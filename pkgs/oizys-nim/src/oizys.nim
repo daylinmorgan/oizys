@@ -85,7 +85,7 @@ proc setupCligen() =
     clCfg.helpAttrOff = {"cmd": "\e[m", "clDescrip": "\e[m", "clDflVal": "\e[m",
         "clOptKeys": "\e[m", "clValType": "\e[m", "args": "\e[m"}.toTable()
     # clCfg.use  does nothing?
-    clCfg.useHdr = "\e[1mUsage\e[m:\n  "
+    clCfg.useHdr = "\e[1musage\e[m:\n  "
 
 when isMainModule:
   checkExes()
