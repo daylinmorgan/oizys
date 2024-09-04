@@ -53,6 +53,7 @@ proc cmpDrv(x, y: Derivation): int =
   cmp(x.name, y.name)
 
 proc parseDryRunOutput(err: string): DryRunOutput =
+  debug "parsing result of dry run"
   let lines = err.strip().splitLines()
   let theseLines = collect:
     for i, line in enumerate(lines):
