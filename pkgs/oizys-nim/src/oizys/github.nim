@@ -20,7 +20,10 @@ proc postGhApi(url: string, body: JsonNode) =
     "X-GitHub-Api-Version": "2022-11-28",
   })
   let response = client.post(url, body = $body)
-  info fmt"Status: {response.status}"
+  try:
+    info fmt"Status: {response.code}"
+  except:
+    error "failed to get response code"
 
 proc createDispatch*(workflowFileName: string, `ref`: string) =
   ## https://docs.github.com/en/rest/actions/workflows?apiVersion=2022-11-28#create-a-workflow-dispatch-event
