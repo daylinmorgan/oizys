@@ -41,18 +41,19 @@ runs:
               $(non_manifest_packages) # > /dev/null
           fi
 
-          (
-            GLOBIGNORE="/usr/share/git-core/**/*";
-            sudo rm -rf \
-              /var/lib/docker/ \
-              "$AGENT_TOOLSDIRECTORY" \
-              /opt \
-              /usr/{local,share}/** 
-          ) &
-          # {
-          #   sudo swapoff -a
-          #   sudo rm -f /mnt/swapfile
-          # } &
+          sudo rm -rf \
+            /var/lib/docker/ \
+            "$AGENT_TOOLSDIRECTORY" \
+            /opt \
+            /usr/local/** &
+
+          # nix flake update wants to find git-core templates
+          # /usr/share/git-core/templates
+          # /usr/share/**
+          {
+            sudo swapoff -a
+            sudo rm -f /mnt/swapfile
+          } &
           wait
           echo "... done"
 
