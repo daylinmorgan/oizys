@@ -543,11 +543,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1725378873,
-        "narHash": "sha256-FHuKRJbzusZNnGi1nykC5H5hMwyJE4zGqoPXDQWxa/E=",
+        "lastModified": 1725465990,
+        "narHash": "sha256-+KN+E3B5lVxi5K0rrDC41l080n/r04LOpmfxK3ZJ058=",
         "owner": "daylinmorgan",
         "repo": "nim2nix",
-        "rev": "c16db19a0809a01189f708848773fbd4c81319db",
+        "rev": "cac4c7106ea09e04b4a555e4f957e38be65dfbb4",
         "type": "github"
       },
       "original": {
