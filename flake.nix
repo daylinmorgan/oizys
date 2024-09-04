@@ -33,13 +33,16 @@
     hyprman.url = "git+https://git.dayl.in/daylin/hyprman.git";
     utils.url = "git+https://git.dayl.in/daylin/utils.git";
 
+    utils.inputs = {
+      nixpkgs.follows = "nixpkgs";
+      nim2nix.follows = "nim2nix";
+    };
     hyprman.inputs.nixpkgs.follows = "nixpkgs";
     f1multiviewer.inputs.nixpkgs.follows = "nixpkgs";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     pixi.inputs.nixpkgs.follows = "nixpkgs";
     roc.inputs.nixpkgs.follows = "nixpkgs";
     tsm.inputs.nixpkgs.follows = "nixpkgs";
-    utils.inputs.nixpkgs.follows = "nixpkgs";
     zls.inputs.nixpkgs.follows = "nixpkgs";
     zls.inputs.zig-overlay.follows = "zig-overlay";
     zig-overlay.inputs.nixpkgs.follows = "nixpkgs";

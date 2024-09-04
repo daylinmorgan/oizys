@@ -29,9 +29,9 @@ let
     packages = forAllSystems (
       pkgs:
       rec {
-        default = oizys-cli;
+        default = oizys-nim;
         oizys-nim = pkgs.callPackage ../pkgs/oizys-nim { };
-        oizys-cli = pkgs.callPackage ../pkgs/oizys { };
+        oizys-go = pkgs.callPackage ../pkgs/oizys { };
         iso = mkIso.config.system.build.isoImage;
         roc = (pkgsFromSystem pkgs.system "roc").full;
       }
