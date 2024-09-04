@@ -6,7 +6,7 @@ on:
       hosts:
         description: 'list of hosts to build'
         required: true
-        default: 'othalan algiz'
+        default: ',othalan,algiz'
         type: string
       lockFile:
         description: 'flake.lock file'
@@ -16,7 +16,7 @@ on:
     inputs:
       hosts:
         description: 'list of hosts to build'
-        default: 'othalan algiz'
+        default: ',othalan,algiz'
         type: string
 
 # concurrency:
@@ -60,7 +60,7 @@ jobs:
           nix run . \
             -- \
             build --minimal \
-              --host "${{ inputs.hosts }}" \
+              --host,="${{ inputs.hosts }}" \
               --flake . \
               --debug \
               -- \
