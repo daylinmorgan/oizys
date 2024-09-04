@@ -238,8 +238,6 @@ proc nixBuildWithCache*(minimal: bool, name: string, rest:seq[string]) =
   else:
     cmd.addArgs nixosConfigAttrs()
   cmd.addArgs rest
-  debug cmd
-  quit QuitSuccess
   let err = runCmd(cmd)
   quit err
 
