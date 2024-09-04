@@ -4,7 +4,7 @@
   outputs = inputs: (import ./lib inputs).oizysFlake;
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     stable.url = "github:nixos/nixpkgs/nixos-23.11";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";

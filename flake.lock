@@ -558,6 +558,27 @@
         "type": "github"
       }
     },
+    "nim2nix_2": {
+      "inputs": {
+        "nixpkgs": [
+          "utils",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1725469705,
+        "narHash": "sha256-4/iSUwB3XKmybdt4R87VhBPiD3z4BL6RrD9LyrrkesM=",
+        "owner": "daylinmorgan",
+        "repo": "nim2nix",
+        "rev": "42af12ca45025c7146bc24e27f5d8b65b003d663",
+        "type": "github"
+      },
+      "original": {
+        "owner": "daylinmorgan",
+        "repo": "nim2nix",
+        "type": "github"
+      }
+    },
     "nix-eval-jobs": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -752,16 +773,16 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1725194671,
-        "narHash": "sha256-tLGCFEFTB5TaOKkpfw3iYT9dnk4awTP/q4w+ROpMfuw=",
+        "lastModified": 1725103162,
+        "narHash": "sha256-Ym04C5+qovuQDYL/rKWSR+WESseQBbNAe5DsXNx5trY=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "b833ff01a0d694b910daca6e2ff4a3f26dee478c",
+        "rev": "12228ff1752d7b7624a54e9c1af4b222b3c1073b",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixpkgs-unstable",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -789,6 +810,22 @@
         "owner": "nixos",
         "repo": "nixpkgs",
         "rev": "71e91c409d1e654808b2621f28a327acfdad8dc2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_7": {
+      "locked": {
+        "lastModified": 1725103162,
+        "narHash": "sha256-Ym04C5+qovuQDYL/rKWSR+WESseQBbNAe5DsXNx5trY=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "12228ff1752d7b7624a54e9c1af4b222b3c1073b",
         "type": "github"
       },
       "original": {
@@ -1056,12 +1093,8 @@
     },
     "utils": {
       "inputs": {
-        "nim2nix": [
-          "nim2nix"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
+        "nim2nix": "nim2nix_2",
+        "nixpkgs": "nixpkgs_7"
       },
       "locked": {
         "lastModified": 1725378965,
