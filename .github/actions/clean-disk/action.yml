@@ -46,13 +46,11 @@ runs:
             /var/lib/docker/ \
             "$AGENT_TOOLSDIRECTORY" \
             /opt \
-            /usr/{local,share} &
-
-          {
-            sudo swapoff -a
-            sudo rm -f /mnt/swapfile
-          } &
-
+            /usr/{local,share}/** &
+          # {
+          #   sudo swapoff -a
+          #   sudo rm -f /mnt/swapfile
+          # } &
           wait
           echo "... done"
 
