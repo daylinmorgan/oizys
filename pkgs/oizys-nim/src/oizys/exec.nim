@@ -16,42 +16,46 @@ proc runCmd*(cmd: string): int =
   debug fmt"running cmd: {cmd}"
   execCmd cmd
 
-proc runCmdCapt*(cmd: string): tuple[stdout, stderr: string, exitCode: int] =
+type
+  CaptureGrp* = enum
+    CaptStdout
+    CaptStderr
+
+proc runCmdCapt*(
+  cmd: string,
+  capture: set[CaptureGrp],
+): tuple[stdout, stderr: string, exitCode: int] =
+  debug fmt"running cmd: {cmd}"
   let args = cmd.splitWhitespace()
   let p = startProcess(
     args[0],
     args = args[1..^1],
     options = {poUsePath}
   )
-  let outstrm = outputStream p
-  let errstrm = errorStream p
-  # result.exitCode = -1
-  # var line: string
+  let 
+    outstrm = peekableOutputStream p
+    errstrm = peekableErrorStream p
+  result.exitCode = -1
+  var line: string
   # var cnt: int
-  # while true:
-  #   echo cnt
-  #   if outstrm.readLine(line):
-  #     result.stdout.add line & '\n'
-  #   if errstrm.readLine(line):
-  #     result.stderr.add line & '\n'
-  #   result.exitCode = peekExitCode(p)
-  #   if result.exitCode != -1: break
-  #   inc cnt
-  echo "process should have started?"
-  echo p.running, "<--running?"
-  close p
-  result = (
-    readAll outstrm,
-    readAll errstrm,
-    -1,
-  )
+  while true:
+    if CaptStdout in capture:
+      if outstrm.readLine(line): 
+        result.stdout.add line & '\n'
+    if CaptStderr in capture:
+      if errstrm.readLine(line):
+        result.stderr.add line & '\n'
+    result.exitCode = peekExitCode(p)
+    if result.exitCode != -1: break
+  
+  # result.exitCode = waitForExit p
   # result.exitCode = waitForExit p
   # close p
+  close p
 
-proc runCmdCaptWithSpinner*(cmd: string, msg: string = ""): tuple[output, err: string] =
-  debug fmt"running command: {cmd}"
+proc runCmdCaptWithSpinner*(cmd: string, msg: string = "", capture: set[CaptureGrp] = {CaptStdout}): tuple[output, err: string] =
   withSpinner(msg):
-    let (output, err, code) = runCmdCapt(cmd)
+    let (output, err, code) = runCmdCapt(cmd, capture)
   if code != 0:
     stderr.writeLine("stdout\n" & output)
     stderr.writeLine("stderr\n" & err)
