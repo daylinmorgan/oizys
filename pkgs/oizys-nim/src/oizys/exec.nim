@@ -19,11 +19,23 @@ proc runCmd*(cmd: string): int =
 proc runCmdCapt*(cmd: string): tuple[stdout, stderr: string, exitCode: int] =
   let args = cmd.splitWhitespace()
   let p = startProcess(args[0], args = args[1..^1], options = {poUsePath})
-  result = (
-    readAll p.outputStream,
-    readAll p.errorStream,
-    waitForExit p
-  )
+  let ostrm = outputStream p
+  let errstrm = errorStream p
+  result.exitCode = -1
+  var line = newStringOfCap(120)
+  while true:
+    if ostrm.readLine(line):
+      result.stdout.add line & '\n'
+    if errstrm.readLine(line):
+      result.stderr.add line & '\n'
+    result.exitCode = peekExitCode(p)
+    if result.exitCode != -1: break
+  
+  # result = (
+  #   readAll p.outputStream,
+  #   readAll p.errorStream,
+  #   waitForExit p
+  # )
   close p
 
 proc runCmdCaptWithSpinner*(cmd: string, msg: string = ""): tuple[output, err: string] =
