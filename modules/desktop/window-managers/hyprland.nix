@@ -15,6 +15,7 @@ mkOizysModule config "hyprland" {
 
   environment.systemPackages =
     (with pkgs; [
+      wl-mirror
       wlr-randr
       kanshi
 
