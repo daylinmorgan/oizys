@@ -179,9 +179,13 @@ proc error*(spinny: Spinny, msg: string) =
 template withSpinner*(msg: string = "", body: untyped): untyped =
   var spinner {.inject.} = newSpinny(msg, Dots)
   spinner.setSymbolColor(fgBlue)
-  start spinner
+  if isatty(stdout): # don't spin if it's not a tty
+    start spinner
+
   body
-  stop spinner
+
+  if isatty(stdout):
+    stop spinner
 
 template withSpinner*(body: untyped): untyped =
   withSpinner("", body)
