@@ -28,13 +28,16 @@ proc runCmdCapt*(cmd: string): tuple[stdout, stderr: string, exitCode: int] =
   let errstrm = errorStream p
   result.exitCode = -1
   var line: string
+  var cnt: int
   while true:
+    echo cnt
     if ostrm.readLine(line):
       result.stdout.add line & '\n'
     if errstrm.readLine(line):
       result.stderr.add line & '\n'
     result.exitCode = peekExitCode(p)
     if result.exitCode != -1: break
+    inc cnt
   
   # result = (
   #   readAll p.outputStream,

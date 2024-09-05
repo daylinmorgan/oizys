@@ -46,9 +46,6 @@ jobs:
       - name: Pre-build oizys
         run: nix build .
 
-      - run: >
-          nix build --dry-run $(nix run . -- output --host othalan --flake . )
-
       - name: Build
         run: >
           nix run .
