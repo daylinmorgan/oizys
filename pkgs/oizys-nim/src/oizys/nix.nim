@@ -110,6 +110,8 @@ proc toBuildNixosConfiguration(): seq[string] =
   var cmd = nixCommand("build")
   cmd.addArg "--dry-run"
   cmd.addArgs nixosConfigAttrs()
+  debug "trying with ouptut"
+  discard execCmd(cmd)
   let (_, err) = runCmdCaptWithSpinner(cmd, "running dry run build for: " & getHosts().join(" "))
   let output = parseDryRunOutput err
   return output.toBuild.mapIt(it.storePath)
