@@ -24,26 +24,26 @@ proc runCmdCapt*(cmd: string): tuple[stdout, stderr: string, exitCode: int] =
     options = {poUsePath}
   )
   p.inputStream.close()
-  let ostrm = outputStream p
+  let outstrm = outputStream p
   let errstrm = errorStream p
-  result.exitCode = -1
-  var line: string
-  var cnt: int
-  while true:
-    echo cnt
-    if ostrm.readLine(line):
-      result.stdout.add line & '\n'
-    if errstrm.readLine(line):
-      result.stderr.add line & '\n'
-    result.exitCode = peekExitCode(p)
-    if result.exitCode != -1: break
-    inc cnt
-  
-  # result = (
-  #   readAll p.outputStream,
-  #   readAll p.errorStream,
-  #   waitForExit p
-  # )
+  # result.exitCode = -1
+  # var line: string
+  # var cnt: int
+  # while true:
+  #   echo cnt
+  #   if outstrm.readLine(line):
+  #     result.stdout.add line & '\n'
+  #   if errstrm.readLine(line):
+  #     result.stderr.add line & '\n'
+  #   result.exitCode = peekExitCode(p)
+  #   if result.exitCode != -1: break
+  #   inc cnt
+  echo "process should have started?" 
+  result = (
+    readAll outstrm,
+    readAll errstrm,
+    waitForExit p
+  )
   close p
 
 proc runCmdCaptWithSpinner*(cmd: string, msg: string = ""): tuple[output, err: string] =
