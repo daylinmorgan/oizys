@@ -23,7 +23,6 @@ proc runCmdCapt*(cmd: string): tuple[stdout, stderr: string, exitCode: int] =
     args = args[1..^1],
     options = {poUsePath}
   )
-  p.inputStream.close()
   let outstrm = outputStream p
   let errstrm = errorStream p
   # result.exitCode = -1
@@ -40,13 +39,14 @@ proc runCmdCapt*(cmd: string): tuple[stdout, stderr: string, exitCode: int] =
   #   inc cnt
   echo "process should have started?"
   echo p.running, "<--running?"
+  close p
   result = (
     readAll outstrm,
     readAll errstrm,
     -1,
   )
-  result.exitCode = waitForExit p
-  close p
+  # result.exitCode = waitForExit p
+  # close p
 
 proc runCmdCaptWithSpinner*(cmd: string, msg: string = ""): tuple[output, err: string] =
   debug fmt"running command: {cmd}"
