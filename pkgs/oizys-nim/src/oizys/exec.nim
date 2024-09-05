@@ -18,11 +18,16 @@ proc runCmd*(cmd: string): int =
 
 proc runCmdCapt*(cmd: string): tuple[stdout, stderr: string, exitCode: int] =
   let args = cmd.splitWhitespace()
-  let p = startProcess(args[0], args = args[1..^1], options = {poUsePath})
+  let p = startProcess(
+    args[0],
+    args = args[1..^1],
+    options = {poUsePath}
+  )
+  p.inputStream.close()
   let ostrm = outputStream p
   let errstrm = errorStream p
   result.exitCode = -1
-  var line = newStringOfCap(120)
+  var line: string
   while true:
     if ostrm.readLine(line):
       result.stdout.add line & '\n'
