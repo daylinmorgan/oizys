@@ -38,12 +38,14 @@ proc runCmdCapt*(cmd: string): tuple[stdout, stderr: string, exitCode: int] =
   #   result.exitCode = peekExitCode(p)
   #   if result.exitCode != -1: break
   #   inc cnt
-  echo "process should have started?" 
+  echo "process should have started?"
+  echo p.running, "<--running?"
   result = (
     readAll outstrm,
     readAll errstrm,
-    waitForExit p
+    -1,
   )
+  result.exitCode = waitForExit p
   close p
 
 proc runCmdCaptWithSpinner*(cmd: string, msg: string = ""): tuple[output, err: string] =
