@@ -95,16 +95,18 @@ jobs:
 
 
       - name: Build
-        run: |
-          system_attr=$(nix run . -- output --host "${{ matrix.host }}" --flake .)
-          nix run . \
-            -- \
-            build $system_attr \
-              --flake . \
-              --debug \
-              -- \
-              --print-build-logs \
-              --out-link current
+        run: >
+          nix run .
+            --
+            build
+            $(nix run . -- output --host "${{ matrix.host }}" --flake .)
+            --flake .
+            --debug
+            --
+            --keep-going
+            --print-build-logs
+            --out-link current
+
 
       - run: git checkout flake-lock
 
@@ -112,23 +114,22 @@ jobs:
         run: nix build .
 
       - name: Build Updated
-        run: |
-          system_attr=$(nix run . -- output --host "${{ matrix.host }}" --flake .)
-          nix run . \
-            -- \
-            build $system_attr \
-              --flake . \
-              --debug \
-              -- \
-              --keep-going \
-              --print-build-logs \
-              --out-link updated
+        run: >
+          nix run .
+            --
+            build
+            $(nix run . -- output --host "${{ matrix.host }}" --flake .)
+            --flake .
+            --debug
+            --
+            --keep-going
+            --print-build-logs
+            --out-link updated
 
       - run: |
           echo "# System Diff" >> $GITHUB_STEP_SUMMARY
           nix run "nixpkgs#nvd" -- --color always diff ./current ./updated >> summary.md
           printf '```\n%s```\n' "$(nix run "nixpkgs#nvd" -- diff ./current ./updated)" >> $GITHUB_STEP_SUMMARY
-          nix run "nixpkgs#nvd" -- --color always diff ./current ./updated | nix run "nixpkgs#charm-freeze" -- --output diff.svg
 
       - run: df -h
 
@@ -136,13 +137,3 @@ jobs:
         with:
           name: ${{ matrix.host }}-summary
           path: summary.md
-
-      # https://github.com/actions/upload-artifact/issues/50#issuecomment-1856471599
-      - uses: actions/upload-artifact@v4
-        id: diff-upload
-        with:
-          name: ${{ matrix.host }}-diff
-          path: diff.svg
-
-      - name: Output artifact URL
-        run: echo 'Artifact URL is ${{ steps.diff-upload.outputs.artifact-url }}'
