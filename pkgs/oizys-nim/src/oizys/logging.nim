@@ -106,3 +106,12 @@ method log*(logger: FancyConsoleLogger, level: Level, args: varargs[string, `$`]
 
 proc addHandlers*(handler: Logger) =
   handlers.add(handler)
+
+template errorQuit*(args: varargs[string, `$`]) =
+  error args
+  quit QuitFailure
+
+template fatalQuit*(args: varargs[string, `$`]) =
+  error args
+  quit QuitFailure
+

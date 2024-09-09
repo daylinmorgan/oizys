@@ -46,24 +46,23 @@ overlay:
 
   proc osCmd() =
     ## nixos-rebuild
-    if len(rest) == 0: quit "please provide subcmd"
+    if len(rest) == 0: fatalQuit "please provide subcmd"
     let subcmd = rest[0]
     if subcmd notin nixosSubcmds:
-      error (
+      fatalQuit(
         &"unknown nixos-rebuild subcmd: {subcmd}\nexpected one of: \n" &
         nixosSubcmds.mapIt("  " & it).join("\n")
-      ); quit QuitFailure
+      )
     nixosRebuild(subcmd, rest[1..^1])
 
   proc ci(`ref`: string = "main") =
     ## trigger GHA update flow
-    if rest.len == 0:
-      fatal "expected workflow file name"; quit QuitFailure
+    if rest.len == 0: fatalQuit "expected workflow file name"
     createDispatch(rest[0], `ref`)
 
 proc checkExes() =
   if findExe("nix") == "":
-    quit("oizys requires nix", QuitFailure)
+    fatalQuit "oizys requires nix"
 
 proc `//`(t1: Table[string, string], t2: Table[string, string]): Table[string, string] =
   # nix style shallow table merge

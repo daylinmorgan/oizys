@@ -4,7 +4,7 @@ import std/[
   strutils, sugar, logging, tables
 ]
 import bbansi, jsony
-import ./[context, exec]
+import ./[context, exec, logging]
 
 
 proc nixCommand(cmd: string): string =
@@ -24,8 +24,7 @@ const nixosSubcmds* =
 
 proc nixosRebuild*(subcmd: string, rest: seq[string] = @[]) =
   if getHosts().len > 1:
-    error "nixos-rebuild only supports one host"
-    quit QuitFailure
+    fatalQuit "nixos-rebuild only supports one host"
   var cmd = fmt"sudo nixos-rebuild {subcmd} --flake {getFlake()} --log-format multiline"
   cmd.addArgs rest
   quitWithCmd cmd
@@ -77,8 +76,8 @@ proc parseDryRunOutput(err: string): DryRunOutput =
         stderr.writeLine err
         quit()
     of 0:
-      info "nothing to do";
-      quit(QuitSuccess)
+      info "nothing to do"
+      quit QuitSuccess
     else:
       fatal "unexpected output from nix"
       stderr.writeLine err
@@ -88,7 +87,7 @@ proc parseDryRunOutput(err: string): DryRunOutput =
   result.toFetch.sort(cmpDrv)
 
 proc trunc(s: string, limit: int): string =
-  if s.len <= limit: 
+  if s.len <= limit:
     s
   else:
     s[0..(limit-4)] & "..."
@@ -175,9 +174,7 @@ proc writeDervationsToStepSummary(drvs: seq[string]) =
       fmt"| {name} | {hash} |"
   )
   let summaryFilePath = getEnv("GITHUB_STEP_SUMMARY")
-  if summaryFilePath == "":
-    fatal "no github step summary found"
-    quit QuitFailure
+  if summaryFilePath == "": fatalQuit "no github step summary found"
   let output = open(summaryFilePath,fmAppend)
   output.writeLine("| derivation | hash |\n|---|---|")
   output.writeLine(rows.join("\n"))
@@ -226,8 +223,7 @@ template `bbfmt`(pattern: static string): untyped =
   bb(fmt(pattern))
 
 proc nixBuildWithCache*(minimal: bool, name: string, rest:seq[string]) =
-  if findExe("cachix") == "":
-    fatal "is cachix installed?"; quit QuitFailure
+  if findExe("cachix") == "": fatalQuit "is cachix installed?"
   info bbfmt"building and pushing to cache: [b]{name}"
   var cmd = "cachix"
   cmd.addArgs ["watch-exec","--"]

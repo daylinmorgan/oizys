@@ -1,6 +1,10 @@
 import std/[httpclient,logging, os, strformat, strutils, json]
+import ./logging
 
 var ghToken = getEnv("GITHUB_TOKEN")
+
+proc checkToken() {.inline.} =
+  if ghToken == "": fatalQuit "GITHUB_TOKEN not set"
 
 #[curl -L \
   -X POST \
@@ -11,16 +15,17 @@ var ghToken = getEnv("GITHUB_TOKEN")
   -d '{"ref":"topic-branch","inputs":{"name":"Mona the Octocat","home":"San Francisco, CA"}}'
 ]#
 
+
 proc postGhApi(url: string, body: JsonNode) =
-  if ghToken == "": fatal "GITHUB_TOKEN not set"; quit QuitFailure
+  checkToken()
   let client = newHttpClient()
   client.headers = newHttpHeaders({
     "Accept"              : "application/vnd.github+json",
     "Authorization"       : fmt"Bearer {ghToken}",
     "X-GitHub-Api-Version": "2022-11-28",
   })
-  let response = client.post(url, body = $body)
   try:
+    let response = client.post(url, body = $body)
     info fmt"Status: {response.code}"
   except:
     error "failed to get response code"

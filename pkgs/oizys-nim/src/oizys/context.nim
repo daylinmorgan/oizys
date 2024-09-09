@@ -1,6 +1,8 @@
 import std/[logging, os, strformat, strutils]
 from std/nativesockets import getHostname
 
+import ./logging
+
 type
   OizysContext* = object
     flake, host: string
@@ -24,8 +26,7 @@ var oc = initContext()
 proc checkPath(s: string): string = 
   ## fail if path doesn't exist
   if not s.dirExists:
-    error fmt"flake path: {s} does not exist"
-    quit()
+    errorQuit fmt"flake path: {s} does not exist"
   s
 
 # public api -------------------------------------
@@ -44,6 +45,7 @@ proc updateContext*(
     oc.flake =
       if flake.startsWith("github") or flake.startsWith("git+"): flake
       else: checkPath(flake.normalizedPath().absolutePath())
+  debug oc
 
 proc getHosts*(): seq[string] = return oc.hosts
 proc getFlake*(): string = return oc.flake
