@@ -94,9 +94,10 @@ proc trunc(s: string, limit: int): string =
 
 proc display(msg: string, drvs: seq[Derivation]) =
   echo fmt"{msg}: [bold cyan]{drvs.len()}[/]".bb
-  let maxLen = min(max drvs.mapIt(it.name.len), 40)
-  for drv in drvs:
-    echo "  ", drv.name.trunc(maxLen).alignLeft(maxLen), " ", drv.hash.bb("faint")
+  if drvs.len > 0:
+    let maxLen = min(max drvs.mapIt(it.name.len), 40)
+    for drv in drvs:
+      echo "  ", drv.name.trunc(maxLen).alignLeft(maxLen), " ", drv.hash.bb("faint")
 
 proc display(output: DryRunOutput) = 
   if isDebug():
@@ -130,7 +131,7 @@ proc evaluateDerivations(drvs: seq[string]): Table[string, NixDerivation] =
   fromJson(output, Table[string,NixDerivation])
 
 
-# TODO: replace asserts in this proc
+# TODO: replace asserts in this proc, would be easier with results type
 proc findSystemPaths(drvs: Table[string, NixDerivation]): seq[string] =
   let hosts = getHosts()
   let systemDrvs = collect(
@@ -148,7 +149,8 @@ proc findSystemPaths(drvs: Table[string, NixDerivation]): seq[string] =
 
 func isIgnored(drv: string): bool =
   const ignoredPackages = (slurp "ignored.txt").splitLines()
-  drv.split("-", 1)[1].replace(".drv","") in ignoredPackages
+  let name = drv.split("-", 1)[1].replace(".drv","")
+  name in ignoredPackages
 
 proc systemPathDrvsToBuild(): seq[string] =
   let toBuild = toBuildNixosConfiguration()
@@ -157,11 +159,12 @@ proc systemPathDrvsToBuild(): seq[string] =
   var inputDrvs: seq[string]
   for p in systemPaths:
     inputDrvs &= drvs[p].inputDrvs.keys().toSeq()
-  result = collect(
-    for drv in inputDrvs:
-      if (drv in toBuild) and (not drv.isIgnored()):
-        drv & "^*"
-  )
+  result = inputDrvs.filterIt(it in toBuild)
+  let nToBuild = result.len
+  result = result.filterIt(not it.isIgnored)
+  let nIgnored = result.len - nToBuild
+  debug fmt"ignored {nIgnored} derivations"
+  result = result.mapIt(it & "^*")
 
 func splitDrv(drv: string): tuple[name, hash:string] =
   let s = drv.split("-", 1)

@@ -23,7 +23,7 @@ type
 
 proc runCmdCapt*(
   cmd: string,
-  capture: set[CaptureGrp],
+  capture: set[CaptureGrp] = {CaptStdout},
 ): tuple[stdout, stderr: string, exitCode: int] =
   debug fmt"running cmd: {cmd}"
   let args = cmd.splitWhitespace()

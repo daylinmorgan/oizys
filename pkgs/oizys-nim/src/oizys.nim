@@ -1,5 +1,5 @@
 ## nix begat oizys
-import std/[os, tables, sequtils, strformat,]
+import std/[os, tables, sequtils, strformat,strutils]
 
 import cligen, bbansi
 import oizys/[context, github, nix, overlay, logging]
@@ -12,6 +12,17 @@ addHandler(
     fmtPrefix = $bb"[b magenta]oizys"
   )
 )
+
+proc confirm(q: string): bool =
+  stderr.write $(q & bb"[yellow] (Y/n) ")
+  while true:
+    let ans = readLine(stdin)
+    case ans.strip().toLowerAscii():
+    of "y","yes": return true
+    of "n","no": return false
+    else:
+      stderr.write($bb("[red]Please answer Yes/no\nexpected one of [b]Y,yes,N,no "))
+  stderr.write "\n"
 
 overlay:
   proc pre(
@@ -32,9 +43,20 @@ overlay:
     ## output
     echo nixosConfigAttrs().join(" ")
 
-  proc update(yes: bool = false) =
-    ## *TBI* update and run nixos-rebuild
-    fatal "not implemented"
+  proc update(
+    yes: bool = false,
+    preview: bool = false
+  ) =
+    ## update and run nixos-rebuild
+    let hosts = getHosts()
+    if hosts.len > 1: fatalQuit "operation only supports one host"
+    let run = getLastUpdateRun()
+    echo fmt"run created at: {run.created_at}"
+    echo "nvd diff:\n", getUpdateSummary(run.id, hosts[0])
+    if preview: quit 0
+    if yes or confirm("Proceed with system update?"):
+      updateRepo()
+      nixosRebuild("switch")
 
   proc build(minimal: bool = false) =
     ## nix build

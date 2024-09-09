@@ -1,11 +1,11 @@
 import std/[logging, os, strformat, strutils]
 from std/nativesockets import getHostname
-
+import bbansi
 import ./logging
 
 type
   OizysContext* = object
-    flake, host: string
+    flake: string
     hosts: seq[string]
     debug: bool
     ci: bool
@@ -39,13 +39,12 @@ proc updateContext*(
 ) =
   oc.debug = debug
   oc.resetCache = resetCache
-  if host.len > 0:
-    oc.hosts = host
   if flake != "":
     oc.flake =
       if flake.startsWith("github") or flake.startsWith("git+"): flake
       else: checkPath(flake.normalizedPath().absolutePath())
-  debug oc
+
+  debug bb(fmt"""[b]flake[/]: {oc.flake}, [b]hosts[/]: {oc.hosts.join(" ")}""")
 
 proc getHosts*(): seq[string] = return oc.hosts
 proc getFlake*(): string = return oc.flake

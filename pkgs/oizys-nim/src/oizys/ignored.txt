@@ -20,3 +20,4 @@ gitea
 lock
 code
 comma-with-db
+nix-index-with-db
