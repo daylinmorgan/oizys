@@ -13,4 +13,5 @@ bin           = @["oizys"]
 requires "nim >= 2.0.8"
 requires "cligen"
 requires "jsony"
+requires "zippy"
 requires "https://github.com/daylinmorgan/bbansi#9a85d9e"
