@@ -1,49 +1,6 @@
 import std/[os, locks, sequtils, terminal]
 
-# https://github.com/molnarmark/colorize
-proc reset(): string = "\e[0m"
-
-# foreground colors
-proc fgRed*(s: string): string = "\e[31m" & s & reset()
-proc fgBlack*(s: string): string = "\e[30m" & s & reset()
-proc fgGreen*(s: string): string = "\e[32m" & s & reset()
-proc fgYellow*(s: string): string = "\e[33m" & s & reset()
-proc fgBlue*(s: string): string = "\e[34m" & s & reset()
-proc fgMagenta*(s: string): string = "\e[35m" & s & reset()
-proc fgCyan*(s: string): string = "\e[36m" & s & reset()
-proc fgLightGray*(s: string): string = "\e[37m" & s & reset()
-proc fgDarkGray*(s: string): string = "\e[90m" & s & reset()
-proc fgLightRed*(s: string): string = "\e[91m" & s & reset()
-proc fgLightGreen*(s: string): string = "\e[92m" & s & reset()
-proc fgLightYellow*(s: string): string = "\e[93m" & s & reset()
-proc fgLightBlue*(s: string): string = "\e[94m" & s & reset()
-proc fgLightMagenta*(s: string): string = "\e[95m" & s & reset()
-proc fgLightCyan*(s: string): string = "\e[96m" & s & reset()
-proc fgWhite*(s: string): string = "\e[97m" & s & reset()
-
-# background colors
-proc bgBlack*(s: string): string = "\e[40m" & s & reset()
-proc bgRed*(s: string): string = "\e[41m" & s & reset()
-proc bgGreen*(s: string): string = "\e[42m" & s & reset()
-proc bgYellow*(s: string): string = "\e[43m" & s & reset()
-proc bgBlue*(s: string): string = "\e[44m" & s & reset()
-proc bgMagenta*(s: string): string = "\e[45m" & s & reset()
-proc bgCyan*(s: string): string = "\e[46m" & s & reset()
-proc bgLightGray*(s: string): string = "\e[47m" & s & reset()
-proc bgDarkGray*(s: string): string = "\e[100m" & s & reset()
-proc bgLightRed*(s: string): string = "\e[101m" & s & reset()
-proc bgLightGreen*(s: string): string = "\e[102m" & s & reset()
-proc bgLightYellow*(s: string): string = "\e[103m" & s & reset()
-proc bgLightBlue*(s: string): string = "\e[104m" & s & reset()
-proc bgLightMagenta*(s: string): string = "\e[105m" & s & reset()
-proc bgLightCyan*(s: string): string = "\e[106m" & s & reset()
-proc bgWhite*(s: string): string = "\e[107m" & s & reset()
-
-# formatting functions
-proc bold*(s: string): string = "\e[1m" & s & reset()
-proc underline*(s: string): string = "\e[4m" & s & reset()
-proc hidden*(s: string): string = "\e[8m" & s & reset()
-proc invert*(s: string): string = "\e[7m" & s & reset()
+import bbansi
 
 type
   SpinnerKind* = enum
@@ -71,10 +28,10 @@ type
     frame: string
     interval: int
     customSymbol: bool
+    style: string
 
   EventKind = enum
-    Stop, StopSuccess, StopError,
-    SymbolChange, TextChange,
+    Stop, SymbolChange, TextChange,
 
   SpinnyEvent = object
     kind: EventKind
@@ -83,19 +40,21 @@ type
 var spinnyChannel: Channel[SpinnyEvent]
 
 proc newSpinny*(text: string, s: Spinner): Spinny =
+  let style = "bold blue"
   Spinny(
     text: text,
     running: true,
-    frames: s.frames,
+    frames: mapIt(s.frames, $bb(it, style)),
     customSymbol: false,
-    interval: s.interval
+    interval: s.interval,
+    style: "bold blue"
   )
 
 proc newSpinny*(text: string, spinType: SpinnerKind): Spinny =
   newSpinny(text, Spinners[spinType])
 
-proc setSymbolColor*(spinny: Spinny, color: proc(x: string): string) =
-  spinny.frames = mapIt(spinny.frames, color(it))
+proc setSymbolColor*(spinny: Spinny, style: string) =
+  spinny.frames = mapIt(spinny.frames, $bb(it, style))
 
 proc setSymbol*(spinny: Spinny, symbol: string) =
   spinnyChannel.send(SpinnyEvent(kind: SymbolChange, payload: symbol))
@@ -113,14 +72,6 @@ proc handleEvent(spinny: Spinny, eventData: SpinnyEvent): bool =
     spinny.frame = eventData.payload
   of TextChange:
     spinny.text = eventData.payload
-  of StopSuccess:
-    spinny.customSymbol = true
-    spinny.frame = "✔".bold.fgGreen
-    spinny.text = eventData.payload.bold.fgGreen
-  of StopError:
-    spinny.customSymbol = true
-    spinny.frame = "✖".bold.fgRed
-    spinny.text = eventData.payload.bold.fgRed
 
 proc spinnyLoop(spinny: Spinny) {.thread.} =
   var frameCounter = 0
@@ -147,7 +98,7 @@ proc spinnyLoop(spinny: Spinny) {.thread.} =
       stdout.write(spinny.frame & " " & spinny.text)
       stdout.flushFile()
 
-    sleep(spinny.interval)
+    sleep spinny.interval
 
     if frameCounter >= spinny.frames.len - 1:
       frameCounter = 0
@@ -155,14 +106,14 @@ proc spinnyLoop(spinny: Spinny) {.thread.} =
       frameCounter += 1
 
 proc start*(spinny: Spinny) =
-  initLock(spinny.lock)
+  initLock spinny.lock
   spinnyChannel.open()
   createThread(spinny.t, spinnyLoop, spinny)
 
 proc stop(spinny: Spinny, kind: EventKind, payload = "") =
   spinnyChannel.send(SpinnyEvent(kind: kind, payload: payload))
   spinnyChannel.send(SpinnyEvent(kind: Stop))
-  joinThread(spinny.t)
+  joinThread spinny.t
   eraseLine stdout
   flushFile stdout
 
@@ -170,15 +121,8 @@ proc stop(spinny: Spinny, kind: EventKind, payload = "") =
 proc stop*(spinny: Spinny) =
   spinny.stop(Stop)
 
-proc success*(spinny: Spinny, msg: string) =
-  spinny.stop(StopSuccess, msg)
-
-proc error*(spinny: Spinny, msg: string) =
-  spinny.stop(StopError, msg)
-
 template withSpinner*(msg: string = "", body: untyped): untyped =
   var spinner {.inject.} = newSpinny(msg, Dots)
-  spinner.setSymbolColor(fgBlue)
   if isatty(stdout): # don't spin if it's not a tty
     start spinner
 
