@@ -23,10 +23,10 @@ const nixosSubcmds* =
   repl build-vm build-vm-with-bootloader list-generations""".splitWhitespace()
 
 proc nixosRebuild*(subcmd: string, rest: seq[string] = @[]) =
-  var cmd = fmt"sudo nixos-rebuild {subcmd} --flake {getFlake()} --log-format multiline"
   if getHosts().len > 1:
     error "nixos-rebuild only supports one host"
     quit QuitFailure
+  var cmd = fmt"sudo nixos-rebuild {subcmd} --flake {getFlake()} --log-format multiline"
   cmd.addArgs rest
   quitWithCmd cmd
 
@@ -217,7 +217,7 @@ proc nixBuildHostDry*(minimal: bool, rest: seq[string]) =
   cmd.addArg "--dry-run"
   cmd.addArgs rest
   let (_, err) =
-    runCmdCaptWithSpinner(cmd, "evaluating derivation for: " & getHosts().join(" "))
+    runCmdCaptWithSpinner(cmd, "evaluating derivation for: " & getHosts().join(" "), {CaptStderr})
   let output = parseDryRunOutput err
   display output
 
