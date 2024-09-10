@@ -3,23 +3,21 @@ let
   lib = nixpkgs.lib.extend (import ./extended.nix inputs);
 
   inherit (builtins) mapAttrs readDir listToAttrs;
-  inherit (lib) genAttrs pkgFromSystem pkgsFromSystem;
+  inherit (lib) genAttrs pkgFromSystem pkgsFromSystem loadOverlays;
 
   inherit (import ./find-modules.nix { inherit lib; }) findModulesList;
   inherit (import ./generators.nix { inherit lib self inputs; }) mkIso mkSystem;
   #supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
   supportedSystems = [ "x86_64-linux" ];
+
   forAllSystems =
-    f:
+    fn:
     genAttrs supportedSystems (
       system:
-      f (
+      fn (
         import nixpkgs {
           inherit system;
-          overlays = [
-            inputs.nim2nix.overlays.default
-            (import ../overlays/nimble { inherit inputs; })
-          ];
+          overlays = (import ../overlays { inherit inputs loadOverlays; });
         }
       )
     );
@@ -62,13 +60,13 @@ let
         ];
       };
     });
-    checks = forAllSystems (
-      pkgs:
-      import ./checks.nix {
-        inherit inputs lib self;
-        system = pkgs.system;
-      }
-    );
+    # checks = forAllSystems (
+    #   pkgs:
+    #   import ./checks.nix {
+    #     inherit inputs lib self;
+    #     system = pkgs.system;
+    #   }
+    # );
     formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
   };
 in

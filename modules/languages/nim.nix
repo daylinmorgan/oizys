@@ -15,8 +15,6 @@ in
       with pkgs;
       [
         nim
-
-        nim-atlas
         nimble
       ]
       ++ [ nimlangserver ];

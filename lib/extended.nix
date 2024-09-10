@@ -3,8 +3,11 @@ let
   inherit (builtins)
     listToAttrs
     substring
-    filter
     replaceStrings
+    map
+    filter
+    attrNames
+    readDir
     ;
   inherit (final)
     concatStringsSep
@@ -106,6 +109,12 @@ let
     pkg = pkgFromSystem system;
   };
 
+  loadOverlays =
+    inputs: dir: readDir dir
+    |> attrNames
+    |> filter (f: f != "default.nix")
+    |> map (f: import (../overlays + "/${f}") { inherit inputs; });
+
 in
 {
   inherit
@@ -125,5 +134,6 @@ in
     overlayFrom
     flakeFromSystem
     listify
+    loadOverlays
     ;
 }

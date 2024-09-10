@@ -1,11 +1,12 @@
 {
+  inputs,
   lib,
   self,
   hostName,
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkOption;
+  inherit (lib) mkEnableOption mkOption loadOverlays;
 in
 {
   imports = with self.nixosModules; [
@@ -54,5 +55,6 @@ in
   config = {
     networking.hostName = hostName;
     time.timeZone = "US/Central";
+    nixpkgs.overlays = import ../overlays { inherit inputs loadOverlays; };
   };
 }
