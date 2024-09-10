@@ -5,6 +5,7 @@ let
     filter
     attrNames
     readDir
+    elem
     ;
   # execute and import all overlay files in the current
   # directory with the given args
@@ -12,11 +13,13 @@ let
   #    map
   #     (f: (import (./. + "/${f}") { inherit inputs; }))
   #     (filter (f: f != "default.nix") (attrNames (readDir ./.)));
+  ignore = ["nimlangserver"];
   overlays =
     readDir ./.
     |> attrNames
-    |> filter (f: f != "default.nix")
+    |> filter (f: f != "default.nix" || elem f ignore)
     |> map (f: import (./. + "/${f}") { inherit inputs; });
+
 in
 {
   nixpkgs.overlays = overlays ++ [

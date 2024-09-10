@@ -42,6 +42,7 @@ let
         default = oizys-nim;
         oizys-nim = pkgs.callPackage ../pkgs/oizys-nim { };
         oizys-go = pkgs.callPackage ../pkgs/oizys { };
+        nimlangserver = pkgs.callPackage ../pkgs/nimlangserver { };
         iso = mkIso.config.system.build.isoImage;
         roc = (pkgsFromSystem pkgs.system "roc").full;
       }

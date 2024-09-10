@@ -49,6 +49,13 @@ let
     nixosSystem {
       system = "x86_64-linux";
       modules = [
+        # TODO: clean this up
+        (
+          { ... }:
+          {
+            nixpkgs.overlays = [ inputs.nim2nix.overlays.default ];
+          }
+        )
         ../overlays
         ../modules/oizys.nix
         inputs.lix-module.nixosModules.default
