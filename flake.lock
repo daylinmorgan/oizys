@@ -323,11 +323,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1725873008,
-        "narHash": "sha256-hVPjlB0EPbf98tm4LcwOmS80tO/qfAoXqXKWZjDUG50=",
+        "lastModified": 1725976150,
+        "narHash": "sha256-Dv4XEWRcVFZhBDbj11/zuuXyf7TGHFVU1IGH9W/yPX8=",
         "ref": "refs/heads/main",
-        "rev": "04421063af2941c6e27e6dca2bdc2c387778a3a5",
-        "revCount": 5203,
+        "rev": "155d44016d0cb11332c454db73d59030cdbd7b13",
+        "revCount": 5209,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/hyprwm/Hyprland/"
@@ -504,11 +504,11 @@
     "lix": {
       "flake": false,
       "locked": {
-        "lastModified": 1725846500,
-        "narHash": "sha256-8tzJO3PllVPc0RYE0OfXVWlgTiJxKH1nzXsQLGyFRJ4=",
-        "rev": "c14486ae8d3bbc862c625d948a6b2f4dc0927d5b",
+        "lastModified": 1725927421,
+        "narHash": "sha256-tiQ9OxiuTb/02xEU2ceo9MIxWBS5Rm/IAhv6QshH8K0=",
+        "rev": "cc183fdbc14ce105a5661d646983f791978b9d5c",
         "type": "tarball",
-        "url": "https://git.lix.systems/api/v1/repos/lix-project/lix/archive/c14486ae8d3bbc862c625d948a6b2f4dc0927d5b.tar.gz?rev=c14486ae8d3bbc862c625d948a6b2f4dc0927d5b"
+        "url": "https://git.lix.systems/api/v1/repos/lix-project/lix/archive/cc183fdbc14ce105a5661d646983f791978b9d5c.tar.gz?rev=cc183fdbc14ce105a5661d646983f791978b9d5c"
       },
       "original": {
         "type": "tarball",
@@ -744,11 +744,11 @@
         "nixpkgs": "nixpkgs_6"
       },
       "locked": {
-        "lastModified": 1725885379,
-        "narHash": "sha256-gw+CYMQRqzErAIp4WOTTeX6YXOhgk9YWyTM1Sa2cACA=",
+        "lastModified": 1725981791,
+        "narHash": "sha256-+4dwaoIrnubM29MK8BW4S2mdKwdlCF1svtO0hQ443X0=",
         "owner": "nix-community",
         "repo": "nixpkgs-wayland",
-        "rev": "dc951da2b8fdaabc09a1bc72dd5744438976be47",
+        "rev": "90046312d6c074e7b941b7ea9c4e54f4d416e5da",
         "type": "github"
       },
       "original": {
@@ -900,11 +900,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1725679186,
-        "narHash": "sha256-Eq+AI70CYMpIAhCjJ0VOoafd3tVhRYgXi8CzEqDn0KI=",
+        "lastModified": 1725957803,
+        "narHash": "sha256-qBG8DEmc9aOLr/WBtsuOB5QKEDxK2bDy4dq3X686xdo=",
         "owner": "roc-lang",
         "repo": "roc",
-        "rev": "9a4d55672551fb4ffb54983272bb02d119c19f85",
+        "rev": "2936a37a1c54cb4cb10003c3b7e43a4772bbccf9",
         "type": "github"
       },
       "original": {
@@ -1162,11 +1162,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1725203932,
-        "narHash": "sha256-VLULC/OnI+6R9KEP2OIGk+uLJJsfRlaLouZ5gyFd2+Y=",
+        "lastModified": 1725228143,
+        "narHash": "sha256-kbSiPA5oXiz1+1eVoRslMi5wylHD6SDT8dS9eZAxXAM=",
         "owner": "hyprwm",
         "repo": "xdg-desktop-portal-hyprland",
-        "rev": "2425e8f541525fa7409d9f26a8ffaf92a3767251",
+        "rev": "11e15b437e7efc39e452f36e15a183225d6bfa39",
         "type": "github"
       },
       "original": {
