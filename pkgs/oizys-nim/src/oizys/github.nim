@@ -7,19 +7,19 @@ import ./[logging, exec, context]
 when defined(amd64) and (defined(gcc) or defined(clang)):
   {.passC: "-msse4.1 -mpclmul".}
 
-template withTmpDir(body: untyped): untyped = 
+template withTmpDir(body: untyped): untyped =
   let tmpDir {.inject.} = createTempDir("oizys","")
   body
-  removeDir(tmpDir)
+  removeDir tmpDir
 
-var ghToken = getEnv("GITHUB_TOKEN")
+var ghToken = getEnv "GITHUB_TOKEN"
 
 proc checkToken() {.inline.} =
   if ghToken == "": fatalQuit "GITHUB_TOKEN not set"
 
 proc ghClient(
   maxRedirects = 5
-): HttpClient = 
+): HttpClient =
   checkToken()
   result = newHttpClient(maxRedirects = maxRedirects)
   result.headers = newHttpHeaders({
@@ -50,7 +50,8 @@ proc postGhApi(url: string, body: JsonNode) =
     let response = client.post(url, body = $body)
     info fmt"Status: {response.code}"
   except:
-    error "failed to get response code"
+    errorQuit "failed to get response code"
+
 
 proc createDispatch*(workflowFileName: string, `ref`: string) =
   ## https://docs.github.com/en/rest/actions/workflows?apiVersion=2022-11-28#create-a-workflow-dispatch-event
@@ -174,7 +175,7 @@ proc fetch(r: GitRepo) =
   checkGit code
 
 proc status(r: GitRepo) =
-  let (output, _, code) = runCmdCapt(r.git("status", "--porcelain"))
+  let (output, _, code) = runCmdCapt r.git("status", "--porcelain")
   checkGit code
   if output.len > 0:
     info "unstaged commits, cowardly exiting..."
@@ -188,6 +189,4 @@ proc rebase(r: GitRepo, `ref`: string) =
 proc updateRepo*() =
   let repo = GitRepo(path: getFlake())
   fetch repo
-  rebase repo, "origin/flake-lock"
-
-
+  rebase(repo, "origin/flake-lock")

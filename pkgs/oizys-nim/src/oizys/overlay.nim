@@ -2,8 +2,7 @@ import std/macros
 
 type
   OverlayKind = enum
-    oPre
-    oPost
+    oPre, oPost
   OverlayProc = object
     node: NimNode
     kind: OverlayKind
@@ -27,6 +26,7 @@ proc applyOverlay(child: NimNode, overlayProc: OverlayProc) =
 macro overlay*(x: untyped): untyped =
   ##[
    apply pre and post operations to procs:
+
    ```nim
    overlay:
      proc pre(a: bool) =
@@ -43,7 +43,8 @@ macro overlay*(x: untyped): untyped =
      echo "inside mine"
      echo "after"
    ```
-   ]##
+  ]##
+
   result = newStmtList()
   var overlays: seq[OverlayProc]
   for child in x.children():

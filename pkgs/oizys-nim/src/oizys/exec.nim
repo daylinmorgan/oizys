@@ -32,25 +32,22 @@ proc runCmdCapt*(
     args = args[1..^1],
     options = {poUsePath}
   )
-  let 
+  # NOTE: if I didn't use streams could I just read from the file handle instead?
+  let
     outstrm = peekableOutputStream p
     errstrm = peekableErrorStream p
   result.exitCode = -1
   var line: string
-  # var cnt: int
   while true:
     if CaptStdout in capture:
-      if outstrm.readLine(line): 
+      if outstrm.readLine(line):
         result.stdout.add line & '\n'
     if CaptStderr in capture:
       if errstrm.readLine(line):
         result.stderr.add line & '\n'
     result.exitCode = peekExitCode(p)
     if result.exitCode != -1: break
-  
-  # result.exitCode = waitForExit p
-  # result.exitCode = waitForExit p
-  # close p
+
   close p
 
 proc runCmdCaptWithSpinner*(

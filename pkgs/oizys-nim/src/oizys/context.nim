@@ -23,13 +23,11 @@ proc initContext*(): OizysContext =
   result.ci = getEnv("GITHUB_STEP_SUMMARY") != ""
 
 var oc = initContext()
-proc checkPath(s: string): string = 
-  ## fail if path doesn't exist
-  if not s.dirExists:
-    errorQuit fmt"flake path: {s} does not exist"
-  s
 
-# public api -------------------------------------
+proc checkPath(s: string): string =
+  ## fail if path doesn't exist
+  if not s.dirExists: fatalQuit fmt"flake path: {s} does not exist"
+  s
 
 proc updateContext*(
   host: seq[string],
@@ -37,8 +35,7 @@ proc updateContext*(
   debug: bool,
   resetCache: bool
 ) =
-  if host.len > 0:
-    oc.hosts = host
+  if host.len > 0: oc.hosts = host
   oc.debug = debug
   oc.resetCache = resetCache
   if flake != "":
@@ -49,9 +46,9 @@ proc updateContext*(
   debug bb(fmt"""[b]flake[/]: {oc.flake}, [b]hosts[/]: {oc.hosts.join(" ")}""")
 
 proc getHosts*(): seq[string] = return oc.hosts
-proc getFlake*(): string = return oc.flake
-proc isDebug*(): bool = return oc.debug
-proc isResetCache*(): bool = return oc.resetCache
-proc isCi*(): bool = return oc.ci
+proc getFlake*(): string      = return oc.flake
+proc isDebug*(): bool         = return oc.debug
+proc isResetCache*(): bool    = return oc.resetCache
+proc isCi*(): bool            = return oc.ci
 
 
