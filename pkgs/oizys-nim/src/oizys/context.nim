@@ -37,6 +37,8 @@ proc updateContext*(
   debug: bool,
   resetCache: bool
 ) =
+  if host.len > 0:
+    oc.hosts = host
   oc.debug = debug
   oc.resetCache = resetCache
   if flake != "":
