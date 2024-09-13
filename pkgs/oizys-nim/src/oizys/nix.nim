@@ -56,7 +56,7 @@ proc parseDryRunOutput(err: string): DryRunOutput =
   let lines = err.strip().splitLines()
   let theseLines = collect:
     for i, line in enumerate(lines):
-      if line.startswith("these"): i
+      if line.startswith("these") or line.startswith("this"): i
 
   case theseLines.len:
     of 2:
