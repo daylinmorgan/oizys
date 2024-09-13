@@ -2,21 +2,23 @@
   config,
   lib,
   pkgs,
+  flake,
   ...
 }:
 let
   inherit (lib) mkIfIn;
   cfg = config.oizys.languages;
-  nimlangserver = pkgs.callPackage ../../pkgs/nimlangserver { };
 in
 {
   config = mkIfIn "nim" cfg {
     environment.systemPackages =
-      with pkgs;
-      [
+      (with pkgs; [
         nim
         nimble
-      ]
-      ++ [ nimlangserver ];
+      ])
+      ++ (with (flake.pkgs "self"); [
+        nimlangserver
+        nph
+      ]);
   };
 }
