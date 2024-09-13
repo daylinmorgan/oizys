@@ -67,6 +67,7 @@ jobs:
     needs: build-minimal
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         host:
           - othalan
