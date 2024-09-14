@@ -14,11 +14,11 @@ in
     environment.systemPackages =
       (with pkgs; [
         nim
-        nimble
       ])
       ++ (with (flake.pkgs "self"); [
         nimlangserver
         nph
+        nimble
       ]);
   };
 }
