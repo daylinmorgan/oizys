@@ -48,7 +48,7 @@ let
         nimlangserver = pkgs.callPackage ../pkgs/nimlangserver { };
         nph = pkgs.callPackage ../pkgs/nph { };
         iso = mkIso.config.system.build.isoImage;
-        roc = (pkgsFromSystem pkgs.system "roc").full;
+        # roc = (pkgsFromSystem pkgs.system "roc").full;
       }
       // (inheritFlakePkgs pkgs [
         "pixi"
@@ -66,13 +66,13 @@ let
         ];
       };
     });
-    # checks = forAllSystems (
-    #   pkgs:
-    #   import ./checks.nix {
-    #     inherit inputs lib self;
-    #     system = pkgs.system;
-    #   }
-    # );
+    checks = forAllSystems (
+      pkgs:
+      import ./checks.nix {
+        inherit inputs lib self;
+        system = pkgs.system;
+      }
+    );
     formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
   };
 in
