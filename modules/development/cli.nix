@@ -24,7 +24,6 @@ mkDefaultOizysModule config "cli" {
       lsd
       fzf
       eza
-      oh-my-posh
 
       # utils
       fd
