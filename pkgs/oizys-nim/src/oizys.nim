@@ -95,10 +95,9 @@ proc setupCligen() =
   let isColor = getEnv("NO_COLOR") == ""
   if clCfg.useMulti == "":
     clCfg.useMulti =
-      if isColor:
-        "${doc}\e[1mUsage\e[m:\n  $command {SUBCMD} [sub-command options & parameters]\n\n\e[1msubcommands\e[m:\n$subcmds"
-      else:
-        "${doc}Usage:\n  $command {SUBCMD} [sub-command options & parameters]\n\nsubcommands:\n$subcmds"
+      if isColor: "${doc}\e[1mUsage\e[m:\n  $command {SUBCMD} [sub-command options & parameters]\n\n\e[1msubcommands\e[m:\n$subcmds"
+      else: "${doc}Usage:\n  $command {SUBCMD} [sub-command options & parameters]\n\nsubcommands:\n$subcmds"
+
   if not isColor: return
   if clCfg.helpAttr.len == 0:
     clCfg.helpAttr = {"cmd": "\e[1;36m", "clDescrip": "", "clDflVal": "\e[33m",

@@ -55,30 +55,18 @@ nix run "github:daylinmorgan/oizys"
 
 ```
 nix begat oizys
-
 Usage:
-  oizys [command]
+  oizys {SUBCMD} [sub-command options & parameters]
 
-Available Commands:
-  build                   nix build
-  cache                   build and push to cachix
-  checks                  nix build checks
-  ci                      offload build to GHA
-  dry                     poor man's nix flake check
-  help                    Help about any command
-  os                      nixos-rebuild wrapper
-  output                  show nixosConfiguration attr
-  update                  update and run nixos rebuild
-
-Flags:
-      --debug          show debug output
-      --flake string   path to flake ($OIZYS_DIR or $HOME/oizys)
-  -h, --help           help for oizys
-      --host string    host(s) to build (current host)
-      --reset-cache    set narinfo-cache-negative-ttl to 0
-  -v, --verbose        show verbose output
-
-Use "oizys [command] --help" for more information about a command.
+subcommands:
+  help   print comprehensive or per-cmd help
+  build  nix build
+  cache  build and push to cachix
+  ci     trigger GHA update flow
+  dry    dry run build
+  os     nixos-rebuild
+  output output
+  update update and run nixos-rebuild
 ```
 
 ## oizys?
