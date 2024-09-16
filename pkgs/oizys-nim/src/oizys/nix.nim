@@ -162,7 +162,7 @@ proc systemPathDrvsToBuild(): seq[string] =
   result = inputDrvs.filterIt(it in toBuild)
   let nToBuild = result.len
   result = result.filterIt(not it.isIgnored)
-  let nIgnored = result.len - nToBuild
+  let nIgnored = nToBuild - result.len
   debug fmt"ignored {nIgnored} derivations"
   result = result.mapIt(it & "^*")
 
