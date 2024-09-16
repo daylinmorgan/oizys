@@ -34,11 +34,11 @@ runs:
 
           echo "Removing unwanted software... "
 
-          if [[ "${{ inputs.purge-packages }}" == 'true' ]]; then
-            sudo apt-get purge \
-              --allow-remove-essential \
-              $(non_manifest_packages) # > /dev/null
-          fi
+          # if [[ "${{ inputs.purge-packages }}" == 'true' ]]; then
+          #   sudo apt-get purge \
+          #     --allow-remove-essential \
+          #     $(non_manifest_packages) # > /dev/null
+          # fi
 
           sudo rm -rf \
             /var/lib/docker/ \
