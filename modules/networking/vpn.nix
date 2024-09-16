@@ -28,10 +28,6 @@ mkOizysModule config "vpn" {
       '';
       autoStart = false;
       updateResolvConf = true;
-
-      # https://github.com/NixOS/nixpkgs/pull/341223
-      # what happens when PR's are merged without review...
-      extraArgs = [];
     };
   };
 
