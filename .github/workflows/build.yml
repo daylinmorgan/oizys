@@ -39,7 +39,7 @@ jobs:
             experimental-features = pipe-operator
             accept-flake-config = true
 
-      - uses: DeterminateSystems/magic-nix-cache-action@v7
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
 
       - uses: cachix/cachix-action@v15
         with:
