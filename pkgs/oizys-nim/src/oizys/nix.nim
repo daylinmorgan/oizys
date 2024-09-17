@@ -150,7 +150,11 @@ proc findSystemPaths(drvs: Table[string, NixDerivation]): seq[string] =
 func isIgnored(drv: string): bool =
   const ignoredPackages = (slurp "ignored.txt").splitLines()
   let name = drv.split("-", 1)[1].replace(".drv","")
-  name in ignoredPackages
+  result = name in ignoredPackages
+  if not result:
+    for pkg in ignoredPackages:
+      if name.startswith(pkg):
+        return true
 
 proc systemPathDrvsToBuild(): seq[string] =
   let toBuild = toBuildNixosConfiguration()
