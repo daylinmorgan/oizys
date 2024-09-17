@@ -36,7 +36,7 @@
     "vt.default_blu=46,168,161,175,250,231,213,222,112,168,161,175,250,231,213,200"
   ];
 
-  boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.tmp.cleanOnBoot = true;
   boot.loader = {
     systemd-boot = enabled // {
