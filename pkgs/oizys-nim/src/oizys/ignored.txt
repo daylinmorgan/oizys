@@ -19,5 +19,6 @@ restic-gdrive
 gitea
 lock
 code
+direnv
 comma-with-db
 nix-index-with-db
