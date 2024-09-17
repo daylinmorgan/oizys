@@ -147,8 +147,18 @@ proc findSystemPaths(drvs: Table[string, NixDerivation]): seq[string] =
 
   assert len(hosts) == len(result)
 
+
+proc filterSeq(
+  drvs: seq[string],
+  filter: proc(s: string): bool,
+): tuple[yes: seq[string], no: seq[string]] =
+  for drv in drvs:
+    if filter(drv): result.yes.add drv
+    else: result.no.add drv
+
+
 func isIgnored(drv: string): bool =
-  const ignoredPackages = (slurp "ignored.txt").splitLines()
+  const ignoredPackages = (slurp "ignored.txt").strip().splitLines()
   let name = drv.split("-", 1)[1].replace(".drv","")
   result = name in ignoredPackages
   if not result:
@@ -157,17 +167,15 @@ func isIgnored(drv: string): bool =
         return true
 
 proc systemPathDrvsToBuild(): seq[string] =
+  var inputDrvs, dropped: seq[string]
   let toBuild = toBuildNixosConfiguration()
   let drvs = evaluateDerivations(nixosConfigAttrs())
   let systemPaths = findSystemPaths(drvs)
-  var inputDrvs: seq[string]
   for p in systemPaths:
     inputDrvs &= drvs[p].inputDrvs.keys().toSeq()
-  result = inputDrvs.filterIt(it in toBuild)
-  let nToBuild = result.len
-  result = result.filterIt(not it.isIgnored)
-  let nIgnored = nToBuild - result.len
-  debug fmt"ignored {nIgnored} derivations"
+  (result, _) = filterSeq(inputDrvs, (s) => s in toBuild)
+  (dropped, result) =  filterSeq(result, isIgnored)
+  debug fmt"ignored {dropped.len} derivations"
   result = result.mapIt(it & "^*")
 
 func splitDrv(drv: string): tuple[name, hash:string] =
