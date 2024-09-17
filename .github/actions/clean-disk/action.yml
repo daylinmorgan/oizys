@@ -6,10 +6,6 @@ inputs:
     description: whether to remove apt packages
     required: false
     default: 'false'
-  apt-manifest-url:
-    description: url to apt-package manifest (default ubuntu-22.04.4)
-    required: false
-    default: 'https://releases.ubuntu.com/jammy/ubuntu-22.04.4-live-server-amd64.manifest'
 
 runs:
   using: "composite"
@@ -24,37 +20,43 @@ runs:
     - name: Maximize build disk space
       shell: bash
       run: |
-          set -euo pipefail
+          set -xeuo pipefail
+          shopt -s globstar
 
           non_manifest_packages() {
             comm -2 -3 \
-              <(sudo apt-mark showmanual | sort) \
-              <(curl --silent "${{ inputs.apt-manifest-url }}" | grep --perl-regexp --only-matching '^[\w-.+]+' | sort)
+              <(sudo apt-mark showmanual | sort -u) \
+              <(grep --perl-regexp --only-matching '^[\w-.+]+' "${{ github.action_path }}"/ubuntu-24.04.1-live-server-amd64.manifest | sort -u)
           }
 
           echo "Removing unwanted software... "
 
-          # if [[ "${{ inputs.purge-packages }}" == 'true' ]]; then
-          #   sudo apt-get purge \
-          #     --allow-remove-essential \
-          #     $(non_manifest_packages) # > /dev/null
-          # fi
+          if [[ "${{ inputs.purge-packages }}" == 'true' ]]; then
+            sudo apt-get purge \
+              --allow-remove-essential \
+              $(non_manifest_packages)
+          fi
+
 
           sudo rm -rf \
             /var/lib/docker/ \
             "$AGENT_TOOLSDIRECTORY" \
-            /opt \
-            /usr/local/** &
+            /opt &
 
-          # nix flake update wants to find git-core templates
-          # /usr/share/git-core/templates
-          # /usr/share/**
+          sudo find /usr/{share,local} \
+            -mindepth 1 -maxdepth 1 \
+            -type d \
+            -not -wholename '/usr/share/git-core' \
+            -exec rm -rf {} + &
+
           {
             sudo swapoff -a
             sudo rm -f /mnt/swapfile
           } &
+
           wait
           echo "... done"
+
 
     - name: Disk space report after modification
       shell: bash

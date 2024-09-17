@@ -30,7 +30,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # - uses: ./.github/actions/clean-disk
+      - uses: ./.github/actions/clean-disk
+        with:
+          purge-packages: 'true'
 
       - uses: DeterminateSystems/nix-installer-action@v14
         with:
@@ -41,11 +43,11 @@ jobs:
 
       - uses: DeterminateSystems/magic-nix-cache-action@v8
 
-      - uses: cachix/cachix-action@v15
-        with:
-          name: daylin
-          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
-
+      # - uses: cachix/cachix-action@v15
+      #   with:
+      #     name: daylin
+      #     authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+      
       - name: write lock file
         if: "${{ inputs.lockFile != '' }}"
         run: |
