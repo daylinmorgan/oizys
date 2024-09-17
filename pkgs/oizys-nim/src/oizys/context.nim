@@ -1,6 +1,6 @@
 import std/[logging, os, strformat, strutils]
 from std/nativesockets import getHostname
-import bbansi
+import hwylterm
 import ./logging
 
 type

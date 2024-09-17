@@ -1,9 +1,9 @@
 ## nix begat oizys
 import std/[os, tables, sequtils, strformat,strutils]
 
-import cligen, bbansi
+import hwylterm
+import hwylterm/cli
 import oizys/[context, github, nix, overlay, logging]
-
 
 addHandler(
   newFancyConsoleLogger(
@@ -91,31 +91,11 @@ proc `//`(t1: Table[string, string], t2: Table[string, string]): Table[string, s
   for k, v in t1.pairs(): result[k] = v
   for k, v in t2.pairs(): result[k] = v
 
-proc setupCligen() =
-  let isColor = getEnv("NO_COLOR") == ""
-  if clCfg.useMulti == "":
-    clCfg.useMulti =
-      if isColor: "${doc}\e[1mUsage\e[m:\n  $command {SUBCMD} [sub-command options & parameters]\n\n\e[1msubcommands\e[m:\n$subcmds"
-      else: "${doc}Usage:\n  $command {SUBCMD} [sub-command options & parameters]\n\nsubcommands:\n$subcmds"
-
-  if not isColor: return
-  if clCfg.helpAttr.len == 0:
-    clCfg.helpAttr = {"cmd": "\e[1;36m", "clDescrip": "", "clDflVal": "\e[33m",
-        "clOptKeys": "\e[32m", "clValType": "\e[31m", "args": "\e[3m"}.toTable()
-    clCfg.helpAttrOff = {"cmd": "\e[m", "clDescrip": "\e[m", "clDflVal": "\e[m",
-        "clOptKeys": "\e[m", "clValType": "\e[m", "args": "\e[m"}.toTable()
-    # clCfg.use  does nothing?
-    clCfg.useHdr = "\e[1musage\e[m:\n  "
 
 when isMainModule:
+  import cligen
   checkExes()
-  setupCligen()
-  let (optOpen, optClose) =
-    if getEnv("NO_COLOR") == "": ("\e[1m","\e[m")
-    else: ("","")
-  let
-    usage = &"$command [flags]\n$doc{optOpen}Options{optClose}:\n$options"
-    osUsage = &"$command [subcmd] [flags]\n$doc{optOpen}Options{optClose}:\n$options"
+  hwylCli(clCfg)
 
   const
     sharedHelp = {
@@ -133,15 +113,17 @@ when isMainModule:
     cacheHelp = {
       "name"       : "name of cachix binary cache"
     }.toTable() // sharedHelp
-
-  # setting clCfg.use wasn't working?
+  let
+    # clUse must be set here using clCfg doesn't seem to work with dispatchMutli ...
+    clUse* = $bb("$command $args\n${doc}[bold]Options[/]:\n$options")
+    osUsage = $bb("$command [[subcmd] $args\n$doc[bold]Options[/]:\n$options")
   dispatchMulti(
-    [build,  help = sharedHelp, usage = usage],
-    [cache,  help = cacheHelp,  usage = usage],
-    [ci,     help = ciHelp,     usage = usage],
-    [dry,    help = sharedHelp, usage = usage],
+    [build,  help = sharedHelp],
+    [cache,  help = cacheHelp ],
+    [ci,     help = ciHelp    ],
+    [dry,    help = sharedHelp],
     [osCmd,  help = sharedHelp, usage = osUsage, cmdName = "os"],
-    [output, help = sharedHelp, usage = usage],
-    [update, help = updateHelp, usage = usage],
+    [output, help = sharedHelp],
+    [update, help = updateHelp],
   )
 

@@ -3,7 +3,7 @@ import std/[
   enumerate, os, sequtils, strformat,
   strutils, sugar, logging, tables
 ]
-import bbansi, jsony
+import hwylterm, jsony
 import ./[context, exec, logging]
 
 

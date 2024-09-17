@@ -1,7 +1,7 @@
 import std/[logging,strutils]
 export logging
 
-import bbansi
+import hwylterm
 
 var
   handlers {.threadvar.}: seq[Logger]

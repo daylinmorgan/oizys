@@ -1,16 +1,6 @@
 {
   "version": 2,
   "packages": {
-    "bbansi": {
-      "version": "0.1.1",
-      "vcsRevision": "9a85d9ed028f06f1ed1ee6851480a51408a6004e",
-      "url": "https://github.com/daylinmorgan/bbansi",
-      "downloadMethod": "git",
-      "dependencies": [],
-      "checksums": {
-        "sha1": "b338433f9a7a1b788b7583674c2b14096ced29ee"
-      }
-    },
     "cligen": {
       "version": "1.7.0",
       "vcsRevision": "4193f802796f15559c81c6dd56724d6f20345917",
@@ -19,6 +9,16 @@
       "dependencies": [],
       "checksums": {
         "sha1": "300bd7fdb6e48d2d98e34ed0661206b50331e99c"
+      }
+    },
+    "hwylterm": {
+      "version": "0.1.0",
+      "vcsRevision": "9afc339a9791f25010ea89a4f52204ad8eeda858",
+      "url": "https://github.com/daylinmorgan/hwylterm",
+      "downloadMethod": "git",
+      "dependencies": [],
+      "checksums": {
+        "sha1": "853c67ee7f789d825ec6f46c9fbae68e03e43cdb"
       }
     },
     "jsony": {

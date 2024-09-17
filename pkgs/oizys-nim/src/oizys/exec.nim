@@ -3,7 +3,7 @@ import std/[
   strutils, streams, logging
 ]
 
-import ./spin
+import hwylterm
 
 
 func addArgs*(cmd: var string, args: openArray[string]) =

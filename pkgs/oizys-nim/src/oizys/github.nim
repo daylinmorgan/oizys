@@ -1,5 +1,5 @@
 import std/[httpclient,logging, os, strformat, strutils, json, tables, tempfiles]
-import jsony, bbansi, zippy/ziparchives
+import jsony, hwylterm, zippy/ziparchives
 import ./[logging, exec, context]
 
 # localPassC is used by zippy but the additional
