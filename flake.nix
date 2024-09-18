@@ -9,6 +9,8 @@
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     nix-index-database.url = "github:nix-community/nix-index-database";
+    # pipe support added
+    nixd.url = "github:nix-community/nixd/e2f0d908d6f2ee7bf72c620ed3c78817143b50ae";
 
     lix = {
       url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
@@ -33,6 +35,7 @@
     hyprman.url = "git+https://git.dayl.in/daylin/hyprman.git";
     utils.url = "git+https://git.dayl.in/daylin/utils.git";
 
+    nixd.inputs.nixpkgs.follows = "nixpkgs";
     nim2nix.inputs.nixpkgs.follows = "nixpkgs";
     hyprman.inputs.nixpkgs.follows = "nixpkgs";
     f1multiviewer.inputs.nixpkgs.follows = "nixpkgs";
