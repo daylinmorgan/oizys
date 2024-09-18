@@ -1,6 +1,4 @@
 {
-  lib,
-  config,
   enabled,
   enableAttrs,
   listify,
@@ -12,8 +10,10 @@
       nix-ld = enabled // {
         overkill = enabled;
       };
-      # languages = "misc|nim|node|nushell|python|roc|tex|zig" |> listify;
-      languages = "misc|nim|node|nushell|python|roc|tex" |> listify;
+      languages =
+        "misc|nim|node|nushell|python|tex"
+        # + "roc|zig"
+        |> listify;
     }
     // (
       ''
