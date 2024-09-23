@@ -94,10 +94,10 @@ method log*(logger: FancyConsoleLogger, level: Level, args: varargs[string, `$`]
 
   if level >= logger.levelThreshold:
     let ln = substituteLog(logger.fmtStrs[level], level, args)
-    when defined(js): {.fatal: "handler does note support JS".}
+    when defined(js): {.fatal: "handler does not support JS".}
     try:
       let handle =
-        if logger.useStderr: stderr 
+        if logger.useStderr: stderr
         else: stdout
       writeLine(handle, ln)
       if level >= logger.flushThreshold: flushFile(handle)
@@ -112,6 +112,6 @@ template errorQuit*(args: varargs[string, `$`]) =
   quit QuitFailure
 
 template fatalQuit*(args: varargs[string, `$`]) =
-  error args
+  fatal args
   quit QuitFailure
 
