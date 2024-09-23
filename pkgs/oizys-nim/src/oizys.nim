@@ -117,13 +117,14 @@ when isMainModule:
     # clUse must be set here using clCfg doesn't seem to work with dispatchMutli ...
     clUse* = $bb("$command $args\n${doc}[bold]Options[/]:\n$options")
     osUsage = $bb("$command [[subcmd] $args\n$doc[bold]Options[/]:\n$options")
+
   dispatchMulti(
-    [build,  help = sharedHelp],
-    [cache,  help = cacheHelp ],
-    [ci,     help = ciHelp    ],
-    [dry,    help = sharedHelp],
+    [build,  help = sharedHelp, usage = clUse ],
+    [cache,  help = cacheHelp , usage = clUse ],
+    [ci,     help = ciHelp    , usage = clUse ],
+    [dry,    help = sharedHelp, usage = clUse ],
     [osCmd,  help = sharedHelp, usage = osUsage, cmdName = "os"],
-    [output, help = sharedHelp],
-    [update, help = updateHelp],
+    [output, help = sharedHelp, usage = clUse],
+    [update, help = updateHelp, usage = clUse],
   )
 
