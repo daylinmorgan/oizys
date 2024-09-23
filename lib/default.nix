@@ -6,7 +6,6 @@ let
   inherit (lib)
     genAttrs
     pkgFromSystem
-    pkgsFromSystem
     loadOverlays
     ;
 
@@ -46,7 +45,7 @@ let
         oizys-nim = pkgs.callPackage ../pkgs/oizys-nim { };
         oizys-go = pkgs.callPackage ../pkgs/oizys { };
         # nimlangserver = pkgs.callPackage ../pkgs/nimlangserver { };
-        # nph = pkgs.callPackage ../pkgs/nph { };
+        nph = pkgs.callPackage ../pkgs/nph { };
         iso = mkIso.config.system.build.isoImage;
         # roc = (pkgsFromSystem pkgs.system "roc").full;
       }
