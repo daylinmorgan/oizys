@@ -14,5 +14,5 @@ requires "nim >= 2.0.8"
 requires "cligen"
 requires "jsony"
 requires "zippy"
-requires "https://github.com/daylinmorgan/hwylterm#9afc339"
+requires "https://github.com/daylinmorgan/hwylterm#HEAD"
 

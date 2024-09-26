@@ -8,5 +8,5 @@ buildNimblePackage {
   verions = "unstable";
   src = lib.cleanSource ./.;
   nativeBuildInputs = [ openssl ];
-  nimbleDepsHash = "sha256-o+CN0LlVOcgjLpDfjItW/5GCXTWcPSx9GfwQn+u2ST4=";
+  nimbleDepsHash = "sha256-A2sQy4x+QyqltV7B1rRh7uRPvv7pDtVNOXZZl5LrHCY=";
 }
