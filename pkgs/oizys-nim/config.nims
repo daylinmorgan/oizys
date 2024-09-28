@@ -6,5 +6,3 @@ task build, "build oizys":
 when withDir(thisDir(), system.fileExists("nimble.paths")):
   include "nimble.paths"
 # end Nimble config
-#
---path:"../../../dev/github/daylinmorgan/hwylterm/src"

@@ -86,10 +86,15 @@ proc checkExes() =
   if findExe("nix") == "":
     fatalQuit "oizys requires nix"
 
-proc `//`(t1: Table[string, string], t2: Table[string, string]): Table[string, string] =
-  # nix style shallow table merge
-  for k, v in t1.pairs(): result[k] = v
-  for k, v in t2.pairs(): result[k] = v
+func `//`[A, B](pairs: openArray[(A, B)]): Table[A, B] =
+  pairs.toTable()
+func `//`[A, B](t1: var Table[A,B], t2: Table[A,B]) =
+  for k, v in t2.pairs(): t1[k] = v
+func `//`[A, B](t1: Table[A, B], t2: Table[A, B]): Table[A, B] =
+  result // t1; result // t2
+func `//`[A, B](pairs: openArray[(A,B)], t2: Table[A,B]): Table[A,B] =
+  // pairs // t2
+
 
 
 when isMainModule:
@@ -98,21 +103,21 @@ when isMainModule:
   hwylCli(clCfg)
 
   const
-    sharedHelp = {
+    sharedHelp = //{
       "flake"      : "path/to/flake",
       "host"       : "host(s) to build",
       "debug"      : "enable debug mode",
       "resetCache" : "set cache timeout to 0"
-    }.toTable()
-    updateHelp = {
+    }
+    updateHelp = //{
       "yes"        : "skip all confirmation prompts"
-    }.toTable() // sharedHelp
-    ciHelp = {
+    } // sharedHelp
+    ciHelp     = //{
       "ref"        : "git ref/branch/tag to trigger workflow on"
-    }.toTable()
-    cacheHelp = {
+    }
+    cacheHelp = //{
       "name"       : "name of cachix binary cache"
-    }.toTable() // sharedHelp
+    } // sharedHelp
   let
     # clUse must be set here using clCfg doesn't seem to work with dispatchMutli ...
     clUse* = $bb("$command $args\n${doc}[bold]Options[/]:\n$options")
