@@ -3,9 +3,9 @@ import std/[
   enumerate, os, sequtils, strformat,
   strutils, sugar, logging, tables
 ]
-import hwylterm, jsony
-import ./[context, exec, logging]
+import hwylterm, hwylterm/logging, jsony
 
+import ./[context, exec]
 
 proc nixCommand(cmd: string): string =
   result = "nix"
@@ -256,9 +256,4 @@ proc nixBuildWithCache*(minimal: bool, name: string, rest:seq[string]) =
   cmd.addArgs rest
   let err = runCmd(cmd)
   quit err
-
-
-
-
-
 

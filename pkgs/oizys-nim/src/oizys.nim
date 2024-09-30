@@ -1,12 +1,11 @@
 ## nix begat oizys
 import std/[os, tables, sequtils, strformat, strutils]
-import hwylterm, hwylterm/cli
-import oizys/[context, github, nix, overlay, logging]
+import hwylterm, hwylterm/[cligen, logging]
+import oizys/[context, github, nix, overlay]# 3, logging
 
 addHandler(
   newFancyConsoleLogger(
-    levelThreshold=lvlAll,
-    useStderr = true,
+    levelThreshold = lvlAll,
     fmtPrefix = $bb"[b magenta]oizys"
   )
 )

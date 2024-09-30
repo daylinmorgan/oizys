@@ -1,6 +1,6 @@
 import std/[httpclient,logging, os, strformat, strutils, json, tables, tempfiles]
-import jsony, hwylterm, zippy/ziparchives
-import ./[logging, exec, context]
+import jsony, hwylterm, hwylterm/logging, zippy/ziparchives
+import ./[exec, context]
 
 # localPassC is used by zippy but the additional
 # module mangling on nixos somehow breaks localPassC

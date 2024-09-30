@@ -1,7 +1,6 @@
 import std/[logging, os, strformat, strutils]
 from std/nativesockets import getHostname
-import hwylterm
-import ./logging
+import hwylterm, hwylterm/logging
 
 type
   OizysContext* = object
