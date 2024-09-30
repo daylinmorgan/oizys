@@ -1,8 +1,6 @@
 ## nix begat oizys
-import std/[os, tables, sequtils, strformat,strutils]
-
-import hwylterm
-import hwylterm/cli
+import std/[os, tables, sequtils, strformat, strutils]
+import hwylterm, hwylterm/cli
 import oizys/[context, github, nix, overlay, logging]
 
 addHandler(
