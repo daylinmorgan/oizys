@@ -5,7 +5,6 @@ import oizys/[context, github, nix, overlay]# 3, logging
 
 addHandler(
   newFancyConsoleLogger(
-    levelThreshold = lvlAll,
     fmtPrefix = $bb"[b magenta]oizys"
   )
 )
@@ -37,7 +36,7 @@ overlay:
     nixBuildHostDry(minimal, rest)
 
   proc output(yes: bool = false) =
-    ## output
+    ## nixos config attr
     echo nixosConfigAttrs().join(" ")
 
   proc update(
