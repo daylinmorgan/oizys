@@ -186,7 +186,7 @@ proc writeDervationsToStepSummary(drvs: seq[string]) =
   let rows = collect(
     for drv in drvs:
       let (name,hash) = splitDrv(drv)
-      fmt"| {name} | {hash} |"
+      fmt"| {name} | `{hash}` |"
   )
   let summaryFilePath = getEnv("GITHUB_STEP_SUMMARY")
   if summaryFilePath == "": fatalQuit "no github step summary found"
@@ -232,10 +232,6 @@ proc nixBuildHostDry*(minimal: bool, rest: seq[string]) =
     runCmdCaptWithSpinner(cmd, "evaluating derivation for: " & getHosts().join(" "), {CaptStderr})
   let output = parseDryRunOutput err
   display output
-
-# TODO: Add to bbansi
-template `bbfmt`(pattern: static string): untyped =
-  bb(fmt(pattern))
 
 proc nixBuildWithCache*(minimal: bool, name: string, rest:seq[string]) =
   if findExe("cachix") == "": fatalQuit "is cachix installed?"
