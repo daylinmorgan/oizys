@@ -1,13 +1,8 @@
 ## nix begat oizys
 import std/[os, tables, sequtils, strformat, strutils]
 import hwylterm, hwylterm/[cligen, logging]
-import oizys/[context, github, nix, overlay]# 3, logging
+import oizys/[context, github, nix, overlay, logging]
 
-addHandler(
-  newFancyConsoleLogger(
-    fmtPrefix = $bb"[b magenta]oizys"
-  )
-)
 
 proc confirm(q: string): bool =
   stderr.write $(q & bb"[yellow] (Y/n) ")
@@ -28,7 +23,7 @@ overlay:
     resetCache: bool = false,
     rest: seq[string],
   ) =
-    if not debug: setLogFilter(lvlInfo)
+    setupLoggers(debug)
     updateContext(host, flake, debug, resetCache)
 
   proc dry(minimal: bool = false) =
@@ -82,16 +77,16 @@ proc checkExes() =
   if findExe("nix") == "":
     fatalQuit "oizys requires nix"
 
-func `//`[A, B](pairs: openArray[(A, B)]): Table[A, B] =
-  pairs.toTable()
-func `//`[A, B](t1: var Table[A,B], t2: Table[A,B]) =
-  for k, v in t2.pairs(): t1[k] = v
-func `//`[A, B](t1: Table[A, B], t2: Table[A, B]): Table[A, B] =
-  result // t1; result // t2
-func `//`[A, B](pairs: openArray[(A,B)], t2: Table[A,B]): Table[A,B] =
-  // pairs // t2
-
-
+# func `//`[A, B](pairs: openArray[(A, B)]): Table[A, B] =
+#   pairs.toTable()
+# func `//`[A, B](t1: var Table[A,B], t2: Table[A,B]) =
+#   for k, v in t2.pairs(): t1[k] = v
+# func `//`[A, B](t1: Table[A, B], t2: Table[A, B]): Table[A, B] =
+#   result // t1; result // t2
+# func `//`[A, B](pairs: openArray[(A,B)], t2: Table[A,B]): Table[A,B] =
+#   // pairs // t2
+#
+#
 
 when isMainModule:
   import cligen
@@ -116,16 +111,16 @@ when isMainModule:
     } // sharedHelp
   let
     # clUse must be set here using clCfg doesn't seem to work with dispatchMutli ...
-    clUse* = $bb("$command $args\n${doc}[bold]Options[/]:\n$options")
+    # clUse* = $bb("$command $args\n${doc}[bold]Options[/]:\n$options")
     osUsage = $bb("$command [[subcmd] $args\n$doc[bold]Options[/]:\n$options")
 
   dispatchMulti(
-    [build,  help = sharedHelp, usage = clUse ],
-    [cache,  help = cacheHelp , usage = clUse ],
-    [ci,     help = ciHelp    , usage = clUse ],
-    [dry,    help = sharedHelp, usage = clUse ],
+    [build,  help = sharedHelp, usage = clCfg.use ],
+    [cache,  help = cacheHelp , usage = clCfg.use ],
+    [ci,     help = ciHelp    , usage = clCfg.use ],
+    [dry,    help = sharedHelp, usage = clCfg.use ],
     [osCmd,  help = sharedHelp, usage = osUsage, cmdName = "os"],
-    [output, help = sharedHelp, usage = clUse],
-    [update, help = updateHelp, usage = clUse],
+    [output, help = sharedHelp, usage = clCfg.use],
+    [update, help = updateHelp, usage = clCfg.use],
   )
 

@@ -13,12 +13,12 @@
     },
     "hwylterm": {
       "version": "0.1.0",
-      "vcsRevision": "d852761831bd748db24b42f15bc8e2d286232295",
+      "vcsRevision": "7e82f7ba5a24d816a79b3a5ea49f32b4c7a5ef7e",
       "url": "https://github.com/daylinmorgan/hwylterm",
       "downloadMethod": "git",
       "dependencies": [],
       "checksums": {
-        "sha1": "7de2a93a03bd0659d8d70cc7c08315e0a7f15439"
+        "sha1": "d6d97bdff3fcdfcf4b39b144fa5f27a6b9f9494d"
       }
     },
     "jsony": {
