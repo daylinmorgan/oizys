@@ -10,7 +10,7 @@
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     nix-index-database.url = "github:nix-community/nix-index-database";
     # pipe support added
-    nixd.url = "github:nix-community/nixd/e2f0d908d6f2ee7bf72c620ed3c78817143b50ae";
+    nixd.url = "github:nix-community/nixd/2.4.0";
 
     lix = {
       url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
