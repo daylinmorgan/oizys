@@ -77,16 +77,6 @@ proc checkExes() =
   if findExe("nix") == "":
     fatalQuit "oizys requires nix"
 
-# func `//`[A, B](pairs: openArray[(A, B)]): Table[A, B] =
-#   pairs.toTable()
-# func `//`[A, B](t1: var Table[A,B], t2: Table[A,B]) =
-#   for k, v in t2.pairs(): t1[k] = v
-# func `//`[A, B](t1: Table[A, B], t2: Table[A, B]): Table[A, B] =
-#   result // t1; result // t2
-# func `//`[A, B](pairs: openArray[(A,B)], t2: Table[A,B]): Table[A,B] =
-#   // pairs // t2
-#
-#
 
 when isMainModule:
   import cligen
@@ -110,8 +100,6 @@ when isMainModule:
       "name"       : "name of cachix binary cache"
     } // sharedHelp
   let
-    # clUse must be set here using clCfg doesn't seem to work with dispatchMutli ...
-    # clUse* = $bb("$command $args\n${doc}[bold]Options[/]:\n$options")
     osUsage = $bb("$command [[subcmd] $args\n$doc[bold]Options[/]:\n$options")
 
   dispatchMulti(
