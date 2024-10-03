@@ -47,21 +47,22 @@ let
   # ["a" "b"] -> {a.enable = true; b.enable = true;}
   enableAttrs =
     attrs:
-    listToAttrs (
-      map (attr: {
-        name = attr;
-        value = enabled;
-      }) attrs
-    );
+    attrs
+    |> map (attr: {
+      name = attr;
+      value = enabled;
+    })
+    |> listToAttrs;
+
   # ["a" "b"] -> {a.enable = false; b.enable = false;}
   disableAttrs =
     attrs:
-    listToAttrs (
-      map (attr: {
-        name = attr;
-        value = disabled;
-      }) attrs
-    );
+    attrs
+    |> map (attr: {
+      name = attr;
+      value = disabled;
+    })
+    |> listToAttrs;
 
   mkIfIn = name: list: prev.mkIf (builtins.elem name list);
 
@@ -110,7 +111,8 @@ let
   };
 
   loadOverlays =
-    inputs: dir: readDir dir
+    inputs: dir:
+    readDir dir
     |> attrNames
     |> filter (f: f != "default.nix")
     |> map (f: import (../overlays + "/${f}") { inherit inputs; });
