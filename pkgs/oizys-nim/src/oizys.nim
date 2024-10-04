@@ -69,7 +69,7 @@ overlay:
     nixosRebuild(subcmd, rest[1..^1])
 
   proc ci(`ref`: string = "main") =
-    ## trigger GHA update flow
+    ## trigger GHA
     if rest.len == 0: fatalQuit "expected workflow file name"
     createDispatch(rest[0], `ref`)
 
