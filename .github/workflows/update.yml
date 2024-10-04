@@ -38,10 +38,10 @@ jobs:
 
       - name: Update nix flake
         run: |
-          printf '# Flake Lock\n\n```txt\n' >> $GITHUB_STEP_SUMMARY
           nix flake update --commit-lock-file
-          git show -s --format='%B' >> $GITHUB_STEP_SUMMARY
-          printf '```\n' >> $GITHUB_STEP_SUMMARY
+          printf '# Flake Lock\n\n```txt\n%s```\n' \
+            "$(git show -s --format='%B')" \
+            >> $GITHUB_STEP_SUMMARY
 
       - name: Pre-build oizys
         run: nix build .
