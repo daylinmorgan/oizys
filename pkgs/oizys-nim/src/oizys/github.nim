@@ -155,8 +155,9 @@ proc fetchUpdateSummaryFromUrl(url: string): string =
       reader.close()
 
 proc getUpdateSummary*(runId: int, host: string): string =
-  let url = getUpdateSummaryUrl(runId, host)
-  result = fetchUpdateSummaryFromUrl(url)
+  withSpinner("fetching update summary"):
+    let url = getUpdateSummaryUrl(runId, host)
+    result = fetchUpdateSummaryFromUrl(url)
 
 type
   GitRepo = object
