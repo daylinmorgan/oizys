@@ -17,7 +17,7 @@ in
       ])
       ++ (with (flake.pkgs "self"); [
         nimlangserver
-        nph
+        # nph
         nimble
       ]);
   };
