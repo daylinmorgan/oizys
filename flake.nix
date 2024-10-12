@@ -12,14 +12,21 @@
     # pipe support added
     nixd.url = "github:nix-community/nixd/2.4.0";
 
-    lix = {
-      url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
-      flake = false;
-    };
+    # ??
+    # error: path '/nix/store/9ryh7avijc1yn8jaa099zbfyhynxmd0a-lix-2.92.0-dev-pre20241009-9865eba-doc' does not exist in the store
+    # lix = {
+    #   url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
+    #   flake = false;
+    # };
+    # lix-module = {
+    #   url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    #   inputs.lix.follows = "lix";
+    # };
+
     lix-module = {
-      url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
+      url = "https://git.lix.systems/lix-project/nixos-module/archive/2.91.0.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.lix.follows = "lix";
     };
 
     hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
