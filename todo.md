@@ -7,14 +7,18 @@
 
 ## software
 
-- [ ] check if there are multiple version of mako?
-- [ ] lid closed does not engage hyprlock?
-  > check the logind conf in Nixos
 - [ ] include langservers for enabled languages?
 - [ ] wezterm is broken...something to do with fonts?
   I tried used the nix flake and that didn't help
   [tracking issue](https://github.com/wez/wezterm/issues/5990)
 
+
+### Window Manager
+
+- [ ] install more of the software as systemd services?
+- [ ] lid closed does not engage hyprlock?
+- [ ] check if there are multiple version of mako?
+  > check the logind conf in Nixos
 
 ## hardware
 
