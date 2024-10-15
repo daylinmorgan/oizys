@@ -43,12 +43,11 @@ in
   # environment.etc."channels/nixpkgs".source = inputs.nixpkgs.outPath;
 
   environment.systemPackages = [
-    # pkgs.nixd
+    pkgs.nixd
     pkgs.nixfmt-rfc-style
     pkgs.nix-output-monitor
 
     self.packages.${pkgs.system}.default
-    (flake.pkg "nixd")
   ];
 
   programs.nix-index-database.comma = enabled;
