@@ -26,6 +26,7 @@ in
 
     virtualbox
     docker
+    podman
 
     gui
     fonts

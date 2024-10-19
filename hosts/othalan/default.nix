@@ -18,10 +18,10 @@
     // (
       ''
         vpn|desktop|hyprland|chrome
-        docker|vbox|backups|hp-scanner|llm
+        backups|hp-scanner|llm
+        podman|docker|vbox
       ''
       |> listify
       |> enableAttrs
     );
-
 }

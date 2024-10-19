@@ -3,6 +3,7 @@
   environment.systemPackages =
     [ (flake.pkg "utils") ]
     ++ (with pkgs; [
+      distrobox
       zk
       quarto
       cachix
