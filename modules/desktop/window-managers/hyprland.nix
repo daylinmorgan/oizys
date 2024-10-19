@@ -32,12 +32,13 @@ mkOizysModule config "hyprland" {
       ksnip
       wl-clipboard
       rofi-wayland
-      pavucontrol
+      pwvucontrol
 
       #hypr ecosystem
       hyprlock
       hypridle
 
+      # wallpapers
       swww
 
       catppuccin-cursors.mochaDark
@@ -52,22 +53,21 @@ mkOizysModule config "hyprland" {
       mako
       eww
       wlr-randr
-      # swww
-      #
-      # dunst
     ]);
+
   nixpkgs.overlays = [
     (flake.overlay "hyprland-contrib")
     # (overlayFrom "nixpkgs-wayland")
     # (overlayFrom "hyprland")
   ];
-  # using the below to autostart Hyprland
-  # broke my keybindings that were working before  
 
-  services.getty = {
-    extraArgs = [ "--skip-login" ];
-    loginOptions = "-p -- ${config.oizys.user}";
-  };
+  # using the below to autostart Hyprland
+  # broke my keybindings that were working before
+  #
+  # services.getty = {
+  #   extraArgs = [ "--skip-login" ];
+  #   loginOptions = "-p -- ${config.oizys.user}";
+  # };
 
   # environment.etc =
   #   let
