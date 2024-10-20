@@ -41,9 +41,8 @@ let
     packages = forAllSystems (
       pkgs:
       rec {
-        default = oizys-nim;
-        oizys-nim = pkgs.callPackage ../pkgs/oizys-nim { };
-        oizys-go = pkgs.callPackage ../pkgs/oizys { };
+        default = oizys;
+        oizys = pkgs.callPackage ../pkgs/oizys { };
         # nimlangserver = pkgs.callPackage ../pkgs/nimlangserver { };
         nph = pkgs.callPackage ../pkgs/nph { };
         iso = mkIso.config.system.build.isoImage;

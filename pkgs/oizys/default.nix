@@ -1,29 +1,15 @@
 {
   lib,
-  installShellFiles,
-  buildGoModule,
-  makeWrapper,
-  ...
+  openssl,
+  buildNimblePackage,
 }:
-let
-  inherit (lib) cleanSource;
-in
-buildGoModule {
-  pname = "oizys";
-  version = "unstable";
+buildNimblePackage {
+  name = "oizys";
+  verions = "unstable";
+  src = lib.cleanSource ./.;
+  nativeBuildInputs = [ openssl ];
+  nimbleDepsHash = "sha256-RceRnhEkei3RfSCTOJsIiw4GSCyhOZhKoEVHNSw/KvA=";
 
-  src = cleanSource ./.;
-  vendorHash = "sha256-+4OtpcKHfomBAXRrJOvkhQdCSwU0W6+5OJuS4o12r5E=";
-
-  nativeBuildInputs = [
-    installShellFiles
-    makeWrapper
-  ];
-
-  postInstall = ''
-    installShellCompletion --cmd oizys \
-      --zsh <(OIZYS_SKIP_CHECK=true $out/bin/oizys completion zsh)
-  '';
   meta = {
     description = "nix begat oizys";
   };
