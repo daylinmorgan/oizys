@@ -452,16 +452,17 @@
     },
     "hyprman": {
       "inputs": {
+        "nim2nix": "nim2nix",
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1718917071,
-        "narHash": "sha256-Ub3xTWzWry05O+Kqxdeob+Zp5mq4tI8KTbvwDzEHINE=",
+        "lastModified": 1729435058,
+        "narHash": "sha256-eGikARBVu4R3Lf9jltmJ6u/z1vf2JOiUhvPsOXhZkcE=",
         "ref": "refs/heads/main",
-        "rev": "bc50f371874a64749209bfb6e650b87c4067b0e2",
-        "revCount": 16,
+        "rev": "795e6941f83daef55ac957a7136a45abf050fb78",
+        "revCount": 6,
         "type": "git",
         "url": "https://git.dayl.in/daylin/hyprman.git"
       },
@@ -579,6 +580,7 @@
     "nim2nix": {
       "inputs": {
         "nixpkgs": [
+          "hyprman",
           "nixpkgs"
         ]
       },
@@ -598,7 +600,9 @@
     },
     "nim2nix_2": {
       "inputs": {
-        "nixpkgs": "nixpkgs_7"
+        "nixpkgs": [
+          "nixpkgs"
+        ]
       },
       "locked": {
         "lastModified": 1725469705,
@@ -615,6 +619,24 @@
       }
     },
     "nim2nix_3": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_7"
+      },
+      "locked": {
+        "lastModified": 1725469705,
+        "narHash": "sha256-4/iSUwB3XKmybdt4R87VhBPiD3z4BL6RrD9LyrrkesM=",
+        "owner": "daylinmorgan",
+        "repo": "nim2nix",
+        "rev": "42af12ca45025c7146bc24e27f5d8b65b003d663",
+        "type": "github"
+      },
+      "original": {
+        "owner": "daylinmorgan",
+        "repo": "nim2nix",
+        "type": "github"
+      }
+    },
+    "nim2nix_4": {
       "inputs": {
         "nixpkgs": [
           "utils",
@@ -999,7 +1021,7 @@
         "hyprman": "hyprman",
         "lix": "lix",
         "lix-module": "lix-module",
-        "nim2nix": "nim2nix",
+        "nim2nix": "nim2nix_2",
         "nix-index-database": "nix-index-database",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_4",
@@ -1179,7 +1201,7 @@
     },
     "tsm": {
       "inputs": {
-        "nim2nix": "nim2nix_2",
+        "nim2nix": "nim2nix_3",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -1202,7 +1224,7 @@
     },
     "utils": {
       "inputs": {
-        "nim2nix": "nim2nix_3",
+        "nim2nix": "nim2nix_4",
         "nixpkgs": "nixpkgs_8"
       },
       "locked": {
