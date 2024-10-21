@@ -2,8 +2,4 @@ nimbledeps
 nimble.paths
 nimble.develop
 
-# binaries
-oizys*
-!src/oizys
-!src/oizys.nim*
 oizys.out
