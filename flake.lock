@@ -458,11 +458,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1729435058,
-        "narHash": "sha256-eGikARBVu4R3Lf9jltmJ6u/z1vf2JOiUhvPsOXhZkcE=",
+        "lastModified": 1729488560,
+        "narHash": "sha256-riUKMUmmB8smERWHlFUr/xXtXyZnk2jOw6SykIvUiBE=",
         "ref": "refs/heads/main",
-        "rev": "795e6941f83daef55ac957a7136a45abf050fb78",
-        "revCount": 6,
+        "rev": "2385e69aa57a83242916fb6fc9dab2a21bc5a7f9",
+        "revCount": 11,
         "type": "git",
         "url": "https://git.dayl.in/daylin/hyprman.git"
       },
@@ -575,6 +575,22 @@
       "original": {
         "type": "tarball",
         "url": "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz"
+      }
+    },
+    "my-nixpkgs": {
+      "locked": {
+        "lastModified": 1714076141,
+        "narHash": "sha256-Drmja/f5MRHZCskS6mvzFqxEaZMeciScCTFxWVLqWEY=",
+        "owner": "daylinmorgan",
+        "repo": "nixpkgs",
+        "rev": "7bb2ccd8cdc44c91edba16c48d2c8f331fb3d856",
+        "type": "github"
+      },
+      "original": {
+        "owner": "daylinmorgan",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
       }
     },
     "nim2nix": {
@@ -1021,6 +1037,7 @@
         "hyprman": "hyprman",
         "lix": "lix",
         "lix-module": "lix-module",
+        "my-nixpkgs": "my-nixpkgs",
         "nim2nix": "nim2nix_2",
         "nix-index-database": "nix-index-database",
         "nixos-wsl": "nixos-wsl",
