@@ -38,9 +38,6 @@ mkOizysModule config "hyprland" {
       hyprlock
       hypridle
 
-      # wallpapers
-      swww
-
       catppuccin-cursors.mochaDark
 
       # not even clear why I need to add this but ¯\_(ツ)_/¯
@@ -53,6 +50,7 @@ mkOizysModule config "hyprland" {
       mako
       eww
       wlr-randr
+      swww
     ]);
 
   nixpkgs.overlays = [
