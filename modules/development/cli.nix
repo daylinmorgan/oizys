@@ -9,7 +9,6 @@
 mkDefaultOizysModule config "cli" {
 
   programs.direnv = enabled;
-  services.lorri = enabled;
 
   environment.etc = {
     "direnv/direnv.toml".text = ''
