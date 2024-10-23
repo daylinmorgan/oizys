@@ -3,8 +3,8 @@ name: Flake Update / Build
 on:
   workflow_dispatch:
   schedule:
-    # At minute 0 on Monday, Wednesday, and Friday.
-    - cron: 0 * * * 1,3,5
+    # At minute 00:00 on Monday, Wednesday, and Friday.
+    - cron: 0 0 * * 1,3,5
 
 permissions:
   contents: write
