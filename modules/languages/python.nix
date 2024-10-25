@@ -26,10 +26,9 @@ in
         exec ${python}/bin/python "$@"
       '')
       pixi
+      pkgs.uv
 
-      # needed for viv to work
-      pkgs.python3Packages.pip
-      pkgs.micromamba
+      pkgs.python3Packages.pip # needed for viv to work
     ];
   };
 }
