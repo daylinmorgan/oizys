@@ -9,7 +9,7 @@ import hwylterm
 func addArgs*(cmd: var string, args: openArray[string]) =
   cmd &= " " & args.join(" ")
 
-func addArg*(cmd: var string, arg: string) =
+func addArg*(cmd: var string, arg: string ) =
   cmd &= " " & arg
 
 proc runCmd*(cmd: string): int =

@@ -1,5 +1,5 @@
 ## nix begat oizys
-import std/[os, tables, sequtils, strformat, strutils]
+import std/[os, osproc, tables, sequtils, strformat, strutils]
 import hwylterm, hwylterm/[cligen, logging]
 import oizys/[context, github, nix, overlay, logging]
 
@@ -53,9 +53,9 @@ overlay:
     ## nix build
     nixBuild(minimal, rest)
 
-  proc cache(minimal: bool = false, name: string = "daylin") =
-    ## build and push to cachix
-    nixBuildWithCache(minimal, name, rest)
+  proc cache(name: string = "oizys", service: string = "attic", jobs: int = countProcessors()) =
+    ## build and push store paths
+    nixBuildWithCache(name, rest, service, jobs)
 
   proc osCmd() =
     ## nixos-rebuild
@@ -97,7 +97,8 @@ when isMainModule:
       "ref"        : "git ref/branch/tag to trigger workflow on"
     }
     cacheHelp = //{
-      "name"       : "name of cachix binary cache"
+      "name"       : "name of cachix binary cache",
+      "jobs"       : "jobs when pushing paths"
     } // sharedHelp
   let
     osUsage = $bb("$command [[subcmd] $args\n$doc[bold]Options[/]:\n$options")

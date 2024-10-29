@@ -10,5 +10,6 @@
       graphviz
       typst
       charm-freeze
+      attic-client
     ]);
 }

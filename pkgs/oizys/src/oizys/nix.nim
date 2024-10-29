@@ -193,6 +193,7 @@ proc writeDervationsToStepSummary(drvs: seq[string]) =
   let output = open(summaryFilePath,fmAppend)
   output.writeLine("| derivation | hash |\n|---|---|")
   output.writeLine(rows.join("\n"))
+  close output
 
 proc nixBuild*(minimal: bool, rest: seq[string]) = 
   var cmd = nixCommand("build")
@@ -233,23 +234,42 @@ proc nixBuildHostDry*(minimal: bool, rest: seq[string]) =
   let output = parseDryRunOutput err
   display output
 
-proc nixBuildWithCache*(minimal: bool, name: string, rest:seq[string]) =
-  if findExe("cachix") == "": fatalQuit "is cachix installed?"
+
+proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: int) =
+  ## build individual derivations not cached and push to cache
+  if findExe(service) == "": fatalQuit fmt"is {service} installed?"
   info bbfmt"building and pushing to cache: [b]{name}"
-  var cmd = "cachix"
-  cmd.addArgs ["watch-exec","--"]
-  cmd.addArg "nix build"
-  if minimal:
-    debug "populating args with derivations not built/cached"
-    let drvs = systemPathDrvsToBuild()
-    if drvs.len == 0:
-      info "nothing to build"
-      quit "exiting...", QuitSuccess
-    cmd.addArgs drvs
-    cmd.addArg "--no-link"
-  else:
-    cmd.addArgs nixosConfigAttrs()
-  cmd.addArgs rest
-  let err = runCmd(cmd)
-  quit err
+  debug "determining missing cache hits"
+  let drvs = systemPathDrvsToBuild()
+  if drvs.len == 0:
+    info "nothing to build"
+    quit "exiting...", QuitSuccess
+
+  for drv in drvs:
+    var cmd = "nix build"
+    cmd.addArg drv
+    cmd.addArgs rest
+    let buildErr = runCmd(cmd)
+    if buildErr != 0:
+      error "failed to build: " & drv
+      continue
+
+    let results = collect(
+      for k, p in walkDir(".", relative = true):
+        if k in { pcLinkToDir, pcLinkToFile} and p.startsWith("result"):
+          p
+    )
+
+    cmd = service
+    cmd.addArg "push"
+    cmd.addArg name
+    cmd.addArg "--jobs"
+    cmd.addArg $jobs
+    cmd.addArgs results
+    let pushErr = runCmd(cmd)
+    if pushErr != 0:
+      errorQuit "failed to push build to cache"
+
+    for p in results:
+      removeFile p
 
