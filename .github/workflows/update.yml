@@ -33,9 +33,10 @@ jobs:
             accept-flake-config = true
 
 
-      - name: Login to cache
+      - name: Install and login to attic cache
         run: |
-          nix run "nixpkgs#attic-client" login oizys https://attic.dayl.in "${{ secrets.ATTIC_TOKEN }}"
+          nix profile install "nixpkgs#attic-client"
+          attic login oizys https://attic.dayl.in "${{ secrets.ATTIC_TOKEN }}"
 
       # - uses: cachix/cachix-action@v15
       #   with:
