@@ -32,10 +32,15 @@ jobs:
             experimental-features = pipe-operator
             accept-flake-config = true
 
-      - uses: cachix/cachix-action@v15
-        with:
-          name: daylin
-          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+
+      - name: Login to cache
+        run: |
+          nix run "nixpkgs#attic-client" login https://attic.dayl.in "${{ secrets.ATTIC_TOKEN }}"
+
+      # - uses: cachix/cachix-action@v15
+      #   with:
+      #     name: daylin
+      #     authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
       - name: Update nix flake
         run: |
@@ -51,7 +56,7 @@ jobs:
         run: >
           nix run .
           --
-          build --minimal
+          cache
           --host "othalan"
           --flake .
           --debug
