@@ -35,7 +35,7 @@ jobs:
 
       - name: Login to cache
         run: |
-          nix run "nixpkgs#attic-client" login https://attic.dayl.in "${{ secrets.ATTIC_TOKEN }}"
+          nix run "nixpkgs#attic-client" login oizys https://attic.dayl.in "${{ secrets.ATTIC_TOKEN }}"
 
       # - uses: cachix/cachix-action@v15
       #   with:
