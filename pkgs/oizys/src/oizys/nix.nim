@@ -245,31 +245,28 @@ proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: i
     info "nothing to build"
     quit "exiting...", QuitSuccess
 
+  var outs: seq[string]
   for drv in drvs:
     var cmd = "nix build"
     cmd.addArg drv
+    cmd.addArg "--no-link"
+    cmd.addArg "--print-out-paths"
     cmd.addArgs rest
-    let buildErr = runCmd(cmd)
-    if buildErr != 0:
+    let (path, _, buildCode) = runCmdCapt(cmd)
+    if buildCode != 0:
       error "failed to build: " & drv
       continue
+    outs.add path
+    # TODO: propagate errors using nix log?
 
-    let results = collect(
-      for k, p in walkDir(".", relative = true):
-        if k in { pcLinkToDir, pcLinkToFile} and p.startsWith("result"):
-          p
-    )
+  var cmd = service
+  cmd.addArg "push"
+  cmd.addArg name
+  cmd.addArg "--jobs"
+  cmd.addArg $jobs
+  cmd.addArgs outs
+  let pushErr = runCmd(cmd)
+  if pushErr != 0:
+    errorQuit "failed to push build to cache"
 
-    cmd = service
-    cmd.addArg "push"
-    cmd.addArg name
-    cmd.addArg "--jobs"
-    cmd.addArg $jobs
-    cmd.addArgs results
-    let pushErr = runCmd(cmd)
-    if pushErr != 0:
-      errorQuit "failed to push build to cache"
-
-    for p in results:
-      removeFile p
 
