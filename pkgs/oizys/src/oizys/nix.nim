@@ -16,7 +16,7 @@ proc nixCommand(cmd: string): string =
 
 proc nixosConfigAttrs*(): seq[string] =
   for host in getHosts():
-    result.add fmt"{getFlake()}#nixosConfigurations.{host}.config.system.build.toplevel"
+    result.add getFlake() & "#nixosConfigurations." & host & ".config.system.build.toplevel"
 
 const nixosSubcmds* =
   """switch boot test build dry-build dry-activate edit
@@ -256,7 +256,7 @@ proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: i
     if buildCode != 0:
       error "failed to build: " & drv
       continue
-    outs.add path
+    outs.add path.strip()
     # TODO: propagate errors using nix log?
 
   var cmd = service
