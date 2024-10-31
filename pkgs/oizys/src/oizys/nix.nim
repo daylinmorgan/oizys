@@ -246,6 +246,8 @@ proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: i
     quit "exiting...", QuitSuccess
 
   var outs: seq[string]
+  # TODO: add back reporting to GITHUB SUMMARY
+  # include time to build?
   for drv in drvs:
     var cmd = "nix build"
     cmd.addArg drv
