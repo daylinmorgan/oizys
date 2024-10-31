@@ -31,8 +31,9 @@ proc setupLoggers*(debug: bool) =
     if not debug: lvlInfo
     else: lvlAll
   addHandler(
-    newFancyConsoleLogger(
+    newHwylConsoleLogger(
       fmtPrefix = $bb"[b magenta]oizys",
+      fmtSuffix = " ",
       levelThreshold = logLevel
     )
   )

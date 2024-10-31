@@ -8,7 +8,7 @@ buildNimblePackage {
   verions = "unstable";
   src = lib.cleanSource ./.;
   nativeBuildInputs = [ openssl ];
-  nimbleDepsHash = "sha256-RceRnhEkei3RfSCTOJsIiw4GSCyhOZhKoEVHNSw/KvA=";
+  nimbleDepsHash = "sha256-0F/rKcLUH95vW3ODB2mgMQ2klbN9rjMeP+LUK0Ucj2w=";
 
   meta = {
     description = "nix begat oizys";
