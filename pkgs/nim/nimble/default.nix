@@ -7,12 +7,12 @@
 }:
 buildNimPackage (finalAttrs: {
   pname = "nimble";
-  version = "0.16.1";
+  version = "0.16.2";
   src = fetchFromGitHub {
     owner = "nim-lang";
     repo = "nimble";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sa0irAZjQRZLduEMBPf7sHlY1FigBJTR/vIH4ihii/w=";
+    hash = "sha256-MVHf19UbOWk8Zba2scj06PxdYYOJA6OXrVyDQ9Ku6Us=";
   };
   buildInputs = [ openssl ];
   lockFile = ./lock.json;
