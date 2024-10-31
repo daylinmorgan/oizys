@@ -254,10 +254,11 @@ proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: i
     cmd.addArgs rest
     let (path, _, buildCode) = runCmdCapt(cmd)
     if buildCode != 0:
+      # TODO: propagate errors using nix log?
       error "failed to build: " & drv
       continue
-    outs.add path.strip()
-    # TODO: propagate errors using nix log?
+
+    outs &= path.strip().splitLines()
 
   var cmd = service
   cmd.addArg "push"
