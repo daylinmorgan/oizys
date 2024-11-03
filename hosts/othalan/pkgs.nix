@@ -1,8 +1,13 @@
 { pkgs, flake, ... }:
 {
   environment.systemPackages =
-    [ (flake.pkg "utils") ]
+    [
+      (flake.pkg "utils")
+      (flake.pkg "ghostty")
+    ]
+
     ++ (with pkgs; [
+
       distrobox
       zk
       quarto

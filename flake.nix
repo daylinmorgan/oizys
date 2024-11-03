@@ -22,6 +22,11 @@
       inputs.lix.follows = "lix";
     };
 
+    # https://github.com/ghostty-org/ghostty/issues/2025
+    ghostty.url = "git+ssh://git@github.com/ghostty-org/ghostty";
+    ghostty.inputs.nixpkgs-stable.follows = "nixpkgs";
+    ghostty.inputs.nixpkgs-unstable.follows = "nixpkgs";
+
     hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
     hyprland-contrib.url = "github:hyprwm/contrib";
     roc.url = "github:roc-lang/roc";
