@@ -253,6 +253,7 @@ proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: i
     cmd.addArg drv
     cmd.addArg "--no-link"
     cmd.addArg "--print-out-paths"
+    cmd.addArg "-L"
     cmd.addArgs rest
     let (path, _, buildCode) = runCmdCapt(cmd)
     if buildCode != 0:

@@ -21,7 +21,7 @@ type
     CaptStdout
     CaptStderr
 
-# TODO: suppot both capturing and inheriting the stream?
+# TODO: support both capturing and inheriting the stream?
 proc runCmdCapt*(
   cmd: string,
   capture: set[CaptureGrp] = {CaptStdout},
