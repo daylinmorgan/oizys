@@ -1,7 +1,7 @@
 import std/[
   algorithm, json,
   enumerate, os, sequtils, strformat,
-  strutils, sugar, logging, tables
+  strutils, sugar, logging, tables, times
 ]
 import hwylterm, hwylterm/logging, jsony
 
@@ -119,9 +119,15 @@ proc toBuildNixosConfiguration(): seq[string] =
   return output.toBuild.mapIt(it.storePath)
 
 type
+  DerivationOutputsOut = object
+    path: string
+  DerivationOutputs = object
+    `out`: DerivationOutputsOut
   NixDerivation = object
     inputDrvs: Table[string, JsonNode]
     name: string
+    outputs: DerivationOutputs
+
 
 proc evaluateDerivations(drvs: seq[string]): Table[string, NixDerivation] =
   var cmd = "nix derivation show -r"
@@ -166,17 +172,48 @@ func isIgnored(drv: string): bool =
       if name.startswith(pkg):
         return true
 
+# proc systemPathDrvsToBuild(): seq[string] =
+
+type
+  OizysDerivation = object
+    drv: NixDerivation # do i need this ?
+    output: string
+    name: string
+
+# func setStatus(od: var OizysDerivation, toBuild: seq[string], drvs: Table[string, NixDerivation]) =
+
+proc getOizysDerivations(): seq[OizysDerivation] =
+  let toBuild = toBuildNixosConfiguration()
+  let drvs = evaluateDerivations(nixosConfigAttrs())
+
+  for name in toBuild:
+    if not isIgnored(name):
+      let nixDrv = drvs[name]
+      result.add OizysDerivation(
+        name: name,
+        output:nixDrv.outputs.`out`.path,
+        drv: nixDrv,
+      )
+
 proc systemPathDrvsToBuild(): seq[string] =
   var inputDrvs, dropped: seq[string]
   let toBuild = toBuildNixosConfiguration()
   let drvs = evaluateDerivations(nixosConfigAttrs())
+
   let systemPaths = findSystemPaths(drvs)
   for p in systemPaths:
     inputDrvs &= drvs[p].inputDrvs.keys().toSeq()
   (result, _) = filterSeq(inputDrvs, (s) => s in toBuild)
   (dropped, result) =  filterSeq(result, isIgnored)
+  echo "SOMETHING SHOULD HAPPEN HERE!"
+  for drv in result:
+    echo drv
+    echo drvs[drv]
+
+
   debug fmt"ignored {dropped.len} derivations"
   result = result.mapIt(it & "^*")
+
 
 func splitDrv(drv: string): tuple[name, hash:string] =
   let s = drv.split("-", 1)
@@ -240,28 +277,29 @@ proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: i
   if findExe(service) == "": fatalQuit fmt"is {service} installed?"
   info bbfmt"building and pushing to cache: [b]{name}"
   debug "determining missing cache hits"
-  let drvs = systemPathDrvsToBuild()
+  let drvs = getOizysDerivations()
   if drvs.len == 0:
     info "nothing to build"
     quit "exiting...", QuitSuccess
 
-  var outs: seq[string]
   # TODO: add back reporting to GITHUB SUMMARY
+  
   # include time to build?
+  var outs: seq[string]
   for drv in drvs:
+    let startTime = now()
     var cmd = "nix build"
-    cmd.addArg drv
+    cmd.addArg drv.name & "^*"
     cmd.addArg "--no-link"
     cmd.addArg "--print-out-paths"
     cmd.addArg "-L"
     cmd.addArgs rest
-    let (path, _, buildCode) = runCmdCapt(cmd)
+    let buildCode = runCmd(cmd)
     if buildCode != 0:
-      # TODO: propagate errors using nix log?
-      error "failed to build: " & drv
+      error "failed to build: " & drv.name
       continue
-
-    outs &= path.strip().splitLines()
+    info "build duration: " & $(now() - startTime)
+    outs &= drv.output
 
   var cmd = service
   cmd.addArg "push"
@@ -272,5 +310,4 @@ proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: i
   let pushErr = runCmd(cmd)
   if pushErr != 0:
     errorQuit "failed to push build to cache"
-
 
