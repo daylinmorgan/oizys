@@ -288,10 +288,6 @@ proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: i
     quit "exiting...", QuitSuccess
 
   # TODO: add back reporting to GITHUB SUMMARY
-  for drv in drvs:
-    echo drv.name
-    quit 1
-  # include time to build?
   var outs: seq[string]
   for drv in drvs:
     let startTime = now()
@@ -306,7 +302,6 @@ proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: i
       error "failed to build: " & drv.name
       continue
     info "build duration: " & $(now() - startTime)
-    info "---------------------------------------------------------------------------------------------------"
     outs &= drv.output
 
   var cmd = service
