@@ -20,6 +20,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup SSH
+        uses: MrSquaare/ssh-setup-action@v1
+        with:
+            host: github.com
+            private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - uses: daylin-bot/actions/setup@main
       - uses: ./.github/actions/clean-disk
 
