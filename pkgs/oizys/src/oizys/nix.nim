@@ -180,18 +180,22 @@ type
     output: string
     name: string
 
-# func setStatus(od: var OizysDerivation, toBuild: seq[string], drvs: Table[string, NixDerivation]) =
+iterator getSystemPathDrvs(drvs: Table[string, NixDerivation]): string =
+  let systemPaths = findSystemPaths(drvs)
+  for p in systemPaths:
+    for d in drvs[p].inputDrvs.keys():
+      yield d
 
 proc getOizysDerivations(): seq[OizysDerivation] =
   let toBuild = toBuildNixosConfiguration()
   let drvs = evaluateDerivations(nixosConfigAttrs())
 
-  for name in toBuild:
-    if not isIgnored(name):
+  for name in getSystemPathDrvs(drvs):
+    if name in toBuild and not isIgnored(name):
       let nixDrv = drvs[name]
       result.add OizysDerivation(
         name: name,
-        output:nixDrv.outputs.`out`.path,
+        output: nixDrv.outputs.`out`.path,
         drv: nixDrv,
       )
 
@@ -203,6 +207,7 @@ proc systemPathDrvsToBuild(): seq[string] =
   let systemPaths = findSystemPaths(drvs)
   for p in systemPaths:
     inputDrvs &= drvs[p].inputDrvs.keys().toSeq()
+
   (result, _) = filterSeq(inputDrvs, (s) => s in toBuild)
   (dropped, result) =  filterSeq(result, isIgnored)
   echo "SOMETHING SHOULD HAPPEN HERE!"
@@ -283,7 +288,9 @@ proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: i
     quit "exiting...", QuitSuccess
 
   # TODO: add back reporting to GITHUB SUMMARY
-  
+  for drv in drvs:
+    echo drv.name
+    quit 1
   # include time to build?
   var outs: seq[string]
   for drv in drvs:
@@ -291,14 +298,15 @@ proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: i
     var cmd = "nix build"
     cmd.addArg drv.name & "^*"
     cmd.addArg "--no-link"
-    cmd.addArg "--print-out-paths"
-    cmd.addArg "-L"
+    # cmd.addArg "--print-out-paths"
+    # cmd.addArg "-L"
     cmd.addArgs rest
     let buildCode = runCmd(cmd)
     if buildCode != 0:
       error "failed to build: " & drv.name
       continue
     info "build duration: " & $(now() - startTime)
+    info "---------------------------------------------------------------------------------------------------"
     outs &= drv.output
 
   var cmd = service
