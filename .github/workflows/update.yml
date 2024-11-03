@@ -57,7 +57,9 @@ jobs:
             >> $GITHUB_STEP_SUMMARY
 
       - name: Pre-build oizys
-        run: nix build .
+        run: |
+          nix build .
+          attic push oizys result
 
       - name: Build
         run: >
