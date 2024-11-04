@@ -69,6 +69,8 @@ jobs:
           --host "othalan"
           --flake .
           --debug
+          --
+          --print-build-logs
 
       - name: Commit Updates
         uses: daylin-bot/actions/commit-and-push@main

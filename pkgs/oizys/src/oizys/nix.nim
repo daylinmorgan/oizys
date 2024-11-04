@@ -198,15 +198,14 @@ proc getOizysDerivations(): seq[OizysDerivation] =
   let
     toBuildDrvs = toBuildNixosConfiguration()
     systemPathDrvs = getSystemPathDrvs()
-    toActullyBuildDrvs = systemPathDrvs.filterIt(it in toBuildDrvs)
+    toActullyBuildDrvs = systemPathDrvs.filterIt(it in toBuildDrvs and not isIgnored(it))
 
   for name, drv in nixDerivationShow(toActullyBuildDrvs):
-    if not isIgnored(name):
-      result.add OizysDerivation(
+    result.add OizysDerivation(
         name: name,
         output: drv.outputs.`out`.path,
         drv: drv,
-      )
+    )
 
 # TODO: remove this proc
 proc systemPathDrvsToBuild(): seq[string] =
