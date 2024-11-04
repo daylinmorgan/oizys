@@ -94,8 +94,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      # needed to access ghostty repo for now
       - name: Setup SSH
-        uses: MrSquaare/ssh-setup-action@v1
+        uses: MrSquaare/ssh-setup-action@v3
         with:
             host: github.com
             private-key: ${{ secrets.SSH_PRIVATE_KEY }}
