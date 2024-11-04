@@ -16,9 +16,10 @@
         |> listify;
     }
     // (
+      # llm
       ''
         vpn|desktop|hyprland|chrome
-        backups|hp-scanner|llm
+        backups|hp-scanner
         podman|docker|vbox
       ''
       |> listify
