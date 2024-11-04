@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "llm-claude-3";
-  version = "0.4";
+  version = "0.7";
   pyproject = true;
 
   src = fetchFromGitHub {

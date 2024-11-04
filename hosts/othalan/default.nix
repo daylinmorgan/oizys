@@ -19,7 +19,7 @@
       # llm
       ''
         vpn|desktop|hyprland|chrome
-        backups|hp-scanner
+        backups|hp-scanner|llm
         podman|docker|vbox
       ''
       |> listify
