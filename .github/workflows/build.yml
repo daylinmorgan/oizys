@@ -30,6 +30,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # needed to access ghostty repo for now
+      - name: Setup SSH
+        uses: MrSquaare/ssh-setup-action@v3
+        with:
+            host: github.com
+            private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - uses: ./.github/actions/clean-disk
         with:
           purge-packages: 'true'
@@ -43,11 +50,16 @@ jobs:
 
       - uses: DeterminateSystems/magic-nix-cache-action@v8
 
-      - uses: cachix/cachix-action@v15
-        with:
-          name: daylin
-          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+      # - name: Install and login to attic cache
+      #   run: |
+      #     nix profile install "nixpkgs#attic-client"
+      #     attic login oizys https://attic.dayl.in "${{ secrets.ATTIC_TOKEN }}"
 
+      # - uses: cachix/cachix-action@v15
+      #   with:
+      #     name: daylin
+      #     authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+      
       - name: write lock file
         if: "${{ inputs.lockFile != '' }}"
         run: |
