@@ -93,7 +93,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup SSH
-        uses: MrSquaare/ssh-setup-action@v1
+        uses: MrSquaare/ssh-setup-action@v3
         with:
             host: github.com
             private-key: ${{ secrets.SSH_PRIVATE_KEY }}
