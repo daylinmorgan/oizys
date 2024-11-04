@@ -134,8 +134,14 @@ proc evaluateDerivations(drvs: seq[string]): Table[string, NixDerivation] =
   cmd.addArgs drvs
   let (output, _) =
     runCmdCaptWithSpinner(cmd, "evaluating derivations")
-  fromJson(output, Table[string,NixDerivation])
+  fromJson(output, Table[string, NixDerivation])
 
+proc nixDerivationShow(drvs: seq[string]): Table[string, NixDerivation] =
+  var cmd = "nix derivation show"
+  cmd.addArgs drvs
+  let (output, _ ) =
+    runCmdCaptWithSpinner(cmd, "evaluating " & drvs.join(" "))
+  fromJson(output, Table[string, NixDerivation])
 
 # TODO: replace asserts in this proc, would be easier with results type
 proc findSystemPaths(drvs: Table[string, NixDerivation]): seq[string] =
@@ -172,33 +178,37 @@ func isIgnored(drv: string): bool =
       if name.startswith(pkg):
         return true
 
-# proc systemPathDrvsToBuild(): seq[string] =
-
 type
   OizysDerivation = object
     drv: NixDerivation # do i need this ?
     output: string
     name: string
 
-iterator getSystemPathDrvs(drvs: Table[string, NixDerivation]): string =
-  let systemPaths = findSystemPaths(drvs)
-  for p in systemPaths:
-    for d in drvs[p].inputDrvs.keys():
-      yield d
+proc getSystemPathDrvs(): seq[string] =
+  let systemDrvs = nixDerivationShow(nixosConfigAttrs())
+  let systemPathDrvs = findSystemPaths(systemDrvs)
+  result =
+    collect:
+      for k, drv in nixDerivationShow(systemPathDrvs):
+        for inputDrv, _ in drv.inputDrvs:
+          inputDrv
+
 
 proc getOizysDerivations(): seq[OizysDerivation] =
-  let toBuild = toBuildNixosConfiguration()
-  let drvs = evaluateDerivations(nixosConfigAttrs())
+  let
+    toBuildDrvs = toBuildNixosConfiguration()
+    systemPathDrvs = getSystemPathDrvs()
+    toActullyBuildDrvs = systemPathDrvs.filterIt(it in toBuildDrvs)
 
-  for name in getSystemPathDrvs(drvs):
-    if name in toBuild and not isIgnored(name):
-      let nixDrv = drvs[name]
+  for name, drv in nixDerivationShow(toActullyBuildDrvs):
+    if not isIgnored(name):
       result.add OizysDerivation(
         name: name,
-        output: nixDrv.outputs.`out`.path,
-        drv: nixDrv,
+        output: drv.outputs.`out`.path,
+        drv: drv,
       )
 
+# TODO: remove this proc
 proc systemPathDrvsToBuild(): seq[string] =
   var inputDrvs, dropped: seq[string]
   let toBuild = toBuildNixosConfiguration()
@@ -210,12 +220,6 @@ proc systemPathDrvsToBuild(): seq[string] =
 
   (result, _) = filterSeq(inputDrvs, (s) => s in toBuild)
   (dropped, result) =  filterSeq(result, isIgnored)
-  echo "SOMETHING SHOULD HAPPEN HERE!"
-  for drv in result:
-    echo drv
-    echo drvs[drv]
-
-
   debug fmt"ignored {dropped.len} derivations"
   result = result.mapIt(it & "^*")
 
@@ -294,8 +298,6 @@ proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: i
     var cmd = "nix build"
     cmd.addArg drv.name & "^*"
     cmd.addArg "--no-link"
-    # cmd.addArg "--print-out-paths"
-    # cmd.addArg "-L"
     cmd.addArgs rest
     let buildCode = runCmd(cmd)
     if buildCode != 0:
