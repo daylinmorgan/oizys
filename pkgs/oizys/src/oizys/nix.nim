@@ -280,6 +280,23 @@ proc nixBuildHostDry*(minimal: bool, rest: seq[string]) =
   display output
 
 
+
+type
+  BuildResult = object
+    duration*: Duration
+    successful*: bool
+
+proc build(drv: OizysDerivation, rest: seq[string]): BuildResult =
+  let startTime = now()
+  var cmd = "nix build"
+  cmd.addArg drv.name & "^*"
+  cmd.addArg "--no-link"
+  cmd.addArgs rest
+  let buildCode = runCmd(cmd)
+  result.successful = buildCode == 0
+  result.duration = now() - startTime
+  debug "build duration: " & $result.duration
+
 proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: int) =
   ## build individual derivations not cached and push to cache
   if findExe(service) == "": fatalQuit fmt"is {service} installed?"
@@ -290,21 +307,20 @@ proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: i
     info "nothing to build"
     quit "exiting...", QuitSuccess
 
-  # TODO: add back reporting to GITHUB SUMMARY
-  var outs: seq[string]
-  for drv in drvs:
-    let startTime = now()
-    var cmd = "nix build"
-    cmd.addArg drv.name & "^*"
-    cmd.addArg "--no-link"
-    cmd.addArgs rest
-    let buildCode = runCmd(cmd)
-    if buildCode != 0:
-      error "failed to build: " & drv.name
-      continue
-    info "build duration: " & $(now() - startTime)
-    outs &= drv.output
+  let results =
+    collect:
+      for drv in drvs:
+        (drv, build(drv, rest))
 
+  # TODO: add back reporting to GITHUB SUMMARY
+
+  let outs =
+    collect:
+      for (drv, res) in results:
+        if res.successful:
+          drv.output
+
+  # TODO: push after build not at once?
   var cmd = service
   cmd.addArg "push"
   cmd.addArg name
