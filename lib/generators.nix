@@ -52,6 +52,7 @@ let
         ../modules/oizys.nix
         inputs.lix-module.nixosModules.default
         inputs.hyprland.nixosModules.default
+        inputs.comin.nixosModules.comin
       ] ++ (hostFiles hostName);
 
       specialArgs = commonSpecialArgs // {
