@@ -1321,11 +1321,11 @@
         "nixpkgs": "nixpkgs_8"
       },
       "locked": {
-        "lastModified": 1730391705,
-        "narHash": "sha256-OxFmkw/4WXidYGFU3TZR0qf2HUbwzqqMFShkBgtHjUA=",
+        "lastModified": 1730939901,
+        "narHash": "sha256-C0Z9ns2NGL1GimCwlvmN8LijDOJ+MbW35WznhZ1goZ4=",
         "ref": "refs/heads/main",
-        "rev": "d86dff8360781e4ccd82a0e5a8efdf1ad07e97db",
-        "revCount": 20,
+        "rev": "367d2e55238b937c89a317f79b12410c11d4e7e5",
+        "revCount": 21,
         "type": "git",
         "url": "https://git.dayl.in/daylin/utils.git"
       },
