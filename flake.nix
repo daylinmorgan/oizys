@@ -10,7 +10,9 @@
 
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
+
     nix-index-database.url = "github:nix-community/nix-index-database";
+    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
     lix = {
       url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
@@ -21,7 +23,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.lix.follows = "lix";
     };
-
     # keep for when lix breaks :/
     # lix-module = {
     #   url = "https://git.lix.systems/lix-project/nixos-module/archive/2.91.1-1.tar.gz";
@@ -38,30 +39,33 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-
     hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
     hyprland-contrib.url = "github:hyprwm/contrib";
-    roc.url = "github:roc-lang/roc";
-    zig-overlay.url = "github:mitchellh/zig-overlay";
-    zls.url = "github:zigtools/zls";
 
-    nim2nix.url = "github:daylinmorgan/nim2nix";
-    pixi.url = "github:daylinmorgan/pixi-flake";
     f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
-    tsm.url = "github:daylinmorgan/tsm?dir=nix";
-    hyprman.url = "git+https://git.dayl.in/daylin/hyprman.git";
-    utils.url = "git+https://git.dayl.in/daylin/utils.git";
-
-    nim2nix.inputs.nixpkgs.follows = "nixpkgs";
-    hyprman.inputs.nixpkgs.follows = "nixpkgs";
     f1multiviewer.inputs.nixpkgs.follows = "nixpkgs";
-    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
-    pixi.inputs.nixpkgs.follows = "nixpkgs";
-    roc.inputs.nixpkgs.follows = "nixpkgs";
+    tsm.url = "github:daylinmorgan/tsm?dir=nix";
     tsm.inputs.nixpkgs.follows = "nixpkgs";
-    zls.inputs.nixpkgs.follows = "nixpkgs";
-    zls.inputs.zig-overlay.follows = "zig-overlay";
-    zig-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    hyprman.url = "git+https://git.dayl.in/daylin/hyprman.git";
+    hyprman.inputs.nixpkgs.follows = "nixpkgs";
+    utils.url = "git+https://git.dayl.in/daylin/utils.git";
+    utils.inputs.nim2nix.follows = "nim2nix";
+    nim2nix.url = "github:daylinmorgan/nim2nix";
+    nim2nix.inputs.nixpkgs.follows = "nixpkgs";
+    pixi.url = "github:daylinmorgan/pixi-flake";
+    pixi.inputs.nixpkgs.follows = "nixpkgs";
+
+    # roc = {
+    #   url = "github:roc-lang/roc";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+
+    # zig-overlay.url = "github:mitchellh/zig-overlay";
+    # zig-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    # zls.url = "github:zigtools/zls";
+    # zls.inputs.nixpkgs.follows = "nixpkgs";
+    # zls.inputs.zig-overlay.follows = "zig-overlay";
+ 
   };
 
   nixConfig = {
