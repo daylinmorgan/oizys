@@ -6,14 +6,20 @@
   ...
 }:
 
+let
+  selfPackages = (flake.pkgs "self");
+  pyWithLlm = (
+    pkgs.python3.withPackages (_: [
+      selfPackages.llm
+      selfPackages.llm-claude-3
+    ])
+  );
+  llm-with-plugins = (
+    pkgs.writeShellScriptBin "llm" ''
+      exec ${pyWithLlm}/bin/llm "$@"
+    ''
+  );
+in
 mkOizysModule config "llm" {
-  environment.systemPackages = with pkgs; [
-    (python3.withPackages (ps:
-      with (flake.pkgs "self");
-      [
-        llm
-        llm-claude-3
-      ]
-    ))
-  ];
+  environment.systemPackages = [ llm-with-plugins ];
 }
