@@ -54,19 +54,27 @@ nix run "github:daylinmorgan/oizys"
 ```
 
 ```
-nix begat oizys
-Usage:
-  oizys {SUBCMD} [sub-command options & parameters]
+oizys
+
+usage:
+  oizys subcmd [flags]
 
 subcommands:
-  help   print comprehensive or per-cmd help
-  build  nix build
-  cache  build and push to cachix
-  ci     trigger GHA update flow
-  dry    dry run build
-  os     nixos-rebuild
-  output output
-  update update and run nixos-rebuild
+  build    nix build                      
+  cache    build and push store paths     
+  ci       trigger GHA                    
+  dry      dry run build                  
+  os       nixos-rebuild subcmd
+  output   nixos config attr              
+  update   update and run nixos-rebuild   
+
+flags:
+     --flake      path/to/flake
+     --host       host(s) to build
+  -d --debug      enable debug mode
+  -r --resetCache set cache timeout to 0
+  -h --help       show this help
+
 ```
 
 ## oizys?
@@ -77,6 +85,5 @@ Oizys was birthed by the goddess Nyx/Nix and embodies suffering and misery. Whic
 
 > [!NOTE]
 > I don't use home-manager to manager my shell/user configs. You can find those in my separate `chezmoi`-managed [`dotfiles`](https://git.dayl.in/daylin/dotfiles) repository.
-
 
 
