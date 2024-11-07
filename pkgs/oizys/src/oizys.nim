@@ -34,6 +34,7 @@ hwylCli:
     flags:
       minimal:
         T bool
+        ? "set minimal"
         - m
     run:
       nixBuild(minimal, args)
@@ -45,11 +46,13 @@ hwylCli:
         * "oizys"
         ? "name of binary cache"
       service:
+        ? "name of cache service"
         * "attic"
       jobs:
         * countProcessors()
         ? "jobs when pushing paths"
         T int
+        - j
     run:
       nixBuildWithCache(name, args, service, jobs)
 
@@ -68,6 +71,8 @@ hwylCli:
     flags:
       minimal:
         T bool
+        ? "set minimal"
+        - m
     run:
       nixBuildHostDry(minimal, args)
 

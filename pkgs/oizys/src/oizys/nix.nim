@@ -119,15 +119,14 @@ proc toBuildNixosConfiguration(): seq[string] =
   return output.toBuild.mapIt(it.storePath)
 
 type
-  DerivationOutputsOut = object
+  DerivationOutput = object
     path: string
-  DerivationOutputs = object
-    `out`: DerivationOutputsOut
+    # hashAlgo: string
+    # hash: string
   NixDerivation = object
     inputDrvs: Table[string, JsonNode]
     name: string
-    outputs: DerivationOutputs
-
+    outputs: Table[string, DerivationOutput]
 
 proc evaluateDerivations(drvs: seq[string]): Table[string, NixDerivation] =
   var cmd = "nix derivation show -r"
@@ -180,8 +179,7 @@ func isIgnored(drv: string): bool =
 
 type
   OizysDerivation = object
-    drv: NixDerivation # do i need this ?
-    output: string
+    drv: NixDerivation
     name: string
 
 proc getSystemPathDrvs(): seq[string] =
@@ -203,7 +201,6 @@ proc getOizysDerivations(): seq[OizysDerivation] =
   for name, drv in nixDerivationShow(toActullyBuildDrvs):
     result.add OizysDerivation(
         name: name,
-        output: drv.outputs.`out`.path,
         drv: drv,
     )
 
@@ -280,7 +277,6 @@ proc nixBuildHostDry*(minimal: bool, rest: seq[string]) =
   display output
 
 
-
 type
   BuildResult = object
     duration*: Duration
@@ -296,6 +292,10 @@ proc build(drv: OizysDerivation, rest: seq[string]): BuildResult =
   result.successful = buildCode == 0
   result.duration = now() - startTime
   debug "build duration: " & $result.duration
+
+func outputsPaths(o: OizysDerivation): seq[string] =
+  for _, output in o.drv.outputs:
+    result.add output.path
 
 proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: int) =
   ## build individual derivations not cached and push to cache
@@ -313,12 +313,10 @@ proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: i
         (drv, build(drv, rest))
 
   # TODO: add back reporting to GITHUB SUMMARY
-
-  let outs =
-    collect:
-      for (drv, res) in results:
-        if res.successful:
-          drv.output
+  var outs: seq[string]
+  for (drv, res) in results:
+    if res.successful:
+      outs &= drv.outputsPaths
 
   # TODO: push after build not at once?
   var cmd = service
