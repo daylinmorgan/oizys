@@ -11,8 +11,7 @@ bin           = @["oizys"]
 # Dependencies
 
 requires "nim >= 2.0.8"
-requires "cligen"
 requires "jsony"
 requires "zippy"
-requires "https://github.com/daylinmorgan/hwylterm#HEAD"
+requires "https://github.com/daylinmorgan/hwylterm#a4e0f3f"
 

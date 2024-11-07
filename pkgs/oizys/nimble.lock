@@ -1,24 +1,14 @@
 {
   "version": 2,
   "packages": {
-    "cligen": {
-      "version": "1.7.7",
-      "vcsRevision": "f50f887eacfe33866e22f8a0d322e29a1c830cf9",
-      "url": "https://github.com/c-blake/cligen.git",
-      "downloadMethod": "git",
-      "dependencies": [],
-      "checksums": {
-        "sha1": "237596b6be88dcf9ee0bd9732a7baaac526f0c07"
-      }
-    },
     "hwylterm": {
       "version": "0.1.0",
-      "vcsRevision": "56bb2bb7c1da402c2c52fb3f7f10620c7c2fca7e",
+      "vcsRevision": "a4e0f3fc7b34bac8e448dd35f58012d07dd4a0d0",
       "url": "https://github.com/daylinmorgan/hwylterm",
       "downloadMethod": "git",
       "dependencies": [],
       "checksums": {
-        "sha1": "8810cf69a74de580e1ab08f0c153afbf33c8a98e"
+        "sha1": "848f75dc1bc910560e5e0038bf0a9ebf8d096385"
       }
     },
     "jsony": {
