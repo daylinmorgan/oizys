@@ -23,6 +23,7 @@ in
     lock
     qtile
     hyprland
+    plasma
 
     virtualbox
     docker
