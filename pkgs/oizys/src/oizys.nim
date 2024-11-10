@@ -8,6 +8,7 @@ proc checkExes() =
     fatalQuit "oizys requires nix"
 
 checkexes()
+
 hwylCli:
   name "oizys"
   flags:
@@ -24,6 +25,16 @@ hwylCli:
       T bool
       ? "set cache timeout to 0"
       - r
+    [yes]
+    yes:
+      T bool
+      ? "skip all confirmation prompts"
+    [minimal]
+    minimal:
+      T bool
+      ? "set minimal"
+      - m
+
   preSub:
     setupLoggers(debug)
     updateContext(host, flake, debug, resetCache)
@@ -32,10 +43,7 @@ hwylCli:
     --- build
     ... "nix build"
     flags:
-      minimal:
-        T bool
-        ? "set minimal"
-        - m
+      ^[minimal]
     run:
       nixBuild(minimal, args)
 
@@ -43,15 +51,15 @@ hwylCli:
     ... "build and push store paths"
     flags:
       name:
-        * "oizys"
         ? "name of binary cache"
+        * "oizys"
       service:
         ? "name of cache service"
         * "attic"
       jobs:
-        * countProcessors()
-        ? "jobs when pushing paths"
         T int
+        ? "jobs when pushing paths"
+        * countProcessors()
         - j
     run:
       nixBuildWithCache(name, args, service, jobs)
@@ -69,10 +77,7 @@ hwylCli:
     --- dry
     ... "dry run build"
     flags:
-      minimal:
-        T bool
-        ? "set minimal"
-        - m
+      ^[minimal]
     run:
       nixBuildHostDry(minimal, args)
 
@@ -91,19 +96,13 @@ hwylCli:
 
     --- output
     ... "nixos config attr"
-    flags:
-      yes:
-        T bool
-        ? "skip all confirmation prompts"
     run:
       echo nixosConfigAttrs().join(" ")
 
     --- update
     ... "update and run nixos-rebuild"
     flags:
-      yes:
-        T bool
-        ? "skip all confirmation prompts"
+      ^[yes]
       preview:
         T bool
         ? "show preview and exit"
