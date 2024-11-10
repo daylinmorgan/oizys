@@ -10,12 +10,12 @@ proc checkExes() =
 checkexes()
 hwylCli:
   name "oizys"
-  globalFlags:
+  flags:
+    [global]
     flake "path/to/flake"
     host:
       T seq[string]
       ? "host(s) to build"
-      # - h conflicts with autoadded help short flag
     debug:
       T bool
       ? "enable debug mode"
