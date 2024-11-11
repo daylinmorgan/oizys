@@ -27,6 +27,7 @@ hwylCli:
       - r
     [yes]
     yes:
+      - y
       T bool
       ? "skip all confirmation prompts"
     [minimal]
@@ -38,6 +39,7 @@ hwylCli:
   preSub:
     setupLoggers(debug)
     updateContext(host, flake, debug, resetCache)
+
   subcommands:
 
     --- build
@@ -104,6 +106,7 @@ hwylCli:
     flags:
       ^[yes]
       preview:
+        - p
         T bool
         ? "show preview and exit"
     run:
@@ -116,4 +119,4 @@ hwylCli:
       if yes or confirm("Proceed with system update?"):
         updateRepo()
         nixosRebuild("switch")
-  
+
