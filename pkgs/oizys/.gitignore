@@ -1,5 +1,5 @@
 nimbledeps
 nimble.paths
 nimble.develop
-
+bin/
 oizys.out
