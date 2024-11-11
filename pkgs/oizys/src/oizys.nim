@@ -1,6 +1,6 @@
 ## nix begat oizys
 import std/[os, osproc, sequtils, strformat, strutils]
-import hwylterm, hwylterm/[hwylcli, logging]
+import hwylterm, hwylterm/[hwylcli]
 import oizys/[context, github, nix, logging]
 
 proc checkExes() =
@@ -13,26 +13,24 @@ hwylCli:
   name "oizys"
   flags:
     [global]
-    flake "path/to/flake"
+    flake:
+      T string
+      ? "path/to/flake"
     host:
       T seq[string]
       ? "host(s) to build"
     debug:
-      T bool
       ? "enable debug mode"
       - d
     resetCache:
-      T bool
       ? "set cache timeout to 0"
       - r
     [yes]
     yes:
       - y
-      T bool
       ? "skip all confirmation prompts"
     [minimal]
     minimal:
-      T bool
       ? "set minimal"
       - m
 
@@ -42,20 +40,22 @@ hwylCli:
 
   subcommands:
 
-    --- build
+    [build]
     ... "nix build"
     flags:
       ^[minimal]
     run:
       nixBuild(minimal, args)
 
-    --- cache
+    [cache]
     ... "build and push store paths"
     flags:
       name:
+        T string
         ? "name of binary cache"
         * "oizys"
       service:
+        T string
         ? "name of cache service"
         * "attic"
       jobs:
@@ -66,24 +66,25 @@ hwylCli:
     run:
       nixBuildWithCache(name, args, service, jobs)
 
-    --- ci
+    [ci]
     ... "trigger GHA"
     flags:
       `ref`:
+        T string
         ? "git ref/branch/tag to trigger workflow on"
         * "main"
     run:
       if args.len == 0: fatalQuit "expected workflow file name"
       createDispatch(args[0], `ref`)
 
-    --- dry
+    [dry]
     ... "dry run build"
     flags:
       ^[minimal]
     run:
       nixBuildHostDry(minimal, args)
 
-    --- os
+    [os]
     ? "[b]oizys os[/] [i]subcmd[/] [[[faint]flags[/]]"
     ... "nixos-rebuild [italic]subcmd[/]"
     run:
@@ -96,12 +97,12 @@ hwylCli:
         )
       nixosRebuild(subcmd, args[1..^1])
 
-    --- output
+    [output]
     ... "nixos config attr"
     run:
       echo nixosConfigAttrs().join(" ")
 
-    --- update
+    [update]
     ... "update and run nixos-rebuild"
     flags:
       ^[yes]
