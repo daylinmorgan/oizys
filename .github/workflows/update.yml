@@ -32,7 +32,7 @@ jobs:
 
       - run: git checkout -B flake-lock
 
-      - uses: DeterminateSystems/nix-installer-action@v14
+      - uses: DeterminateSystems/nix-installer-action@v15
         with:
           source-url: https://install.lix.systems/lix/lix-installer-x86_64-linux
           extra-conf: |
@@ -101,7 +101,7 @@ jobs:
             host: github.com
             private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - uses: DeterminateSystems/nix-installer-action@v14
+      - uses: DeterminateSystems/nix-installer-action@v15
         with:
           source-url: https://install.lix.systems/lix/lix-installer-x86_64-linux
           extra-conf: |
