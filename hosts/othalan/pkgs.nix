@@ -16,5 +16,6 @@
       typst
       charm-freeze
       attic-client
+      jujutsu
     ]);
 }
