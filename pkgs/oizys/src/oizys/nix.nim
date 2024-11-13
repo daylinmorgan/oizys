@@ -297,6 +297,23 @@ func outputsPaths(o: OizysDerivation): seq[string] =
   for _, output in o.drv.outputs:
     result.add output.path
 
+proc reportResults(results: seq[(OizysDerivation, BuildResult)]) =
+  let rows = collect(
+    for (drv, res) in results:
+      let (name, hash) = splitDrv(drv.name)
+      fmt"| {name} | `{hash}` | " & (
+        if res.successful: ":white_check_mark:"
+        else: ":x:"
+      ) & " |"
+  )
+  let summaryFilePath = getEnv("GITHUB_STEP_SUMMARY")
+  if summaryFilePath == "": fatalQuit "no github step summary found"
+  let output = open(summaryFilePath,fmAppend)
+  output.writeLine("| derivation | hash | build successful |\n|---|---|---|")
+  output.writeLine(rows.join("\n"))
+  close output
+
+
 proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: int) =
   ## build individual derivations not cached and push to cache
   if findExe(service) == "": fatalQuit fmt"is {service} installed?"
@@ -312,11 +329,13 @@ proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: i
       for drv in drvs:
         (drv, build(drv, rest))
 
-  # TODO: add back reporting to GITHUB SUMMARY
   var outs: seq[string]
   for (drv, res) in results:
     if res.successful:
       outs &= drv.outputsPaths
+
+  if isCi():
+    reportResults(results)
 
   # TODO: push after build not at once?
   var cmd = service
