@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "llm-claude-3";
-  version = "0.7";
+  version = "0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-claude-3";
     rev = version;
-    hash = "sha256-5qF5BK319PNzB4XsLdYvtyq/SxBDdHJ9IoKWEnvNRp4=";
+    hash = "sha256-XhmxUo+nM6el17AVRUq+RLT5SEl+Q0eWhouU9WDZJl0=";
   };
 
   nativeBuildInputs = [
