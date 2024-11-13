@@ -304,15 +304,15 @@ proc reportResults(results: seq[(OizysDerivation, BuildResult)]) =
       fmt"| {name} | `{hash}` | " & (
         if res.successful: ":white_check_mark:"
         else: ":x:"
-      ) & " |"
+      ) & " |" & $(res.duration)
   )
   let summaryFilePath = getEnv("GITHUB_STEP_SUMMARY")
   if summaryFilePath == "": fatalQuit "no github step summary found"
-  let output = open(summaryFilePath,fmAppend)
-  output.writeLine("| derivation | hash | build successful |\n|---|---|---|")
-  output.writeLine(rows.join("\n"))
+  let output = open(summaryFilePath, fmAppend)
+  output.writeLine "| derivation | hash | build | time |"
+  output.writeLine "\n|---|---|---|---|"
+  output.writeLine rows.join("\n")
   close output
-
 
 proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: int) =
   ## build individual derivations not cached and push to cache
