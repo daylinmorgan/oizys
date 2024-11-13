@@ -310,7 +310,7 @@ proc reportResults(results: seq[(OizysDerivation, BuildResult)]) =
   if summaryFilePath == "": fatalQuit "no github step summary found"
   let output = open(summaryFilePath, fmAppend)
   output.writeLine "| derivation | hash | build | time |"
-  output.writeLine "\n|---|---|---|---|"
+  output.writeLine "|---|---|---|---|"
   output.writeLine rows.join("\n")
   close output
 
