@@ -20,11 +20,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1730968822,
-        "narHash": "sha256-NocDjINsh6ismkhb0Xr6xPRksmhuB2WGf8ZmXMhxu7Y=",
+        "lastModified": 1731496216,
+        "narHash": "sha256-nlQrNN+tmJ+iP6Ck/czwZI0Hxz3oNvUyGkVruxJwgwA=",
         "owner": "hyprwm",
         "repo": "aquamarine",
-        "rev": "a49bc3583ff223f426cb3526fdaa4bcaa247ec14",
+        "rev": "3b00e96f90cb0040de6d88ad99bf5f4d443f0c59",
         "type": "github"
       },
       "original": {
@@ -240,11 +240,11 @@
         "zig": "zig"
       },
       "locked": {
-        "lastModified": 1731351056,
-        "narHash": "sha256-a779DeG+HXRR5Gy/pU47KI/1xeLdeYoA8gyopRRseW4=",
+        "lastModified": 1731469793,
+        "narHash": "sha256-ZewQYTlsysOt6orTIIKNR+y43iklehOzeBF/Gfy7fog=",
         "ref": "refs/heads/main",
-        "rev": "70b984ebaff9fb9e80e0332a00eaac7b45b52e1d",
-        "revCount": 7942,
+        "rev": "523e3a6ae3e62463b309c1b3222bafd7b1fb11ef",
+        "revCount": 7949,
         "type": "git",
         "url": "ssh://git@github.com/ghostty-org/ghostty"
       },
@@ -318,11 +318,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1731340175,
-        "narHash": "sha256-IfE7lqNFfFyzAu3pe2XTeNovU9tVzJeGLzQ2B8Segy0=",
+        "lastModified": 1731526492,
+        "narHash": "sha256-2Gob+eZEPpF225QrRLXyfeQ9L63YHFa/tNh15FW/Rzo=",
         "ref": "refs/heads/main",
-        "rev": "f5fa84554ffe55e29a397014964238be89ffa54d",
-        "revCount": 5448,
+        "rev": "3fb47372b79265ebdabeeefdad10359d5b18377a",
+        "revCount": 5451,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/hyprwm/Hyprland/"
@@ -413,11 +413,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1731019624,
-        "narHash": "sha256-22viQMlEqNjwj+wHpo9FkKD/vlXmj+dzm+23VezXlME=",
+        "lastModified": 1731363071,
+        "narHash": "sha256-FdB1uxTPgS7vcfVIsG720G2+t2l6uHksW3bp3fzz/Q8=",
         "ref": "refs/heads/main",
-        "rev": "a41acd54a3f887f4050c518de25963d5e7d6208f",
-        "revCount": 18,
+        "rev": "884cb9c68c3d28542e581be762b13dcc380a8135",
+        "revCount": 19,
         "type": "git",
         "url": "https://git.dayl.in/daylin/hyprman.git"
       },
@@ -438,11 +438,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1731163338,
-        "narHash": "sha256-Qflei0JBeqQ0c8jxA8e982xAxJvfMwfx4Aci2eJi84s=",
+        "lastModified": 1731518387,
+        "narHash": "sha256-aZZw1ZvTMLkcA6udlvkA3hrCkuipoWLy8s/JNnIclxY=",
         "owner": "hyprwm",
         "repo": "hyprutils",
-        "rev": "60d3dece30f98e8ad85131829c8529950630d6bc",
+        "rev": "315fba5d21d87ddb756d4bebdb49f99d86b0ffe8",
         "type": "github"
       },
       "original": {
@@ -692,11 +692,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1730785428,
-        "narHash": "sha256-Zwl8YgTVJTEum+L+0zVAWvXAGbWAuXHax3KzuejaDyo=",
+        "lastModified": 1731139594,
+        "narHash": "sha256-IigrKK3vYRpUu+HEjPL/phrfh7Ox881er1UEsZvw9Q4=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "4aa36568d413aca0ea84a1684d2d46f55dbabad7",
+        "rev": "76612b17c0ce71689921ca12d9ffdc9c23ce40b2",
         "type": "github"
       },
       "original": {
@@ -745,11 +745,11 @@
         "nixpkgs": "nixpkgs_6"
       },
       "locked": {
-        "lastModified": 1731353483,
-        "narHash": "sha256-0IZPqgc4k/VqP3yLhNw8QbiPRq56Cl07ewRv7aqQZIw=",
+        "lastModified": 1731515670,
+        "narHash": "sha256-tY1C721VV87LfNdGBsdRwTXpskFlqEXxLokgNO1OnZA=",
         "owner": "nix-community",
         "repo": "nixpkgs-wayland",
-        "rev": "e71b4345d9aebca98d9ea91eb5f86d57f804f6d6",
+        "rev": "c2fa066bb9952469a5e01a08293f78d114c02f09",
         "type": "github"
       },
       "original": {
@@ -901,11 +901,11 @@
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {
-        "lastModified": 1730814269,
-        "narHash": "sha256-fWPHyhYE6xvMI1eGY3pwBTq85wcy1YXqdzTZF+06nOg=",
+        "lastModified": 1731363552,
+        "narHash": "sha256-vFta1uHnD29VUY4HJOO/D6p6rxyObnf+InnSMT4jlMU=",
         "owner": "cachix",
         "repo": "git-hooks.nix",
-        "rev": "d70155fdc00df4628446352fc58adc640cd705c2",
+        "rev": "cd1af27aa85026ac759d5d3fccf650abe7e1bbf0",
         "type": "github"
       },
       "original": {
@@ -1058,11 +1058,11 @@
       },
       "locked": {
         "dir": "nix",
-        "lastModified": 1728315073,
-        "narHash": "sha256-x2kUFvEWzLcrwvWVi/DNBnLkPGG3xGsPU996ckR5NFY=",
+        "lastModified": 1731525506,
+        "narHash": "sha256-fiwUGTEee3UKmflWgwLvZmuXmx2IAF7tFLSNRbX2Yf8=",
         "owner": "daylinmorgan",
         "repo": "tsm",
-        "rev": "544b4f5c6fe8acd1a9529e5604ea2a9ced3161a4",
+        "rev": "4a91ce99a774e19d8369a742482632522de5c2a1",
         "type": "github"
       },
       "original": {
@@ -1080,11 +1080,11 @@
         "nixpkgs": "nixpkgs_8"
       },
       "locked": {
-        "lastModified": 1730954629,
-        "narHash": "sha256-1Q54FS+ScXopTd40xzTBe/iydiQQp2JsymfeGPGHX2A=",
+        "lastModified": 1731360812,
+        "narHash": "sha256-4DKaz/gafKL2JOsC0rwO7/5R8AlwJ2EcLmxSPG8HO64=",
         "ref": "refs/heads/main",
-        "rev": "c81c065701d77bfce59e8358c2f9e2dfdcb11b95",
-        "revCount": 22,
+        "rev": "32adb124b3b7ea820e3d0e67622c10e1c711ade4",
+        "revCount": 23,
         "type": "git",
         "url": "https://git.dayl.in/daylin/utils.git"
       },
