@@ -25,15 +25,13 @@ hwylCli:
     resetCache:
       ? "set cache timeout to 0"
       - r
-    [yes]
+    [misc]
     yes:
       - y
       ? "skip all confirmation prompts"
-    [minimal]
     minimal:
       ? "set minimal"
       - m
-
   preSub:
     setupLoggers(debug)
     updateContext(host, flake, debug, resetCache)
@@ -43,7 +41,7 @@ hwylCli:
     [build]
     ... "nix build"
     flags:
-      ^[minimal]
+      ^minimal
     run:
       nixBuild(minimal, args)
 
@@ -80,7 +78,7 @@ hwylCli:
     [dry]
     ... "dry run build"
     flags:
-      ^[minimal]
+      ^minimal
     run:
       nixBuildHostDry(minimal, args)
 
@@ -105,7 +103,7 @@ hwylCli:
     [update]
     ... "update and run nixos-rebuild"
     flags:
-      ^[yes]
+      ^yes
       preview:
         - p
         T bool
