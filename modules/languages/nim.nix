@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  flake,
   ...
 }:
 let
@@ -11,14 +10,10 @@ let
 in
 {
   config = mkIfIn "nim" cfg {
-    environment.systemPackages =
-      (with pkgs; [
-        nim
-      ])
-      ++ (with (flake.pkgs "self"); [
-        nimlangserver
-        # nph
-        nimble
-      ]);
+    environment.systemPackages = with pkgs; [
+      nim
+      nimble
+      nimlangserver
+    ];
   };
 }
