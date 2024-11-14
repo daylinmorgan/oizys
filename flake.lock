@@ -877,11 +877,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1729614871,
-        "narHash": "sha256-dSlXHzGlR4pxTGHioqyJoI5boDWwkAtNTPZo2Lsl4xU=",
+        "lastModified": 1731609704,
+        "narHash": "sha256-HSOQ5VyzXOfKLlwSg1pelbwf9hwj89V7rZMbv9ldA1E=",
         "owner": "daylinmorgan",
         "repo": "pixi-flake",
-        "rev": "30c2903994e41cea1ea341fd041a78633e95e7b7",
+        "rev": "e11d879dabad54ec0ef0218b48cea7f630fada78",
         "type": "github"
       },
       "original": {
