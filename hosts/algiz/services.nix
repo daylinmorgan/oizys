@@ -1,6 +1,10 @@
 { pkgs, enabled, ... }:
 let
   atticPort = "5656";
+  static = pkgs.runCommandLocal "static-files" { } ''
+    mkdir $out
+    cp ${./caddy/index.html} $out/index.html
+  '';
 in
 {
 
@@ -15,12 +19,22 @@ in
     settings.PasswordAuthentication = false;
   };
 
+  services.comin = enabled // {
+    remotes = [
+      {
+        name = "origin";
+        url = "https://github.com/daylinmorgan/oizys.git";
+        branches.main.name = "main";
+      }
+    ];
+  };
+
   security.polkit = enabled; # attic was looking for this...
   environment.systemPackages = [ pkgs.attic-client ];
 
   # allow docker to forward the request to the host running attic
   # https://discourse.nixos.org/t/docker-container-not-resolving-to-host/30259/6
-  networking.firewall.extraCommands = "iptables -A INPUT -p tcp --destination-port ${atticPort} -s 172.16.0.0/12 -j ACCEPT";
+  # networking.firewall.extraCommands = "iptables -A INPUT -p tcp --destination-port ${atticPort} -s 172.16.0.0/12 -j ACCEPT";
   services.atticd = enabled // {
 
     # Replace with absolute path to your credentials file
@@ -56,26 +70,19 @@ in
     };
   };
 
-  services.comin = enabled // {
-    remotes = [
-      {
-        name = "origin";
-        url = "https://github.com/daylinmorgan/oizys.git";
-        branches.main.name = "main";
-      }
-    ];
-  };
-
   services.caddy = enabled // {
-    extraConfig =
-      builtins.readFile ./caddy/Caddyfile
-      + ''
-        ${builtins.readFile ./caddy/Caddyfile}
-        attic.dayl.in {
-          root * ${./caddy}
-          file_server index.html
-          reverse_proxy /* http://localhost:5656
-        }
-      '';
+    extraConfig = builtins.readFile ./caddy/Caddyfile;
+    virtualHosts."attic.dayl.in".extraConfig = ''
+      redir /oizys /
+
+      handle / {
+        root * ${static}
+        file_server
+      }
+
+      handle /* {
+        reverse_proxy http://localhost:5656
+      }
+    '';
   };
 }

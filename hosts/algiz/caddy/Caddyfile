@@ -1,3 +1,4 @@
+
 elizabeth-and-daylin.com {
     reverse_proxy http://localhost:4321
 }
@@ -5,10 +6,6 @@ elizabeth-and-daylin.com {
 elizabeth.dayl.in, www.elizabeth-and-daylin.com {
   redir https://elizabeth-and-daylin.com{uri} permanent
 }
-
-#attic.dayl.in {
-#  reverse_proxy http://localhost:5656
-#}
 
 git.dayl.in {
   reverse_proxy http://localhost:3000
