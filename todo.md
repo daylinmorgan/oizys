@@ -3,7 +3,7 @@
 ## oizys
 
 - [ ] write a flake template that includes the systems boilerplate
-- [ ] include all of the defined overlays from `./overlays` in the `forAllSystems` nixpkgs
+- [ ] get the running action url after `oizys ci {workflow}.yml`
 
 ## software
 
