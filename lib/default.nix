@@ -43,10 +43,7 @@ let
       rec {
         default = oizys;
         oizys = pkgs.callPackage ../pkgs/oizys { };
-        # nimlangserver = pkgs.callPackage ../pkgs/nimlangserver { };
-        nph = pkgs.callPackage ../pkgs/nph { };
         iso = mkIso.config.system.build.isoImage;
-        # roc = (pkgsFromSystem pkgs.system "roc").full;
       }
       // (inheritFlakePkgs pkgs [
         "pixi"
