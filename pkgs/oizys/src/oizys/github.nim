@@ -1,4 +1,4 @@
-import std/[httpclient,logging, os, strformat, strutils, json, tables, tempfiles]
+import std/[httpclient,logging, os, strformat, strutils, json, tables, tempfiles, times]
 import jsony, hwylterm, hwylterm/logging, zippy/ziparchives
 import ./[exec, context]
 
@@ -11,6 +11,33 @@ template withTmpDir(body: untyped): untyped =
   let tmpDir {.inject.} = createTempDir("oizys","")
   body
   removeDir tmpDir
+
+type
+  GhArtifact = object
+    id: int
+    name: string
+    url: string
+    archive_download_url*: string
+
+  GhWorkflowRun = object
+    id*: int
+    node_id: string
+    run_number: int
+    event: string
+    status: string
+    conclusion: string
+    html_url: string
+    workflow_id: int
+    created_at*: string # use datetime?
+    updated_at: string # use datetime?
+
+  ListGhArtifactResponse = object
+    total_count: int
+    artifacts: seq[GhArtifact]
+
+  ListGhWorkflowResponse = object
+    total_count: int
+    workflow_runs: seq[GhWorkflowRun]
 
 var ghToken = getEnv "GITHUB_TOKEN"
 
@@ -52,47 +79,35 @@ proc postGhApi(url: string, body: JsonNode) =
   except:
     errorQuit "failed to get response code"
 
+proc getInProgressRun(workflow: string, timeout: int = 5000): (GhWorkflowRun, bool) =
+  let
+    start = now()
+    timeoutDuration = initDuration(milliseconds = timeout)
+
+  withSpinner fmt"waiting for {workflow} workflow to start":
+    while (now() - start) < timeoutDuration:
+      let response = getGhApi(fmt"https://api.github.com/repos/daylinmorgan/oizys/actions/workflows/{workflow}/runs")
+      let runs = fromJson(response.body,  ListGhWorkflowResponse).workflow_runs
+      if runs[0].status == "in_progress":
+        spinner.stop() # cleanup
+        return (runs[0], true)
+      sleep 500
+
+  warn "timeout reached waiting for workflow to start"
 
 proc createDispatch*(workflowFileName: string, `ref`: string) =
   ## https://docs.github.com/en/rest/actions/workflows?apiVersion=2022-11-28#create-a-workflow-dispatch-event
-  var workflow =
+  let workflow =
     if workflowFileName.endsWith(".yml") or workflowFileName.endsWith(".yaml"): workflowFileName
     else: workflowFileName & ".yml"
+  let body = %*{"ref": `ref`}
   info fmt"creating dispatch event for {workflow}"
   postGhApi(
    fmt"https://api.github.com/repos/daylinmorgan/oizys/actions/workflows/{workflow}/dispatches",
-    %*{
-      "ref": `ref`,
-    }
+   body
   )
-
-type
-  GhArtifact = object
-    id: int
-    name: string
-    url: string
-    archive_download_url*: string
-
-  GhWorkflowRun = object
-    id*: int
-    node_id: string
-    run_number: int
-    event: string
-    status: string
-    conclusion: string
-    html_url: string
-    workflow_id: int
-    created_at*: string # use datetime?
-    updated_at: string # use datetime?
-
-  ListGhArtifactResponse = object
-    total_count: int
-    artifacts: seq[GhArtifact]
-
-  ListGhWorkflowResponse = object
-    total_count: int
-    workflow_runs: seq[GhWorkflowRun]
-
+  let (run, ok) = getInProgressRun(workflow)
+  if ok: info "view workflow run at: " & run.html_url
 
 proc listUpdateRuns(): seq[GhWorkflowRun] =
   ## get update.yml runs
