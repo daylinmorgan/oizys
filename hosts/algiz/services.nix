@@ -65,4 +65,8 @@ in
       }
     ];
   };
+
+  services.caddy = enabled // {
+    extraConfig = builtins.readFile ./Caddyfile;
+  };
 }

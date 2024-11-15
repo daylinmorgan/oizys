@@ -1,0 +1,74 @@
+elizabeth-and-daylin.com {
+    reverse_proxy http://localhost:4321
+}
+
+elizabeth.dayl.in, www.elizabeth-and-daylin.com {
+  redir https://elizabeth-and-daylin.com{uri} permanent
+}
+
+attic.dayl.in {
+  reverse_proxy http://localhost:5656
+}
+
+git.dayl.in {
+  reverse_proxy http://localhost:3000
+}
+
+gts.dayl.in {
+	# Optional, but recommended, compress the traffic using proper protocols
+	encode zstd gzip
+
+  # TODO: change port?
+	# The actual proxy configuration to port 8080 (unless you've chosen another port number)
+	reverse_proxy * http://localhost:3758 {
+		# Flush immediatly, to prevent buffered response to the client
+		flush_interval -1
+	}
+}
+
+# not currently a running service on algiz
+# (caddy-common) {
+# 	encode gzip
+# 	header {
+# 		-Server
+# 		Strict-Transport-Security "max-age=31536000; include-subdomains;"
+# 		X-XSS-Protection "1; mode=block"
+# 		X-Frame-Options "DENY"
+# 		X-Content-Type-Options nosniff
+# 		# Referrer-Policy  no-referrer-when-downgrade
+# 		X-Robots-Tag "none"
+# 	}
+# }
+# 
+# lemmy.dayl.in {
+# 	import caddy-common
+# 	reverse_proxy http://lemmy-ui:1234
+# 
+# 	@lemmy {
+# 		path /api/*
+# 		path /pictrs/*
+# 		path /feeds/*
+# 		path /nodeinfo/*
+# 		path /.well-known/*
+# 	}
+# 
+# 	@lemmy-hdr {
+# 		header Accept application/*
+# 	}
+# 
+# 	handle @lemmy {
+# 		reverse_proxy http://lemmy:8536
+# 	}
+# 
+# 	handle @lemmy-hdr {
+# 		reverse_proxy http://lemmy:8536
+# 	}
+# 
+# 	@lemmy-post {
+# 		method POST
+# 	}
+# 
+# 	handle @lemmy-post {
+# 		reverse_proxy http://lemmy:8536
+# 	}
+# }
