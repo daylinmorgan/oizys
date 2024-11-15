@@ -6,9 +6,9 @@ elizabeth.dayl.in, www.elizabeth-and-daylin.com {
   redir https://elizabeth-and-daylin.com{uri} permanent
 }
 
-attic.dayl.in {
-  reverse_proxy http://localhost:5656
-}
+#attic.dayl.in {
+#  reverse_proxy http://localhost:5656
+#}
 
 git.dayl.in {
   reverse_proxy http://localhost:3000

@@ -67,6 +67,15 @@ in
   };
 
   services.caddy = enabled // {
-    extraConfig = builtins.readFile ./Caddyfile;
+    extraConfig =
+      builtins.readFile ./caddy/Caddyfile
+      + ''
+        ${builtins.readFile ./caddy/Caddyfile}
+        attic.dayl.in {
+          root * ${./caddy}
+          file_server index.html
+          reverse_proxy /* http://localhost:5656
+        }
+      '';
   };
 }

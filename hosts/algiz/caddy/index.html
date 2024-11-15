@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Attic Binary Cache</title>
+    <style>
+      .cursor {
+        display: inline-block;
+        background-color: black;
+        animation-name: cursor;
+        animation-duration: 0.8s;
+        animation-iteration-count: infinite;
+      }
+      @keyframes cursor {
+        0% {
+          background-color: #ffffff;
+        }
+        20% {
+          background-color: #555;
+        }
+        50% {
+          background-color: #555;
+        }
+        60% {
+          background-color: #ffffff;
+        }
+        100% {
+          background-color: #ffffff;
+        }
+      }
+      /* https://stackoverflow.com/a/13356401 */
+      body {
+        background-color: #1e1e2e;
+      }
+      pre {
+        color: #f5e0dc;
+      }
+      #box {
+        width: 100px;
+        height: 100px;
+
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        margin: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="box">
+      <pre>
+┏━━━━━━━━━━━━━━━━┑
+┃┏━━━ @ ━━━ @ ━━┓┃
+┃┃              ┃┃
+┃┃$ attic push <div class="cursor"> </div>┃┃
+┃┃              ┃┃
+┃┗━━━ ╰─────╯ ━━┛┃
+┗━━━━━━━━━━━━━━━━┛
+ ╲ ############### ╲
+  ╲ ############### ╲
+   ╲ ############### ╲
+    ━━━━━━━━━━━━━━━━━━
+</pre>
+    </div>
+  </body>
+</html>
