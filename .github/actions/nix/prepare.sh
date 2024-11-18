@@ -45,7 +45,8 @@ Linux)
     sudo mkfs.btrfs --data raid0 /dev/loop6 /dev/loop7
     sudo mkdir /nix
     sudo mount -t btrfs -o compress=zstd /dev/loop6 /nix
-    sudo chown "${RUNNER_USER}:" /nix
+    # issue with determinate installer?
+    # sudo chown "${RUNNER_USER}:" /nix
   elif [ "$(findmnt -bno size /mnt)" -gt 20000000000 ]; then
     df -h -x tmpfs
     echo "/mnt is large, bind mount /mnt/nix"
