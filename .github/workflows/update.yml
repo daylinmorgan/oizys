@@ -121,7 +121,6 @@ jobs:
           --debug
           --
           --keep-going
-          # --print-build-logs
           --out-link updated
 
       - run: |
