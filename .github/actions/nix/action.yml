@@ -1,0 +1,92 @@
+# adapted from https://github.com/azuwis/actions/tree/7236424fa0fdc8d82df7cd4bff831a9d2338ce9e/nix
+name: Install Nix and setup cache
+inputs:
+  nix_conf:
+    description: Extra nix.conf config
+    default: |
+      accept-flake-config = true
+      build-dir = /nix/var
+      experimental-features = pipe-operator
+      keep-derivations = true
+      keep-outputs = true
+  # key:
+  #   description: Key to actions/cache
+  #   default: nix
+  # install_action:
+  #   description: Set `nixbuild` to use nixbuild/nix-quick-install-action, otherwide use cachix/install-nix-action
+  #   default: nixbuild
+  # use_nixpkgs_in_flake:
+  #   description: Use nixpkgs defined in flake.nix
+  #   default: true
+  # nixpkgs_url:
+  #   description: Nixpkgs URL
+  #   default: https://nixos.org/channels/nixos-24.05
+  clean:
+    description: Clean up disk space
+    default: false
+  btrfs:
+    description: Use BTRFS to setup RAID0
+    default: false
+  # debug:
+  #   description: Enable debug
+  #   default: false
+  # debug_token:
+  #   default: ${{ github.token }}
+  #   description: Set github token for gh cli
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        CLEAN: ${{ inputs.clean }}
+        BTRFS: ${{ inputs.btrfs }}
+      run: exec ${{ github.action_path }}/prepare.sh
+
+    #   # needed to access ghostty repo for now
+    # - name: Setup SSH
+    #   uses: MrSquaare/ssh-setup-action@v3
+    #   with:
+    #       host: github.com
+    #       private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - uses: DeterminateSystems/nix-installer-action@v15
+      with:
+        source-url: https://install.lix.systems/lix/lix-installer-x86_64-linux
+        extra-conf: ${{ inputs.nix_conf }}
+
+    - name: Install and login to attic cache
+      run: |
+        nix profile install "nixpkgs#attic-client"
+        attic login oizys https://attic.dayl.in "${{ secrets.ATTIC_TOKEN }}"
+
+    # - name: Nix restore pre
+    #   shell: bash
+    #   env:
+    #     CACHE_KEY: ${{ inputs.key }}
+      # run: exec ${{ github.action_path }}/restore.sh pre
+    # - uses: actions/cache/restore@v4
+    #   with:
+    #     key: ${{ env.CACHE_KEY }}-${{ runner.os }}-${{ runner.arch }}-${{ env.CACHE_TIMESTAMP }}
+    #     restore-keys: |
+    #       ${{ env.CACHE_KEY }}-${{ runner.os }}-${{ runner.arch }}
+    #     path: |
+    #       /nix/store
+    #       /nix/var/nix/db
+    #       /nix/var/nix/gcroots
+    #       /nix/var/nix/profiles
+    #       ~/.cache/nix
+    #       ~/.local/state/nix
+    #       ~/.nix-channels
+    #       ~/.nix-defexpr
+    # - name: Nix restore post
+    #   shell: bash
+    #   env:
+    #     USE_NIXPKGS_IN_FLAKE: ${{ inputs.use_nixpkgs_in_flake }}
+    #     NIXPKGS_URL: ${{ inputs.nixpkgs_url }}
+      # run: exec ${{ github.action_path }}/restore.sh post
+    # - name: Debug
+    #   if: ${{ inputs.debug == true || inputs.debug == 'true' || inputs.debug == 'nopause' }}
+    #   shell: bash
+    #   env:
+    #     GH_TOKEN: ${{ inputs.debug_token }}
+    #   run: exec ${{ github.action_path }}/debug.sh "${{ inputs.debug }}"
