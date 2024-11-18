@@ -6,7 +6,6 @@
   flake,
   ...
 }:
-
 mkOizysModule config "hyprland" {
   programs.hyprland = enabled;
   security.pam.services.swaylock = { };
@@ -42,8 +41,14 @@ mkOizysModule config "hyprland" {
 
       # not even clear why I need to add this but ¯\_(ツ)_/¯
       kdePackages.qtwayland
+
     ])
-    ++ [ (flake.pkg "hyprman") ]
+    ++ [
+      (flake.pkg "hyprman")
+      ((flake.pkgs "self").flameshot.override {
+        enableWlrSupport = true;
+      })
+    ]
 
     # swww-git is broken
     ++ (with (flake.pkgs "nixpkgs-wayland"); [
@@ -59,7 +64,6 @@ mkOizysModule config "hyprland" {
     # (overlayFrom "hyprland")
   ];
 
- 
   services.getty = {
     extraArgs = [ "--skip-login" ];
     loginOptions = "-p -- ${config.oizys.user}";
