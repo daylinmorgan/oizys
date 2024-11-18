@@ -1,12 +1,14 @@
 name: Build NixOS (on demand)
 
+# TODO: accept , style sep in hwylcli
 on:
   workflow_dispatch:
     inputs:
       hosts:
         description: 'list of hosts to build'
         required: true
-        default: ',othalan,algiz'
+        default: 'othalan'
+        # default: ',othalan,algiz'
         type: string
       lockFile:
         description: 'flake.lock file'
@@ -17,7 +19,6 @@ on:
       hosts:
         description: 'list of hosts to build'
         default: 'othalan'
-        # TODO: accept , style sep in hwylcli
         # default: ',othalan,algiz'
         type: string
 
@@ -50,7 +51,7 @@ jobs:
             experimental-features = pipe-operator
             accept-flake-config = true
 
-      - uses: DeterminateSystems/magic-nix-cache-action@v8
+      # - uses: DeterminateSystems/magic-nix-cache-action@v8
 
       - name: Install and login to attic cache
         run: |
@@ -77,7 +78,7 @@ jobs:
           --
           cache
           --host "${{ inputs.hosts }}"
-          --flake
+          --flake .
           --debug
           --
           --keep-going
