@@ -27,6 +27,8 @@ inputs:
   btrfs:
     description: Use BTRFS to setup RAID0
     default: false
+  attic_token:
+    description: token to access attic cache
   # debug:
   #   description: Enable debug
   #   default: false
@@ -57,7 +59,7 @@ runs:
     - name: Install and login to attic cache
       run: |
         nix profile install "nixpkgs#attic-client"
-        attic login oizys https://attic.dayl.in "${{ secrets.ATTIC_TOKEN }}"
+        attic login oizys https://attic.dayl.in "${{ inputs.attic_token}}"
 
     # - name: Nix restore pre
     #   shell: bash

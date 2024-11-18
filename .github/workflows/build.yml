@@ -41,6 +41,8 @@ jobs:
             private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - uses: ./.github/actions/nix
+        with:
+          attic_token: ${{ secrets.ATTIC_TOKEN }}
 
       - name: write lock file
         if: "${{ inputs.lockFile != '' }}"
