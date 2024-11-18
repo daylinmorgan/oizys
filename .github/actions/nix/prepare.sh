@@ -49,7 +49,9 @@ Linux)
   elif [ "$(findmnt -bno size /mnt)" -gt 20000000000 ]; then
     df -h -x tmpfs
     echo "/mnt is large, bind mount /mnt/nix"
-    sudo install -d -o "$RUNNER_USER" /mnt/nix /nix
+    # sudo install -d -o "$RUNNER_USER" /mnt/nix /nix
+    # issue with determinate installer?
+    sudo install -d /mnt/nix /nix
     sudo mount --bind /mnt/nix /nix
   fi
   ;;
