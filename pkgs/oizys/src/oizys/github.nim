@@ -4,6 +4,7 @@ import ./[exec, context]
 
 # localPassC is used by zippy but the additional
 # module mangling on nixos somehow breaks localPassC
+# https://github.com/NixOS/nixpkgs/issues/356524
 when defined(amd64) and (defined(gcc) or defined(clang)):
   {.passC: "-msse4.1 -mpclmul".}
 
@@ -79,7 +80,11 @@ proc postGhApi(url: string, body: JsonNode) =
   except:
     errorQuit "failed to get response code"
 
-proc getInProgressRun(workflow: string, timeout: int = 5000): (GhWorkflowRun, bool) =
+proc getInProgressRun(
+  workflow: string,
+  timeout: int = 10000
+): (GhWorkflowRun, bool) =
+  ## wait up to 10 seconds to try to fetch ongoing run url
   let
     start = now()
     timeoutDuration = initDuration(milliseconds = timeout)
