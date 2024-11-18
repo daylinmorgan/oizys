@@ -55,6 +55,9 @@ Linux)
     sudo install -d /mnt/nix /nix
     sudo mount --bind /mnt/nix /nix
   fi
+  echo "Final:"
+  df -h -x tmpfs
+  echo
   ;;
 macOS)
   if [ "$CLEAN" = true ]; then
