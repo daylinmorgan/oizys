@@ -44,19 +44,13 @@ runs:
         BTRFS: ${{ inputs.btrfs }}
       run: exec ${{ github.action_path }}/prepare.sh
 
-    #   # needed to access ghostty repo for now
-    # - name: Setup SSH
-    #   uses: MrSquaare/ssh-setup-action@v3
-    #   with:
-    #       host: github.com
-    #       private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
     - uses: DeterminateSystems/nix-installer-action@v15
       with:
         source-url: https://install.lix.systems/lix/lix-installer-x86_64-linux
         extra-conf: ${{ inputs.nix_conf }}
 
     - name: Install and login to attic cache
+      shell: bash
       run: |
         nix profile install "nixpkgs#attic-client"
         attic login oizys https://attic.dayl.in "${{ inputs.attic_token}}"
