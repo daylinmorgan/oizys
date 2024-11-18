@@ -28,26 +28,11 @@ jobs:
             private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - uses: daylin-bot/actions/setup@main
-      - uses: ./.github/actions/clean-disk
+      - uses: ./.github/actions/nix
+        with:
+          attic_token: ${{ secrets.ATTIC_TOKEN }}
 
       - run: git checkout -B flake-lock
-
-      - uses: DeterminateSystems/nix-installer-action@v15
-        with:
-          source-url: https://install.lix.systems/lix/lix-installer-x86_64-linux
-          extra-conf: |
-            experimental-features = pipe-operator
-            accept-flake-config = true
-
-      - name: Install and login to attic cache
-        run: |
-          nix profile install "nixpkgs#attic-client"
-          attic login oizys https://attic.dayl.in "${{ secrets.ATTIC_TOKEN }}"
-
-      # - uses: cachix/cachix-action@v15
-      #   with:
-      #     name: daylin
-      #     authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
       - name: Update nix flake
         run: |
@@ -69,8 +54,6 @@ jobs:
           --host "othalan"
           --flake .
           --debug
-          # --
-          # --print-build-logs
 
       - name: Commit Updates
         uses: daylin-bot/actions/commit-and-push@main
@@ -101,20 +84,15 @@ jobs:
             host: github.com
             private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - uses: DeterminateSystems/nix-installer-action@v15
+      - uses: daylin-bot/actions/setup@main
+      - uses: ./.github/actions/nix
         with:
-          source-url: https://install.lix.systems/lix/lix-installer-x86_64-linux
-          extra-conf: |
-            experimental-features = pipe-operator
-            accept-flake-config = true
-
-      - uses: ./.github/actions/clean-disk
-        with:
-          purge-packages: 'true'
+          attic_token: ${{ secrets.ATTIC_TOKEN }}
+          clean: true
+          btrfs: true
 
       - name: Pre-build oizys
         run: nix build .
-
 
       - name: Build
         run: >
@@ -126,7 +104,6 @@ jobs:
           --debug
           --
           --keep-going
-          # --print-build-logs
           --out-link current
 
       - run: git checkout flake-lock
