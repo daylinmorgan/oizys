@@ -60,6 +60,75 @@ jobs:
         with:
           push-args: --set-upstream --force origin flake-lock
 
+
+  build-full-at-once:
+    needs: build-minimal
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # needed to access ghostty repo for now
+      - name: Setup SSH
+        uses: MrSquaare/ssh-setup-action@v3
+        with:
+            host: github.com
+            private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - uses: daylin-bot/actions/setup@main
+      - uses: ./.github/actions/nix
+        with:
+          attic_token: ${{ secrets.ATTIC_TOKEN }}
+          clean: true
+          btrfs: true
+
+      - name: Pre-build oizys
+        run: nix build .
+
+      - name: Build
+        run: >
+          nix run .
+          --
+          build
+          "$(nix run . -- output --host,=othalan,algiz,mannaz,naudiz --flake .)"
+          --flake .
+          --debug
+          --
+          --keep-going
+          --out-link current
+
+      - run: git checkout flake-lock
+
+      - name: Pre-build oizys
+        run: nix build .
+
+      - name: Build Updated
+        run: >
+          nix run .
+          --
+          build
+          "$(nix run . -- output --host,=othalan,algiz,mannaz,naudiz --flake .)"
+          --flake .
+          --debug
+          --
+          --keep-going
+          --out-link updated
+
+      - run: ls
+      # - run: |
+      #     echo "# System Diff" >> $GITHUB_STEP_SUMMARY
+      #     nix run "nixpkgs#nvd" -- --color always diff ./current ./updated >> summary.md
+      #     printf '```\n%s\n```\n' "$(nix run "nixpkgs#nvd" -- diff ./current ./updated)" >> $GITHUB_STEP_SUMMARY
+      #
+      - run: df -h
+
+      # - uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ${{ matrix.host }}-summary
+      #     path: summary.md
+      #
   build-full:
     needs: build-minimal
     runs-on: ubuntu-latest
