@@ -25,16 +25,16 @@ proc getOizysLogPath(): string =
 
 setLogFilter(lvlAll)
 
-proc setupLoggers*(debug: bool) =
-  let logLevel =
-    if not debug: lvlInfo
-    else: lvlAll
-  addHandler(
-    newHwylConsoleLogger(
+var consoleLogger* = 
+  newHwylConsoleLogger(
       fmtPrefix = $bb"[b magenta]oizys",
       fmtSuffix = " ",
-      levelThreshold = logLevel
-    )
+      levelThreshold = lvlInfo
+  )
+
+proc setupLoggers*() =
+  addHandler(
+    consoleLogger
   )
   addHandler(
     newRollingFileLogger(

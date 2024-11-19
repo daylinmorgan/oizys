@@ -33,7 +33,7 @@ hwylCli:
       ? "set minimal"
       - m
   preSub:
-    setupLoggers(debug)
+    setupLoggers()
     updateContext(host, flake, debug, resetCache)
 
   subcommands:
@@ -69,7 +69,6 @@ hwylCli:
     # when really I want it to only happen in the lowest "subcommand"
     # needs to be fixed in hwylterm
     preSub:
-      setupLoggers(debug)
       updateContext(host, flake, debug, resetCache)
     subcommands:
       [update]

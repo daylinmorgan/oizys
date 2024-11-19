@@ -1,6 +1,7 @@
 import std/[logging, os, strformat, strutils]
 from std/nativesockets import getHostname
 import hwylterm, hwylterm/logging
+import ./logging
 
 type
   OizysContext* = object
@@ -36,6 +37,8 @@ proc updateContext*(
 ) =
   if host.len > 0: oc.hosts = host
   oc.debug = debug
+  if debug:
+    consoleLogger.levelThreshold = lvlAll
   oc.resetCache = resetCache
   if flake != "":
     oc.flake =
