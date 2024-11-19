@@ -3,10 +3,10 @@
 ## oizys
 
 - [ ] write a flake template that includes the systems boilerplate
-- [ ] get the running action url after `oizys ci {workflow}.yml`
 
 ## software
 
+- [ ] why is my update ci always building llm and rofi?
 - [ ] include langservers for enabled languages?
 <!--[tracking issue](https://github.com/wez/wezterm/issues/5990)-->
 - [ ] ~wezterm is broken...something to do with fonts?~ using ghostty

@@ -24,3 +24,5 @@ comma-with-db
 nix-index-with-db
 python
 net.conf
+llm
+rofi
