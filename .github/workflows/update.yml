@@ -88,7 +88,9 @@ jobs:
 
       - name: Pre-build oizys
         run: nix build .
-
+      
+      # TODO: make this all oizys ci update --host
+      # to build / then build then write paths
       - name: Build
         run: >
           nix run .
