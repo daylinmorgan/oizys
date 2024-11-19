@@ -93,7 +93,7 @@ proc getInProgressRun(
     while (now() - start) < timeoutDuration:
       let response = getGhApi(fmt"https://api.github.com/repos/daylinmorgan/oizys/actions/workflows/{workflow}/runs")
       let runs = fromJson(response.body,  ListGhWorkflowResponse).workflow_runs
-      if runs[0].status == "in_progress":
+      if runs[0].status in ["in_progress", "queued"]:
         spinner.stop() # cleanup
         return (runs[0], true)
       sleep 500
