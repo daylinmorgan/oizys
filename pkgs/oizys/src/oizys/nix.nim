@@ -400,35 +400,29 @@ proc getUpdatedLockFile() =
     fatalQuit "failed to fetch updated lock file using git"
   writeFile("updated.lock", res.stdout)
 
-proc ciUpdate*(rest: seq[string]) =
-  # TODO: deduplicated logic in this proc
-  for host in getHosts():
-    info "building " & host.bb("bold")
+# probably duplicating logic above ¯\_(ツ)_/¯
+proc buildSystem(host: string, rest: seq[string]) =
     var cmd = nixCommand("build")
     cmd.addArg nixosConfigAttr(host)
-    # TODO: how to get the out link?
-    cmd.addArgs ["--out-link", host & "-current"]
-    cmd.addArg "--quiet"
     cmd.addArgs rest
     let code = runCmd cmd
     if code != 0:
-      # TODO: nix log "attr"?
-      discard runCmd("nix log " & nixosConfigAttr(host))
       fatalQuit "build failed"
+
+proc ciUpdate*(rest: seq[string]) =
+  for host in getHosts():
+    info "building " & host.bb("bold")
+    buildSystem(
+      host,
+      @["--out-link", host & "-current", "--quiet"] & rest
+    )
 
   getUpdatedLockFile()
 
   for host in getHosts():
     info "building updated " & host.bb("bold")
-    var cmd = nixCommand("build")
-    cmd.addArg nixosConfigAttr(host)
-    cmd.addArgs ["--out-link", host & "-updated"]
-    cmd.addArg "--quiet"
-    cmd.addArgs ["--reference-lock-file", "updated.lock"]
-    cmd.addArgs rest
-    let code = runCmd cmd
-    if code != 0:
-      # TODO: nix log "attr"?
-      discard runCmd("nix log " & nixosConfigAttr(host))
-      fatalQuit "build failed"
+    buildSystem(
+      host,
+      @["--out-link", host & "-updated", "--quiet", "--reference-lock-file", "updated.lock"] & rest
+    )
 
