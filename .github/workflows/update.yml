@@ -51,7 +51,7 @@ jobs:
           nix run .
           --
           cache
-          --host,=",othalan,algiz"
+          --host,=",othalan,algiz,mannaz,naudiz"
           --flake .
           --debug
           --
