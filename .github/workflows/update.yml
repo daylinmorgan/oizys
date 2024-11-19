@@ -54,6 +54,8 @@ jobs:
           --host,=",othalan,algiz"
           --flake .
           --debug
+          --
+          --quiet
 
       - name: Commit Updates
         uses: daylin-bot/actions/commit-and-push@main
