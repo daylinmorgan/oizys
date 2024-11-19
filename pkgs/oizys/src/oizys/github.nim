@@ -100,13 +100,14 @@ proc getInProgressRun(
 
   warn "timeout reached waiting for workflow to start"
 
-proc createDispatch*(workflowFileName: string, `ref`: string) =
+proc createDispatch*(workflowFileName: string, `ref`: string, inputs: Table[string, string]) =
   ## https://docs.github.com/en/rest/actions/workflows?apiVersion=2022-11-28#create-a-workflow-dispatch-event
   let workflow =
     if workflowFileName.endsWith(".yml") or workflowFileName.endsWith(".yaml"): workflowFileName
     else: workflowFileName & ".yml"
-  let body = %*{"ref": `ref`}
+  let body = %*{"ref": `ref`, "inputs": inputs}
   info fmt"creating dispatch event for {workflow}"
+  debug "with body: " & $body
   postGhApi(
    fmt"https://api.github.com/repos/daylinmorgan/oizys/actions/workflows/{workflow}/dispatches",
    body

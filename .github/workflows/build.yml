@@ -41,7 +41,7 @@ jobs:
       - uses: ./.github/actions/nix
         with:
           attic_token: ${{ secrets.ATTIC_TOKEN }}
-          clean: true
+          # clean: true
           btrfs: true
 
       - name: write lock file

@@ -2,6 +2,13 @@ name: Flake Update / Build
 
 on:
   workflow_dispatch:
+    inputs:
+      hosts:
+        description: 'list of hosts to build'
+        required: true
+        default: 'othalan,algiz'
+        type: string
+ 
   schedule:
     # At minute 00:00 on Monday, Wednesday, and Friday.
     - cron: 0 0 * * 1,3,5
@@ -51,7 +58,7 @@ jobs:
           nix run .
           --
           cache
-          --host,=",othalan,algiz"
+          --host,="${{ inputs.hosts }}"
           --flake .
           --debug
           --
@@ -94,7 +101,7 @@ jobs:
           nix run .
           --
           ci update
-          --host,=othalan,algiz,mannaz,naudiz
+          --host,="${{ inputs.hosts }}"
           --flake .
           --debug
           --
@@ -102,7 +109,8 @@ jobs:
 
       - run: |
           echo "# system diffs" >> $GITHUB_STEP_SUMMARY
-          for host in othalan algiz mannaz naudiz; do
+          hosts="${{ inputs.hosts }}"
+          for host in ${hosts//,/ }; do
             echo "## $host" >> $GITHUB_STEP_SUMMARY
             nix run "nixpkgs#nvd" -- --color always diff ./$host-current ./$host-updated >> $host-summary.md
             printf '```\n%s\n```\n' "$(nix run "nixpkgs#nvd" -- diff ./$host-current ./$host-updated)" >> $GITHUB_STEP_SUMMARY

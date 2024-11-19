@@ -1,5 +1,5 @@
 ## nix begat oizys
-import std/[os, osproc, sequtils, strformat, strutils]
+import std/[os, osproc, sequtils, strformat, strutils, tables]
 import hwylterm, hwylterm/[hwylcli]
 import oizys/[context, github, nix, logging]
 
@@ -77,17 +77,27 @@ hwylCli:
         ciUpdate(args)
 
     [gha]
-    ... "trigger GHA"
+    ... """
+    trigger GHA
+
+    examples:
+      [b]oizys gha update[/] --input:hosts:othalan,algiz,mannaz
+    """
     flags:
-      # make a key/value input that is passed to workflows and encoded in json
-      # i.e. --input:ref:main
+      input:
+        T seq[KVString]
+        ? "inputs for dispatch"
       `ref`:
         T string
         ? "git ref/branch/tag to trigger workflow on"
         * "main"
     run:
+      # TODO: support file operations like gh
+      # i.e. @flake.lock means read a file a flake.lock and use it's contents
       if args.len == 0: fatalQuit "expected workflow file name"
-      createDispatch(args[0], `ref`)
+      let inputs = 
+        input.mapIt((it.key, it.val)).toTable()
+      createDispatch(args[0], `ref`, inputs)
 
     [dry]
     ... "dry run build"
