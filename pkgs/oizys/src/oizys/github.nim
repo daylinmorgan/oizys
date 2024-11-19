@@ -137,17 +137,17 @@ proc getArtifacts(runId: int): seq[GhArtifact] =
   let response = getGhApi(fmt"https://api.github.com/repos/daylinmorgan/oizys/actions/runs/{runId}/artifacts")
   fromJson(response.body, ListGhArtifactResponse).artifacts
 
-proc getUpdateSummaryArtifact(runId: int, host: string): GhArtifact =
-  let name = fmt"{host}-summary"
+proc getUpdateSummaryArtifact(runId: int): GhArtifact =
+  let name = "summary"
   let artifacts = getArtifacts(runId)
   for artifact in artifacts:
     if artifact.name == name:
       return artifact
   fatalQuit fmt"failed to find summary for run id: {runID}"
 
-proc getUpdateSummaryUrl(runID: int, host: string): string =
+proc getUpdateSummaryUrl(runID: int): string =
   ## https://api.github.com/repos/OWNER/REPO/actions/artifacts/ARTIFACT_ID/ARCHIVE_FORMAT
-  let artifact = getUpdateSummaryArtifact(runID, host)
+  let artifact = getUpdateSummaryArtifact(runID)
   # httpclient was forwarding the Authorization headers,
   # which confused Azure where the archive lives...
   var response: Response
@@ -164,20 +164,20 @@ proc getUpdateSummaryUrl(runID: int, host: string): string =
   if location.len == 0: errorQuit fmt("location header missing url?")
   return location[0]
 
-proc fetchUpdateSummaryFromUrl(url: string): string =
+proc fetchUpdateSummaryFromUrl(url: string, host: string): string =
   withTmpDir:
     let client = newHttpClient()
     client.downloadFile(url, tmpDir / "summary.zip")
     let reader = openZipArchive(tmpDir / "summary.zip")
     try:
-      result = reader.extractFile("summary.md")
+      result = reader.extractFile(host & "-summary.md")
     finally:
       reader.close()
 
 proc getUpdateSummary*(runId: int, host: string): string =
   withSpinner("fetching update summary"):
-    let url = getUpdateSummaryUrl(runId, host)
-    result = fetchUpdateSummaryFromUrl(url)
+    let url = getUpdateSummaryUrl(runId)
+    result = fetchUpdateSummaryFromUrl(url, host)
 
 type
   GitRepo = object
