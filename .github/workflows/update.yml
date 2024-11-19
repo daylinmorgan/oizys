@@ -83,7 +83,7 @@ jobs:
       - uses: ./.github/actions/nix
         with:
           attic_token: ${{ secrets.ATTIC_TOKEN }}
-          clean: true
+          # clean: true
           btrfs: true
 
       - name: Pre-build oizys
@@ -99,12 +99,12 @@ jobs:
           --debug
           --
           --keep-going
-          --out-link current
+          --no-link
 
-      - run: git checkout flake-lock
+      - run: git show origin/flake-lock:flake.lock > updated.lock
 
       - name: Pre-build oizys
-        run: nix build .
+        run: nix build . --reference-lock-file updated.lock
 
       - name: Build Updated
         run: >
@@ -116,9 +116,20 @@ jobs:
           --debug
           --
           --keep-going
-          --out-link updated
+          --no-link
+          --reference-lock-file updated.lock
+
+      - run: |
+          for host in othalan algiz mannaz naudiz; do
+            for rev in current updated; do
+              args="\"$(nix run . -- output --host $host)\" --out-link \"${host}-${rev}\""
+              [[ "$rev" == "updated" ]] && args="$args --reference-lock-file updated.lock"
+              nix build $args
+            done
+          done
 
       - run: ls
+
       # - run: |
       #     echo "# System Diff" >> $GITHUB_STEP_SUMMARY
       #     nix run "nixpkgs#nvd" -- --color always diff ./current ./updated >> summary.md
