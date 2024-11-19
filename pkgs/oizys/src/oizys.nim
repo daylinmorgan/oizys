@@ -37,7 +37,6 @@ hwylCli:
     updateContext(host, flake, debug, resetCache)
 
   subcommands:
-
     [build]
     ... "nix build"
     flags:
@@ -65,8 +64,24 @@ hwylCli:
       nixBuildWithCache(name, args, service, jobs)
 
     [ci]
+    ... "builtin ci"
+    # current behavior adds this block twice...
+    # when really I want it to only happen in the lowest "subcommand"
+    # needs to be fixed in hwylterm
+    preSub:
+      setupLoggers(debug)
+      updateContext(host, flake, debug, resetCache)
+    subcommands:
+      [update]
+      ... "build current and updated hosts"
+      run:
+        ciUpdate(args)
+
+    [gha]
     ... "trigger GHA"
     flags:
+      # make a key/value input that is passed to workflows and encoded in json
+      # i.e. --input:ref:main
       `ref`:
         T string
         ? "git ref/branch/tag to trigger workflow on"

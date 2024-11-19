@@ -49,5 +49,3 @@ proc getFlake*(): string      = return oc.flake
 proc isDebug*(): bool         = return oc.debug
 proc isResetCache*(): bool    = return oc.resetCache
 proc isCi*(): bool            = return oc.ci
-
-

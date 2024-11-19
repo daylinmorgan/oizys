@@ -14,9 +14,12 @@ proc nixCommand(cmd: string): string =
   result.addArg "--log-format multiline"
   result.addArg cmd
 
+proc nixosConfigAttr(host: string): string =
+  getFlake() & "#nixosConfigurations." & host & ".config.system.build.toplevel"
+
 proc nixosConfigAttrs*(): seq[string] =
   for host in getHosts():
-    result.add getFlake() & "#nixosConfigurations." & host & ".config.system.build.toplevel"
+    result.add nixosConfigAttr(host)
 
 const nixosSubcmds* =
   """switch boot test build dry-build dry-activate edit
@@ -347,4 +350,85 @@ proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: i
   let pushErr = runCmd(cmd)
   if pushErr != 0:
     errorQuit "failed to push build to cache"
+
+#[
+      - name: Build
+        run: >
+          nix run .
+          --
+          build
+          "$(nix run . -- output --host,=othalan,algiz,mannaz,naudiz --flake .)"
+          --flake .
+          --debug
+          --
+          --keep-going
+          --no-link
+
+      - run: git show origin/flake-lock:flake.lock > updated.lock
+
+      - name: Pre-build oizys
+        run: nix build . --reference-lock-file updated.lock
+
+      - name: Build Updated
+        run: >
+          nix run .
+          --
+          build
+          "$(nix run . -- output --host,=othalan,algiz,mannaz,naudiz --flake .)"
+          --flake .
+          --debug
+          --
+          --keep-going
+          --no-link
+          --reference-lock-file updated.lock
+
+      - run: |
+          for host in othalan algiz mannaz naudiz; do
+            for rev in current updated; do
+              args="\"$(nix run . -- output --host $host)\" --out-link \"${host}-${rev}\""
+              [[ "$rev" == "updated" ]] && args="$args --reference-lock-file updated.lock"
+              nix build $args
+            done
+          done
+]#
+
+
+proc getUpdatedLockFile() =
+  info "getting updated flake.lock as updated.lock"
+  let res = runCmdCapt("git --no-pager show origin/flake-lock:flake.lock")
+  if res.exitCode != 0:
+    fatalQuit "failed to fetch updated lock file using git"
+  writeFile("updated.lock", res.stdout)
+
+proc ciUpdate*(rest: seq[string]) =
+  # TODO: deduplicated logic in this proc
+  for host in getHosts():
+    info "building " & host.bb("bold")
+    var cmd = nixCommand("build")
+    cmd.addArg nixosConfigAttr(host)
+    # TODO: how to get the out link?
+    cmd.addArgs ["--out-link", host & "-current"]
+    cmd.addArg "--quiet"
+    cmd.addArgs rest
+    let code = runCmd cmd
+    if code != 0:
+      # TODO: nix log "attr"?
+      discard runCmd("nix log " & nixosConfigAttr(host))
+      fatalQuit "build failed"
+
+  getUpdatedLockFile()
+
+  for host in getHosts():
+    info "building updated " & host.bb("bold")
+    var cmd = nixCommand("build")
+    cmd.addArg nixosConfigAttr(host)
+    cmd.addArgs ["--out-link", host & "-updated"]
+    cmd.addArg "--quiet"
+    cmd.addArgs ["--reference-lock-file", "updated.lock"]
+    cmd.addArgs rest
+    let code = runCmd cmd
+    if code != 0:
+      # TODO: nix log "attr"?
+      discard runCmd("nix log " & nixosConfigAttr(host))
+      fatalQuit "build failed"
 

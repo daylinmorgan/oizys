@@ -47,7 +47,10 @@ proc runCmdCapt*(
       if errstrm.readLine(line):
         result.stderr.add line & '\n'
     result.exitCode = peekExitCode(p)
-    if result.exitCode != -1: break
+    if result.exitCode != -1:
+      result.stdout.add outstrm.readAll()
+      result.stderr.add errstrm.readAll()
+      break
 
   close p
 

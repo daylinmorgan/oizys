@@ -23,7 +23,6 @@ proc getOizysLogPath(): string =
   createDir(dataDir / "oizys")
   result = dataDir / "oizys" / "oizys.log"
 
-
 setLogFilter(lvlAll)
 
 proc setupLoggers*(debug: bool) =
