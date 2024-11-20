@@ -81,10 +81,10 @@ hwylCli:
     trigger GHA
 
     examples:
-      [b]oizys gha update[/] --input:hosts:othalan,algiz,mannaz
+      [b]oizys gha update[/] --inputs:hosts:othalan,algiz,mannaz
     """
     flags:
-      input:
+      inputs:
         T seq[KVString]
         ? "inputs for dispatch"
       `ref`:
@@ -96,7 +96,7 @@ hwylCli:
       # i.e. @flake.lock means read a file a flake.lock and use it's contents
       if args.len == 0: fatalQuit "expected workflow file name"
       let inputs = 
-        input.mapIt((it.key, it.val)).toTable()
+        inputs.mapIt((it.key, it.val)).toTable()
       createDispatch(args[0], `ref`, inputs)
 
     [dry]
