@@ -74,11 +74,14 @@ proc postGhApi(url: string, body: JsonNode) =
     "Authorization"       : fmt"Bearer {ghToken}",
     "X-GitHub-Api-Version": "2022-11-28",
   })
+  var response: Response
   try:
-    let response = client.post(url, body = $body)
+    response = client.post(url, body = $body)
     info fmt"Status: {response.code}"
   except:
     errorQuit "failed to get response code"
+  if response.code != Http204:
+    errorQuit "failed to post github api request"
 
 proc getInProgressRun(
   workflow: string,
