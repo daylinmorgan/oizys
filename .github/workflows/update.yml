@@ -13,6 +13,9 @@ on:
     # At minute 00:00 on Monday, Wednesday, and Friday.
     - cron: 0 0 * * 1,3,5
 
+env:
+  hosts: ${{ github.event_name == 'schedule' && 'othalan,algiz' || github.event.inputs.hosts }}
+
 permissions:
   contents: write
 
@@ -58,7 +61,7 @@ jobs:
           nix run .
           --
           cache
-          --host,="${{ inputs.hosts }}"
+          --host,="${{ env.hosts }}"
           --flake .
           --debug
           --
@@ -101,7 +104,7 @@ jobs:
           nix run .
           --
           ci update
-          --host,="${{ inputs.hosts }}"
+          --host,="${{ env.hosts }}"
           --flake .
           --debug
           --
@@ -109,7 +112,7 @@ jobs:
 
       - run: |
           echo "# system diffs" >> $GITHUB_STEP_SUMMARY
-          hosts="${{ inputs.hosts }}"
+          hosts="${{ env.hosts }}"
           for host in ${hosts//,/ }; do
             echo "## $host" >> $GITHUB_STEP_SUMMARY
             nix run "nixpkgs#nvd" -- --color always diff ./$host-current ./$host-updated >> $host-summary.md
