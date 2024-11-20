@@ -24,5 +24,7 @@ comma-with-db
 nix-index-with-db
 python
 net.conf
+# unclear why these needed to be added
 llm
 rofi
+atticd-atticadm

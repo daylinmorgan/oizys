@@ -170,9 +170,13 @@ proc filterSeq(
     if filter(drv): result.yes.add drv
     else: result.no.add drv
 
+func getIgnoredPackages(): seq[string] =
+  for l in slurp("ignored.txt").strip().splitLines():
+    if not l.startsWith("#"):
+      result.add l
 
 func isIgnored(drv: string): bool =
-  const ignoredPackages = (slurp "ignored.txt").strip().splitLines()
+  const ignoredPackages = getIgnoredPackages()
   let name = drv.split("-", 1)[1].replace(".drv","")
   result = name in ignoredPackages
   if not result:
