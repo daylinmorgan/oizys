@@ -19,6 +19,7 @@ mkDefaultOizysModule config "cli" {
 
   environment.systemPackages =
     (with pkgs; [
+      parallel
       chezmoi
       zoxide
       lsd
