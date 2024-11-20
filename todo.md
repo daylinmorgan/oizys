@@ -6,6 +6,7 @@
 
 ## software
 
+- [ ] hyprland > v0.45.0 is causing chrome to not tile by default
 - [ ] why is my update ci always building llm and rofi?
 - [ ] include langservers for enabled languages?
 <!--[tracking issue](https://github.com/wez/wezterm/issues/5990)-->
