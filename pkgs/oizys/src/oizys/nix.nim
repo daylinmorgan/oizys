@@ -211,6 +211,11 @@ proc getOizysDerivations(): seq[OizysDerivation] =
         drv: drv,
     )
 
+proc showOizysDerivations*() =
+  let drvs = getOizysDerivations()
+  echo drvs.mapIt(it.name & "^*").join("\n")
+
+
 # TODO: remove this proc
 proc systemPathDrvsToBuild*(): seq[string] =
   var inputDrvs, dropped: seq[string]
@@ -354,48 +359,6 @@ proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: i
   let pushErr = runCmd(cmd)
   if pushErr != 0:
     errorQuit "failed to push build to cache"
-
-#[
-      - name: Build
-        run: >
-          nix run .
-          --
-          build
-          "$(nix run . -- output --host,=othalan,algiz,mannaz,naudiz --flake .)"
-          --flake .
-          --debug
-          --
-          --keep-going
-          --no-link
-
-      - run: git show origin/flake-lock:flake.lock > updated.lock
-
-      - name: Pre-build oizys
-        run: nix build . --reference-lock-file updated.lock
-
-      - name: Build Updated
-        run: >
-          nix run .
-          --
-          build
-          "$(nix run . -- output --host,=othalan,algiz,mannaz,naudiz --flake .)"
-          --flake .
-          --debug
-          --
-          --keep-going
-          --no-link
-          --reference-lock-file updated.lock
-
-      - run: |
-          for host in othalan algiz mannaz naudiz; do
-            for rev in current updated; do
-              args="\"$(nix run . -- output --host $host)\" --out-link \"${host}-${rev}\""
-              [[ "$rev" == "updated" ]] && args="$args --reference-lock-file updated.lock"
-              nix build $args
-            done
-          done
-]#
-
 
 proc getUpdatedLockFile() =
   info "getting updated flake.lock as updated.lock"
