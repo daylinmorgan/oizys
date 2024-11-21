@@ -121,8 +121,14 @@ hwylCli:
 
     [output]
     ... "nixos config attr"
+    flags:
+      system:
+        ? "get system path installables"
     run:
-      echo nixosConfigAttrs().join(" ")
+      if not system:
+        echo nixosConfigAttrs().join(" ")
+      else:
+        echo getSystemPathDrvs().mapIt(it & "^*").join("\n")
 
     [update]
     ... "update and run nixos-rebuild"

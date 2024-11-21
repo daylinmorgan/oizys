@@ -189,7 +189,7 @@ type
     drv: NixDerivation
     name: string
 
-proc getSystemPathDrvs(): seq[string] =
+proc getSystemPathDrvs*(): seq[string] =
   let systemDrvs = nixDerivationShow(nixosConfigAttrs())
   let systemPathDrvs = findSystemPaths(systemDrvs)
   result =
@@ -212,7 +212,7 @@ proc getOizysDerivations(): seq[OizysDerivation] =
     )
 
 # TODO: remove this proc
-proc systemPathDrvsToBuild(): seq[string] =
+proc systemPathDrvsToBuild*(): seq[string] =
   var inputDrvs, dropped: seq[string]
   let toBuild = toBuildNixosConfiguration()
   let drvs = evaluateDerivations(nixosConfigAttrs())
