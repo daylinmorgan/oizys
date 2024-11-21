@@ -45,9 +45,6 @@ mkOizysModule config "hyprland" {
     ])
     ++ [
       (flake.pkg "hyprman")
-      ((flake.pkgs "self").flameshot.override {
-        enableWlrSupport = true;
-      })
     ]
 
     # swww-git is broken

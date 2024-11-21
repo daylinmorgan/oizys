@@ -11,7 +11,4 @@ in
 
   llm = python3Packages.callPackage ./llm { };
   llm-claude-3 = python3Packages.callPackage ./llm-plugins/llm-claude-3 { };
-
-  flameshot = pkgs.callPackage ./flameshot { };
-
 }
