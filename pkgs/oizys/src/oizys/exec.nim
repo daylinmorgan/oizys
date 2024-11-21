@@ -59,8 +59,11 @@ proc runCmdCaptWithSpinner*(
   msg: string = "",
   capture: set[CaptureGrp] = {CaptStdout}
 ): tuple[output, err: string] =
+  var
+    output, err: string
+    code: int
   withSpinner(msg):
-    let (output, err, code) = runCmdCapt(cmd, capture)
+    (output, err, code) = runCmdCapt(cmd, capture)
   if code != 0:
     stderr.writeLine("stdout\n" & output)
     stderr.writeLine("stderr\n" & err)
