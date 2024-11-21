@@ -9,5 +9,10 @@ let
   cfg = config.oizys.languages;
 in
 {
-  config = mkIfIn "nushell" cfg { environment.systemPackages = with pkgs; [ nushell ]; };
+  config = mkIfIn "nushell" cfg {
+    environment.systemPackages = with pkgs; [
+      nushell
+      nushellPlugins.polars
+    ];
+  };
 }
