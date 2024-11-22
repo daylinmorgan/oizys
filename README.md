@@ -54,15 +54,14 @@ nix run "github:daylinmorgan/oizys"
 ```
 
 ```
-oizys
-
 usage:
   oizys subcmd [flags]
 
 subcommands:
   build    nix build                      
   cache    build and push store paths     
-  ci       trigger GHA                    
+  ci       builtin ci                     
+  gha      trigger GHA                    
   dry      dry run build                  
   os       nixos-rebuild subcmd
   output   nixos config attr              
@@ -74,7 +73,6 @@ flags:
   -d --debug      enable debug mode
   -r --resetCache set cache timeout to 0
   -h --help       show this help
-
 ```
 
 ## oizys?
