@@ -1,0 +1,16 @@
+{
+  "depends": [
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/xhjd99w42nrbi93czwqrpiqk75am3dcn-source",
+      "rev": "e274362fc12dff368aeacd982112385f59fc8c49",
+      "sha256": "19d8na1qnq80y0zwrsq3a99dnxir1c9vjg6h355cm15l4wgad2c8",
+      "srcDir": "",
+      "url": "https://github.com/c-blake/cligen/archive/e274362fc12dff368aeacd982112385f59fc8c49.tar.gz",
+      "subDir": "",
+      "packages": [
+        "cligen"
+      ]
+    }
+  ]
+}
