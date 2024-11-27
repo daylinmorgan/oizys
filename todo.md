@@ -2,7 +2,7 @@
 
 ## oizys
 
-- [ ] write a flake template that includes the systems boilerplate
+- [x] write a flake template that includes the systems boilerplate
 
 ## software
 
