@@ -11,7 +11,7 @@ in
   config = mkIf config.oizys.desktop.enable {
     fonts.fontconfig.enable = true;
     fonts.packages = with pkgs; [
-      (nerdfonts.override { fonts = [ "FiraCode" ]; })
+      nerd-fonts.fira-code
       recursive
     ];
   };
