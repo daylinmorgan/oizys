@@ -1,0 +1,13 @@
+# This document uses YAML anchors which allows reuse of multiple keys
+# without having to repeat yourself.
+# Also see https://github.com/Mic92/dotfiles/blob/master/nixos/.sops.yaml
+# for a more complex example.
+keys:
+  - &admin_daylin age10ft5tkswydhmassqeqzr8frpx6vc07g4rwam09rs8agvgfrsn95q9ml7u3
+  - &host_othalan age1t4k04mjltmmhljnwugm6y4dejtu72vv4fd4anxxfsdpkapfnfauqe765gy
+creation_rules:
+  - path_regex: hosts/othalan/[^/]+\.(yaml|json|env|ini)$
+    key_groups:
+    - age:
+      - *admin_daylin
+      - *host_othalan
