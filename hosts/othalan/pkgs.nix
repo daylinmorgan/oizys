@@ -7,7 +7,7 @@
     ]
 
     ++ (with pkgs; [
-
+      sops
       distrobox
       zk
       quarto
