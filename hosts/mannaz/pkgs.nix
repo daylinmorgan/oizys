@@ -4,6 +4,7 @@
     with pkgs;
     [
       nvitop
+      sops
     ]
   );
 }
