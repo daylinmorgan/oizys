@@ -6,7 +6,13 @@ keys:
   - &admin_daylin age10ft5tkswydhmassqeqzr8frpx6vc07g4rwam09rs8agvgfrsn95q9ml7u3
   - &host_othalan age1t4k04mjltmmhljnwugm6y4dejtu72vv4fd4anxxfsdpkapfnfauqe765gy
 creation_rules:
+  - path_regex: hosts/(.*)/[^/]+\.(yaml|json|env|ini)$
+  # - path_regex: hosts/algiz/[^/]+\.(yaml|json|env|ini)$
+    key_groups:
+    - age:
+      - *admin_daylin
   - path_regex: hosts/othalan/[^/]+\.(yaml|json|env|ini)$
+
     key_groups:
     - age:
       - *admin_daylin
