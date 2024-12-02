@@ -15,9 +15,16 @@
     }
     // (
       ''
-        vpn|desktop|hyprland|chrome
-        backups|hp-scanner|llm
-        podman|docker|vbox
+        desktop
+        hyprland
+        chrome
+        vpn
+        backups
+        llm
+        hp-scanner
+        vbox
+        podman
+        docker
       ''
       |> listify
       |> enableAttrs
