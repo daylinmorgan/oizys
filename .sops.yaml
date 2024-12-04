@@ -4,7 +4,6 @@
 # for a more complex example.
 keys:
   - &admin_daylin age10ft5tkswydhmassqeqzr8frpx6vc07g4rwam09rs8agvgfrsn95q9ml7u3
-  - &admin_daylin_algiz age10ft5tkswydhmassqeqzr8frpx6vc07g4rwam09rs8agvgfrsn95q9ml7u3
   - &host_othalan age1t4k04mjltmmhljnwugm6y4dejtu72vv4fd4anxxfsdpkapfnfauqe765gy
   - &host_algiz age1ks6753mqsze8an0vx69gjglc7zwzjw7m0ccmzem30hm0jw0zr42qg0g2kj
 creation_rules:
@@ -17,4 +16,4 @@ creation_rules:
     key_groups:
     - age:
       - *host_algiz
-      - *admin_daylin_algiz
+      - *admin_daylin
