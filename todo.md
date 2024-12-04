@@ -12,6 +12,9 @@
 <!--[tracking issue](https://github.com/wez/wezterm/issues/5990)-->
 - [ ] ~wezterm is broken...something to do with fonts?~ using ghostty
 
+VS Code is crashing when the computer is inactive?
+Unclear if this problem is due to VSCode, hypridle, or hyprlock.
+Is this related to above and could maybe resolved by settling on a stable version of hyprland and friends?
 
 ### Window Manager
 
