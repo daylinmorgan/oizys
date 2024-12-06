@@ -78,6 +78,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    jj = {
+      url = "github:martinvonz/jj/v0.24.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # roc = {
     #   url = "github:roc-lang/roc";
     #   inputs.nixpkgs.follows = "nixpkgs";

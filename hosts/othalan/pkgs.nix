@@ -4,8 +4,8 @@
     [
       (flake.pkg "utils")
       (flake.pkg "ghostty")
+      (flake.pkg "jj")
     ]
-
     ++ (with pkgs; [
       sops
       distrobox
@@ -16,6 +16,6 @@
       typst
       charm-freeze
       attic-client
-      jujutsu
+      # jujutsu
     ]);
 }
