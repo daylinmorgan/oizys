@@ -1,12 +1,17 @@
-{ pkgs, ... }:
+{ pkgs, flake, ... }:
 {
-  environment.systemPackages = with pkgs; [
-    git
-    git-lfs
+  environment.systemPackages =
+    [
+      # not technically git ¯\_(ツ)_/¯
+      (flake.pkg "jj")
 
-    gh
-    lazygit
-    delta
-    jujutsu
-  ];
+    ]
+    ++ (with pkgs; [
+      git
+      git-lfs
+
+      gh
+      lazygit
+      delta
+    ]);
 }
