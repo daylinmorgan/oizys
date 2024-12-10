@@ -49,7 +49,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1&ref=v0.45.2";
     hyprland-contrib.url = "github:hyprwm/contrib";
 
     f1multiviewer = {
