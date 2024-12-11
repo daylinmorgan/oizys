@@ -16,8 +16,6 @@
     gcc
     file
 
-    jq
-
     wget
     curl
     htop

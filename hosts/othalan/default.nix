@@ -25,6 +25,7 @@
         vbox
         podman
         docker
+        utils
       ''
       |> listify
       |> enableAttrs
