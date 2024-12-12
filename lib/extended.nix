@@ -104,8 +104,10 @@ let
   pkgsFromSystem = system: flake: inputs."${flake}".packages."${system}";
   pkgFromSystem = system: flake: (pkgsFromSystem system flake).default;
   overlayFrom = flake: inputs."${flake}".overlays.default;
+  nixosModuleFrom = flake: inputs."${flake}".nixosModules.default;
   flakeFromSystem = system: {
     overlay = overlayFrom;
+    module = nixosModuleFrom;
     pkgs = pkgsFromSystem system;
     pkg = pkgFromSystem system;
   };
