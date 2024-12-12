@@ -12,6 +12,7 @@
       qemu = {
         swtpm = enabled;
         ovmf.packages = [ pkgs.OVMFFull.fd ];
+        vhostUserPackages = [ pkgs.virtiofsd ];
       };
 
     };
