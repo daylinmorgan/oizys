@@ -83,6 +83,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    NixVirt = {
+      # master as of 2024.12.12
+      url = "github:AshleyYakeley/NixVirt?rev=fe3aaa86d4458e4f84348941297f7ba82e2a9f67";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # roc = {
     #   url = "github:roc-lang/roc";
     #   inputs.nixpkgs.follows = "nixpkgs";

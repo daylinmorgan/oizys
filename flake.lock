@@ -1,5 +1,26 @@
 {
   "nodes": {
+    "NixVirt": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1732406038,
+        "narHash": "sha256-BYNBN+Rtc/SX6qI7m3nmryufRPn0ZYd40yHDo9VQaNE=",
+        "owner": "AshleyYakeley",
+        "repo": "NixVirt",
+        "rev": "fe3aaa86d4458e4f84348941297f7ba82e2a9f67",
+        "type": "github"
+      },
+      "original": {
+        "owner": "AshleyYakeley",
+        "repo": "NixVirt",
+        "rev": "fe3aaa86d4458e4f84348941297f7ba82e2a9f67",
+        "type": "github"
+      }
+    },
     "aquamarine": {
       "inputs": {
         "hyprutils": [
@@ -942,6 +963,7 @@
     },
     "root": {
       "inputs": {
+        "NixVirt": "NixVirt",
         "comin": "comin",
         "f1multiviewer": "f1multiviewer",
         "ghostty": "ghostty",

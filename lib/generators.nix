@@ -20,7 +20,6 @@ let
   flake = flakeFromSystem "x86_64-linux";
   hostPath = host: ../. + "/hosts/${host}";
 
-  # all nix files not including pkgs.nix
   hostFiles = host: host |> hostPath |> listFilesRecursive |> filter isNixFile;
 
   nixosModules = names: names |> listify |> map (n: inputs.${n}.nixosModules.default);
