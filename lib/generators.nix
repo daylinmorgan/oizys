@@ -45,11 +45,9 @@ let
     nixosSystem {
       system = "x86_64-linux";
       modules =
-        [
-          inputs.comin.nixosModules.comin
-        ]
+        []
         ++ (selfModules ''oizys'')
-        ++ (nixosModules ''lix-module|hyprland|sops-nix'')
+        ++ (nixosModules ''lix-module|sops-nix'')
         ++ (hostFiles hostName);
 
       specialArgs = commonSpecialArgs // {

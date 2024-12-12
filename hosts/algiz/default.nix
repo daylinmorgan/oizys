@@ -1,4 +1,5 @@
 {
+  inputs,
   config,
   enabled,
   enableAttrs,
@@ -6,6 +7,10 @@
   ...
 }:
 {
+  imports = [
+    inputs.comin.nixosModules.comin
+  ];
+
   oizys = {
     rune.motd = enabled;
     languages = "nim|node|python|nushell" |> listify;
