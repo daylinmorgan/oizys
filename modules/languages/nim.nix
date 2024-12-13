@@ -14,9 +14,9 @@ in
     environment.systemPackages = with pkgs; [
       nim
       nimlangserver
+      nph
 
       (flake.pkgs "self").nimble
-      (flake.pkgs "self").nph
     ];
   };
 }
