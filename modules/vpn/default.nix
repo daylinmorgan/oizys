@@ -13,9 +13,9 @@ mkOizysModule config "vpn" {
   ];
   services.openvpn.servers = {
 
-    mullvad-chi = {
+    mullvad-us-atl = {
       config = ''
-        config ${./mullvad_us_chi.conf}
+        config ${./mullvad_us_atl.conf}
         auth-user-pass ${config.sops.secrets.mullvad-userpass.path}
         ca ${config.sops.secrets."mullvad_ca.crt".path}
       '';
