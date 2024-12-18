@@ -1223,11 +1223,11 @@
       },
       "locked": {
         "dir": "nix",
-        "lastModified": 1734113352,
-        "narHash": "sha256-ltxdCp+lfVew6qy6302xVbd2O4XzMFPeSVJ7QLJEETU=",
+        "lastModified": 1734559324,
+        "narHash": "sha256-CaJT90NyTtH15vE1aZi6+3DhTGgc0EygRJyx4QTo0IQ=",
         "owner": "daylinmorgan",
         "repo": "tsm",
-        "rev": "7a479425201ab3d3ff6c268f9bfdefa25eb0b531",
+        "rev": "3aa9fb9490426c1d60b93c888026a7a67cb53046",
         "type": "github"
       },
       "original": {
