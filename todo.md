@@ -6,6 +6,7 @@
 
 ## software
 
+- [ ] switch systemd desktop file to libvirt VM
 - [ ] why is my update ci always building llm and rofi?
 - [ ] include langservers for enabled languages?
 <!--[tracking issue](https://github.com/wez/wezterm/issues/5990)-->
