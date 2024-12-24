@@ -10,11 +10,12 @@
 }:
 buildNimPackage (finalAttrs: {
   pname = "nimble";
-  version = "0.16.4";
+  version = "0.16.4-unstable";
   src = fetchFromGitHub {
     owner = "nim-lang";
     repo = "nimble";
-    rev = "v${finalAttrs.version}";
+    rev = "30e7014c8ea865f3b9fc051824fe6dbc6b1d917c";
+    # rev = "v${finalAttrs.version}";
     hash = "sha256-ASodRov4rO/IhjQRRdqVnLWMG1voXWM9F6R6VJd9qkM=";
     fetchSubmodules = true;
   };
