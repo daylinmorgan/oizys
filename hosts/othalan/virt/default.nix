@@ -16,7 +16,7 @@ let
     );
   };
   win-desktop = pkgs.stdenvNoCC.mkDerivation rec {
-    name = "win10vm";
+    name = "win11-vm";
     unpackPhase = "true";
     version = "unstable";
     windows10Logo = pkgs.fetchurl {
@@ -25,13 +25,14 @@ let
     };
 
     desktopItem = pkgs.makeDesktopItem {
-      name = "win10vm";
-      exec = "VBoxManage startvm win10";
+      name = "win11-vm";
+      # exec = "VBoxManage startvm win10";
+      exec = "${pkgs.libvirt}/bin/virsh start win11 && ${pkgs.virt-viewer}/bin/virt-viewer --wait -c qemu:///system win11 && ${pkgs.libvirt}/bin/virsh shutdown win11";
       icon = "${windows10Logo}";
-      desktopName = "Windows 10 VM";
+      desktopName = "Windows 11 VM";
     };
     installPhase = ''
-      install -Dm0644 {${desktopItem},$out}/share/applications/win10vm.desktop
+      install -Dm0644 {${desktopItem},$out}/share/applications/win11vm.desktop
     '';
   };
 
