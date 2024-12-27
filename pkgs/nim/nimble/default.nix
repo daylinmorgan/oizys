@@ -16,7 +16,7 @@ buildNimPackage (finalAttrs: {
     repo = "nimble";
     rev = "30e7014c8ea865f3b9fc051824fe6dbc6b1d917c";
     # rev = "v${finalAttrs.version}";
-    hash = "sha256-ASodRov4rO/IhjQRRdqVnLWMG1voXWM9F6R6VJd9qkM=";
+    hash = "sha256-wHoRQOtSChL1Oiv7ojoECNU2OZ6DObZRvkagVMp5ahY=";
     fetchSubmodules = true;
   };
     nativeBuildInputs = [ makeWrapper ];
