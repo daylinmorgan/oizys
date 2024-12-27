@@ -1,13 +1,12 @@
 name: Build NixOS (on demand)
 
-# TODO: accept , style sep in hwylcli
 on:
   workflow_dispatch:
     inputs:
       hosts:
         description: 'list of hosts to build'
         required: true
-        default: ',othalan,algiz'
+        default: 'othalan,algiz'
         type: string
       lockFile:
         description: 'flake.lock file'
@@ -20,9 +19,9 @@ on:
         default: ',othalan,algiz'
         type: string
 
-# concurrency:
-#   group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.host }}
-#   cancel-in-progress: true
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.host }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -30,13 +29,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      # needed to access ghostty repo for now
-      - name: Setup SSH
-        uses: MrSquaare/ssh-setup-action@v3
-        with:
-            host: github.com
-            private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - uses: ./.github/actions/nix
         with:
