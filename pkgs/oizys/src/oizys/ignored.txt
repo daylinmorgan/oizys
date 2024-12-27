@@ -21,7 +21,7 @@ lock
 code
 direnv
 comma-with-db
-nix-index-with-db
+nix-index-with-full-db
 python
 net.conf
 # unclear why these needed to be added
