@@ -13,7 +13,7 @@ in
     environment.systemPackages =
       [ (flake.pkg "f1multiviewer") ]
       ++ (with pkgs; [
-        pcmanfm
+        # pcmanfm build failure?
         wezterm
         alacritty
 
