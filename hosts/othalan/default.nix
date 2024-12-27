@@ -22,7 +22,6 @@
         vpn
         backups
         llm
-        hp-scanner
         vbox
         podman
         docker
