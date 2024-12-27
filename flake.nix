@@ -36,14 +36,16 @@
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
 
+    # https://github.com/NixOS/nixpkgs/pull/368404 replace when PR merged?
     # https://github.com/ghostty-org/ghostty/issues/2025
     ghostty = {
-      url = "git+ssh://git@github.com/ghostty-org/ghostty";
+      url = "git+https://github.com/ghostty-org/ghostty.git?ref=refs/tags/v1.0.0";
       inputs = {
         nixpkgs-stable.follows = "nixpkgs";
         nixpkgs-unstable.follows = "nixpkgs";
       };
     };
+
     comin = {
       url = "github:nlewo/comin";
       inputs.nixpkgs.follows = "nixpkgs";
