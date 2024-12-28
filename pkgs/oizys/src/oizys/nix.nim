@@ -115,8 +115,10 @@ proc toBuildNixosConfiguration(): seq[string] =
   cmd.addArgs nixosConfigAttrs()
   let (_, err) = runCmdCaptWithSpinner(
     cmd,
+    # BUG: hwylterm spinner not showing styled text?
+    # "running dry run build for: " & $(getHosts().join(" ").bb("bold")),
     "running dry run build for: " & getHosts().join(" "),
-    capture ={CaptStderr}
+    capture = {CaptStderr}
   )
   let output = parseDryRunOutput err
   return output.toBuild.mapIt(it.storePath)
