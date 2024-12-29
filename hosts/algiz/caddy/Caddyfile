@@ -1,3 +1,6 @@
+links.dayl.in {
+  reverse_proxy http://localhost:9090
+}
 
 elizabeth-and-daylin.com {
     reverse_proxy http://localhost:4321
