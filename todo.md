@@ -2,8 +2,6 @@
 
 ## oizys
 
-- [x] write a flake template that includes the systems boilerplate
-
 ## software
 
 - [ ] switch systemd desktop file to libvirt VM
@@ -19,11 +17,8 @@ Is this related to above and could maybe resolved by settling on a stable versio
 
 ### Window Manager
 
-- [ ] hyprland > v0.45.0 is causing chrome to not tile by default
 - [ ] install more of the software as systemd services?
 - [ ] lid closed does not engage hyprlock?
-- [ ] check if there are multiple version of mako?
-  > check the logind conf in Nixos
 
 ## hardware
 
