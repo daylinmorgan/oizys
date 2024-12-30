@@ -1,10 +1,12 @@
 {
+  lib,
   config,
   pkgs,
   enabled,
   ...
 }:
 {
+  time.timeZone = lib.mkForce null; # allow TZ to be set by desktop user
   networking.networkmanager = enabled;
   services.fwupd = enabled;
   hardware.bluetooth = enabled // {
