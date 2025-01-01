@@ -39,7 +39,7 @@
     # https://github.com/NixOS/nixpkgs/pull/368404 replace when PR merged?
     # https://github.com/ghostty-org/ghostty/issues/2025
     ghostty = {
-      url = "git+https://github.com/ghostty-org/ghostty.git?ref=refs/tags/v1.0.0";
+      url = "git+https://github.com/ghostty-org/ghostty.git?ref=refs/tags/v1.0.1";
       inputs = {
         nixpkgs-stable.follows = "nixpkgs";
         nixpkgs-unstable.follows = "nixpkgs";
