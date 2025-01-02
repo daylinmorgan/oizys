@@ -7,12 +7,18 @@ import hwylterm, hwylterm/logging, jsony
 
 import ./[context, exec]
 
-proc nixCommand(cmd: string): string =
-  result = "nix"
+proc nixCommand(cmd: string, nom: bool = false): string =
+  if nom:
+    if findExe("nom") == "":
+      fatalQuit "--nom requires nix-output-monitor is installed"
+    result = "nom"
+  else:
+    result = "nix"
+  result.addArg cmd
   if isResetCache():
     result.addArg "--narinfo-cache-negative-ttl 0"
-  result.addArg "--log-format multiline"
-  result.addArg cmd
+  if not nom:
+    result.addArg "--log-format multiline"
 
 proc nixosConfigAttr(host: string): string =
   getFlake() & "#nixosConfigurations." & host & ".config.system.build.toplevel"
@@ -250,8 +256,8 @@ proc writeDervationsToStepSummary(drvs: seq[string]) =
   output.writeLine(rows.join("\n"))
   close output
 
-proc nixBuild*(minimal: bool, rest: seq[string]) = 
-  var cmd = nixCommand("build")
+proc nixBuild*(minimal: bool, nom: bool, rest: seq[string]) =
+  var cmd = nixCommand("build", nom)
   if minimal:
     debug "populating args with derivations not built/cached"
     let drvs = systemPathDrvsToBuild()

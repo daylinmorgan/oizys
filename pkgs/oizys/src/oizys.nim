@@ -41,8 +41,10 @@ hwylCli:
     ... "nix build"
     flags:
       ^minimal
+      nom:
+        ? "use nom"
     run:
-      nixBuild(minimal, args)
+      nixBuild(minimal, nom, args)
 
     [cache]
     ... "build and push store paths"
