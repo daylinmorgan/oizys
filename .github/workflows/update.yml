@@ -9,9 +9,9 @@ on:
         default: 'othalan,algiz'
         type: string
  
-  schedule:
-    # At minute 00:00 on Monday, Wednesday, and Friday.
-    - cron: 0 0 * * 1,3,5
+  # schedule:
+  #   # At minute 00:00 on Monday, Wednesday, and Friday.
+  #   - cron: 0 0 * * 1,3,5
 
 env:
   hosts: ${{ github.event_name == 'schedule' && 'othalan,algiz' || github.event.inputs.hosts }}
