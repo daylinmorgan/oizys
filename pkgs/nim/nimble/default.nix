@@ -14,9 +14,9 @@ buildNimPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nim-lang";
     repo = "nimble";
-    rev = "30e7014c8ea865f3b9fc051824fe6dbc6b1d917c";
+    rev = "f1ee5ff7b5f8211f9a236ffd2562a30b7ea57104";
     # rev = "v${finalAttrs.version}";
-    hash = "sha256-wHoRQOtSChL1Oiv7ojoECNU2OZ6DObZRvkagVMp5ahY=";
+    hash = "sha256-yf/aTHvwWIEKvyIJ80pgryih0FKoZdzRoje2IPwMJZw=";
     fetchSubmodules = true;
   };
     nativeBuildInputs = [ makeWrapper ];
