@@ -21,6 +21,7 @@ let
     types
     hasPrefix
     splitString
+    removePrefix
     trim
     ;
   inherit (final.filesystem) listFilesRecursive;
@@ -147,6 +148,35 @@ let
       // (tryreadEnabledAttrsOrEmpty "${p}/settings/modules")
     );
 
+  # convert the following:
+  # ```txt
+  # flake:utils
+  # sops
+  # graphviz
+  # ```
+  # to
+  # ```nix
+  # [
+  #   (flake.pkg "utils")
+  #   pkgs.sops
+  #   pkgs.graphviz
+  # ]
+  # ```
+  tryPkgsFromFile =
+    {
+      hostName,
+      pkgs,
+      flake ? flakeFromSystem "x86_64-linux",
+    }:
+        hostName
+        |> pathFromHostName
+        |> (p: "${p}/settings/pkgs")
+        |> tryReadLinesNoComment
+        |> map (
+          line:
+          if hasPrefix "flake:" line then (line |> removePrefix "flake:" |> flake.pkgs) else pkgs.${line}
+        );
+
 in
 {
   inherit
@@ -169,5 +199,6 @@ in
     loadOverlays
     hostFiles
     oizysSettings
+    tryPkgsFromFile
     ;
 }

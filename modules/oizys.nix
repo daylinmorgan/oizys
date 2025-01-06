@@ -3,10 +3,11 @@
   lib,
   self,
   hostName,
+  pkgs,
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkOption loadOverlays oizysSettings;
+  inherit (lib) mkEnableOption mkOption loadOverlays oizysSettings tryPkgsFromFile;
 in
 {
   imports = with self.nixosModules; [
@@ -61,5 +62,6 @@ in
     time.timeZone = "US/Central";
     nixpkgs.overlays = import ../overlays { inherit inputs loadOverlays; };
     oizys = oizysSettings hostName;
+    environment.systemPackages = tryPkgsFromFile {inherit hostName pkgs;};
   };
 }

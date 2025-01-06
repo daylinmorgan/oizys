@@ -1,0 +1,10 @@
+flake:utils
+flake:ghostty
+sops
+attic-client
+distrobox
+zk
+graphviz
+charm-freeze
+quarto
+calibre
