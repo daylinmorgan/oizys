@@ -18,7 +18,6 @@
       charm-freeze
 
       quarto
-      typst
 
       calibre
     ]);

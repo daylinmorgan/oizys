@@ -12,7 +12,7 @@
       nix-ld = enabled // {
         overkill = enabled;
       };
-      languages = "misc|nim|node|nushell|python|tex" |> listify;
+      languages = "misc|nim|node|nushell|python|tex|typst" |> listify;
     }
     // (
       ''
