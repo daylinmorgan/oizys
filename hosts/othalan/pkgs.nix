@@ -7,13 +7,19 @@
     ]
     ++ (with pkgs; [
       sops
-      distrobox
-      zk
-      quarto
-      cachix
-      graphviz
-      typst
-      charm-freeze
       attic-client
+
+      distrobox
+
+      # cachix
+      zk
+
+      graphviz
+      charm-freeze
+
+      quarto
+      typst
+
+      calibre
     ]);
 }
