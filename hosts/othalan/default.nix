@@ -17,6 +17,7 @@
     // (
       ''
         desktop
+        hp-scanner
         hyprland
         chrome
         vpn

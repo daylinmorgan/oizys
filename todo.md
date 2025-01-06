@@ -9,7 +9,6 @@
 - [ ] include langservers for enabled languages?
 <!--[tracking issue](https://github.com/wez/wezterm/issues/5990)-->
 - [ ] ~wezterm is broken...something to do with fonts?~ using ghostty
-- [ ] hplip is failing to build..disabling hp-scanner module on othalan in the mean time
 
 VS Code is crashing when the computer is inactive?
 Unclear if this problem is due to VSCode, hypridle, or hyprlock.
