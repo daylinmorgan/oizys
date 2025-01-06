@@ -10,7 +10,6 @@
       attic-client
 
       distrobox
-
       # cachix
       zk
 
@@ -18,7 +17,6 @@
       charm-freeze
 
       quarto
-
       calibre
     ]);
 }

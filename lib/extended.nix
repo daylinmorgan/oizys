@@ -8,6 +8,9 @@ let
     filter
     attrNames
     readDir
+    readFile
+    pathExists
+    length
     ;
   inherit (final)
     concatStringsSep
@@ -16,6 +19,7 @@ let
     mkIf
     mkOption
     types
+    hasPrefix
     splitString
     trim
     ;
@@ -119,6 +123,30 @@ let
     |> filter (f: f != "default.nix")
     |> map (f: import (../overlays + "/${f}") { inherit inputs; });
 
+  readLinesNoComment =
+    f: f |> readFile |> splitString "\n" |> filter (line: !(hasPrefix "#" line) && line != "");
+
+  pathFromHostName = host: ../. + "/hosts/${host}";
+  hostFiles = host: host |> pathFromHostName |> listFilesRecursive |> filter isNixFile;
+
+  # if the specified path doesn't exist returns an empty array
+  tryReadLinesNoComment = f: if pathExists f then (readLinesNoComment f) else [ ];
+
+  tryreadEnabledAttrsOrEmpty =
+    p: p |> tryReadLinesNoComment |> (lines: if (length lines) > 0 then lines |> enableAttrs else { });
+
+  oizysSettings =
+    hostName:
+    hostName
+    |> pathFromHostName
+    |> (
+      p:
+      {
+        languages = tryReadLinesNoComment "${p}/settings/languages";
+      }
+      // (tryreadEnabledAttrsOrEmpty "${p}/settings/modules")
+    );
+
 in
 {
   inherit
@@ -139,5 +167,7 @@ in
     flakeFromSystem
     listify
     loadOverlays
+    hostFiles
+    oizysSettings
     ;
 }

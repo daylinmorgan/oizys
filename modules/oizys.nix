@@ -6,7 +6,7 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkOption loadOverlays;
+  inherit (lib) mkEnableOption mkOption loadOverlays oizysSettings;
 in
 {
   imports = with self.nixosModules; [
@@ -60,5 +60,6 @@ in
     networking.hostName = hostName;
     time.timeZone = "US/Central";
     nixpkgs.overlays = import ../overlays { inherit inputs loadOverlays; };
+    oizys = oizysSettings hostName;
   };
 }

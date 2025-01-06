@@ -12,18 +12,16 @@ let
     mkOizysModule
     enabled
     enableAttrs
-    isNixFile
     flakeFromSystem
     listify
+    readSettings
+    hostFiles
     ;
-  inherit (lib.filesystem) listFilesRecursive;
   flake = flakeFromSystem "x86_64-linux";
-  hostPath = host: ../. + "/hosts/${host}";
-
-  hostFiles = host: host |> hostPath |> listFilesRecursive |> filter isNixFile;
-
   nixosModules = names: names |> listify |> map (n: inputs.${n}.nixosModules.default);
   selfModules = names: names |> listify |> map (n: self.nixosModules.${n});
+
+  # generate anonymous module to set oizys settings from existing plaintext files
 
   commonSpecialArgs = {
     inherit
@@ -45,19 +43,21 @@ let
     nixosSystem {
       system = "x86_64-linux";
       modules =
-        []
+        [
+        ]
         ++ (selfModules ''oizys'')
         ++ (nixosModules ''lix-module|sops-nix'')
         ++ (hostFiles hostName);
 
       specialArgs = commonSpecialArgs // {
         inherit
+          flake
           mkDefaultOizysModule
           mkOizysModule
           listify
           enableAttrs
           hostName
-          flake
+          readSettings
           ;
       };
     };

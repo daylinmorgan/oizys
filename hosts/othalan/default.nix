@@ -1,44 +1,14 @@
 {
-  lib,
   enabled,
-  enableAttrs,
-  listify,
   config,
   ...
 }:
-
-let
-  inherit (lib.strings) hasPrefix splitString;
-  inherit (builtins) readFile filter;
-  readLanguageSettings = f: f |> readFile |> splitString "\n" |> filter (line: !(hasPrefix "#" line));
-in
 {
-
-  oizys =
-    {
-      nix-ld = enabled // {
-        overkill = enabled;
-      };
-      languages = readLanguageSettings ./settings/languages;
-      # languages = "misc|nim|node|nushell|python|tex|typst" |> listify;
-    }
-    // (
-      ''
-        desktop
-        hp-scanner
-        hyprland
-        chrome
-        vpn
-        backups
-        llm
-        vbox
-        podman
-        docker
-        utils
-      ''
-      |> listify
-      |> enableAttrs
-    );
+  oizys = {
+    nix-ld = enabled // {
+      overkill = enabled;
+    };
+  };
 
   sops = {
     defaultSopsFile = ./secrets.yaml;
