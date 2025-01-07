@@ -2,6 +2,9 @@
 
 ## oizys
 
+- [ ] add deployment capability that expands `oizys os <subcmd>` with a `--remote` flag and utilizes `nixos-rebuild <cmd> --target-host`
+  basically `oizys os switch --host algiz --remote` is translated to `nixos-rebuild switch --flake . --target-host algiz --use-remote-sudo`
+
 ## software
 
 - [ ] switch systemd desktop file to libvirt VM
