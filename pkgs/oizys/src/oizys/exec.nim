@@ -4,6 +4,7 @@ import std/[
 ]
 
 import hwylterm
+import hwylterm/spin/spinners # todo: remove after hwylterm update
 
 
 func addArgs*(cmd: var string, args: openArray[string]) =
@@ -62,7 +63,7 @@ proc runCmdCaptWithSpinner*(
   var
     output, err: string
     code: int
-  withSpinner(msg):
+  with(Dots2, msg):
     (output, err, code) = runCmdCapt(cmd, capture)
   if code != 0:
     stderr.writeLine("stdout\n" & output)
