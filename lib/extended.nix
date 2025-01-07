@@ -166,7 +166,7 @@ let
     {
       hostName,
       pkgs,
-      flake ? flakeFromSystem "x86_64-linux",
+      flake ? flakeFromSystem pkgs.system
     }:
         hostName
         |> pathFromHostName
@@ -174,7 +174,7 @@ let
         |> tryReadLinesNoComment
         |> map (
           line:
-          if hasPrefix "flake:" line then (line |> removePrefix "flake:" |> flake.pkgs) else pkgs.${line}
+          if hasPrefix "flake:" line then (line |> removePrefix "flake:" |> flake.pkg) else pkgs.${line}
         );
 
 in

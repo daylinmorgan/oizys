@@ -2,8 +2,7 @@
   inputs,
   config,
   enabled,
-  enableAttrs,
-  listify,
+  pkgs,
   ...
 }:
 {
@@ -13,8 +12,13 @@
 
   oizys = {
     rune.motd = enabled;
-    languages = "nim|node|python|nushell" |> listify;
-  } // ("docker|backups|nix-ld" |> listify |> enableAttrs);
+  };
+
+  environment.systemPackages = with pkgs; [
+    (writeShellScriptBin "gitea" ''
+      ssh -p 2222 -o StrictHostKeyChecking=no git@127.0.0.1 "SSH_ORIGINAL_COMMAND=\"$SSH_ORIGINAL_COMMAND\" $0 $@"
+    '')
+  ];
 
   services.restic.backups.gdrive = {
     # directories created by gitea and soft-serve aren't world readable

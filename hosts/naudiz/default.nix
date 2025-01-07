@@ -1,15 +1,6 @@
 { inputs, enabled, ... }:
-
 {
   imports = [ inputs.nixos-wsl.nixosModules.default ];
-  oizys = {
-    nix-ld = enabled;
-    languages = [
-
-      "python"
-      "node"
-    ];
-  };
   wsl = enabled // {
     defaultUser = "daylin";
   };
