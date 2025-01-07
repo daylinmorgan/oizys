@@ -52,6 +52,6 @@ jobs:
           cache
           --host,="${{ inputs.hosts }}"
           --flake .
-          --debug
+          -vv
           --
           --keep-going

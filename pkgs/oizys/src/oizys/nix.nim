@@ -131,8 +131,8 @@ proc display(msg: string, drvs: seq[Derivation]) =
     for drv in drvs:
       echo "  ", drv.name.trunc(maxLen).alignLeft(maxLen), " ", drv.hash.bb("faint")
 
-proc display(output: DryRunOutput) = 
-  if isDebug():
+proc display(output: DryRunOutput) =
+  if getVerbosity() > 0:
     display("to fetch", output.toFetch)
   else:
     echo fmt"to fetch: [bold cyan]{output.toFetch.len()}[/]".bb

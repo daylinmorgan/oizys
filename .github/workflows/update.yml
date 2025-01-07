@@ -56,7 +56,7 @@ jobs:
           cache
           --host,="${{ env.hosts }}"
           --flake .
-          --debug
+          -vv
           --
           --quiet
 
@@ -92,7 +92,7 @@ jobs:
           ci update
           --host,="${{ env.hosts }}"
           --flake .
-          --debug
+          -vv
           --
           --quiet
 

@@ -1,6 +1,7 @@
 import std/[logging, os, strformat, strutils]
 from std/nativesockets import getHostname
 import hwylterm, hwylterm/logging
+from hwylterm/hwylcli import Count
 import ./logging
 
 type
@@ -9,6 +10,7 @@ type
     hosts: seq[string]
     debug: bool
     ci: bool
+    verbose: Count
     resetCache: bool
 
 let currentHost* = getHostName()
@@ -29,17 +31,17 @@ var oc = initContext()
 proc checkPath(s: string): string =
   ## fail if path doesn't exist
   if not s.dirExists: fatalQuit fmt"flake path: {s} does not exist"
-  s
+  result = s
 
 proc updateContext*(
   host: seq[string],
   flake: string,
-  debug: bool,
+  verbose: Count,
   resetCache: bool
 ) =
   if host.len > 0: oc.hosts = host
-  oc.debug = debug
-  if debug:
+  oc.verbose = verbose
+  if verbose.val > 1:
     consoleLogger.levelThreshold = lvlAll
   oc.resetCache = resetCache
   if flake != "":
@@ -49,8 +51,9 @@ proc updateContext*(
 
   debug bb(fmt"""[b]flake[/]: {oc.flake}, [b]hosts[/]: {oc.hosts.join(" ")}""")
 
+
+proc getVerbosity*(): int     = return oc.verbose.val
 proc getHosts*(): seq[string] = return oc.hosts
 proc getFlake*(): string      = return oc.flake
-proc isDebug*(): bool         = return oc.debug
 proc isResetCache*(): bool    = return oc.resetCache
 proc isCi*(): bool            = return oc.ci

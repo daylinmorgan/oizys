@@ -19,9 +19,10 @@ hwylCli:
     host:
       T seq[string]
       ? "host(s) to build"
-    debug:
-      ? "enable debug mode"
-      - d
+    verbose:
+      T Count
+      ? "increase verbosity (up to 2)"
+      - v
     resetCache:
       ? "set cache timeout to 0"
     [misc]
@@ -33,7 +34,7 @@ hwylCli:
       - m
   preSub:
     setupLoggers()
-    updateContext(host, flake, debug, resetCache)
+    updateContext(host, flake, verbose, resetCache)
 
   subcommands:
     [build]
@@ -70,7 +71,7 @@ hwylCli:
     # when really I want it to only happen in the lowest "subcommand"
     # needs to be fixed in hwylterm
     preSub:
-      updateContext(host, flake, debug, resetCache)
+      updateContext(host, flake, verbose, resetCache)
     subcommands:
       [update]
       ... "build current and updated hosts"
@@ -96,7 +97,7 @@ hwylCli:
       # TODO: support file operations like gh
       # i.e. @flake.lock means read a file a flake.lock and use it's contents
       if args.len == 0: fatalQuit "expected workflow file name"
-      let inputs = 
+      let inputs =
         inputs.mapIt((it.key, it.val)).toTable()
       createDispatch(args[0], `ref`, inputs)
 
