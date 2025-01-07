@@ -2,8 +2,7 @@
 
 ## oizys
 
-- [ ] add deployment capability that expands `oizys os <subcmd>` with a `--remote` flag and utilizes `nixos-rebuild <cmd> --target-host`
-  basically `oizys os switch --host algiz --remote` is translated to `nixos-rebuild switch --flake . --target-host algiz --use-remote-sudo`
+- [ ] reimplement "--debug" flag as verbosity count i.e. "-vv"/ "--verbose --verbose"
 
 ## software
 

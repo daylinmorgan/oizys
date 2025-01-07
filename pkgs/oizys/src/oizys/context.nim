@@ -11,8 +11,10 @@ type
     ci: bool
     resetCache: bool
 
+let currentHost* = getHostName()
+
 proc initContext*(): OizysContext =
-  result.hosts = @[getHostname()]
+  result.hosts = @[currentHost]
   result.flake = "github:daylinmorgan/oizys"
   let localDir = getHomeDir() / "oizys"
   if localDir.dirExists:

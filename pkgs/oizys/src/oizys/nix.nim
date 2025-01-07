@@ -31,11 +31,34 @@ const nixosSubcmds* =
   """switch boot test build dry-build dry-activate edit
   repl build-vm build-vm-with-bootloader list-generations""".splitWhitespace()
 
-proc nixosRebuild*(subcmd: string, rest: seq[string] = @[]) =
-  if getHosts().len > 1:
-    fatalQuit "nixos-rebuild only supports one host"
-  var cmd = fmt"sudo nixos-rebuild {subcmd} --flake {getFlake()} --log-format multiline"
-  cmd.addArgs rest
+proc handleRebuildArgs(args: openArray[string], remote: bool): string =
+  assert args.len > 0
+  # TODO: future versions will let hwylterm handle arg parseing
+  let subcmd = args[0]
+  if subcmd notin nixosSubcmds:
+    fatalQuit(
+      "unknown nixos-rebuild subcmd: " & 
+      subcmd &
+      "\nexpected one of: \n" &
+      nixosSubcmds.mapIt("  " & it).join("\n")
+    )
+  if not remote: result.add "sudo"
+  result.addArgs "nixos-rebuild"
+  result.addArgs subcmd
+  result.addArgs "--flake", getFlake()
+  result.addArgs "--log-format multiline"
+  if remote:
+    let host = getHosts()[0]
+    if host == currentHost:
+      fatalQuit "did you mean to specify a remote host?"
+    result.addArgs "--target-host", host, "--use-remote-sudo"
+    result.addArgs args[1..^1]
+
+
+proc nixosRebuild*(args: openArray[string], remote: bool = false) =
+  if getHosts().len > 1: fatalQuit "nixos-rebuild only supports one host"
+  if args.len == 0: fatalQuit "please provide subcmd"
+  let cmd = handleRebuildArgs(args, remote)
   quitWithCmd cmd
 
 type

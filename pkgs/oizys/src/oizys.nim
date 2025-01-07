@@ -24,7 +24,6 @@ hwylCli:
       - d
     resetCache:
       ? "set cache timeout to 0"
-      - r
     [misc]
     yes:
       - y
@@ -111,15 +110,12 @@ hwylCli:
     [os]
     ? "[b]oizys os[/] [i]subcmd[/] [[[faint]flags[/]]"
     ... "nixos-rebuild [italic]subcmd[/]"
+    flags:
+      remote:
+        ? "host is remote"
+        - r
     run:
-      if args.len == 0: fatalQuit "please provide subcmd"
-      let subcmd = args[0]
-      if subcmd notin nixosSubcmds:
-        fatalQuit(
-          &"unknown nixos-rebuild subcmd: {subcmd}\nexpected one of: \n" &
-          nixosSubcmds.mapIt("  " & it).join("\n")
-        )
-      nixosRebuild(subcmd, args[1..^1])
+      nixosRebuild(args, remote)
 
     [output]
     ... "nixos config attr"
@@ -148,5 +144,5 @@ hwylCli:
       if preview: quit 0
       if yes or confirm("Proceed with system update?"):
         updateRepo()
-        nixosRebuild("switch")
+        nixosRebuild(["switch"])
 

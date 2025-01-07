@@ -7,9 +7,10 @@ import hwylterm
 import hwylterm/spin/spinners # todo: remove after hwylterm update
 
 
-func addArgs*(cmd: var string, args: openArray[string]) =
+func addArgs*(cmd: var string, args: varargs[string]) =
   cmd &= " " & args.join(" ")
 
+# deprecate in favor of above?
 func addArg*(cmd: var string, arg: string ) =
   cmd &= " " & arg
 
