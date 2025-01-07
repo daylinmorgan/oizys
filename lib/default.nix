@@ -38,9 +38,10 @@ let
   oizysFlake = {
     templates = {
       dev = {
-        path = ./templates/dev;
+        path = ../templates/dev;
         description = "a basic dev shell";
       };
+      default = self.templates.dev;
     };
     nixosModules = listToAttrs (findModulesList ../modules);
     nixosConfigurations = mapAttrs (name: _: mkSystem name) (readDir ../hosts);
