@@ -67,7 +67,7 @@ hwylCli:
 
     [ci]
     ... "builtin ci"
-    # current behavior adds this block twice...
+    # BUG: current behavior adds this block twice...
     # when really I want it to only happen in the lowest "subcommand"
     # needs to be fixed in hwylterm
     preSub:
@@ -95,7 +95,7 @@ hwylCli:
         * "main"
     run:
       # TODO: support file operations like gh
-      # i.e. @flake.lock means read a file a flake.lock and use it's contents
+      # i.e. @flake.lock means read a file at flake.lock and use it's contents as a string
       if args.len == 0: fatalQuit "expected workflow file name"
       let inputs =
         inputs.mapIt((it.key, it.val)).toTable()
