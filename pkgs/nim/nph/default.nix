@@ -11,12 +11,12 @@ let
 in
 buildNimPackage' (finalAttrs: {
   pname = "nph";
-  version = "0.6.0";
+  version = "0.6.1";
   src = fetchFromGitHub {
     owner = "arnetheduck";
     repo = "nph";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9t5VeGsxyytGdu7+Uv/J+x6bmeB5+eQapbyp30iPxqs=";
+    hash = "sha256-RIuggg09l7jZDg91FPrjwdoE+gCxgb7c8fEvCiwQk5U=";
   };
   # replace gorge(git...) call to for version
   patchPhase = ''
