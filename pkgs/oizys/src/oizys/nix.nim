@@ -324,6 +324,8 @@ type
     duration*: Duration
     successful*: bool
 
+
+
 proc build(drv: OizysDerivation, rest: seq[string]): BuildResult =
   let startTime = now()
   var cmd = "nix build"
@@ -333,7 +335,9 @@ proc build(drv: OizysDerivation, rest: seq[string]): BuildResult =
   let buildCode = runCmd(cmd)
   result.successful = buildCode == 0
   result.duration = now() - startTime
-  debug "build duration: " & $result.duration
+  # TODO: make splitDrv more ergonmic?
+  info "succesfully built: " & splitDrv(drv.name).name
+  info "-> duration: " & $result.duration
 
 func outputsPaths(o: OizysDerivation): seq[string] =
   for _, output in o.drv.outputs:
