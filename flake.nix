@@ -46,11 +46,6 @@
       };
     };
 
-    comin = {
-      url = "github:nlewo/comin";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
     hyprland.inputs.nixpkgs.follows = "nixpkgs";
     hyprland-contrib.url = "github:hyprwm/contrib";

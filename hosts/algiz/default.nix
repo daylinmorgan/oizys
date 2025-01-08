@@ -1,14 +1,10 @@
 {
-  inputs,
   config,
   enabled,
   pkgs,
   ...
 }:
 {
-  imports = [
-    inputs.comin.nixosModules.comin
-  ];
 
   oizys = {
     rune.motd = enabled;
@@ -25,7 +21,6 @@
     user = "root";
     rcloneConfigFile = "/home/daylin/.config/rclone/rclone.conf";
     repository = "rclone:g:archives/algiz";
-    # passwordFile = "/home/daylin/.config/restic/algiz-pass";
     passwordFile = config.sops.secrets.restic-algiz.path;
     paths = [
       "/home/daylin/services/git/"

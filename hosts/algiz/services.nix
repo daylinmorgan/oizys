@@ -19,16 +19,6 @@ in
     settings.PasswordAuthentication = false;
   };
 
-  services.comin = enabled // {
-    remotes = [
-      {
-        name = "origin";
-        url = "https://github.com/daylinmorgan/oizys.git";
-        branches.main.name = "main";
-      }
-    ];
-  };
-
   security.polkit = enabled; # attic was looking for this...
   environment.systemPackages = [ pkgs.attic-client ];
 
