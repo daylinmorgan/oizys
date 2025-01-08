@@ -370,11 +370,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1736191857,
-        "narHash": "sha256-2ADoC5iTawhEmEuDrl5z+gLbLHEsYqdjwnlF5Y5MZmA=",
+        "lastModified": 1736336083,
+        "narHash": "sha256-ZTDR7vby2vJEOt5knh2ecRLvDEBKKLLsQgLCWiCMtmQ=",
         "ref": "refs/heads/main",
-        "rev": "b9f110ef8726fcba2b4ee69856027731e73003a5",
-        "revCount": 5638,
+        "rev": "983bc067dac2e737bc724721c79d87cd81f27501",
+        "revCount": 5650,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/hyprwm/Hyprland/"
@@ -604,11 +604,11 @@
     "lix": {
       "flake": false,
       "locked": {
-        "lastModified": 1736036352,
-        "narHash": "sha256-bJzjEWrsGJJTaYfScHfwCG4dXbHXyXQ604kvbWc/3Fg=",
-        "rev": "8c1ece93cc21b7c2fff4031b4de7a40d919bf4eb",
+        "lastModified": 1736275188,
+        "narHash": "sha256-IWu1aN1MeRCtx0PYIKTvG5iDSOx/JVegm4Y+0lAZGTE=",
+        "rev": "3413ab56292f12ac03ee49270bcaf16038020cb3",
         "type": "tarball",
-        "url": "https://git.lix.systems/api/v1/repos/lix-project/lix/archive/8c1ece93cc21b7c2fff4031b4de7a40d919bf4eb.tar.gz?rev=8c1ece93cc21b7c2fff4031b4de7a40d919bf4eb"
+        "url": "https://git.lix.systems/api/v1/repos/lix-project/lix/archive/3413ab56292f12ac03ee49270bcaf16038020cb3.tar.gz?rev=3413ab56292f12ac03ee49270bcaf16038020cb3"
       },
       "original": {
         "type": "tarball",
@@ -834,11 +834,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1736264518,
-        "narHash": "sha256-XyiF6WPNmBmuJvceL9/V13UIrjiNqZsHsnHo8wq5KHc=",
+        "lastModified": 1736339905,
+        "narHash": "sha256-tDMrYyZI+cJGz0Y1eDvtudf4Tyoc1saW0TGdIfPCCpw=",
         "owner": "nix-community",
         "repo": "nixpkgs-wayland",
-        "rev": "d66cbb5fdc273a69cb539f33b2b278518b025e51",
+        "rev": "9430f078fd67a365b5fc434307a6d81089f42a43",
         "type": "github"
       },
       "original": {
