@@ -14,7 +14,7 @@ in
       [ (flake.pkg "f1multiviewer") ]
       ++ (with pkgs; [
         # pcmanfm build failure?
-        wezterm
+        # wezterm
         alacritty
 
         inkscape
@@ -25,6 +25,7 @@ in
         libreoffice-qt
         hunspell # spell check for libreoffice
 
+        okular
         (catppuccin-gtk.override {
           accents = [ "rosewater" ];
           variant = "mocha";
