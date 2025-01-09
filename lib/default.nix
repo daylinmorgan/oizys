@@ -66,7 +66,6 @@ let
           openssl
           nim
           self.packages.${pkgs.system}.nimble
-          # nimble
         ];
       };
     });

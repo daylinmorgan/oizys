@@ -3,7 +3,6 @@ let
   inherit (pkgs) python3Packages;
 in
 {
-  nph = pkgs.callPackage ./nim/nph { };
   # nimlangserver = pkgs.callPackage ./nim/nimlangserver { };
   procs = pkgs.callPackage ./nim/procs { };
   nimble = pkgs.callPackage ./nim/nimble { };
