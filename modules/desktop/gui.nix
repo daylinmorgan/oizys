@@ -2,7 +2,7 @@
   pkgs,
   config,
   lib,
-  flake,
+  enabled,
   ...
 }:
 let
@@ -10,12 +10,33 @@ let
 in
 {
   config = mkIf config.oizys.desktop.enable {
-    environment.systemPackages =
-      [ (flake.pkg "f1multiviewer") ]
-      ++ (with pkgs; [
+    qt = enabled // {
+      platformTheme = "qt5ct";
+      # style = "kvantum";
+    };
+
+    # For some reason it's not linked unless I include this.
+    # Though it's possible if I enabled plasma than it would be.
+    environment.pathsToLink = ["/share/Kvantum"];
+
+    environment.systemPackages = with pkgs; [
+        (catppuccin-gtk.override {
+          accents = [ "pink" ];
+          variant = "mocha";
+        })
+
+        (catppuccin-kvantum.override {
+          variant = "mocha";
+          accent = "pink";
+        })
+
+        libsForQt5.qtstyleplugin-kvantum
+        libsForQt5.okular
+        libsForQt5.qt5ct
+        papirus-icon-theme
+
         # pcmanfm build failure?
-        # wezterm
-        alacritty
+        alacritty # backup to ghostty
 
         inkscape
         gimp
@@ -24,12 +45,7 @@ in
 
         libreoffice-qt
         hunspell # spell check for libreoffice
+      ];
 
-        okular
-        (catppuccin-gtk.override {
-          accents = [ "rosewater" ];
-          variant = "mocha";
-        })
-      ]);
   };
 }
