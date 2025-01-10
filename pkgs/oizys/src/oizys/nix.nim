@@ -1,6 +1,6 @@
 import std/[
   algorithm, json,
-  enumerate, os, sequtils, strformat,
+  enumerate, os, sequtils, sets, strformat,
   strutils, sugar, logging, tables, times
 ]
 import hwylterm, hwylterm/logging, jsony
@@ -230,13 +230,13 @@ proc getSystemPathDrvs*(): seq[string] =
           inputDrv
 
 
-proc getOizysDerivations(): seq[OizysDerivation] =
+proc getOizysDerivations(): HashSet[OizysDerivation] =
   let
     toBuildDrvs = toBuildNixosConfiguration()
     systemPathDrvs = getSystemPathDrvs()
     toActullyBuildDrvs = systemPathDrvs.filterIt(it in toBuildDrvs and not isIgnored(it))
   for name, drv in nixDerivationShow(toActullyBuildDrvs):
-    result.add OizysDerivation(
+    result.incl OizysDerivation(
         name: name,
         drv: drv,
     )
