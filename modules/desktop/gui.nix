@@ -35,7 +35,7 @@ in
         libsForQt5.qt5ct
         papirus-icon-theme
 
-        # pcmanfm build failure?
+        pcmanfm 
         alacritty # backup to ghostty
 
         inkscape
