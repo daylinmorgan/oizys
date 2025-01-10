@@ -101,6 +101,7 @@
   };
 
   nixConfig = {
+
     extra-substituters = [
       "https://attic.dayl.in/oizys"
       "https://nixpkgs-wayland.cachix.org"

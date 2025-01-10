@@ -21,7 +21,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper  installShellFiles];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -42,7 +45,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p $out/share/distrobox
     echo 'container_additional_volumes="/nix:/nix"' > $out/share/distrobox/distrobox.conf
   '';
-
 
   postInstall = ''
     ls completions/zsh

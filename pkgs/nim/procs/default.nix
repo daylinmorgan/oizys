@@ -1,5 +1,5 @@
 { fetchFromGitHub, buildNimPackage }:
-buildNimPackage( finalAttrs:  {
+buildNimPackage (finalAttrs: {
   pname = "procs";
   version = "0.7.3";
   src = fetchFromGitHub {
@@ -11,5 +11,4 @@ buildNimPackage( finalAttrs:  {
 
   doCheck = false;
   lockFile = ./lock.json;
-}
-)
+})

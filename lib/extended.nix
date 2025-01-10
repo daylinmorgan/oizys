@@ -166,16 +166,15 @@ let
     {
       hostName,
       pkgs,
-      flake ? flakeFromSystem pkgs.system
+      flake ? flakeFromSystem pkgs.system,
     }:
-        hostName
-        |> pathFromHostName
-        |> (p: "${p}/settings/pkgs")
-        |> tryReadLinesNoComment
-        |> map (
-          line:
-          if hasPrefix "flake:" line then (line |> removePrefix "flake:" |> flake.pkg) else pkgs.${line}
-        );
+    hostName
+    |> pathFromHostName
+    |> (p: "${p}/settings/pkgs")
+    |> tryReadLinesNoComment
+    |> map (
+      line: if hasPrefix "flake:" line then (line |> removePrefix "flake:" |> flake.pkg) else pkgs.${line}
+    );
 
 in
 {

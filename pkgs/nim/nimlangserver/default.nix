@@ -1,5 +1,5 @@
 { fetchFromGitHub, buildNimPackage }:
-buildNimPackage( finalAttrs:  {
+buildNimPackage (finalAttrs: {
   pname = "nimlangserver";
   version = "1.6.0";
   src = fetchFromGitHub {
@@ -12,5 +12,4 @@ buildNimPackage( finalAttrs:  {
 
   doCheck = false;
   lockFile = ./lock.json;
-}
-)
+})
