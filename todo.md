@@ -2,8 +2,6 @@
 
 ## oizys
 
-- [ ] reimplement "--debug" flag as verbosity count i.e. "-vv"/ "--verbose --verbose"
-
 ## software
 
 - [ ] switch systemd desktop file to libvirt VM
