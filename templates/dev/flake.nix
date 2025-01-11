@@ -7,13 +7,9 @@
     { nixpkgs, ... }:
     let
       inherit (nixpkgs.lib) genAttrs;
-      systems = [
-        "x86_64-linux"
-        "x86_64-darwin"
-        "aarch64-linux"
-        "aarch64-darwin"
-      ];
-      forAllSystems = f: genAttrs systems (system: f (import nixpkgs { inherit system; }));
+      systems = [ "x86_64-linux" ]; # "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
+      forSystem = f: system: f (import nixpkgs { inherit system; });
+      forAllSystems = f: genAttrs systems (forSystem f);
     in
     {
       devShells = forAllSystems (pkgs: {
