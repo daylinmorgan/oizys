@@ -324,7 +324,13 @@ type
     duration*: Duration
     successful*: bool
 
-
+func formatDuration(d: Duration): string =
+  ## convert duration to: X minutes and Y seconds
+  let seconds = d.inSeconds
+  if seconds > 60:
+    result.add $(seconds div 60) & " minutes"
+    result.add " and "
+  result.add $(seconds mod 60) & " seconds"
 
 proc build(drv: OizysDerivation, rest: seq[string]): BuildResult =
   let startTime = now()
@@ -337,7 +343,7 @@ proc build(drv: OizysDerivation, rest: seq[string]): BuildResult =
   result.duration = now() - startTime
   # TODO: make splitDrv more ergonmic?
   info "succesfully built: " & splitDrv(drv.name).name
-  info "-> duration: " & $result.duration
+  info "-> duration: " & formatDuration(result.duration)
 
 func outputsPaths(o: OizysDerivation): seq[string] =
   for _, output in o.drv.outputs:
@@ -403,12 +409,12 @@ proc getUpdatedLockFile() =
 
 # probably duplicating logic above ¯\_(ツ)_/¯
 proc buildSystem(host: string, rest: seq[string]) =
-    var cmd = nixCommand("build")
-    cmd.addArg nixosConfigAttr(host)
-    cmd.addArgs rest
-    let code = runCmd cmd
-    if code != 0:
-      fatalQuit "build failed"
+  var cmd = nixCommand("build")
+  cmd.addArg nixosConfigAttr(host)
+  cmd.addArgs rest
+  let code = runCmd cmd
+  if code != 0:
+    fatalQuit "build failed"
 
 proc ciUpdate*(rest: seq[string]) =
   for host in getHosts():
