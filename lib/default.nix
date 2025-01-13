@@ -51,6 +51,7 @@ let
         default = oizys;
         oizys = pkgs.callPackage ../pkgs/oizys { };
         iso = mkIso.config.system.build.isoImage;
+        lix = pkgs.lix;
       }
       // (inheritFlakePkgs pkgs [
         "pixi"
