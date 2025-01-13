@@ -604,38 +604,36 @@
     "lix": {
       "flake": false,
       "locked": {
-        "lastModified": 1736680332,
-        "narHash": "sha256-gwidOezQ6FT5q4GHcpD6y2EwKcrtzjAoxaN/9bTGqQw=",
-        "rev": "38dd196b03f4163ae3bbb2a1910b8f0f141ca0e2",
+        "lastModified": 1729298361,
+        "narHash": "sha256-hiGtfzxFkDc9TSYsb96Whg0vnqBVV7CUxyscZNhed0U=",
+        "rev": "ad9d06f7838a25beec425ff406fe68721fef73be",
         "type": "tarball",
-        "url": "https://git.lix.systems/api/v1/repos/lix-project/lix/archive/38dd196b03f4163ae3bbb2a1910b8f0f141ca0e2.tar.gz?rev=38dd196b03f4163ae3bbb2a1910b8f0f141ca0e2"
+        "url": "https://git.lix.systems/api/v1/repos/lix-project/lix/archive/ad9d06f7838a25beec425ff406fe68721fef73be.tar.gz?rev=ad9d06f7838a25beec425ff406fe68721fef73be"
       },
       "original": {
         "type": "tarball",
-        "url": "https://git.lix.systems/lix-project/lix/archive/main.tar.gz"
+        "url": "https://git.lix.systems/lix-project/lix/archive/2.91.1.tar.gz"
       }
     },
     "lix-module": {
       "inputs": {
         "flake-utils": "flake-utils_3",
         "flakey-profile": "flakey-profile",
-        "lix": [
-          "lix"
-        ],
+        "lix": "lix",
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1733522213,
-        "narHash": "sha256-H+Pk19MzvI/TAbXWimUPZAoKkD56OSyxJBm8lVIA5n0=",
-        "rev": "c374ebf5548c7b6d4bf884369a5b6879cfc916ea",
+        "lastModified": 1729360442,
+        "narHash": "sha256-6U0CyPycIBc04hbYy2hBINnVso58n/ZyywY2BD3hu+s=",
+        "rev": "9098ac95768f7006d7e070b88bae76939f6034e6",
         "type": "tarball",
-        "url": "https://git.lix.systems/api/v1/repos/lix-project/nixos-module/archive/c374ebf5548c7b6d4bf884369a5b6879cfc916ea.tar.gz?rev=c374ebf5548c7b6d4bf884369a5b6879cfc916ea"
+        "url": "https://git.lix.systems/api/v1/repos/lix-project/nixos-module/archive/9098ac95768f7006d7e070b88bae76939f6034e6.tar.gz?rev=9098ac95768f7006d7e070b88bae76939f6034e6"
       },
       "original": {
         "type": "tarball",
-        "url": "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz"
+        "url": "https://git.lix.systems/lix-project/nixos-module/archive/2.91.1-1.tar.gz"
       }
     },
     "my-nixpkgs": {
@@ -963,7 +961,6 @@
         "hyprland-contrib": "hyprland-contrib",
         "hyprman": "hyprman",
         "jj": "jj",
-        "lix": "lix",
         "lix-module": "lix-module",
         "my-nixpkgs": "my-nixpkgs",
         "nim2nix": "nim2nix_2",
