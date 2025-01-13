@@ -27,4 +27,3 @@ Is this related to above and could maybe resolved by settling on a stable versio
   > kernel: ucsi_acpi USBC000:00: error -EINVAL: PPM init failed
 
 <!-- generated with <3 by daylinmorgan/todo -->
-

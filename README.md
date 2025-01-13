@@ -44,7 +44,6 @@ See below for the currently maintained hosts.
 </tr>
 </table>
 
-
 ## oizys cli
 
 A small helper utility that mostly just wraps `nix` commands for convenience.
@@ -58,14 +57,14 @@ usage:
   oizys subcmd [flags]
 
 subcommands:
-  build    nix build                      
-  cache    build and push store paths     
-  ci       builtin ci                     
-  gha      trigger GHA                    
-  dry      dry run build                  
+  build    nix build
+  cache    build and push store paths
+  ci       builtin ci
+  gha      trigger GHA
+  dry      dry run build
   os       nixos-rebuild subcmd
-  output   nixos config attr              
-  update   update and run nixos-rebuild   
+  output   nixos config attr
+  update   update and run nixos-rebuild
 
 flags:
      --flake      path/to/flake
@@ -83,5 +82,3 @@ Oizys was birthed by the goddess Nyx/Nix and embodies suffering and misery. Whic
 
 > [!NOTE]
 > I don't use home-manager to manager my shell/user configs. You can find those in my separate `chezmoi`-managed [`dotfiles`](https://git.dayl.in/daylin/dotfiles) repository.
-
-

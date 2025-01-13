@@ -30,9 +30,11 @@ ln -s /run/current-system/sw/bin/gitea /usr/local/bin/gitea
 ## Setting up Attic
 
 Generated a key using command provided in attic docs:
+
 ```sh
 nix run nixpkgs#openssl -- genrsa -traditional 4096 | base64 -w0
 ```
+
 And wrote `ATTIC_SERVER_TOKEN_RS256_SECRET_BASE64="output from above"` to `/etc/attic.env`
 
 I generated a token to configure the caches using the following command:
@@ -43,4 +45,3 @@ atticd-atticadm make-token --sub daylin --push "*" --pull "*" --validity '1y' --
 
 If I handled secrets via `sops` or `agenix` I think this could be stored directly in the repo.
 I also had to modify the firewall so that docker would forward along the requests by caddy to `host.docker.internal` correctly.
-

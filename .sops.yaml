@@ -9,11 +9,11 @@ keys:
 creation_rules:
   - path_regex: hosts/othalan/[^/]+\.(yaml|json|env|ini)$
     key_groups:
-    - age:
-      - *admin_daylin
-      - *host_othalan
+      - age:
+          - *admin_daylin
+          - *host_othalan
   - path_regex: hosts/algiz/[^/]+\.(yaml|json|env|ini)$
     key_groups:
-    - age:
-      - *host_algiz
-      - *admin_daylin
+      - age:
+          - *host_algiz
+          - *admin_daylin

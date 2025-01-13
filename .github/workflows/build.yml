@@ -4,19 +4,19 @@ on:
   workflow_dispatch:
     inputs:
       hosts:
-        description: 'list of hosts to build'
+        description: "list of hosts to build"
         required: true
-        default: 'othalan,algiz'
+        default: "othalan,algiz"
         type: string
       lockFile:
-        description: 'flake.lock file'
+        description: "flake.lock file"
         type: string
 
   workflow_call:
     inputs:
       hosts:
-        description: 'list of hosts to build'
-        default: ',othalan,algiz'
+        description: "list of hosts to build"
+        default: ",othalan,algiz"
         type: string
 
 concurrency:

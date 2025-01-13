@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       lockFile:
-        description: 'flake.lock file'
+        description: "flake.lock file"
         type: string
 
 jobs:
@@ -23,7 +23,6 @@ jobs:
           extra-conf: |
             accept-flake-config = true
       - uses: DeterminateSystems/magic-nix-cache-action@v8
-
       - uses: cachix/cachix-action@v15
         with:
           name: daylin

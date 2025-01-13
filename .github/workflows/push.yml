@@ -6,7 +6,7 @@ on:
   #     - '**/*.md'
   pull_request:
     paths-ignore:
-      - '**/*.md'
+      - "**/*.md"
     branches:
       - main
 

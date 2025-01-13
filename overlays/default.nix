@@ -2,6 +2,7 @@
 (loadOverlays inputs ./.)
 ++ [
   inputs.nim2nix.overlays.default # adds buildNimPackage
+
   (final: prev: {
     stable = import inputs.stable {
       system = final.system;
