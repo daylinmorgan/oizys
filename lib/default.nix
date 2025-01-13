@@ -12,7 +12,6 @@ let
     genAttrs
     pkgFromSystem
     loadOverlays
-    enabled
     listify
     enableAttrs
     ;
