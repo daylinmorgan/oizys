@@ -43,6 +43,23 @@ let
       }) flakes
     );
 
+  evalTreeFmt =
+    pkgs:
+    (treefmt-nix.lib.evalModule pkgs (
+      { ... }:
+      {
+        projectRootFile = "flake.nix";
+        # don't warn me about missing formatters
+        settings.excludes = [
+          # likely to be nnl lockfiles
+          "pkgs/**/lock.json"
+          "hosts/**/secrets.yaml"
+        ];
+        settings.on-unmatched = "debug";
+        programs = "prettier|nixfmt" |> listify |> enableAttrs;
+      }
+    ));
+
   oizysFlake = {
     templates = {
       dev = {
@@ -84,25 +101,12 @@ let
         inherit inputs lib self;
         system = pkgs.system;
       }
+      // {
+        formatter = (evalTreeFmt pkgs).config.build.check self;
+      }
     );
+    formatter = forAllSystems (pkgs: (evalTreeFmt pkgs).config.build.wrapper);
     # formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
-    formatter = forAllSystems (
-      pkgs:
-      (treefmt-nix.lib.evalModule pkgs (
-        { ... }:
-        {
-          projectRootFile = "flake.nix";
-          # don't warn me about missing formatters
-          settings.excludes = [
-            # likely to be nnl lockfiles
-            "pkgs/**/lock.json"
-            "hosts/**/secrets.yaml"
-          ];
-          settings.on-unmatched = "debug";
-          programs = "prettier|nixfmt" |> listify |> enableAttrs;
-        }
-      )).config.build.wrapper
-    );
   };
 in
 {
