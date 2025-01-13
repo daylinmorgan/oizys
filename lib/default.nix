@@ -1,4 +1,9 @@
-inputs@{ nixpkgs, self, ... }:
+inputs@{
+  nixpkgs,
+  treefmt-nix,
+  self,
+  ...
+}:
 let
   lib = nixpkgs.lib.extend (import ./extended.nix inputs);
 
@@ -7,6 +12,9 @@ let
     genAttrs
     pkgFromSystem
     loadOverlays
+    enabled
+    listify
+    enableAttrs
     ;
 
   inherit (import ./find-modules.nix { inherit lib; }) findModulesList;
@@ -51,7 +59,7 @@ let
         default = oizys;
         oizys = pkgs.callPackage ../pkgs/oizys { };
         iso = mkIso.config.system.build.isoImage;
-        lix = pkgs.lix;
+        lix = pkgFromSystem pkgs.system "lix-module";
       }
       // (inheritFlakePkgs pkgs [
         "pixi"
@@ -77,7 +85,24 @@ let
         system = pkgs.system;
       }
     );
-    formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
+    # formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
+    formatter = forAllSystems (
+      pkgs:
+      (treefmt-nix.lib.evalModule pkgs (
+        { ... }:
+        {
+          projectRootFile = "flake.nix";
+          # don't warn me about missing formatters
+          settings.excludes = [
+            # likely to be nnl lockfiles
+            "pkgs/**/lock.json"
+            "hosts/**/secrets.yaml"
+          ];
+          settings.on-unmatched = "debug";
+          programs = "prettier|nixfmt" |> listify |> enableAttrs;
+        }
+      )).config.build.wrapper
+    );
   };
 in
 {

@@ -7,6 +7,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     stable.url = "github:nixos/nixpkgs/nixos-24.05";
     my-nixpkgs.url = "github:daylinmorgan/nixpkgs/nixos-unstable";
+    treefmt-nix.url = "github:numtide/treefmt-nix";
 
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
