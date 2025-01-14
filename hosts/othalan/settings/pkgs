@@ -3,6 +3,7 @@ flake:ghostty
 sops
 attic-client
 distrobox
+firefox
 zk
 graphviz
 charm-freeze
