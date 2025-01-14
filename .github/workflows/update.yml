@@ -19,7 +19,7 @@ on:
 
 env:
   hosts: ${{ github.event_name == 'schedule' && 'othalan,algiz' || github.event.inputs.hosts }}
-  flake-inputs: ${{ github.event_name == 'flake-inputs' && '' || github.event.inputs.flake-inputs }}
+  flake-inputs: ${{ github.event_name == 'schedule' && '' || github.event.inputs.flake-inputs }}
 
 permissions:
   contents: write
@@ -44,7 +44,7 @@ jobs:
 
       - name: Update nix flake
         run: |
-          nix flake update --commit-lock-file "${{ env.flake-inputs }}"
+          nix flake update --commit-lock-file ${{ env.flake-inputs }}
           printf '# Flake Lock\n\n```txt\n%s```\n' \
             "$(git show -s --format='%B')" \
             >> $GITHUB_STEP_SUMMARY
