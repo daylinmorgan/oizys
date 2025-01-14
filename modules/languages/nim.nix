@@ -13,10 +13,11 @@ in
   config = mkIfIn "nim" cfg {
     environment.systemPackages = with pkgs; [
       nim
-      nimlangserver
+      # nimlangserver
       nph
 
       (flake.pkgs "self").nimble
+      (flake.pkgs "self").nimlangserver
     ];
   };
 }
