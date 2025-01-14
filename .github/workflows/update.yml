@@ -8,6 +8,10 @@ on:
         required: true
         default: "othalan,algiz"
         type: string
+      flake-inputs:
+        description: "list of nix flake inputs"
+        default: ""
+        type: "string"
 
   # schedule:
   #   # At minute 00:00 on Monday, Wednesday, and Friday.
@@ -15,6 +19,7 @@ on:
 
 env:
   hosts: ${{ github.event_name == 'schedule' && 'othalan,algiz' || github.event.inputs.hosts }}
+  flake-inputs: ${{ github.event_name == 'flake-inputs' && '' || github.event.inputs.flake-inputs }}
 
 permissions:
   contents: write
@@ -39,7 +44,7 @@ jobs:
 
       - name: Update nix flake
         run: |
-          nix flake update --commit-lock-file
+          nix flake update --commit-lock-file "${{ env.flake-inputs }}"
           printf '# Flake Lock\n\n```txt\n%s```\n' \
             "$(git show -s --format='%B')" \
             >> $GITHUB_STEP_SUMMARY
