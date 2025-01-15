@@ -104,7 +104,7 @@ proc parseDryRunOutput(err: string): DryRunOutput =
       elif line.contains("will be fetched"):
         result.toFetch = drvs
       else:
-        fatal "expected on of the lines to contain built or fetched check the output below"
+        fatal """expected at least one of the lines to contain "built" or "fetched", check the output below"""
         stderr.writeLine err
         quit()
     of 0:
