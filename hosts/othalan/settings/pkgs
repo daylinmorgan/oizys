@@ -1,5 +1,5 @@
 flake:utils
-flake:ghostty
+ghostty
 sops
 attic-client
 distrobox

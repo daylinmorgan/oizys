@@ -38,15 +38,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # https://github.com/NixOS/nixpkgs/pull/368404 replace when PR merged?
-    # https://github.com/ghostty-org/ghostty/issues/2025
-    ghostty = {
-      url = "git+https://github.com/ghostty-org/ghostty.git?ref=refs/tags/v1.0.1";
-      inputs = {
-        nixpkgs-stable.follows = "nixpkgs";
-        nixpkgs-unstable.follows = "nixpkgs";
-      };
-    };
+    # using nixpkgs version now
+    # # https://github.com/ghostty-org/ghostty/issues/2025
+    # ghostty = {
+    #   url = "git+https://github.com/ghostty-org/ghostty.git?ref=refs/tags/v1.0.1";
+    #   inputs = {
+    #     nixpkgs-stable.follows = "nixpkgs";
+    #     nixpkgs-unstable.follows = "nixpkgs";
+    #   };
+    # };
 
     hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
     hyprland.inputs.nixpkgs.follows = "nixpkgs";
