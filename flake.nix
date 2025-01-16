@@ -7,20 +7,6 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     stable.url = "github:nixos/nixpkgs/nixos-24.05";
     my-nixpkgs.url = "github:daylinmorgan/nixpkgs/nixos-unstable";
-    treefmt-nix.url = "github:numtide/treefmt-nix";
-
-    nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
-    nixos-wsl.url = "github:nix-community/NixOS-WSL";
-
-    nix-index-database = {
-      url = "github:nix-community/nix-index-database";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     # lix = {
     #   url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
@@ -36,44 +22,79 @@
     lix-module = {
       url = "https://git.lix.systems/lix-project/nixos-module/archive/2.91.1-1.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
     };
 
-    # using nixpkgs version now
-    # # https://github.com/ghostty-org/ghostty/issues/2025
-    # ghostty = {
-    #   url = "git+https://github.com/ghostty-org/ghostty.git?ref=refs/tags/v1.0.1";
-    #   inputs = {
-    #     nixpkgs-stable.follows = "nixpkgs";
-    #     nixpkgs-unstable.follows = "nixpkgs";
-    #   };
-    # };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-    hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
-    hyprland.inputs.nixpkgs.follows = "nixpkgs";
-    hyprland-contrib.url = "github:hyprwm/contrib";
-    hyprland-contrib.inputs.nixpkgs.follows = "nixpkgs";
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-compat.follows = "flake-compat";
+    };
+
+    hyprland = {
+      url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
+      inputs.nixpkgs.follows = "nixpkgs";
+      # inputs.systems.follows = "systems";
+      inputs.pre-commit-hooks.follows = "";
+    };
+    hyprland-contrib = {
+      url = "github:hyprwm/contrib";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nixpkgs-wayland = {
+      url = "github:nix-community/nixpkgs-wayland";
+      # breaks their cache...
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.lib-aggregate.follows = "lib-aggregate";
+      inputs.nix-eval-jobs.follows = "";
+      inputs.flake-compat.follows = "";
+    };
 
     f1multiviewer = {
       url = "github:daylinmorgan/f1multiviewer-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     tsm = {
       url = "github:daylinmorgan/tsm?dir=nix";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        nim2nix.follows = "nim2nix";
+      };
     };
     hyprman = {
       url = "git+https://git.dayl.in/daylin/hyprman.git";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nim2nix.follows = "nim2nix";
     };
     utils = {
       url = "git+https://git.dayl.in/daylin/utils.git";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nim2nix.follows = "nim2nix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        nim2nix.follows = "nim2nix";
+      };
     };
     nim2nix = {
       url = "github:daylinmorgan/nim2nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     pixi = {
       url = "github:daylinmorgan/pixi-flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -82,6 +103,7 @@
     jj = {
       url = "github:martinvonz/jj/v0.25.0";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
     };
 
     NixVirt = {
@@ -90,6 +112,21 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # included to reduce flake.lock size
+    flake-utils = {
+      url = "github:numtide/flake-utils";
+    };
+
+    flake-compat = {
+      url = "github:edolstra/flake-compat";
+    };
+    lib-aggregate = {
+      url = "github:nix-community/lib-aggregate";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.nixpkgs-lib.follows = "nixpkgs-lib";
+    };
+
+    nixpkgs-lib.url = "github:nix-community/nixpkgs.lib";
     # roc = {
     #   url = "github:roc-lang/roc";
     #   inputs.nixpkgs.follows = "nixpkgs";
