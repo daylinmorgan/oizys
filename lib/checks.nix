@@ -36,11 +36,11 @@ in
             swww
             nixVersions.git
           ])
-          ++ [
-            (flake.pkgs "roc").full
-            (flake.pkgs "zig-overlay").master
-            (flake.pkg "zls")
-          ]
+          # ++ [
+          #   (flake.pkgs "roc").full
+          #   (flake.pkgs "zig-overlay").master
+          #   (flake.pkg "zls")
+          # ]
           ++ hyprPackages
           ++ selfPackages;
       }
