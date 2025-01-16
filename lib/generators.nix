@@ -33,17 +33,21 @@ let
   };
 
   mkIso = nixosSystem {
-    system = "x86_64-linux";
-    modules = (nixosModules "lix-module") ++ (selfModules "nix|essentials|iso");
+    modules =
+      [
+        { nixpkgs.hostPlatform = "x86_64-linux"; }
+      ]
+      ++ (nixosModules "lix-module")
+      ++ (selfModules "nix|essentials|iso");
     specialArgs = commonSpecialArgs;
   };
 
   mkSystem =
     hostName:
     nixosSystem {
-      system = "x86_64-linux";
       modules =
         [
+          { nixpkgs.hostPlatform = "x86_64-linux"; }
         ]
         ++ (selfModules ''oizys'')
         ++ (nixosModules ''lix-module|sops-nix'')
