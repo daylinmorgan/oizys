@@ -1,7 +1,4 @@
 { pkgs, ... }:
-let
-  inherit (pkgs) python3Packages;
-in
 {
   nimlangserver = pkgs.callPackage ./nim/nimlangserver { };
   procs = pkgs.callPackage ./nim/procs { };
@@ -9,6 +6,6 @@ in
 
   distrobox = pkgs.callPackage ./distrobox { };
 
-  llm = python3Packages.callPackage ./llm { };
-  llm-claude-3 = python3Packages.callPackage ./llm-plugins/llm-claude-3 { };
+  llm-with-plugins = pkgs.callPackage ./llm/llm-with-plugins {};
 }
+
