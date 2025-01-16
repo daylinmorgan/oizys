@@ -6,6 +6,5 @@
 
   distrobox = pkgs.callPackage ./distrobox { };
 
-  llm-with-plugins = pkgs.callPackage ./llm/llm-with-plugins {};
+  llm-with-plugins = pkgs.callPackage ./llm/llm-with-plugins { };
 }
-

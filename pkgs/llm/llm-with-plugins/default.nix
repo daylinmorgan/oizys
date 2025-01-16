@@ -5,7 +5,7 @@
 let
   inherit (pkgs) python3Packages;
   llm = python3Packages.callPackage ../llm { };
-  llm-claude-3 = python3Packages.callPackage ../llm-plugins/llm-claude-3 { };
+  llm-claude-3 = python3Packages.callPackage ../llm-claude-3 { };
 
   pyWithLlm = (
     pkgs.python3.withPackages (_: [
