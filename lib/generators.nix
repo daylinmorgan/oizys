@@ -5,7 +5,6 @@
   ...
 }:
 let
-  inherit (builtins) filter;
   inherit (lib)
     nixosSystem
     mkDefaultOizysModule
@@ -21,13 +20,12 @@ let
   nixosModules = names: names |> listify |> map (n: inputs.${n}.nixosModules.default);
   selfModules = names: names |> listify |> map (n: self.nixosModules.${n});
 
-  # generate anonymous module to set oizys settings from existing plaintext files
-
   commonSpecialArgs = {
     inherit
       self
       inputs
       lib
+      flake
       enabled
       ;
   };
@@ -38,7 +36,7 @@ let
         { nixpkgs.hostPlatform = "x86_64-linux"; }
       ]
       ++ (nixosModules "lix-module")
-      ++ (selfModules "nix|essentials|iso");
+      ++ (selfModules "essentials|iso");
     specialArgs = commonSpecialArgs;
   };
 
@@ -55,7 +53,6 @@ let
 
       specialArgs = commonSpecialArgs // {
         inherit
-          flake
           mkDefaultOizysModule
           mkOizysModule
           listify

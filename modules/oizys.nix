@@ -19,9 +19,9 @@ in
   imports = with self.nixosModules; [
     users
     runes
-    nix
-
     essentials
+
+    nix-improved
     cli
     nvim
     vpn
