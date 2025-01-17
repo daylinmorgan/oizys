@@ -105,7 +105,6 @@ let
       }
     );
     formatter = forAllSystems (pkgs: (evalTreeFmt pkgs).config.build.wrapper);
-    # formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
   };
 in
 {
