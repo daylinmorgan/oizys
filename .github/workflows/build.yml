@@ -6,11 +6,15 @@ on:
       hosts:
         description: "list of hosts to build"
         required: true
-        default: "othalan,algiz"
         type: string
+        default: "othalan,algiz"
       lockFile:
         description: "flake.lock file"
         type: string
+      extraArgs:
+        description: "postional args forwared to nix"
+        type: string
+        default: "--keep-going"
 
   workflow_call:
     inputs:
@@ -54,4 +58,4 @@ jobs:
           --flake .
           -vv
           --
-          --keep-going
+          ${{ inputs.extraArgs }}
