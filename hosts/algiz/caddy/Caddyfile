@@ -2,14 +2,6 @@ links.dayl.in {
   reverse_proxy http://localhost:9090
 }
 
-elizabeth-and-daylin.com {
-    reverse_proxy http://localhost:4321
-}
-
-elizabeth.dayl.in, www.elizabeth-and-daylin.com {
-  redir https://elizabeth-and-daylin.com{uri} permanent
-}
-
 git.dayl.in {
   reverse_proxy http://localhost:3000
 }
@@ -25,6 +17,19 @@ gts.dayl.in {
 		flush_interval -1
 	}
 }
+
+daylin.bsky.dayl.in, bsky.dayl.in {
+  reverse_proxy http://localhost:6555
+}
+
+elizabeth-and-daylin.com {
+    reverse_proxy http://localhost:4321
+}
+
+elizabeth.dayl.in, www.elizabeth-and-daylin.com {
+  redir https://elizabeth-and-daylin.com{uri} permanent
+}
+
 
 # not currently a running service on algiz
 # (caddy-common) {
