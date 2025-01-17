@@ -39,5 +39,6 @@ runs:
         attic login oizys https://attic.dayl.in "${{ inputs.attic_token}}"
 
     - name: "Show Nix Info"
-      run: nix-info -m
+      shell: bash
+      run: nix run "nixpkgs#nix-info" -- -m
 
