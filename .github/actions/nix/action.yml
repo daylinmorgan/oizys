@@ -5,8 +5,8 @@ inputs:
     description: Extra nix.conf config
     default: |
       accept-flake-config = true
-      build-dir = /nix/var
       experimental-features = pipe-operator
+      build-dir = /nix/var
       keep-derivations = true
       keep-outputs = true
   clean:
@@ -37,3 +37,7 @@ runs:
       run: |
         nix profile install "nixpkgs#attic-client"
         attic login oizys https://attic.dayl.in "${{ inputs.attic_token}}"
+
+    - name: "Show Nix Info"
+      run: nix-info -m
+
