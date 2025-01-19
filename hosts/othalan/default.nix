@@ -1,6 +1,7 @@
 {
-  enabled,
   config,
+  enabled,
+  flake,
   ...
 }:
 {
@@ -26,4 +27,9 @@
       group = config.users.users.daylin.group;
     };
   };
+
+  environment.systemPackages =[
+    (flake.pkgs "lix-attic").attic-client
+  ];
+
 }

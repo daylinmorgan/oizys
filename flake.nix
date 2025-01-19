@@ -18,7 +18,6 @@
     #   inputs.lix.follows = "lix";
     # };
     #
-    # lix is failing to build only on GHA?
     # keep for when lix breaks :/
     lix-module = {
       url = "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0.tar.gz";
@@ -44,15 +43,13 @@
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-compat.follows = "flake-compat";
     };
 
     hyprland = {
       url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
       inputs.nixpkgs.follows = "nixpkgs";
-      # inputs.systems.follows = "systems";
-      inputs.pre-commit-hooks.follows = "";
     };
+
     hyprland-contrib = {
       url = "github:hyprwm/contrib";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -60,11 +57,7 @@
 
     nixpkgs-wayland = {
       url = "github:nix-community/nixpkgs-wayland";
-      # breaks their cache...
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.lib-aggregate.follows = "lib-aggregate";
-      inputs.nix-eval-jobs.follows = "";
-      inputs.flake-compat.follows = "";
     };
 
     f1multiviewer = {
@@ -104,7 +97,6 @@
     jj = {
       url = "github:martinvonz/jj/v0.25.0";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
     };
 
     NixVirt = {
@@ -113,21 +105,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # included to reduce flake.lock size
-    flake-utils = {
-      url = "github:numtide/flake-utils";
+    lix-attic = {
+      url = "git+https://git.lix.systems/nrabulinski/attic.git";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.lix-module.follows = "lix-module";
+      # make lix-module source of truth
+      inputs.lix.follows = "lix-module/lix";
     };
 
-    flake-compat = {
-      url = "github:edolstra/flake-compat";
-    };
-    lib-aggregate = {
-      url = "github:nix-community/lib-aggregate";
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.nixpkgs-lib.follows = "nixpkgs-lib";
-    };
-
-    nixpkgs-lib.url = "github:nix-community/nixpkgs.lib";
     # roc = {
     #   url = "github:roc-lang/roc";
     #   inputs.nixpkgs.follows = "nixpkgs";
@@ -138,6 +123,24 @@
     # zls.url = "github:zigtools/zls";
     # zls.inputs.nixpkgs.follows = "nixpkgs";
     # zls.inputs.zig-overlay.follows = "zig-overlay";
+
+    # further flake.lock minimization shenanigans
+    flake-utils.url = "github:numtide/flake-utils";
+    jj.inputs.flake-utils.follows = "flake-utils";
+    lib-aggregate.inputs.flake-utils.follows = "flake-utils";
+
+    lib-aggregate.url = "github:nix-community/lib-aggregate";
+    nixpkgs-wayland.inputs.lib-aggregate.follows = "lib-aggregate";
+
+    nixpkgs-lib.url = "github:nix-community/nixpkgs.lib";
+
+    # nil inputs
+    hyprland.inputs.pre-commit-hooks.follows = "";
+
+    nixpkgs-wayland.inputs.flake-compat.follows = "";
+    nixos-wsl.inputs.flake-compat.follows = "";
+
+    nixpkgs-wayland.inputs.nix-eval-jobs.follows = "";
   };
 
   nixConfig = {

@@ -1,7 +1,6 @@
 flake:utils
 ghostty
 sops
-attic-client
 distrobox
 firefox
 zk

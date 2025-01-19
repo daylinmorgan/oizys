@@ -1,6 +1,7 @@
 inputs@{
   nixpkgs,
   treefmt-nix,
+  lix-attic,
   self,
   ...
 }:
@@ -59,6 +60,12 @@ let
       }
     ));
 
+  lixAtticPackages = pkgs:
+  { attic-client = lix-attic.packages.${pkgs.system}.attic-client;
+  attic-server = lix-attic.packages.${pkgs.system}.attic-server;
+};
+
+
   oizysFlake = {
     templates = {
       dev = {
@@ -83,6 +90,7 @@ let
         "tsm"
       ])
       // (import ../pkgs { inherit pkgs; })
+      // (lixAtticPackages pkgs)
     );
 
     devShells = forAllSystems (pkgs: {
