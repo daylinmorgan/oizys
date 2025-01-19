@@ -5,7 +5,7 @@
 }:
 buildNimblePackage {
   name = "oizys";
-  verions = "unstable";
+  version = "unstable";
   src = lib.cleanSource ./.;
   nativeBuildInputs = [ openssl ];
   nimbleDepsHash = "sha256-dFJw/m7D5UFUrHH7exsyHknt8WHIK1QIQATNd5l7FZA=";
