@@ -1,4 +1,9 @@
-{ pkgs, enabled, flake, ... }:
+{
+  pkgs,
+  enabled,
+  flake,
+  ...
+}:
 let
   atticPort = "5656";
   static = pkgs.runCommandLocal "static-files" { } ''
@@ -28,8 +33,8 @@ in
   services.atticd = enabled // {
     package = (flake.pkgs "lix-attic").attic-server;
 
-
     # Replace with absolute path to your credentials file
+    # TODO: replace with sops-secret!
     environmentFile = "/etc/atticd.env";
 
     settings = {
