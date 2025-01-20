@@ -183,11 +183,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1737310896,
-        "narHash": "sha256-Y0s1jBm18Dl9HKpXsLG0fN9Co2IKoGqtriZ/2Vncv5s=",
+        "lastModified": 1737398451,
+        "narHash": "sha256-9X6dQbYGi9az9+8wk3fnPppD2SOOe6U68vdZCl+MxkE=",
         "ref": "refs/heads/main",
-        "rev": "407453166ce2a52433c7b0b4ee92a41e47ef8f6d",
-        "revCount": 5690,
+        "rev": "a661203bb6d4714b211572759e2f74b1da194972",
+        "revCount": 5693,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/hyprwm/Hyprland/"
@@ -423,11 +423,11 @@
     "lix": {
       "flake": false,
       "locked": {
-        "lastModified": 1737301226,
-        "narHash": "sha256-Gt0o5Reh1Pm/1Bf5QawWWbEB6A1kExmc9Wva4bq8Bx8=",
-        "rev": "4bb97b2a9b4e96b825e621810900ce077fdf7efb",
+        "lastModified": 1737403222,
+        "narHash": "sha256-bAcx6Nv0a3XoCBs9TSqgjyf16nrz/ozUO93Ng52IfOI=",
+        "rev": "fcc151d7898e466569c5f9e628217e476c1eaba8",
         "type": "tarball",
-        "url": "https://git.lix.systems/api/v1/repos/lix-project/lix/archive/4bb97b2a9b4e96b825e621810900ce077fdf7efb.tar.gz?rev=4bb97b2a9b4e96b825e621810900ce077fdf7efb"
+        "url": "https://git.lix.systems/api/v1/repos/lix-project/lix/archive/fcc151d7898e466569c5f9e628217e476c1eaba8.tar.gz?rev=fcc151d7898e466569c5f9e628217e476c1eaba8"
       },
       "original": {
         "type": "tarball",
@@ -594,11 +594,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1737341314,
-        "narHash": "sha256-cLtRowBc6OUcOSgGkwle70mOW/UyCbxWUveK3iQUKzI=",
+        "lastModified": 1737390929,
+        "narHash": "sha256-0G3+H+LH18eQXDnElM/Y/8BkUPoO9qc2jLh7aoI6tXA=",
         "owner": "nix-community",
         "repo": "nixpkgs-wayland",
-        "rev": "0deffe038aebb272bd19a514e780a09e24da8417",
+        "rev": "900b3dbd52e89c7dde737e50c51ee97e93ee4d9e",
         "type": "github"
       },
       "original": {
@@ -682,11 +682,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1737107480,
-        "narHash": "sha256-GXUE9+FgxoZU8v0p6ilBJ8NH7k8nKmZjp/7dmMrCv3o=",
+        "lastModified": 1737411508,
+        "narHash": "sha256-j9IdflJwRtqo9WpM0OfAZml47eBblUHGNQTe62OUqTw=",
         "owner": "Mic92",
         "repo": "sops-nix",
-        "rev": "4c4fb93f18b9072c6fa1986221f9a3d7bf1fe4b6",
+        "rev": "015d461c16678fc02a2f405eb453abb509d4e1d4",
         "type": "github"
       },
       "original": {
