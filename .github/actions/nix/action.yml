@@ -41,4 +41,3 @@ runs:
     - name: "Show Nix Info"
       shell: bash
       run: nix run "nixpkgs#nix-info" -- -m
-
