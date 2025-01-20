@@ -389,16 +389,17 @@ proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: i
   if isCi():
     reportResults(results)
 
-  # TODO: push after build not at once?
-  var cmd = service
-  cmd.addArg "push"
-  cmd.addArg name
-  cmd.addArg "--jobs"
-  cmd.addArg $jobs
-  cmd.addArgs outs
-  let pushErr = runCmd(cmd)
-  if pushErr != 0:
-    errorQuit "failed to push build to cache"
+  if outs.len > 0:
+    # TODO: push after build not at once?
+    var cmd = service
+    cmd.addArg "push"
+    cmd.addArg name
+    cmd.addArg "--jobs"
+    cmd.addArg $jobs
+    cmd.addArgs outs
+    let pushErr = runCmd(cmd)
+    if pushErr != 0:
+      errorQuit "failed to push build to cache"
 
 proc getUpdatedLockFile() =
   info "getting updated flake.lock as updated.lock"
