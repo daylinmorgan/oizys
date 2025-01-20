@@ -36,6 +36,11 @@ runs:
       with:
         extra-conf: ${{ inputs.nix_conf }}
 
+    - name: modify trusted users
+      shell: bash
+      run: |
+        sudo echo "trusted-users = root $USER" >> /etc/nix/nix.conf
+
     - name: Install and login to attic cache
       shell: bash
       run: |
