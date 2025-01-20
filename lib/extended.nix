@@ -125,6 +125,7 @@ let
     module = nixosModuleFrom;
     pkgs = pkgsFromSystem system;
     pkg = pkgFromSystem system;
+    toPackageAttrs = flakesToPackagesAttrs system;
   };
 
   loadOverlays =
@@ -209,6 +210,5 @@ in
     hostFiles
     oizysSettings
     tryPkgsFromFile
-    flakesToPackagesAttrs
     ;
 }

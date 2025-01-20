@@ -4,7 +4,7 @@
   ...
 }:
 let
-  inherit (lib) flakesToPackageAttrs flakeFromSystem;
+  inherit (lib) flakeFromSystem;
   flake = flakeFromSystem pkgs.system;
 in
 {
@@ -20,8 +20,8 @@ in
   attic-server = (flake.pkgs "lix-attic").attic-server;
   lix = (flake.pkgs "lix-module").default;
 }
-# // (flakesToPackageAttrs [
-#   "pixi"
-#   "f1multiviewer"
-#   "tsm"
-# ])
+// (flake.toPackageAttrs [
+  "pixi"
+  "f1multiviewer"
+  "tsm"
+])
