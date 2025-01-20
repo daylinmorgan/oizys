@@ -18,7 +18,7 @@ in
 
   attic-client = (flake.pkgs "lix-attic").attic-client;
   attic-server = (flake.pkgs "lix-attic").attic-server;
-  lix = (flake.pkgs "lix-module").default;
+  lix = pkgs.callPackage ./lix { inherit flake; };
 }
 // (flake.toPackageAttrs [
   "pixi"
