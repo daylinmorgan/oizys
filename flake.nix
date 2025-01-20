@@ -25,10 +25,10 @@
       inputs.flake-utils.follows = "flake-utils";
     };
 
-    sops-nix.url = "github:Mic92/sops-nix";
-    nix-index-database.url = "github:nix-community/nix-index-database";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
+    nix-index-database.url = "github:nix-community/nix-index-database";
+    sops-nix.url = "github:Mic92/sops-nix";
     hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
     hyprland-contrib.url = "github:hyprwm/contrib";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
@@ -41,7 +41,7 @@
     jj.url = "github:martinvonz/jj/v0.25.0";
 
     # master as of 2024.12.12
-    NixVirt.url = "github:AshleyYakeley/NixVirt?rev=fe3aaa86d4458e4f84348941297f7ba82e2a9f67";
+    NixVirt.url = "github:AshleyYakeley/NixVirt?rev=9063243af5e6674359a0ff7cec57f02eeacf0cea";
 
     # Follows
 
