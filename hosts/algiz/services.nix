@@ -1,4 +1,4 @@
-{ pkgs, enabled, ... }:
+{ pkgs, enabled, flake, ... }:
 let
   atticPort = "5656";
   static = pkgs.runCommandLocal "static-files" { } ''
@@ -26,6 +26,8 @@ in
   # https://discourse.nixos.org/t/docker-container-not-resolving-to-host/30259/6
   # networking.firewall.extraCommands = "iptables -A INPUT -p tcp --destination-port ${atticPort} -s 172.16.0.0/12 -j ACCEPT";
   services.atticd = enabled // {
+    package = (flake.pkgs "lix-attic").attic-server;
+
 
     # Replace with absolute path to your credentials file
     environmentFile = "/etc/atticd.env";
