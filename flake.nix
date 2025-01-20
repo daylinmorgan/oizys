@@ -145,7 +145,6 @@
     };
 
     lix-attic.inputs = {
-      flake-compat.follows = "";
       nix-github-actions.follows = "";
     };
   };
