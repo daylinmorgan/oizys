@@ -62,19 +62,14 @@ proc formatStdoutStderr(stdout: string, stderr: string): string =
     result.add "-> "
     result.add line
     result.add "\n"
+
   result.add "stdout:\n"
   for line in stdout.splitLines():
     addLine
-    # result.add bb"[red]->[/]"
-    #  result.add "-> "
-    #  result.add line
-    #  result.add "\n"
+
   result.add "stdout:\n"
   for line in stderr.splitLines():
     addLine
-    result.add "-> "
-    result.add line
-    result.add "\n"
 
 
 
