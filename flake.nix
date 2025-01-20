@@ -137,10 +137,17 @@
     # nil inputs
     hyprland.inputs.pre-commit-hooks.follows = "";
 
-    nixpkgs-wayland.inputs.flake-compat.follows = "";
     nixos-wsl.inputs.flake-compat.follows = "";
 
-    nixpkgs-wayland.inputs.nix-eval-jobs.follows = "";
+    nixpkgs-wayland.inputs = {
+      flake-compat.follows = "";
+      nix-eval-jobs.follows = "";
+    };
+
+    lix-attic.inputs = {
+      flake-compat.follows = "";
+      nix-github-actions.follows = "";
+    };
   };
 
   nixConfig = {
