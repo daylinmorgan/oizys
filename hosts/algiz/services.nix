@@ -25,13 +25,13 @@ in
   };
 
   security.polkit = enabled; # attic was looking for this...
-  environment.systemPackages = [ pkgs.attic-client ];
+  environment.systemPackages = [ (flake.pkgs "self").attic-client ];
 
   # allow docker to forward the request to the host running attic
   # https://discourse.nixos.org/t/docker-container-not-resolving-to-host/30259/6
   # networking.firewall.extraCommands = "iptables -A INPUT -p tcp --destination-port ${atticPort} -s 172.16.0.0/12 -j ACCEPT";
   services.atticd = enabled // {
-    package = (flake.pkgs "lix-attic").attic-server;
+    package = (flake.pkgs "self").attic-server;
 
     # Replace with absolute path to your credentials file
     # TODO: replace with sops-secret!

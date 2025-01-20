@@ -67,7 +67,7 @@ let
         iso = mkIso.config.system.build.isoImage;
         # nimlangserver = pkgs.callPackage ../pkgs/nim/nimlangserver { };
       }
-      // (import ../pkgs { inherit pkgs lib; })
+      // (import ../pkgs { inherit pkgs lib inputs; })
     );
 
     devShells = forAllSystems (pkgs: {

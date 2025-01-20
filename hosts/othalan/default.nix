@@ -29,7 +29,7 @@
   };
 
   environment.systemPackages = [
-    (flake.pkgs "lix-attic").attic-client
+    (flake.pkgs "self").attic-client
   ];
 
 }
