@@ -54,21 +54,6 @@
         "type": "github"
       }
     },
-    "crane": {
-      "locked": {
-        "lastModified": 1736898272,
-        "narHash": "sha256-D10wlrU/HCpSRcb3a7yk+bU3ggpMD1kGbseKtO+7teo=",
-        "owner": "ipetkov",
-        "repo": "crane",
-        "rev": "6a589f034202a7c6e10bce6c5d1d392d7bc0f340",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ipetkov",
-        "repo": "crane",
-        "type": "github"
-      }
-    },
     "f1multiviewer": {
       "inputs": {
         "nixpkgs": [
@@ -86,43 +71,6 @@
       "original": {
         "owner": "daylinmorgan",
         "repo": "f1multiviewer-flake",
-        "type": "github"
-      }
-    },
-    "flake-compat": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1733328505,
-        "narHash": "sha256-NeCCThCEP3eCl2l/+27kNNK7QrwZB1IJCrXfrbv5oqU=",
-        "owner": "edolstra",
-        "repo": "flake-compat",
-        "rev": "ff81ac966bb2cae68946d5ed5fc4994f96d0ffec",
-        "type": "github"
-      },
-      "original": {
-        "owner": "edolstra",
-        "repo": "flake-compat",
-        "type": "github"
-      }
-    },
-    "flake-parts": {
-      "inputs": {
-        "nixpkgs-lib": [
-          "lix-attic",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1736143030,
-        "narHash": "sha256-+hu54pAoLDEZT9pjHlqL9DNzWz0NbUn8NEAHP7PQPzU=",
-        "owner": "hercules-ci",
-        "repo": "flake-parts",
-        "rev": "b905f6fc23a9051a6e1b741e1438dbfc0634c6de",
-        "type": "github"
-      },
-      "original": {
-        "owner": "hercules-ci",
-        "repo": "flake-parts",
         "type": "github"
       }
     },
@@ -486,38 +434,6 @@
         "url": "https://git.lix.systems/lix-project/lix/archive/main.tar.gz"
       }
     },
-    "lix-attic": {
-      "inputs": {
-        "crane": "crane",
-        "flake-compat": "flake-compat",
-        "flake-parts": "flake-parts",
-        "lix": [
-          "lix-module",
-          "lix"
-        ],
-        "lix-module": [
-          "lix-module"
-        ],
-        "nix-github-actions": [],
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "nixpkgs-stable": "nixpkgs-stable"
-      },
-      "locked": {
-        "lastModified": 1736969694,
-        "narHash": "sha256-4OKeL5HbDNDKl1JgRH97HCe/QQjhLGB4pjxxYr5PTFc=",
-        "ref": "refs/heads/main",
-        "rev": "d413a74fa132cf5f421732dc7dd5cadda96fb874",
-        "revCount": 361,
-        "type": "git",
-        "url": "https://git.lix.systems/nrabulinski/attic.git"
-      },
-      "original": {
-        "type": "git",
-        "url": "https://git.lix.systems/nrabulinski/attic.git"
-      }
-    },
     "lix-module": {
       "inputs": {
         "flake-utils": [
@@ -666,22 +582,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-stable": {
-      "locked": {
-        "lastModified": 1735563628,
-        "narHash": "sha256-OnSAY7XDSx7CtDoqNh8jwVwh4xNL/2HaJxGjryLWzX8=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "b134951a4c9f3c995fd7be05f3243f8ecd65d798",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-24.05",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-wayland": {
       "inputs": {
         "flake-compat": [],
@@ -738,7 +638,6 @@
         "jj": "jj",
         "lib-aggregate": "lib-aggregate",
         "lix": "lix",
-        "lix-attic": "lix-attic",
         "lix-module": "lix-module",
         "my-nixpkgs": "my-nixpkgs",
         "nim2nix": "nim2nix",

@@ -6,14 +6,6 @@
 let
   inherit (lib) flakeFromSystem;
   flake = flakeFromSystem pkgs.system;
-  lix = pkgs.callPackage ./lix { inherit flake; };
-
-  # make attic also use the "no check lix"
-  atticPackages = pkg: {
-    "${pkg}" = (flake.pkgs "lix-attic").${pkg}.overrideAttrs (oldAttrs: {
-      buildInputs = [ pkgs.boost lix ];
-    });
-  };
 
 in
 {
@@ -25,10 +17,8 @@ in
 
   llm-with-plugins = pkgs.callPackage ./llm/llm-with-plugins { };
 
-  lix = lix;
+  lix = pkgs.callPackage ./lix { inherit flake; };
 }
-// (atticPackages "attic-client")
-// (atticPackages "attic-server")
 // (flake.toPackageAttrs [
   "pixi"
   "f1multiviewer"

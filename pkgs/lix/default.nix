@@ -1,5 +1,6 @@
 { flake, ... }:
 ((flake.pkgs "lix-module").default.override {
+  # is this doing anything?
   aws-sdk-cpp = null;
 }).overrideAttrs
   (attrs: {

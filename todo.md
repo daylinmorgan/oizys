@@ -2,6 +2,7 @@
 
 ## oizys
 
+
 ## software
 
 - [ ] switch systemd desktop file to libvirt VM

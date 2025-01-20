@@ -61,13 +61,14 @@
     tsm.inputs.nim2nix.follows = "nim2nix";
     utils.inputs.nim2nix.follows = "nim2nix";
 
-    lix-attic = {
-      url = "git+https://git.lix.systems/nrabulinski/attic.git";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.lix-module.follows = "lix-module";
-      # make lix-module source of truth
-      inputs.lix.follows = "lix-module/lix";
-    };
+    # lix-attic = {
+    #   url = "git+https://git.lix.systems/nrabulinski/attic.git";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    #   inputs.lix-module.follows = "lix-module";
+    #   # make lix-module source of truth
+    #   inputs.lix.follows = "lix-module/lix";
+    #   inputs.nix-github-actions.follows = "";
+    # };
 
     # roc = {
     #   url = "github:roc-lang/roc";
@@ -95,7 +96,7 @@
     nixos-wsl.inputs.flake-compat.follows = "";
     nixpkgs-wayland.inputs.flake-compat.follows = "";
     nixpkgs-wayland.inputs.nix-eval-jobs.follows = "";
-    lix-attic.inputs.nix-github-actions.follows = "";
+
   };
 
   nixConfig = {
