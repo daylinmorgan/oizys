@@ -6,7 +6,7 @@
   # # added to make using `pip install` work in docker build
   # networking.nameservers = [ "8.8.8.8"];
 
-  # allow tcp connections for revsere proxy
+  # allow tcp connections for reverse proxy
   networking.firewall = enabled // {
     allowedTCPPorts = [
       80
