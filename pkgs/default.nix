@@ -11,7 +11,7 @@ let
   # make attic also use the "no check lix"
   atticPackages = pkg: {
     "${pkg}" = (flake.pkgs "lix-attic").${pkg}.overrideAttrs (oldAttrs: {
-      buildInputs = oldAttrs.buildInputs ++ [ lix ];
+      buildInputs = [ pkgs.boost lix ];
     });
   };
 
