@@ -104,6 +104,16 @@ let
   # listNixFilesRecursive = dir: filterNotDefaultNixFile (listFilesRecursive dir);
   listNixFilesRecursive = dir: dir |> listFilesRecursive |> filterNotDefaultNixFile;
 
+  ## convert a list of flakes to { name = packageAttr; }
+  flakesToPackagesAttrs =
+    system: flakes:
+    listToAttrs (
+      map (name: {
+        inherit name;
+        value = pkgFromSystem system name;
+      }) flakes
+    );
+
   # defaultLinuxPackage = flake: flake.packages.x86_64-linux.default;
   # defaultPackageGeneric = system: flake: "${flake}.packages.${system}.default";
   pkgsFromSystem = system: flake: inputs."${flake}".packages."${system}";
@@ -199,5 +209,6 @@ in
     hostFiles
     oizysSettings
     tryPkgsFromFile
+    flakesToPackagesAttrs
     ;
 }

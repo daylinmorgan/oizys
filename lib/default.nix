@@ -1,7 +1,6 @@
 inputs@{
   nixpkgs,
   treefmt-nix,
-  lix-attic,
   self,
   ...
 }:
@@ -11,7 +10,6 @@ let
   inherit (builtins) mapAttrs readDir listToAttrs;
   inherit (lib)
     genAttrs
-    pkgFromSystem
     loadOverlays
     listify
     enableAttrs
@@ -34,15 +32,6 @@ let
       )
     );
 
-  inheritFlakePkgs =
-    pkgs: flakes:
-    listToAttrs (
-      map (name: {
-        inherit name;
-        value = pkgFromSystem pkgs.system name;
-      }) flakes
-    );
-
   evalTreeFmt =
     pkgs:
     (treefmt-nix.lib.evalModule pkgs (
@@ -60,12 +49,6 @@ let
       }
     ));
 
-  lixAtticPackages = pkgs:
-  { attic-client = lix-attic.packages.${pkgs.system}.attic-client;
-  attic-server = lix-attic.packages.${pkgs.system}.attic-server;
-};
-
-
   oizysFlake = {
     templates = {
       dev = {
@@ -82,15 +65,10 @@ let
         default = oizys;
         oizys = pkgs.callPackage ../pkgs/oizys { };
         iso = mkIso.config.system.build.isoImage;
-        lix = pkgFromSystem pkgs.system "lix-module";
+
+        # nimlangserver = pkgs.callPackage ../pkgs/nim/nimlangserver { };
       }
-      // (inheritFlakePkgs pkgs [
-        "pixi"
-        "f1multiviewer"
-        "tsm"
-      ])
-      // (import ../pkgs { inherit pkgs; })
-      // (lixAtticPackages pkgs)
+      // (import ../pkgs { inherit pkgs lib; })
     );
 
     devShells = forAllSystems (pkgs: {
