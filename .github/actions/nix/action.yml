@@ -32,10 +32,9 @@ runs:
     #     source-url: https://install.lix.systems/lix/lix-installer-x86_64-linux
     #     extra-conf: ${{ inputs.nix_conf }}
 
-    - uses: samueldr/lix-gha-installer-action@released
-    - name: workaround
-      shell: bash
-      run: echo "${{ inputs.nix_conf }}" >> /etc/nix/nix.conf
+    - uses: daylinmorgan/lix-gha-installer-action@released
+      with:
+        extra-conf: ${{ inputs.nix_conf }}
 
     - name: Install and login to attic cache
       shell: bash
