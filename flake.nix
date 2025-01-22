@@ -39,7 +39,7 @@
 
     # Follows
 
-    # nixpkgs
+    ## nixpkgs
     f1multiviewer.inputs.nixpkgs.follows = "nixpkgs";
     hyprland.inputs.nixpkgs.follows = "nixpkgs";
     hyprland-contrib.inputs.nixpkgs.follows = "nixpkgs";
@@ -56,7 +56,7 @@
     tsm.inputs.nixpkgs.follows = "nixpkgs";
     utils.inputs.nixpkgs.follows = "nixpkgs";
 
-    # nim2nix
+    ## nim2nix
     hyprman.inputs.nim2nix.follows = "nim2nix";
     tsm.inputs.nim2nix.follows = "nim2nix";
     utils.inputs.nim2nix.follows = "nim2nix";
@@ -91,7 +91,7 @@
 
     nixpkgs-lib.url = "github:nix-community/nixpkgs.lib";
 
-    # nil inputs
+    ## nil inputs, I don't *ALL* your flake inputs...
     hyprland.inputs.pre-commit-hooks.follows = "";
     nixos-wsl.inputs.flake-compat.follows = "";
     nixpkgs-wayland.inputs.flake-compat.follows = "";
