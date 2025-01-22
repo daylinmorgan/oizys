@@ -90,6 +90,7 @@
     nixpkgs-wayland.inputs.lib-aggregate.follows = "lib-aggregate";
 
     nixpkgs-lib.url = "github:nix-community/nixpkgs.lib";
+    lib-aggregate.inputs.nixpkgs-lib.follows = "nixpkgs-lib";
 
     ## nil inputs, I don't *ALL* your flake inputs...
     hyprland.inputs.pre-commit-hooks.follows = "";
