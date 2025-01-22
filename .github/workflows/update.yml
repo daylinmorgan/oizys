@@ -12,6 +12,11 @@ on:
         description: "list of nix flake inputs"
         default: ""
         type: "string"
+      extraArgs:
+        description: "postional args forwared to nix"
+        default: ""
+        type: string
+
 
   # schedule:
   #   # At minute 00:00 on Monday, Wednesday, and Friday.
@@ -20,6 +25,7 @@ on:
 env:
   hosts: ${{ github.event_name == 'schedule' && 'othalan,algiz' || github.event.inputs.hosts }}
   flake-inputs: ${{ github.event_name == 'schedule' && '' || github.event.inputs.flake-inputs }}
+  extraArgs: ${{ github.event_name == 'schedule' && '' || github.event.inputs.extraArgs }}
 
 permissions:
   contents: write
@@ -63,7 +69,8 @@ jobs:
           --flake .
           -vv
           --
-          --quiet
+          ${{ env.extraArgs }}
+
 
       - name: Commit Updates
         uses: daylin-bot/actions/commit-and-push@main
@@ -98,7 +105,7 @@ jobs:
           --flake .
           -vv
           --
-          --quiet
+          ${{ env.extraArgs }}
 
       - run: |
           echo "# system diffs" >> $GITHUB_STEP_SUMMARY
