@@ -1,6 +1,8 @@
 {
   config,
+  pkgs,
   enabled,
+
   ...
 }:
 {
@@ -27,4 +29,5 @@
     };
   };
 
+  environment.systemPackages = [pkgs.stable.quarto];
 }

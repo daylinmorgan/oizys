@@ -6,6 +6,8 @@ firefox
 zk
 graphviz
 charm-freeze
-quarto
+# build-failure:
+# pandoc -> texmath -> typst-symbols?
+# quarto
 calibre
 attic-client
