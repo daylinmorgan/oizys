@@ -82,6 +82,16 @@
     # zls.inputs.zig-overlay.follows = "zig-overlay";
 
     # further flake.lock minimization shenanigans
+    hyprland-qt-support.url = "github:hyprwm/hyprland-qt-support";
+    hyprland-qt-support.inputs.hyprlang.follows = "hyprland/hyprlang";
+    hyprland-qt-support.inputs.nixpkgs.follows = "hyprland/nixpkgs";
+    hyprland-qt-support.inputs.systems.follows = "hyprland/systems";
+    hyprland.inputs.hyprland-qtutils.inputs.hyprland-qt-support.follows = "hyprland-qt-support";
+
+    systems.url = "github:nix-systems/x86_64-linux";
+    hyprland.inputs.systems.follows = "systems";
+    flake-utils.inputs.systems.follows = "systems";
+
     flake-utils.url = "github:numtide/flake-utils";
     jj.inputs.flake-utils.follows = "flake-utils";
     lib-aggregate.inputs.flake-utils.follows = "flake-utils";
