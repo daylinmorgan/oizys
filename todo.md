@@ -5,6 +5,7 @@
 Could make an `oizys check` command:
 
 - `check lock` could encapsulate any diagnostic code I want to run that does things like check for too many "inputs".
+   essentially getting the same output as this `jq < flake.lock '.nodes | keys[] | select(contains("_"))`
 - `check cache <path>` check for the narinfo in my cache given some nix store path
 
 ## software
