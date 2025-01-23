@@ -57,21 +57,16 @@ proc runCmdCapt*(
   close p
 
 proc formatStdoutStderr(stdout: string, stderr: string): string =
-  template addLine =
-    # TODO: make -> red after hwylterm update
-    result.add "-> "
-    result.add line
-    result.add "\n"
-
-  result.add "stdout:\n"
-  for line in stdout.splitLines():
-    addLine
-
-  result.add "stdout:\n"
-  for line in stderr.splitLines():
-    addLine
-
-
+  template show(stream: string) =
+    if stream.strip() != "":
+      result.add astToStr(stream) & ":\n"
+      for line in stream.splitlines():
+      # TODO: make -> red after hwylterm update
+        result.add "-> "
+        result.add line
+        result.add "\n"
+  show(stdout)
+  show(stderr)
 
 proc runCmdCaptWithSpinner*(
   cmd: string,
