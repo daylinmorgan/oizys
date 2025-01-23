@@ -29,5 +29,5 @@
     };
   };
 
-  environment.systemPackages = [pkgs.stable.quarto];
+  environment.systemPackages = [ pkgs.stable.quarto ];
 }
