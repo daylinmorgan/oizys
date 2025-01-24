@@ -5,10 +5,10 @@ inputs:
     description: Extra nix.conf config
     default: |
       accept-flake-config = true
-      experimental-features = nix-command flakes pipe-operator
-      build-dir = /nix/var
-      keep-derivations = true
-      keep-outputs = true
+      experimental-features = nix-command flakes pipe-operators
+      # build-dir = /nix/var
+      # keep-derivations = true
+      # keep-outputs = true
   clean:
     description: Clean up disk space
     default: false
@@ -21,22 +21,24 @@ inputs:
 runs:
   using: composite
   steps:
-    - shell: bash
-      env:
-        CLEAN: ${{ inputs.clean }}
-        BTRFS: ${{ inputs.btrfs }}
-      run: exec ${{ github.action_path }}/prepare.sh
+    # - shell: bash
+    #   env:
+    #     CLEAN: ${{ inputs.clean }}
+    #     BTRFS: ${{ inputs.btrfs }}
+      # run: exec ${{ github.action_path }}/prepare.sh
 
-
-    - uses: daylinmorgan/lix-gha-installer-action@released
+    - uses: DeterminateSystems/nix-installer-action@v15
       with:
         extra-conf: ${{ inputs.nix_conf }}
 
-    # TODO: rebase my fork to remove this
-    - name: modify trusted users
-      shell: bash
-      run: |
-        sudo echo "trusted-users = root $USER" >> /etc/nix/nix.conf
+    # - uses: daylinmorgan/lix-gha-installer-action@released
+    #   with:
+    #     extra-conf: ${{ inputs.nix_conf }}
+    #
+    # - name: modify trusted users
+    #   shell: bash
+    #   run: |
+    #     sudo echo "trusted-users = root $USER" >> /etc/nix/nix.conf
 
     - name: Install and login to attic cache
       shell: bash

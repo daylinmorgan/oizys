@@ -49,6 +49,9 @@ jobs:
       - name: Pre-build Oizys
         run: nix build . --print-build-logs
 
+      - run: |
+          nix flake show
+
       - name: Build
         run: >
           nix run .

@@ -8,11 +8,12 @@
     stable.url = "github:nixos/nixpkgs/nixos-24.05";
     my-nixpkgs.url = "github:daylinmorgan/nixpkgs/nixos-unstable";
 
-    lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
+    # lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
+    lix-module.url = "git+https://git.lix.systems/lix-project/nixos-module.git";
     lix-module.inputs.nixpkgs.follows = "nixpkgs";
     lix-module.inputs.flake-utils.follows = "flake-utils";
     lix = {
-      url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
+      url = "git+https://git.lix.systems/lix-project/lix.git";
       flake = false;
     };
     lix-module.inputs.lix.follows = "lix";
@@ -86,7 +87,15 @@
     hyprland-qt-support.inputs.hyprlang.follows = "hyprland/hyprlang";
     hyprland-qt-support.inputs.nixpkgs.follows = "hyprland/nixpkgs";
     hyprland-qt-support.inputs.systems.follows = "hyprland/systems";
-    hyprland.inputs.hyprland-qtutils.inputs.hyprland-qt-support.follows = "hyprland-qt-support";
+    # hyprland.inputs.hyprland-qtutils.inputs.hyprland-qt-support.follows = "hyprland-qt-support";
+    #
+    # fix needed for nix 2.26.1?
+    hyprland.inputs.hyprland-qtutils.follows = "hyprland-qtutils";
+    hyprland-qtutils.url = "github:hyprwm/hyprland-qtutils";
+    hyprland-qtutils.inputs.hyprutils.follows = "hyprland/hyprutils";
+    hyprland-qtutils.inputs.nixpkgs.follows = "hyprland/nixpkgs";
+    hyprland-qtutils.inputs.systems.follows = "hyprland/systems";
+    hyprland-qtutils.inputs.hyprland-qt-support.follows = "hyprland-qt-support";
 
     systems.url = "github:nix-systems/x86_64-linux";
     hyprland.inputs.systems.follows = "systems";
