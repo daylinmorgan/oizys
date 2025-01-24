@@ -67,7 +67,7 @@ proc formatStdoutStderr(stdout: string, stderr: string): BbString =
 
 proc runCmdCaptWithSpinner*(
   cmd: string,
-  msg: string = "",
+  msg: BbString | string = bb"",
   capture: set[CaptureGrp] = {CaptStdout}
 ): tuple[output, err: string] =
   var

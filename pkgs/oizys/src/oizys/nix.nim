@@ -135,8 +135,7 @@ proc toBuildNixosConfiguration(): seq[string] =
   let (_, err) = runCmdCaptWithSpinner(
     cmd,
     # BUG: hwylterm spinner not showing styled text?
-    # "running dry run build for: " & $(getHosts().join(" ").bb("bold")),
-    "running dry run build for: " & getHosts().join(" "),
+    "running dry run build for: " & (getHosts().join(" ").bb("bold")),
     capture = {CaptStderr}
   )
   let output = parseDryRunOutput err
