@@ -2,6 +2,8 @@
 
 ## oizys
 
+- [ ] build failures are reported on the command line for `oizys ci update` as 'build successful'
+
 Could make an `oizys check` command:
 
 - `check lock` could encapsulate any diagnostic code I want to run that does things like check for too many "inputs".
