@@ -27,15 +27,12 @@ runs:
         BTRFS: ${{ inputs.btrfs }}
       run: exec ${{ github.action_path }}/prepare.sh
 
-    # - uses: DeterminateSystems/nix-installer-action@v15
-    #   with:
-    #     source-url: https://install.lix.systems/lix/lix-installer-x86_64-linux
-    #     extra-conf: ${{ inputs.nix_conf }}
 
     - uses: daylinmorgan/lix-gha-installer-action@released
       with:
         extra-conf: ${{ inputs.nix_conf }}
 
+    # TODO: rebase my fork to remove this
     - name: modify trusted users
       shell: bash
       run: |
