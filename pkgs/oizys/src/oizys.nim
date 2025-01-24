@@ -39,6 +39,8 @@ hwylCli:
   subcommands:
     [build]
     ... "nix build"
+    positionals:
+      args seq[string]
     flags:
       ^minimal
       nom:
@@ -48,6 +50,8 @@ hwylCli:
 
     [cache]
     ... "build and push store paths"
+    positionals:
+      args seq[string]
     flags:
       name:
         T string
@@ -75,6 +79,8 @@ hwylCli:
     subcommands:
       [update]
       ... "build current and updated hosts"
+      positionals:
+        args seq[string]
       run:
         ciUpdate(args)
 
@@ -85,6 +91,8 @@ hwylCli:
     examples:
       [b]oizys gha update[/] --inputs:hosts:othalan,algiz,mannaz
     """
+    positionals:
+      workflow string
     flags:
       inputs:
         T seq[KVString]
@@ -96,13 +104,14 @@ hwylCli:
     run:
       # TODO: support file operations like gh
       # i.e. @flake.lock means read a file at flake.lock and use it's contents as a string
-      if args.len == 0: fatalQuit "expected workflow file name"
       let inputs =
         inputs.mapIt((it.key, it.val)).toTable()
-      createDispatch(args[0], `ref`, inputs)
+      createDispatch(workflow, `ref`, inputs)
 
     [dry]
     ... "dry run build"
+    positionals:
+      args seq[string]
     flags:
       ^minimal
     run:
@@ -111,12 +120,15 @@ hwylCli:
     [os]
     ? "[b]oizys os[/] [i]subcmd[/] [[[faint]flags[/]]"
     ... "nixos-rebuild [italic]subcmd[/]"
+    positionals:
+      subcmd NixosRebuildSubcmd
+      args seq[string]
     flags:
       remote:
         ? "host is remote"
         - r
     run:
-      nixosRebuild(args, remote)
+      nixosRebuild(subcmd, args, remote)
 
     [output]
     ... "nixos config attr"
@@ -145,5 +157,5 @@ hwylCli:
       if preview: quit 0
       if yes or confirm("Proceed with system update?"):
         updateRepo()
-        nixosRebuild(["switch"])
+        nixosRebuild(NixosRebuildSubcmd.switch)
 

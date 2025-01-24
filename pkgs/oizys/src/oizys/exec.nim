@@ -56,17 +56,14 @@ proc runCmdCapt*(
 
   close p
 
-proc formatStdoutStderr(stdout: string, stderr: string): string =
-  template show(stream: string) =
+proc formatStdoutStderr(stdout: string, stderr: string): BbString =
+  template add(stream: string) =
     if stream.strip() != "":
-      result.add astToStr(stream) & ":\n"
+      result.add astToStr(stream).bb("bold") & ":\n"
       for line in stream.splitlines():
-      # TODO: make -> red after hwylterm update
-        result.add "-> "
-        result.add line
-        result.add "\n"
-  show(stdout)
-  show(stderr)
+        result.add bb("[red]->[/] " & line & "\n")
+  add(stdout)
+  add(stderr)
 
 proc runCmdCaptWithSpinner*(
   cmd: string,
@@ -79,7 +76,7 @@ proc runCmdCaptWithSpinner*(
   with(Dots2, msg):
     (output, err, code) = runCmdCapt(cmd, capture)
   if code != 0:
-    stderr.write(formatStdoutStderr(output,err))
+    stderr.write($formatStdoutStderr(output,err))
     error fmt"{cmd} had non zero exit"
     quit code
   return (output, err)
