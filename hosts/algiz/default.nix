@@ -16,6 +16,9 @@
     '')
   ];
 
+  # maybe I don't need to use root and can use this strategy?
+  # https://wiki.nixos.org/wiki/Restic#Security_Wrapper
+  # would this make it possible for me to run the binary as my 'normal user'?
   services.restic.backups.gdrive = {
     # directories created by gitea and soft-serve aren't world readable
     user = "root";
