@@ -339,10 +339,13 @@ proc build(drv: OizysDerivation, rest: seq[string]): BuildResult =
   cmd.addArg "--no-link"
   cmd.addArgs rest
   let buildCode = runCmd(cmd)
-  result.successful = buildCode == 0
   result.duration = now() - startTime
   # TODO: make splitDrv more ergonmic?
-  info "succesfully built: " & splitDrv(drv.name).name
+  if buildCode == 0:
+    result.successful = true
+    info "succesfully built: " & splitDrv(drv.name).name
+  else:
+    warn "failed to build: " & splitDrv(drv.name).name
   info "-> duration: " & formatDuration(result.duration)
 
 func outputsPaths(o: OizysDerivation): seq[string] =
