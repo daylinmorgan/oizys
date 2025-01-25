@@ -2,13 +2,12 @@
 
 ## oizys
 
-- [ ] build failures are reported on the command line for `oizys ci update` as 'build successful'
-
 Could make an `oizys check` command:
 
+- `utils hash` given some flake-url or path attempt to build and extract "got:   <hash>" string
 - `check lock` could encapsulate any diagnostic code I want to run that does things like check for too many "inputs".
   essentially getting the same output as this `jq < flake.lock '.nodes | keys[] | select(contains("_"))`
-- `check cache <path>` check for the narinfo in my cache given some nix store path
+- `utils cache <path>` check for the narinfo in my cache given some nix store path
 
 ## software
 
