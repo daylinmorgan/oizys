@@ -113,11 +113,11 @@
   nixConfig = {
     extra-substituters = [
       "https://attic.dayl.in/oizys"
-      "https://nixpkgs-wayland.cachix.org"
+      # "https://nixpkgs-wayland.cachix.org"
     ];
     extra-trusted-public-keys = [
       "oizys:DSw3mwVMM/Y+PXSVpkDlU5dLwlORuiJRGPkwr5INSMc="
-      "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
+      # "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
     ];
   };
 }
