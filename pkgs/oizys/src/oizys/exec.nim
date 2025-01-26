@@ -7,8 +7,14 @@ import hwylterm
 import hwylterm/spin/spinners # todo: remove after hwylterm update
 
 
-func addArgs*(cmd: var string, args: varargs[string]) =
+func addArgs*(cmd: string, args: varargs[string]): string =
+  ## append to string for command
+  result = cmd & " " & args.join(" ")
+
+func addArgs*(cmd: var string, args: varargs[string]): string {.discardable.} =
+  ## append to string for command
   cmd &= " " & args.join(" ")
+  result = cmd
 
 # deprecate in favor of above?
 func addArg*(cmd: var string, arg: string ) =
@@ -50,32 +56,39 @@ proc runCmdCapt*(
         result.stderr.add line & '\n'
     result.exitCode = peekExitCode(p)
     if result.exitCode != -1:
-      result.stdout.add outstrm.readAll()
-      result.stderr.add errstrm.readAll()
+      if CaptStdout in capture:
+        result.stdout.add outstrm.readAll()
+      if CaptStderr in capture:
+        result.stderr.add errstrm.readAll()
       break
 
   close p
 
-proc formatStdoutStderr(stdout: string, stderr: string): BbString =
+proc formatSubprocessError*(s: string): BbString =
+  for line in s.splitLines():
+    result.add bb("[red]->[/] " & line & "\n")
+
+proc formatStdoutStderr*(stdout: string, stderr: string): BbString =
   template add(stream: string) =
     if stream.strip() != "":
       result.add astToStr(stream).bb("bold") & ":\n"
-      for line in stream.splitlines():
-        result.add bb("[red]->[/] " & line & "\n")
+      result.add formatSubprocessError(stream)
   add(stdout)
   add(stderr)
+
 
 proc runCmdCaptWithSpinner*(
   cmd: string,
   msg: BbString | string = bb"",
-  capture: set[CaptureGrp] = {CaptStdout}
+  capture: set[CaptureGrp] = {CaptStdout},
+  check: bool = true
 ): tuple[output, err: string] =
   var
     output, err: string
     code: int
   with(Dots2, msg):
     (output, err, code) = runCmdCapt(cmd, capture)
-  if code != 0:
+  if check and code != 0:
     stderr.write($formatStdoutStderr(output,err))
     error fmt"{cmd} had non zero exit"
     quit code

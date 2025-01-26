@@ -1,7 +1,7 @@
 ## nix begat oizys
 import std/[os, osproc, sequtils, strformat, strutils, tables]
 import hwylterm, hwylterm/[hwylcli]
-import oizys/[context, github, nix, logging]
+import oizys/[context, github, nix, logging, utils]
 
 proc checkExes() =
   if findExe("nix") == "":
@@ -37,6 +37,7 @@ hwylCli:
       - m
   preSub:
     setupLoggers()
+    echo "ORIGINAL UPDATE CONTEXT"
     updateContext(host, flake, verbose, resetCache)
 
   subcommands:
@@ -74,11 +75,6 @@ hwylCli:
 
     [ci]
     ... "builtin ci"
-    # BUG: current behavior adds this block twice...
-    # when really I want it to only happen in the lowest "subcommand"
-    # needs to be fixed in hwylterm
-    preSub:
-      updateContext(host, flake, verbose, resetCache)
     subcommands:
       [update]
       ... "build current and updated hosts"
@@ -162,3 +158,32 @@ hwylCli:
         updateRepo()
         nixosRebuild(NixosRebuildSubcmd.switch)
 
+    [utils]
+    ... """
+    less common utils operations
+
+    some snippets I've reimplemented in nim so that nix isn't as annoying
+    """
+    subcommands:
+      [hash]
+      ... "collect build hash from failure"
+      positionals:
+        installable string
+      run:
+        stdout.write getBuildHash(installable)
+
+      [narinfo]
+      ... """
+      check active caches for nix derivation
+
+      by default will use [yellow]nix config show[/] to determine
+      the binary cache urls
+      """
+      positionals:
+        installables seq[string]
+      flags:
+        cache:
+          ? "url of nix binary cache, can be repeated"
+          T seq[string]
+      run:
+        checkForCache(installables, cache)

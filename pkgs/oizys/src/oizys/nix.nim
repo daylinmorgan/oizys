@@ -3,11 +3,12 @@ import std/[
   enumerate, os, sequtils, sets, strformat,
   strutils, sugar, logging, tables, times
 ]
+export tables
 import hwylterm, hwylterm/logging, jsony
 
 import ./[context, exec]
 
-proc nixCommand(cmd: string, nom: bool = false): string =
+proc nixCommand*(cmd: string, nom: bool = false): string =
   if nom:
     if findExe("nom") == "":
       fatalQuit "--nom requires nix-output-monitor is installed"
@@ -53,13 +54,13 @@ proc nixosRebuild*(subcmd: NixosRebuildSubcmd, args: openArray[string] = [], rem
 
 type
   Derivation = object
-    storePath, hash, name: string
+    storePath*, hash*, name*: string
 
   DryRunOutput = object
     toBuild: seq[Derivation]
     toFetch: seq[Derivation]
 
-func toDerivation(pkg: string): Derivation =
+func toDerivation*(pkg: string): Derivation =
   let path = pkg.strip()
   let s = path.split("-", 1)
   result.storePath = path
@@ -108,7 +109,7 @@ proc parseDryRunOutput(err: string): DryRunOutput =
   result.toBuild.sort(cmpDrv)
   result.toFetch.sort(cmpDrv)
 
-proc trunc(s: string, limit: int): string =
+proc trunc*(s: string, limit: int): string =
   if s.len <= limit:
     s
   else:
@@ -143,22 +144,30 @@ proc toBuildNixosConfiguration(): seq[string] =
 
 type
   DerivationOutput = object
-    path: string
+    path*: string
     # hashAlgo: string
     # hash: string
   NixDerivation = object
-    inputDrvs: Table[string, JsonNode]
-    name: string
-    outputs: Table[string, DerivationOutput]
+    inputDrvs*: Table[string, JsonNode]
+    name*: string
+    outputs*: Table[string, DerivationOutput]
 
-proc evaluateDerivations(drvs: seq[string]): Table[string, NixDerivation] =
+# here a results var would be nice...
+proc narHash*(s: string): string =
+  ## get hash from nix store path
+  if not s.startsWith("/nix/store/") and s.len >= 44:
+    fatalQuit "failed to extract narHash from: " &  s
+  let ss = s.split("-")
+  result = ss[0].split("/")[^1]
+
+proc evaluateDerivations(drvs: openArray[string]): Table[string, NixDerivation] =
   var cmd = "nix derivation show -r"
   cmd.addArgs drvs
   let (output, _) =
     runCmdCaptWithSpinner(cmd, "evaluating derivations")
   fromJson(output, Table[string, NixDerivation])
 
-proc nixDerivationShow(drvs: seq[string]): Table[string, NixDerivation] =
+proc nixDerivationShow*(drvs: openArray[string]): Table[string, NixDerivation] =
   var cmd = "nix derivation show"
   cmd.addArgs drvs
   let (output, _ ) =
