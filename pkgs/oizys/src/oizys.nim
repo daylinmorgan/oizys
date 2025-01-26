@@ -16,11 +16,9 @@ hwylCli:
     flake:
       T string
       ? "path/to/flake"
-      * getFlake()
     host:
       T seq[string]
       ? "host(s) to build"
-      * getHosts()
     verbose:
       T Count
       ? "increase verbosity (up to 2)"
@@ -37,7 +35,6 @@ hwylCli:
       - m
   preSub:
     setupLoggers()
-    echo "ORIGINAL UPDATE CONTEXT"
     updateContext(host, flake, verbose, resetCache)
 
   subcommands:
