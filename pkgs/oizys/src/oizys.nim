@@ -11,6 +11,7 @@ checkexes()
 
 hwylCli:
   name "oizys"
+  settings ShowHelp
   flags:
     [global]
     flake:
