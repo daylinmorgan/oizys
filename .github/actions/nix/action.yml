@@ -27,7 +27,6 @@ runs:
         BTRFS: ${{ inputs.btrfs }}
       run: exec ${{ github.action_path }}/prepare.sh
 
-
     - uses: daylinmorgan/lix-gha-installer-action@released
       with:
         extra-conf: ${{ inputs.nix_conf }}
