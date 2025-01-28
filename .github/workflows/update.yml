@@ -88,8 +88,8 @@ jobs:
       - uses: ./.github/actions/nix
         with:
           attic_token: ${{ secrets.ATTIC_TOKEN }}
-          # clean: true
-          btrfs: true
+          clean: true
+          # btrfs: true
 
       - name: Pre-build oizys
         run: nix build .
