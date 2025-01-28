@@ -86,7 +86,13 @@
     hyprland-qt-support.inputs.hyprlang.follows = "hyprland/hyprlang";
     hyprland-qt-support.inputs.nixpkgs.follows = "hyprland/nixpkgs";
     hyprland-qt-support.inputs.systems.follows = "hyprland/systems";
-    hyprland.inputs.hyprland-qtutils.inputs.hyprland-qt-support.follows = "hyprland-qt-support";
+    hyprland-qtutils.url = "github:hyprwm/hyprland-qtutils";
+    hyprland-qtutils.inputs.hyprland-qt-support.follows = "hyprland-qt-support";
+    hyprland-qtutils.inputs.hyprlang.follows = "hyprland/hyprlang";
+    hyprland-qtutils.inputs.hyprutils.follows = "hyprland/hyprutils";
+    hyprland-qtutils.inputs.nixpkgs.follows = "hyprland/nixpkgs";
+    hyprland-qtutils.inputs.systems.follows = "hyprland/systems";
+    hyprland.inputs.hyprland-qtutils.follows = "hyprland-qtutils";
 
     systems.url = "github:nix-systems/x86_64-linux";
     hyprland.inputs.systems.follows = "systems";
