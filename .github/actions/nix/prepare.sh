@@ -6,9 +6,6 @@ Linux)
     echo "Disk clean, before:"
     df -h -x tmpfs
     sudo rm -rf \
-      /etc/skel/.cargo \
-      /etc/skel/.dotnet \
-      /etc/skel/.rustup \
       /home/runner/.cargo \
       /home/runner/.dotnet \
       /home/runner/.rustup \
