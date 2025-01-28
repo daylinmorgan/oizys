@@ -6,9 +6,7 @@ inputs:
     default: |
       accept-flake-config = true
       experimental-features = nix-command flakes pipe-operator
-      # build-dir = /nix/var
-      # keep-derivations = true
-      # keep-outputs = true
+      build-dir = /nix/var
       stalled-download-timeout = 0
   clean:
     description: Clean up disk space
@@ -22,11 +20,11 @@ inputs:
 runs:
   using: composite
   steps:
-    # - shell: bash
-    #   env:
-    #     CLEAN: ${{ inputs.clean }}
-    #     BTRFS: ${{ inputs.btrfs }}
-    #   run: exec ${{ github.action_path }}/prepare.sh
+    - shell: bash
+      env:
+        CLEAN: ${{ inputs.clean }}
+        BTRFS: ${{ inputs.btrfs }}
+      run: exec ${{ github.action_path }}/prepare.sh
 
     - uses: daylinmorgan/lix-gha-installer-action@latest
       with:
