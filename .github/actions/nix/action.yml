@@ -8,6 +8,7 @@ inputs:
       experimental-features = nix-command flakes pipe-operator
       build-dir = /nix/var
       stalled-download-timeout = 0
+      download-attempts = 10
   clean:
     description: Clean up disk space
     default: false
