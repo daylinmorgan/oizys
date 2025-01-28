@@ -27,15 +27,9 @@ runs:
         BTRFS: ${{ inputs.btrfs }}
       run: exec ${{ github.action_path }}/prepare.sh
 
-    - uses: daylinmorgan/lix-gha-installer-action@released
+    - uses: daylinmorgan/lix-gha-installer-action@latest
       with:
         extra-conf: ${{ inputs.nix_conf }}
-
-    # TODO: rebase my fork to remove this
-    - name: modify trusted users
-      shell: bash
-      run: |
-        sudo echo "trusted-users = root $USER" >> /etc/nix/nix.conf
 
     - name: Install and login to attic cache
       shell: bash
