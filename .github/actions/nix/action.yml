@@ -9,6 +9,7 @@ inputs:
       build-dir = /nix/var
       keep-derivations = true
       keep-outputs = true
+      stalled-download-timeout = 0
   clean:
     description: Clean up disk space
     default: false
@@ -25,6 +26,7 @@ runs:
       env:
         CLEAN: ${{ inputs.clean }}
         BTRFS: ${{ inputs.btrfs }}
+
       run: exec ${{ github.action_path }}/prepare.sh
 
     - uses: daylinmorgan/lix-gha-installer-action@latest
