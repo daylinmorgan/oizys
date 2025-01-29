@@ -25,8 +25,9 @@ hwylCli:
       ? "increase verbosity (up to 2)"
       - v
       * Count(val: 0)
-    resetCache:
+    `reset-cache`:
       ? "set cache timeout to 0"
+      ident resetCache
     [misc]
     yes:
       - y
