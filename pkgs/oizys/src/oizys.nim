@@ -185,6 +185,8 @@ hwylCli:
           ? "url of nix binary cache, can be repeated"
           T seq[string]
       run:
+        if installables.len == 0: 
+          fatalQuit "expected at least one positional argument"
         checkForCache(installables, cache)
 
       [lock]

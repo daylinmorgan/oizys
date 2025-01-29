@@ -1,6 +1,6 @@
-import std/[strformat, strutils, osproc, sugar, httpclient]
+import std/[strformat, strutils, osproc, sugar, httpclient, terminal, wordwrap]
 import hwylterm
-import ./[nix, exec,logging]
+import ./[nix, exec, logging, context]
 
 
 # TODO: refactor runCmdCaptWithSpinner so it works in getBuildHash
@@ -44,18 +44,21 @@ proc getCaches(): seq[string] =
     fatalQuit "error running `nix config show`"
 
 
-
-
-proc hasNarinfo*(cache: string, path: string): bool =
+proc hasNarinfo*(cache: string, path: string): tuple[exists:bool, narinfo:string] =
   debug fmt"checking {cache} for {path}"
   let
     hash = narHash(path)
     url = cache & "/" & hash & ".narinfo"
+
+  var client = newHttpClient()
   try:
-    let client = newHttpClient()
-    result = client.head(url).code == Http200
-  except:
-    result = false
+    let res = client.get(url)
+    result.exists = res.code == Http200
+    result.narinfo = res.body.strip()
+    # if result and getVerbosity() > 0:
+    #     info "narinfo:\n" & indent(res.body.strip(),2)
+  finally:
+    client.close()
 
 proc prettyDerivation(path: string): BbString =
   let drv = path.toDerivation()
@@ -63,6 +66,19 @@ proc prettyDerivation(path: string): BbString =
   result.add drv.name.trunc(maxLen).alignLeft(maxLen)
   result.add " "
   result.add drv.hash.bb("faint")
+
+proc showNarInfo(s: string): BbString =
+  let maxWidth = terminalWidth()
+  result.add "narinfo:"
+  for line in s.splitLines():
+    let
+      ss = line.split(": ", maxsplit = 1)
+      (k, v) = (ss[0], ss[1])
+    result.add bbfmt("\n[b]{k}[/]: ")
+    if (len(v) - len(k) + 2) > maxWidth:
+      result.add "\n  " & wrapWords(v, maxLineWidth = maxWidth - 2, newLine="\n  ")
+    else:
+      result.add v
 
 proc checkForCache*(installables: seq[string], caches: seq[string]) =
   let caches =
@@ -77,10 +93,12 @@ proc checkForCache*(installables: seq[string], caches: seq[string]) =
   for name, path in outs:
     var found = false
     for cache in caches:
-      if hasNarinfo(cache, path):
+      let (exists, narinfo) = hasNarinfo(cache, path)
+      if exists:
         found = true
         info prettyDerivation(path)
         info fmt"exists in {cache}"
+        debug showNarinfo(narinfo)
         break
 
     if not found:
