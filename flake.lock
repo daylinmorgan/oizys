@@ -154,11 +154,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1737634889,
-        "narHash": "sha256-9JZE3KxcXOqZH9zs3UeadngDiK/yIACTiAR8HSA/TNI=",
+        "lastModified": 1737985436,
+        "narHash": "sha256-zx8FdI4zr2GhNyD1YGAqa2ymodAObTSAdwuWwVucewo=",
         "owner": "hyprwm",
         "repo": "hyprgraphics",
-        "rev": "0d77b4895ad5f1bb3b0ee43103a5246c58b65591",
+        "rev": "23783b96036f5506fdaf8b2250a1ef849d57f0d3",
         "type": "github"
       },
       "original": {
@@ -189,11 +189,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1737918410,
-        "narHash": "sha256-5iteQaFySyF3vmZfe5V80Lh7cee0k6g5JjmmK+JS7gM=",
+        "lastModified": 1738157651,
+        "narHash": "sha256-IObMsim4ZEDmCEc4EjJV8U+cJpUX1JFrMXgrVExZvXo=",
         "ref": "refs/heads/main",
-        "rev": "3b207d29bdaf4c718a8878456bb17f2a67f2d9f4",
-        "revCount": 5740,
+        "rev": "61319197155cbcb3b8d5f004f46c2249029ec1f3",
+        "revCount": 5757,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/hyprwm/Hyprland/"
@@ -378,11 +378,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1737725508,
-        "narHash": "sha256-jGmcPc6y/prg/4A8KGYqJ27nSPaProCMiFadaxNAKvA=",
+        "lastModified": 1737978343,
+        "narHash": "sha256-TfFS0HCEJh63Kahrkp1h9hVDMdLU8a37Zz+IFucxyfA=",
         "owner": "hyprwm",
         "repo": "hyprutils",
-        "rev": "fb0c2d1de3d1ef7396d19c18ac09e12bd956929e",
+        "rev": "6a8bc9d2a4451df12f5179dc0b1d2d46518a90ab",
         "type": "github"
       },
       "original": {
@@ -467,11 +467,11 @@
     "lix": {
       "flake": false,
       "locked": {
-        "lastModified": 1738053421,
-        "narHash": "sha256-B9HigdAgTs/FxUVcGYIRIxJVPQ+vGp3/G6WRuVKIGds=",
-        "rev": "f8a592713d14bf0374950c8d3575eb3795e63987",
+        "lastModified": 1738097047,
+        "narHash": "sha256-GcgcCYhAkxU9BtzsUImFRIEFK0WqgjKrMqMySImGLK4=",
+        "rev": "3a41bf32a78550f7373b51d39c07a4bb91bb9f2e",
         "type": "tarball",
-        "url": "https://git.lix.systems/api/v1/repos/lix-project/lix/archive/f8a592713d14bf0374950c8d3575eb3795e63987.tar.gz?rev=f8a592713d14bf0374950c8d3575eb3795e63987"
+        "url": "https://git.lix.systems/api/v1/repos/lix-project/lix/archive/3a41bf32a78550f7373b51d39c07a4bb91bb9f2e.tar.gz?rev=3a41bf32a78550f7373b51d39c07a4bb91bb9f2e"
       },
       "original": {
         "type": "tarball",
@@ -623,11 +623,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1737894760,
-        "narHash": "sha256-ZdGIeBckpPutzFx4ZoWJptrFNGTjWsn63I564qfqyU0=",
+        "lastModified": 1738168578,
+        "narHash": "sha256-J5INnlMeEXyArPuAADEqjnF2Emw5ikywAkSk+yHWxyM=",
         "owner": "nix-community",
         "repo": "nixpkgs-wayland",
-        "rev": "d18185861d43d50bfdc822c03ad78ad4cfdc90e7",
+        "rev": "d9ae9d6e0b7359568f3bb8f89ba7eba4bd9611b2",
         "type": "github"
       },
       "original": {
@@ -765,11 +765,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1737483750,
-        "narHash": "sha256-5An1wq5U8sNycOBBg3nsDDgpwBmR9liOpDGlhliA6Xo=",
+        "lastModified": 1738070913,
+        "narHash": "sha256-j6jC12vCFsTGDmY2u1H12lMr62fnclNjuCtAdF1a4Nk=",
         "owner": "numtide",
         "repo": "treefmt-nix",
-        "rev": "f2cc121df15418d028a59c9737d38e3a90fbaf8f",
+        "rev": "bebf27d00f7d10ba75332a0541ac43676985dea3",
         "type": "github"
       },
       "original": {
@@ -789,11 +789,11 @@
       },
       "locked": {
         "dir": "nix",
-        "lastModified": 1737756936,
-        "narHash": "sha256-ocqjh7iBYOnFFLhrGIRK67BwLPl95m/eLpYRGapl+Yc=",
+        "lastModified": 1738098086,
+        "narHash": "sha256-tygXdamq36DYrkwNssACsU/XSNAkvQLZHPWGKZjGnUw=",
         "owner": "daylinmorgan",
         "repo": "tsm",
-        "rev": "7893af6a7dd4f75fa6d357a18fbd1a8914358482",
+        "rev": "c2ca0c6ffb3b4e70f412a4f522885fc5bd608a52",
         "type": "github"
       },
       "original": {
