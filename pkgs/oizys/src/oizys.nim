@@ -1,7 +1,7 @@
 ## nix begat oizys
 import std/[os, osproc, sequtils, strformat, strutils, tables]
 import hwylterm, hwylterm/[hwylcli]
-import oizys/[context, github, nix, logging, utils]
+import oizys/[context, github, nix, logging, utils, exec]
 
 proc checkExes() =
   if findExe("nix") == "":
@@ -185,3 +185,14 @@ hwylCli:
           T seq[string]
       run:
         checkForCache(installables, cache)
+
+      [lock]
+      ... """
+      check lock status for duplicates
+
+      currently just runs `jq < flake.lock '.nodes | keys[] | select(contains("_"))' -r`
+      """
+      run:
+        # use absolute value for flake.lock?
+        quitWithCmd("""jq '.nodes | keys[] | select(contains("_"))' -r flake.lock""")
+
