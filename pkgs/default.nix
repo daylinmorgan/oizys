@@ -17,7 +17,6 @@ in
 
   llm-with-plugins = pkgs.callPackage ./llm/llm-with-plugins { };
 
-  # lix = pkgs.callPackage ./lix { inherit flake; };
   lix = (flake.pkg "lix-module");
 }
 // (flake.toPackageAttrs [
