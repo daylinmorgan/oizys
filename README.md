@@ -65,13 +65,16 @@ subcommands:
   os       nixos-rebuild subcmd
   output   nixos config attr
   update   update and run nixos-rebuild
+  hash     collect build hash from failure
+  narinfo  check active caches for nix derivation
+  lock     check lock status for duplicates
 
 flags:
-     --flake      path/to/flake
-     --host       host(s) to build
-  -d --debug      enable debug mode
-  -r --resetCache set cache timeout to 0
-  -h --help       show this help
+     --flake       string      path/to/flake
+     --host        seq[string] host(s) to build
+  -v --verbose     Count       increase verbosity (up to 2) (default: 0)
+     --reset-cache             set cache timeout to 0
+  -h --help                    show this help
 ```
 
 ## oizys?
