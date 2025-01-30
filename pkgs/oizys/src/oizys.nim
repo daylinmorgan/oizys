@@ -28,6 +28,7 @@ hwylCli:
     `reset-cache`:
       ? "set cache timeout to 0"
       ident resetCache
+
     [misc]
     yes:
       - y
@@ -157,45 +158,44 @@ hwylCli:
         updateRepo()
         nixosRebuild(NixosRebuildSubcmd.switch)
 
-    [utils]
+    # [utils]
+    # ... """
+    # less common utils operations
+    #
+    # some snippets I've reimplemented in nim so that nix isn't as annoying
+    # """
+    [hash]
+    ... "collect build hash from failure"
+    positionals:
+      installable string
+    run:
+      stdout.write getBuildHash(installable)
+
+    [narinfo]
     ... """
-    less common utils operations
+    check active caches for nix derivation
 
-    some snippets I've reimplemented in nim so that nix isn't as annoying
+    by default will use [yellow]nix config show[/] to determine
+    the binary cache urls
     """
-    subcommands:
-      [hash]
-      ... "collect build hash from failure"
-      positionals:
-        installable string
-      run:
-        stdout.write getBuildHash(installable)
+    positionals:
+      installables seq[string]
+    flags:
+      cache:
+        ? "url of nix binary cache, can be repeated"
+        T seq[string]
+    run:
+      if installables.len == 0:
+        fatalQuit "expected at least one positional argument"
+      checkForCache(installables, cache)
 
-      [narinfo]
-      ... """
-      check active caches for nix derivation
+    [lock]
+    ... """
+    check lock status for duplicates
 
-      by default will use [yellow]nix config show[/] to determine
-      the binary cache urls
-      """
-      positionals:
-        installables seq[string]
-      flags:
-        cache:
-          ? "url of nix binary cache, can be repeated"
-          T seq[string]
-      run:
-        if installables.len == 0: 
-          fatalQuit "expected at least one positional argument"
-        checkForCache(installables, cache)
-
-      [lock]
-      ... """
-      check lock status for duplicates
-
-      currently just runs `jq < flake.lock '.nodes | keys[] | select(contains("_"))' -r`
-      """
-      run:
-        # use absolute value for flake.lock?
-        quitWithCmd("""jq '.nodes | keys[] | select(contains("_"))' -r flake.lock""")
+    currently just runs `jq < flake.lock '.nodes | keys[] | select(contains("_"))' -r`
+    """
+    run:
+      # use absolute value for flake.lock?
+      quitWithCmd("""jq '.nodes | keys[] | select(contains("_"))' -r flake.lock""")
 

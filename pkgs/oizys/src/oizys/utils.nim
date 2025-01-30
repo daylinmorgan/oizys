@@ -1,6 +1,6 @@
 import std/[strformat, strutils, osproc, sugar, httpclient, terminal, wordwrap]
 import hwylterm
-import ./[nix, exec, logging, context]
+import ./[nix, exec, logging]
 
 
 # TODO: refactor runCmdCaptWithSpinner so it works in getBuildHash
