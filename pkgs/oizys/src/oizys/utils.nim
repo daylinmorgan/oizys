@@ -63,7 +63,10 @@ proc hasNarinfo*(cache: string, path: string): tuple[exists:bool, narinfo:string
 proc prettyDerivation(path: string): BbString =
   let drv = path.toDerivation()
   const maxLen = 40
-  result.add drv.name.trunc(maxLen).alignLeft(maxLen)
+  if drv.name.len < maxLen:
+    result.add drv.name
+  else:
+    result.add drv.name.trunc(maxLen)
   result.add " "
   result.add drv.hash.bb("faint")
 
