@@ -25,6 +25,7 @@
     (flake.pkg "self")
 
     pkgs.nix-output-monitor
+    sops
   ];
 
   nixpkgs.config.allowUnfree = true;
