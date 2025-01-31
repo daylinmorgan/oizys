@@ -1,5 +1,5 @@
 import std/[strformat, strutils, osproc, sugar, httpclient, terminal, wordwrap]
-import hwylterm,resultz
+import hwylterm, resultz
 import ./[nix, exec, logging]
 
 # TODO: refactor runCmdCaptWithSpinner so it works in getBuildHash
@@ -74,17 +74,15 @@ proc showNarInfo(s: string): BbString =
     else:
       result.add v
 
-# TODO: replace this with 'match Some() later for all Opts
-
 proc searchCaches(caches: seq[string], path: string): bool =
   ## search all caches until a match is found
   info "searching for: " & prettyDerivation(path)
   for cache in caches:
-    match hasNarinfo(cache, path):
-      Ok(narinfo):
-        info fmt"exists in {cache}"
-        debug showNarinfo(narinfo)
-      Err(): discard
+    case hasNarinfo(cache, path):
+    of Some(narinfo):
+      info fmt"exists in {cache}"
+      debug showNarinfo(narinfo)
+    of None: discard
 
 proc checkForCache*(installables: seq[string], caches: seq[string]) =
   let caches =
