@@ -23,12 +23,12 @@
     },
     "resultz": {
       "version": "0.1.0",
-      "vcsRevision": "9708a3f10bf3fa54907f52c28ede41cab6838aa6",
+      "vcsRevision": "43ed7f7e991b326e738ec14db4909b7330de089b",
       "url": "https://github.com/daylinmorgan/resultz",
       "downloadMethod": "git",
       "dependencies": [],
       "checksums": {
-        "sha1": "edf54faf880744d61c48900273d2a55ce1d89c36"
+        "sha1": "4ac450fc6debba51e42f41d59aaffc6287b6d796"
       }
     },
     "zippy": {
