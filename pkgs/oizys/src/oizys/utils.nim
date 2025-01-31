@@ -1,7 +1,6 @@
 import std/[strformat, strutils, osproc, sugar, httpclient, terminal, wordwrap]
-import hwylterm
+import hwylterm,resultz
 import ./[nix, exec, logging]
-
 
 # TODO: refactor runCmdCaptWithSpinner so it works in getBuildHash
 proc checkBuild(installable: string): tuple[stdout: string, stderr: string] =
@@ -43,8 +42,7 @@ proc getCaches(): seq[string] =
     echo formatSubprocessError(output)
     fatalQuit "error running `nix config show`"
 
-
-proc hasNarinfo*(cache: string, path: string): tuple[exists:bool, narinfo:string] =
+proc hasNarinfo*(cache: string, path: string): Opt[string] =
   debug fmt"checking {cache} for {path}"
   let
     hash = narHash(path)
@@ -53,22 +51,15 @@ proc hasNarinfo*(cache: string, path: string): tuple[exists:bool, narinfo:string
   var client = newHttpClient()
   try:
     let res = client.get(url)
-    result.exists = res.code == Http200
-    result.narinfo = res.body.strip()
-    # if result and getVerbosity() > 0:
-    #     info "narinfo:\n" & indent(res.body.strip(),2)
+    if res.code == Http200:
+      result.ok res.body.strip()
   finally:
     client.close()
 
 proc prettyDerivation(path: string): BbString =
-  let drv = path.toDerivation()
   const maxLen = 40
-  if drv.name.len < maxLen:
-    result.add drv.name
-  else:
-    result.add drv.name.trunc(maxLen)
-  result.add " "
-  result.add drv.hash.bb("faint")
+  let drv = path.toDerivation()
+  drv.name.trunc(maxLen) & " " & drv.hash.bb("faint")
 
 proc showNarInfo(s: string): BbString =
   let maxWidth = terminalWidth()
@@ -83,6 +74,18 @@ proc showNarInfo(s: string): BbString =
     else:
       result.add v
 
+# TODO: replace this with 'match Some() later for all Opts
+
+proc searchCaches(caches: seq[string], path: string): bool =
+  ## search all caches until a match is found
+  info "searching for: " & prettyDerivation(path)
+  for cache in caches:
+    match hasNarinfo(cache, path):
+      Ok(narinfo):
+        info fmt"exists in {cache}"
+        debug showNarinfo(narinfo)
+      Err(): discard
+
 proc checkForCache*(installables: seq[string], caches: seq[string]) =
   let caches =
     if caches.len > 0: caches
@@ -94,17 +97,5 @@ proc checkForCache*(installables: seq[string], caches: seq[string]) =
       {name: drv.outputs["out"].path}
 
   for name, path in outs:
-    var found = false
-    for cache in caches:
-      let (exists, narinfo) = hasNarinfo(cache, path)
-      if exists:
-        found = true
-        info prettyDerivation(path)
-        info fmt"exists in {cache}"
-        debug showNarinfo(narinfo)
-        break
-
-    if not found:
-      info fmt"failed to find:"
-      info prettyDerivation(path)
-
+    if not searchCaches(caches, path):
+      error "did not find above 'narinfo' in any caches"
