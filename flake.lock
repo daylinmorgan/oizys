@@ -353,11 +353,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1737760086,
-        "narHash": "sha256-c/7SJnyeqZyWCYT6wdojwTVC3hz4f22RdV2qFxO673o=",
+        "lastModified": 1738281741,
+        "narHash": "sha256-PmHxvQBlcQIqR5xnVksXmgFpBlHc3FTJCdYkG4zMLF0=",
         "ref": "refs/heads/main",
-        "rev": "52ef7a6539d02eddc9518be730a0b5d34a8ea58d",
-        "revCount": 24,
+        "rev": "9f2be2c4ac037c19b10e46edd631d2443f599d70",
+        "revCount": 25,
         "type": "git",
         "url": "https://git.dayl.in/daylin/hyprman.git"
       },
@@ -789,11 +789,11 @@
       },
       "locked": {
         "dir": "nix",
-        "lastModified": 1738098086,
-        "narHash": "sha256-tygXdamq36DYrkwNssACsU/XSNAkvQLZHPWGKZjGnUw=",
+        "lastModified": 1738281090,
+        "narHash": "sha256-WLdHHGCSaLjQ1DbZVsphHysWjnhs26JzXUaS+7RYfrg=",
         "owner": "daylinmorgan",
         "repo": "tsm",
-        "rev": "c2ca0c6ffb3b4e70f412a4f522885fc5bd608a52",
+        "rev": "2aab7c23de890700a1ce1c7f651c04478105393b",
         "type": "github"
       },
       "original": {
@@ -813,11 +813,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1737677548,
-        "narHash": "sha256-LzXnKEgw2YBd8mUusAYSNip+x0C0rZAtHf2iVEkhJ4I=",
+        "lastModified": 1738280304,
+        "narHash": "sha256-5ORiy3z+rmnTxY57ANIlLEDUgeoQtXl1nmJJm1p7q7I=",
         "ref": "refs/heads/main",
-        "rev": "374e59dcdabe24b5ad95a53510f9247956da0353",
-        "revCount": 25,
+        "rev": "60e088306aa7087714580ec9bdce568f4bba9c49",
+        "revCount": 30,
         "type": "git",
         "url": "https://git.dayl.in/daylin/utils.git"
       },
