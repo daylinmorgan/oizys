@@ -1,6 +1,8 @@
 {
+  config,
   pkgs,
   enabled,
+  flake,
   ...
 }:
 let
@@ -24,7 +26,7 @@ in
   };
 
   security.polkit = enabled; # attic was looking for this...
-  environment.systemPackages = with pkgs; [ attic-client ];
+  environment.systemPackages = [ (flake.pkg "lix-atttic").attic-client ];
 
   # allow docker to forward the request to the host running attic
   # https://discourse.nixos.org/t/docker-container-not-resolving-to-host/30259/6
@@ -32,8 +34,7 @@ in
   services.atticd = enabled // {
 
     # Replace with absolute path to your credentials file
-    # TODO: replace with sops-secret!
-    environmentFile = "/etc/atticd.env";
+    environmentFile = config.sops.secrets."atticd-env".path;
 
     settings = {
       listen = "[::]:${atticPort}";
