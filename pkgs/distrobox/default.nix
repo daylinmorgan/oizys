@@ -49,8 +49,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postInstall = ''
     installShellCompletion \
       --cmd distrbox \
-      --zsh completions/zsh/_distrobox \
-      --bash completions/bash/distrbox
+      --zsh completions/zsh/_distrobox
   '';
 
   meta = with lib; {
