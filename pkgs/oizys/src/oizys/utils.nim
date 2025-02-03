@@ -56,7 +56,7 @@ proc hasNarinfo*(cache: string, path: string): Opt[string] =
   finally:
     client.close()
 
-proc showNarInfo(s: string): BbString =
+proc fmtNarinfo(s: string): BbString =
   let maxWidth = terminalWidth()
   result.add "narinfo:"
   for line in s.splitLines():
@@ -76,7 +76,7 @@ proc searchCaches(caches: seq[string], path: string): bool =
     case hasNarinfo(cache, path):
     of Some(narinfo):
       info fmt"exists in {cache}"
-      debug showNarinfo(narinfo)
+      debug fmtNarinfo(narinfo)
     of None: discard
 
 proc checkForCache*(installables: seq[string], caches: seq[string]) =
