@@ -1,5 +1,5 @@
 import std/[httpclient,logging, os, strformat, strutils, json, tables, tempfiles, times]
-import jsony, hwylterm, hwylterm/logging, zippy/ziparchives
+import jsony, hwylterm, hwylterm/logging, zippy/ziparchives, resultz
 import ./[exec, context]
 
 
@@ -78,10 +78,11 @@ proc postGhApi(url: string, body: JsonNode) =
   if response.code != Http204:
     errorQuit "failed to post github api request"
 
+
 proc getInProgressRun(
   workflow: string,
   timeout: int = 10000
-): (GhWorkflowRun, bool) =
+): Opt[GhWorkflowRun] =
   ## wait up to 10 seconds to try to fetch ongoing run url
   let
     start = now()
@@ -93,7 +94,7 @@ proc getInProgressRun(
       let runs = fromJson(response.body,  ListGhWorkflowResponse).workflow_runs
       if runs[0].status in ["in_progress", "queued"]:
         spinner.stop() # cleanup
-        return (runs[0], true)
+        return ok runs[0]
       sleep 500
 
   warn "timeout reached waiting for workflow to start"
@@ -110,8 +111,11 @@ proc createDispatch*(workflowFileName: string, `ref`: string, inputs: Table[stri
    fmt"https://api.github.com/repos/daylinmorgan/oizys/actions/workflows/{workflow}/dispatches",
    body
   )
-  let (run, ok) = getInProgressRun(workflow)
-  if ok: info "view workflow run at: " & run.html_url
+  case getInProgressRun(workflow)
+  of Some(run):
+    info "view workflow run at: " & run.html_url
+  of None:
+    warn "couldn't determine workflow url"
 
 proc listUpdateRuns(): seq[GhWorkflowRun] =
   ## get update.yml runs
