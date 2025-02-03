@@ -56,11 +56,6 @@ proc hasNarinfo*(cache: string, path: string): Opt[string] =
   finally:
     client.close()
 
-proc prettyDerivation(path: string): BbString =
-  const maxLen = 40
-  let drv = path.toDerivation()
-  drv.name.trunc(maxLen) & " " & drv.hash.bb("faint")
-
 proc showNarInfo(s: string): BbString =
   let maxWidth = terminalWidth()
   result.add "narinfo:"

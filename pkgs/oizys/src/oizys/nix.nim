@@ -367,6 +367,12 @@ proc reportResults(results: seq[(OizysDerivation, BuildResult)]) =
   output.writeLine rows.join("\n")
   close output
 
+proc prettyDerivation*(path: string): BbString =
+  const maxLen = 40
+  let drv = path.toDerivation()
+  drv.name.trunc(maxLen) & " " & drv.hash.bb("faint")
+
+
 proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: int) =
   ## build individual derivations not cached and push to cache
   if findExe(service) == "": fatalQuit fmt"is {service} installed?"
@@ -376,6 +382,8 @@ proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: i
   if drvs.len == 0:
     info "nothing to build"
     quit "exiting...", QuitSuccess
+
+  info fmt("building {drvs.len} derivations:\n") & drvs.mapIt(prettyDerivation(it.drv.outputs["out"].path)).join("\n")
 
   let results =
     collect:
