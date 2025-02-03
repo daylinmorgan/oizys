@@ -2,7 +2,6 @@
   config,
   pkgs,
   enabled,
-  flake,
   ...
 }:
 let
@@ -26,7 +25,7 @@ in
   };
 
   security.polkit = enabled; # attic was looking for this...
-  environment.systemPackages = [ (flake.pkg "lix-atttic").attic-client ];
+  environment.systemPackages = [ pkgs.attic-client ];
 
   # allow docker to forward the request to the host running attic
   # https://discourse.nixos.org/t/docker-container-not-resolving-to-host/30259/6
