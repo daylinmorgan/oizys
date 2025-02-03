@@ -112,7 +112,6 @@
     hyprland.inputs.pre-commit-hooks.follows = "";
     nixos-wsl.inputs.flake-compat.follows = "";
     nixpkgs-wayland.inputs.flake-compat.follows = "";
-    nixpkgs-wayland.inputs.nix-eval-jobs.follows = "";
 
   };
 
