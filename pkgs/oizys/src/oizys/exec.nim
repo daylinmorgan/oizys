@@ -4,8 +4,6 @@ import std/[
 ]
 
 import hwylterm
-import hwylterm/spin/spinners # todo: remove after hwylterm update
-
 
 func addArgs*(cmd: string, args: varargs[string]): string =
   ## append to string for command
