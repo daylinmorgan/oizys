@@ -117,7 +117,6 @@ hwylCli:
       nixBuildHostDry(minimal, args)
 
     [os]
-    ? "[b]oizys os[/] [i]subcmd[/] [[[faint]flags[/]]"
     ... "nixos-rebuild [italic]subcmd[/]"
     positionals:
       subcmd NixosRebuildSubcmd
@@ -158,12 +157,6 @@ hwylCli:
         updateRepo()
         nixosRebuild(NixosRebuildSubcmd.switch)
 
-    # [utils]
-    # ... """
-    # less common utils operations
-    #
-    # some snippets I've reimplemented in nim so that nix isn't as annoying
-    # """
     [hash]
     ... "collect build hash from failure"
     positionals:
