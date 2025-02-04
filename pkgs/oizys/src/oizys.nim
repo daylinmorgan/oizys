@@ -189,6 +189,7 @@ hwylCli:
     currently just runs `jq < flake.lock '.nodes | keys[] | select(contains("_"))' -r`
     """
     run:
+      discard runCmd("nix flake lock")
       # use absolute value for flake.lock?
       quitWithCmd("""jq '.nodes | keys[] | select(contains("_"))' -r flake.lock""")
 
