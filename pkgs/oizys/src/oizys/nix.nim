@@ -312,7 +312,7 @@ proc nixBuildHostDry*(minimal: bool, rest: seq[string]) =
   cmd.addArg "--dry-run"
   cmd.addArgs rest
   let (_, err) =
-    runCmdCaptWithSpinner(cmd, "evaluating derivation for: " & getHosts().join(" "), {CaptStderr})
+    runCmdCaptWithSpinner(cmd, "evaluating derivation for: " & getHosts().join(" ").bb("bold"), {CaptStderr})
   let output = parseDryRunOutput err
   display output
 
