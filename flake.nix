@@ -33,6 +33,8 @@
     utils.url = "git+https://git.dayl.in/daylin/utils.git";
     pixi.url = "github:daylinmorgan/pixi-flake";
     jj.url = "github:martinvonz/jj/v0.25.0";
+    # roc.url ="github:roc-lang/roc/0.0.0-alpha2-rolling";
+    roc.url ="github:roc-lang/roc/0.0.0-alpha2-rolling";
 
     # master as of 2024.12.12
     NixVirt.url = "github:AshleyYakeley/NixVirt?rev=9063243af5e6674359a0ff7cec57f02eeacf0cea";
@@ -51,6 +53,7 @@
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     NixVirt.inputs.nixpkgs.follows = "nixpkgs";
     pixi.inputs.nixpkgs.follows = "nixpkgs";
+    roc.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     tsm.inputs.nixpkgs.follows = "nixpkgs";
@@ -60,20 +63,6 @@
     hyprman.inputs.nim2nix.follows = "nim2nix";
     tsm.inputs.nim2nix.follows = "nim2nix";
     utils.inputs.nim2nix.follows = "nim2nix";
-
-    # lix-attic = {
-    #   url = "git+https://git.lix.systems/nrabulinski/attic.git";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    #   inputs.lix-module.follows = "lix-module";
-    #   # make lix-module source of truth
-    #   inputs.lix.follows = "lix-module/lix";
-    #   inputs.nix-github-actions.follows = "";
-    # };
-
-    # roc = {
-    #   url = "github:roc-lang/roc";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
 
     # zig-overlay.url = "github:mitchellh/zig-overlay";
     # zig-overlay.inputs.nixpkgs.follows = "nixpkgs";
@@ -101,6 +90,7 @@
     flake-utils.url = "github:numtide/flake-utils";
     jj.inputs.flake-utils.follows = "flake-utils";
     lib-aggregate.inputs.flake-utils.follows = "flake-utils";
+    roc.inputs.flake-utils.follows = "flake-utils";
 
     lib-aggregate.url = "github:nix-community/lib-aggregate";
     nixpkgs-wayland.inputs.lib-aggregate.follows = "lib-aggregate";
@@ -112,6 +102,11 @@
     hyprland.inputs.pre-commit-hooks.follows = "";
     nixos-wsl.inputs.flake-compat.follows = "";
     nixpkgs-wayland.inputs.flake-compat.follows = "";
+
+    rust-overlay.url = "github:oxalica/rust-overlay";
+    rust-overlay.inputs.nixpkgs.follows  = "nixpkgs";
+    jj.inputs.rust-overlay.follows ="rust-overlay";
+    roc.inputs.rust-overlay.follows = "rust-overlay";
 
   };
 

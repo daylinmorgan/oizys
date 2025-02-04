@@ -18,6 +18,9 @@ in
   llm-with-plugins = pkgs.callPackage ./llm/llm-with-plugins { };
 
   lix = (flake.pkg "lix-module");
+
+  roc = (flake.pkgs "roc").cli;
+  roc-lang-server = (flake.pkgs "roc").lang-server;
 }
 // (flake.toPackageAttrs [
   "pixi"
