@@ -32,7 +32,7 @@
     nim2nix.url = "github:daylinmorgan/nim2nix";
     utils.url = "git+https://git.dayl.in/daylin/utils.git";
     pixi.url = "github:daylinmorgan/pixi-flake";
-    jj.url = "github:martinvonz/jj/v0.25.0";
+    jj.url = "github:martinvonz/jj/v0.26.0";
     # roc.url ="github:roc-lang/roc/0.0.0-alpha2-rolling";
     roc.url ="github:roc-lang/roc/0.0.0-alpha2-rolling";
 
