@@ -70,8 +70,10 @@ hwylCli:
         ? "jobs when pushing paths"
         * countProcessors()
         - j
+      `dry-run`:
+        ? "don't actually build derivations"
     run:
-      nixBuildWithCache(name, args, service, jobs)
+      nixBuildWithCache(name, args, service, jobs, `dry-run`)
 
     [ci]
     ... "builtin ci"
