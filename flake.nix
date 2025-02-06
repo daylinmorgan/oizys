@@ -97,15 +97,15 @@
     nixpkgs-lib.url = "github:nix-community/nixpkgs.lib";
     lib-aggregate.inputs.nixpkgs-lib.follows = "nixpkgs-lib";
 
-    ## nil inputs, I don't *ALL* your flake inputs...
-    hyprland.inputs.pre-commit-hooks.follows = "";
-    nixos-wsl.inputs.flake-compat.follows = "";
-    nixpkgs-wayland.inputs.flake-compat.follows = "";
-
     rust-overlay.url = "github:oxalica/rust-overlay";
     rust-overlay.inputs.nixpkgs.follows  = "nixpkgs";
     jj.inputs.rust-overlay.follows ="rust-overlay";
     roc.inputs.rust-overlay.follows = "rust-overlay";
+
+    ## nil inputs, I don't *ALL* your flake inputs...
+    hyprland.inputs.pre-commit-hooks.follows = "";
+    nixos-wsl.inputs.flake-compat.follows = "";
+    nixpkgs-wayland.inputs.flake-compat.follows = "";
 
   };
 
