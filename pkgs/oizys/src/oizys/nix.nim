@@ -377,7 +377,7 @@ proc prettyDerivation*(path: string): BbString =
   drv.name.trunc(maxLen) & " " & drv.hash.bb("faint")
 
 
-proc nixBuildWithCache*(name: string, rest:seq[string], service: string, jobs: int, dry: bool) =
+proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: int, dry: bool) =
   ## build individual derivations not cached and push to cache
   if findExe(service) == "": fatalQuit fmt"is {service} installed?"
   info bbfmt"building and pushing to cache: [b]{name}"
