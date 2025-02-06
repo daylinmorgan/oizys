@@ -5,12 +5,14 @@
 let
   inherit (pkgs) python3Packages;
   llm = python3Packages.callPackage ../llm { };
-  llm-claude-3 = python3Packages.callPackage ../llm-claude-3 { };
+  llm-anthropic = python3Packages.callPackage ../llm-anthropic { };
+  llm-gemini = python3Packages.callPackage ../llm-gemini { };
 
   pyWithLlm = (
     pkgs.python3.withPackages (_: [
       llm
-      llm-claude-3
+      llm-anthropic
+      llm-gemini
     ])
   );
 in

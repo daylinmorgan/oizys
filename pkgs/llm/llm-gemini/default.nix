@@ -7,20 +7,21 @@
   wheel,
 
   # deps
-  anthropic,
+  httpx,
+  ijson,
   ...
 }:
 
 buildPythonPackage rec {
-  pname = "llm-claude-3";
-  version = "0.8";
+  pname = "llm-gemini";
+  version = "0.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
-    repo = "llm-claude-3";
+    repo = "llm-gemini";
     rev = version;
-    hash = "sha256-XhmxUo+nM6el17AVRUq+RLT5SEl+Q0eWhouU9WDZJl0=";
+    hash = "sha256-+ghsBvEY8GQAphdvG7Rdu3T/7yz64vmkuA1VGvqw1fU=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  dependencies = [ anthropic ];
+  dependencies = [ httpx ijson ];
 
   dontCheckRuntimeDeps = true;
 }
