@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  flake,
   enabled,
 
   ...
@@ -29,5 +30,8 @@
     };
   };
 
-  environment.systemPackages = [ pkgs.stable.quarto ];
+  environment.systemPackages = [
+    pkgs.stable.quarto
+    (flake.pkgs "self").attic-client
+  ];
 }

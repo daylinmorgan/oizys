@@ -16,6 +16,14 @@
       flake = false;
     };
     lix-module.inputs.lix.follows = "lix";
+
+    lix-attic.url = "git+https://git.lix.systems/nrabulinski/attic.git";
+    lix-attic.inputs.nixpkgs.follows = "nixpkgs";
+    lix-attic.inputs.lix-module.follows = "lix-module";
+    lix-attic.inputs.lix.follows = "lix-module/lix";
+    lix-attic.inputs.flake-compat.follows = "";
+
+
     # keep for when lix breaks :/
     # lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0.tar.gz";
 
