@@ -10,6 +10,11 @@ let
     mkdir $out
     cp ${./caddy/index.html} $out/index.html
   '';
+
+  check-attic = pkgs.writeShellScriptBin "check-attic" ''
+    sudo du -sh /var/lib/atticd/
+  '';
+
 in
 {
 
@@ -28,6 +33,7 @@ in
 
   environment.systemPackages = [
     pkgs.attic-client
+    check-attic
   ];
 
   services.atticd = enabled // {
