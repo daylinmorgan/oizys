@@ -14,7 +14,6 @@ let
   check-attic = pkgs.writeShellScriptBin "check-attic" ''
     sudo du -sh /var/lib/atticd/
   '';
-
 in
 {
 
@@ -82,7 +81,7 @@ in
       }
 
       handle /* {
-        reverse_proxy http://localhost:5656
+        reverse_proxy http://localhost:${atticPort}
       }
     '';
   };
