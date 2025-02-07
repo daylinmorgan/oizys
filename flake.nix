@@ -23,7 +23,6 @@
     lix-attic.inputs.lix.follows = "lix-module/lix";
     lix-attic.inputs.flake-compat.follows = "";
 
-
     # keep for when lix breaks :/
     # lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0.tar.gz";
 
@@ -41,7 +40,7 @@
     utils.url = "git+https://git.dayl.in/daylin/utils.git";
     pixi.url = "github:daylinmorgan/pixi-flake";
     jj.url = "github:martinvonz/jj/v0.26.0";
-    roc.url ="github:roc-lang/roc/0.0.0-alpha2-rolling";
+    roc.url = "github:roc-lang/roc/0.0.0-alpha2-rolling";
 
     # master as of 2024.12.12
     NixVirt.url = "github:AshleyYakeley/NixVirt?rev=9063243af5e6674359a0ff7cec57f02eeacf0cea";
@@ -106,8 +105,8 @@
     lib-aggregate.inputs.nixpkgs-lib.follows = "nixpkgs-lib";
 
     rust-overlay.url = "github:oxalica/rust-overlay";
-    rust-overlay.inputs.nixpkgs.follows  = "nixpkgs";
-    jj.inputs.rust-overlay.follows ="rust-overlay";
+    rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    jj.inputs.rust-overlay.follows = "rust-overlay";
     roc.inputs.rust-overlay.follows = "rust-overlay";
 
     ## nil inputs, I don't *ALL* your flake inputs...

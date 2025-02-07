@@ -30,7 +30,8 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    prompt_toolkit pygments
+    prompt_toolkit
+    pygments
   ];
 
   dontCheckRuntimeDeps = true;

@@ -29,7 +29,10 @@ buildPythonPackage rec {
     wheel
   ];
 
-  dependencies = [ httpx ijson ];
+  dependencies = [
+    httpx
+    ijson
+  ];
 
   dontCheckRuntimeDeps = true;
 }

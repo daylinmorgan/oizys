@@ -2,7 +2,6 @@
 
 ## oizys
 
-
 ## software
 
 - [ ] why is my update ci always building llm and rofi?
