@@ -135,7 +135,6 @@ proc toBuildNixosConfiguration(): seq[string] =
   cmd.addArgs nixosConfigAttrs()
   let (_, err) = runCmdCaptWithSpinner(
     cmd,
-    # BUG: hwylterm spinner not showing styled text?
     "running dry run build for: " & (getHosts().join(" ").bb("bold")),
     capture = {CaptStderr}
   )
@@ -213,11 +212,6 @@ func isIgnored(drv: string): bool =
       if name.startswith(pkg):
         return true
 
-type
-  OizysDerivation = object
-    drv: NixDerivation
-    name: string
-
 proc getSystemPathDrvs*(): seq[string] =
   let systemDrvs = nixDerivationShow(nixosConfigAttrs())
   let systemPathDrvs = findSystemPaths(systemDrvs)
@@ -228,21 +222,17 @@ proc getSystemPathDrvs*(): seq[string] =
           inputDrv
 
 
-proc getOizysDerivations(): HashSet[OizysDerivation] =
+proc getOizysDerivations(): HashSet[NixDerivation] =
   let
     toBuildDrvs = toBuildNixosConfiguration()
     systemPathDrvs = getSystemPathDrvs()
     toActullyBuildDrvs = systemPathDrvs.filterIt(it in toBuildDrvs and not isIgnored(it))
-  for name, drv in nixDerivationShow(toActullyBuildDrvs):
-    result.incl OizysDerivation(
-        name: name,
-        drv: drv,
-    )
+  for _ , drv in nixDerivationShow(toActullyBuildDrvs):
+    result.incl drv
 
 proc showOizysDerivations*() =
   let drvs = getOizysDerivations()
   echo drvs.mapIt(it.name & "^*").join("\n")
-
 
 # TODO: remove this proc
 proc systemPathDrvsToBuild*(): seq[string] =
@@ -334,7 +324,7 @@ func formatDuration(d: Duration): string =
     result.add " and "
   result.add $(seconds mod 60) & " seconds"
 
-proc build(drv: OizysDerivation, rest: seq[string]): BuildResult =
+proc build(drv: NixDerivation, rest: seq[string]): BuildResult =
   let startTime = now()
   var cmd = "nix build"
   cmd.addArg drv.name & "^*"
@@ -350,11 +340,11 @@ proc build(drv: OizysDerivation, rest: seq[string]): BuildResult =
     warn "failed to build: " & splitDrv(drv.name).name
   info "-> duration: " & formatDuration(result.duration)
 
-func outputsPaths(o: OizysDerivation): seq[string] =
-  for _, output in o.drv.outputs:
+func outputsPaths(drv: NixDerivation): seq[string] =
+  for _, output in drv.outputs:
     result.add output.path
 
-proc reportResults(results: seq[(OizysDerivation, BuildResult)]) =
+proc reportResults(results: seq[(NixDerivation, BuildResult)]) =
   let rows = collect(
     for (drv, res) in results:
       let (name, hash) = splitDrv(drv.name)
@@ -379,15 +369,17 @@ proc prettyDerivation*(path: string): BbString =
 
 proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: int, dry: bool) =
   ## build individual derivations not cached and push to cache
+
   if findExe(service) == "": fatalQuit fmt"is {service} installed?"
   info bbfmt"building and pushing to cache: [b]{name}"
   debug "determining missing cache hits"
+
   let drvs = getOizysDerivations()
   if drvs.len == 0:
     info "nothing to build"
     quit "exiting...", QuitSuccess
 
-  info fmt("need to build {drvs.len} derivations:\n") & drvs.mapIt(prettyDerivation("  " & it.drv.outputs["out"].path)).join("\n")
+  info fmt("need to build {drvs.len} derivations:\n") & drvs.mapIt(prettyDerivation("  " & it.outputs["out"].path)).join("\n")
   if dry:
     quit "exiting...", QuitSuccess
 
