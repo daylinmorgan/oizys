@@ -53,25 +53,25 @@ proc nixosRebuild*(subcmd: NixosRebuildSubcmd, args: openArray[string] = [], rem
   quitWithCmd cmd
 
 type
-  Derivation = object
-    storePath*, hash*, name*: string
+  DrvPath = object
+    path*, hash*, name*: string
 
   DryRunOutput = object
-    toBuild: seq[Derivation]
-    toFetch: seq[Derivation]
+    toBuild: seq[DrvPath]
+    toFetch: seq[DrvPath]
 
-func toDerivation*(pkg: string): Derivation =
+func toDerivation*(pkg: string): DrvPath =
   let path = pkg.strip()
   let s = path.split("-", 1)
-  result.storePath = path
+  result.path = path
   result.hash = s[0].rsplit("/")[^1]
   result.name = s[^1].replace(".drv","")
 
-func toDerivations(lines: seq[string]): seq[Derivation] =
+func toDerivations(lines: seq[string]): seq[DrvPath] =
   for pkg in lines:
     result.add (toDerivation pkg)
 
-proc cmpDrv(x, y: Derivation): int = 
+proc cmpDrv(x, y: DrvPath): int = 
   cmp(x.name, y.name)
 
 proc parseDryRunOutput(err: string): DryRunOutput =
@@ -115,7 +115,7 @@ proc trunc*(s: string, limit: int): string =
   else:
     s[0..(limit-4)] & "..."
 
-proc display(msg: string, drvs: seq[Derivation]) =
+proc display(msg: string, drvs: seq[DrvPath]) =
   echo fmt"{msg}: [bold cyan]{drvs.len()}[/]".bb
   if drvs.len > 0:
     let maxLen = min(max drvs.mapIt(it.name.len), 40)
@@ -139,7 +139,7 @@ proc toBuildNixosConfiguration(): seq[string] =
     capture = {CaptStderr}
   )
   let output = parseDryRunOutput err
-  return output.toBuild.mapIt(it.storePath)
+  return output.toBuild.mapIt(it.path)
 
 type
   DerivationOutput = object
@@ -252,7 +252,7 @@ proc systemPathDrvsToBuild*(): seq[string] =
 
 func splitDrv(drv: string): tuple[name, hash:string] =
   let s = drv.split("-", 1)
-  (s[1].replace(".drv^*",""),s[0].split("/")[^1])
+  (s[1].replace(".drv",""),s[0].split("/")[^1])
 
 proc writeDervationsToStepSummary(drvs: seq[string]) =
   let rows = collect(
