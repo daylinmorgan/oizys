@@ -10,3 +10,4 @@ charm-freeze
 # pandoc -> texmath -> typst-symbols?
 # quarto
 calibre
+attic-client

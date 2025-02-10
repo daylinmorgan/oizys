@@ -2,7 +2,6 @@
   config,
   pkgs,
   enabled,
-  flake,
   ...
 }:
 let
@@ -28,11 +27,10 @@ in
   security.polkit = enabled; # attic was looking for this...
 
   environment.systemPackages = [
-    (flake.pkgs "self").attic-client
+    pkgs.attic-client
   ];
 
   services.atticd = enabled // {
-    package = (flake.pkgs "self").attic-server;
 
     # Replace with absolute path to your credentials file
     environmentFile = config.sops.secrets."atticd-env".path;
