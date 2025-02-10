@@ -400,8 +400,9 @@ proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: 
     if res.successful:
       outs &= drv.outputsPaths
 
-  if isCi():
-    reportResults(results)
+  # TODO: fix refactor above interfaces to make this more seemless
+  # if isCi():
+  #   reportResults(results)
 
   if outs.len > 0:
     # TODO: push after build not at once?
