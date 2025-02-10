@@ -221,18 +221,18 @@ proc getSystemPathDrvs*(): seq[string] =
         for inputDrv, _ in drv.inputDrvs:
           inputDrv
 
-
-proc getOizysDerivations(): HashSet[NixDerivation] =
+proc getOizysDerivations():Table[string, NixDerivation] =
   let
     toBuildDrvs = toBuildNixosConfiguration()
     systemPathDrvs = getSystemPathDrvs()
     toActullyBuildDrvs = systemPathDrvs.filterIt(it in toBuildDrvs and not isIgnored(it))
-  for _ , drv in nixDerivationShow(toActullyBuildDrvs):
-    result.incl drv
+  for path , drv in nixDerivationShow(toActullyBuildDrvs):
+    result[path] = drv
 
 proc showOizysDerivations*() =
   let drvs = getOizysDerivations()
-  echo drvs.mapIt(it.name & "^*").join("\n")
+  for path, drv in drvs:
+    echo path & "^*"
 
 # TODO: remove this proc
 proc systemPathDrvsToBuild*(): seq[string] =
@@ -251,6 +251,7 @@ proc systemPathDrvsToBuild*(): seq[string] =
 
 
 func splitDrv(drv: string): tuple[name, hash:string] =
+  assert drv.startsWith("/nix/store"), "is this a /nix/store path? $1" % [drv]
   let s = drv.split("-", 1)
   (s[1].replace(".drv",""),s[0].split("/")[^1])
 
@@ -324,20 +325,19 @@ func formatDuration(d: Duration): string =
     result.add " and "
   result.add $(seconds mod 60) & " seconds"
 
-proc build(drv: NixDerivation, rest: seq[string]): BuildResult =
+# TODO: by default collect the build result
+proc build(path: string, drv: NixDerivation, rest: seq[string]): BuildResult =
   let startTime = now()
   var cmd = "nix build"
-  cmd.addArg drv.name & "^*"
-  cmd.addArg "--no-link"
+  cmd.addArgs path & "^*", "--no-link"
   cmd.addArgs rest
   let buildCode = runCmd(cmd)
   result.duration = now() - startTime
-  # TODO: make splitDrv more ergonmic?
   if buildCode == 0:
     result.successful = true
-    info "succesfully built: " & splitDrv(drv.name).name
+    info "succesfully built: " & splitDrv(path).name
   else:
-    warn "failed to build: " & splitDrv(drv.name).name
+    warn "failed to build: " & splitDrv(path).name
   info "-> duration: " & formatDuration(result.duration)
 
 func outputsPaths(drv: NixDerivation): seq[string] =
@@ -361,6 +361,7 @@ proc reportResults(results: seq[(NixDerivation, BuildResult)]) =
   output.writeLine rows.join("\n")
   close output
 
+
 proc prettyDerivation*(path: string): BbString =
   const maxLen = 40
   let drv = path.toDerivation()
@@ -379,14 +380,20 @@ proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: 
     info "nothing to build"
     quit "exiting...", QuitSuccess
 
-  info fmt("need to build {drvs.len} derivations:\n") & drvs.mapIt(prettyDerivation("  " & it.outputs["out"].path)).join("\n")
+  # TODO: fix this so it works with table
+  # info fmt("need to build {drvs.len} derivations:\n") & drvs.mapIt(prettyDerivation("  " & it.outputs["out"].path)).join("\n")
+
+  info fmt("need to build {drvs.len} dervations")
+  for _, drv in drvs:
+    info prettyDerivation(drv.outputs["out"].path)
+
   if dry:
     quit "exiting...", QuitSuccess
 
   let results =
     collect:
-      for drv in drvs:
-        (drv, build(drv, rest))
+      for path, drv in drvs:
+        (drv, build(path, drv, rest))
 
   var outs: seq[string]
   for (drv, res) in results:
