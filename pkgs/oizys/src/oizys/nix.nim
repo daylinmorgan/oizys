@@ -344,10 +344,10 @@ func outputsPaths(drv: NixDerivation): seq[string] =
   for _, output in drv.outputs:
     result.add output.path
 
-proc reportResults(results: seq[(NixDerivation, BuildResult)]) =
+proc reportResults(results: seq[(string, NixDerivation, BuildResult)]) =
   let rows = collect(
-    for (drv, res) in results:
-      let (name, hash) = splitDrv(drv.name)
+    for (path, drv, res) in results:
+      let (name, hash) = splitDrv(path)
       fmt"| {name} | `{hash}` | " & (
         if res.successful: ":white_check_mark:"
         else: ":x:"
@@ -393,16 +393,15 @@ proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: 
   let results =
     collect:
       for path, drv in drvs:
-        (drv, build(path, drv, rest))
+        (path, drv, build(path, drv, rest))
 
   var outs: seq[string]
-  for (drv, res) in results:
+  for (path, drv, res) in results:
     if res.successful:
       outs &= drv.outputsPaths
 
-  # TODO: fix refactor above interfaces to make this more seemless
-  # if isCi():
-  #   reportResults(results)
+  if isCi():
+    reportResults(results)
 
   if outs.len > 0:
     # TODO: push after build not at once?
