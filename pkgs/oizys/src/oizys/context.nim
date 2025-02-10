@@ -57,3 +57,4 @@ proc getHosts*(): seq[string] = return oc.hosts
 proc getFlake*(): string      = return oc.flake
 proc isResetCache*(): bool    = return oc.resetCache
 proc isCi*(): bool            = return oc.ci
+proc isLocal*(): bool         = return oc.flake.dirExists

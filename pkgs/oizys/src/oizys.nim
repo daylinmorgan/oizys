@@ -191,7 +191,11 @@ hwylCli:
     currently just runs `jq < flake.lock '.nodes | keys[] | select(contains("_"))' -r`
     """
     run:
-      discard runCmd("nix flake lock")
       # use absolute value for flake.lock?
-      quitWithCmd("""jq '.nodes | keys[] | select(contains("_"))' -r flake.lock""")
+      if not isLocal():
+        quit "`oizys lock` should be run with a local flake"
+
+      discard runCmd("nix flake lock " & getFlake())
+      let lockfile = getFlake() / "flake.lock"
+      quitWithCmd(fmt"""jq '.nodes | keys[] | select(contains("_"))' -r {lockFile}""")
 
