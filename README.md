@@ -52,30 +52,7 @@ A small helper utility that mostly just wraps `nix` commands for convenience.
 nix run "github:daylinmorgan/oizys"
 ```
 
-```
-usage:
-  oizys subcmd [flags]
-
-subcommands:
-  build    nix build
-  cache    build and push store paths
-  ci       builtin ci
-  gha      trigger GHA
-  dry      dry run build
-  os       nixos-rebuild subcmd
-  output   nixos config attr
-  update   update and run nixos-rebuild
-  hash     collect build hash from failure
-  narinfo  check active caches for nix derivation
-  lock     check lock status for duplicates
-
-flags:
-     --flake       string      path/to/flake
-     --host        seq[string] host(s) to build
-  -v --verbose     Count       increase verbosity (up to 2) (default: 0)
-     --reset-cache             set cache timeout to 0
-  -h --help                    show this help
-```
+![](./assets/capture.svg)
 
 ## oizys?
 
