@@ -18,7 +18,7 @@ proc nixCommand*(cmd: string, nom: bool = false): string =
   result.addArg cmd
   if isResetCache():
     result.addArg "--narinfo-cache-negative-ttl 0"
-  if not nom:
+  if not (nom or isCi()):
     result.addArg "--log-format multiline"
 
 proc nixosConfigAttr(host: string): string =
