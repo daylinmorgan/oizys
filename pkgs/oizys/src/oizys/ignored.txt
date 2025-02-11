@@ -16,15 +16,16 @@ nixos-wsl-version
 nixos-wsl-welcome-message
 nixos-wsl-welcome
 restic-gdrive
-gitea
-lock
 code
 direnv
 comma-with-db
 nix-index-with-full-db
 python
 net.conf
-# unclear why these needed to be added
-llm
 rofi
+# small `packages` to build locally
+lock
+gitea
+llm
 atticd-atticadm
+check-attic
