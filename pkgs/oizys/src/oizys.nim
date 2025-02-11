@@ -71,6 +71,7 @@ hwylCli:
         * countProcessors()
         - j
       `dry-run`:
+        - n
         ? "don't actually build derivations"
     run:
       nixBuildWithCache(name, args, service, jobs, `dry-run`)
