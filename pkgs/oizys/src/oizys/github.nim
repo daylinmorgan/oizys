@@ -88,7 +88,7 @@ proc getInProgressRun(
     start = now()
     timeoutDuration = initDuration(milliseconds = timeout)
 
-  withSpinner fmt"waiting for {workflow} workflow to start":
+  with(Dots2, fmt"waiting for {workflow} workflow to start"):
     while (now() - start) < timeoutDuration:
       let response = getGhApi(fmt"https://api.github.com/repos/daylinmorgan/oizys/actions/workflows/{workflow}/runs")
       let runs = fromJson(response.body,  ListGhWorkflowResponse).workflow_runs
