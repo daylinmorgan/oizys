@@ -28,6 +28,15 @@ proc initContext*(): OizysContext =
 
 var oc = initContext()
 
+proc getVerbosity*(): int     = return oc.verbose.val
+proc getHosts*(): seq[string] = return oc.hosts
+proc getFlake*(): string      = return oc.flake
+proc isResetCache*(): bool    = return oc.resetCache
+proc isCi*(): bool            = return oc.ci
+proc isLocal*(): bool         = return oc.flake.dirExists
+
+
+
 proc checkPath(s: string): string =
   ## fail if path doesn't exist
   if not s.dirExists: fatalQuit fmt"flake path: {s} does not exist"
@@ -50,11 +59,8 @@ proc updateContext*(
       else: checkPath(flake.normalizedPath().absolutePath())
 
   debug bb(fmt"""[b]flake[/]: {oc.flake}, [b]hosts[/]: {oc.hosts.join(" ")}""")
+  if not isLocal():
+    warn "not using local directory for flake"
 
 
-proc getVerbosity*(): int     = return oc.verbose.val
-proc getHosts*(): seq[string] = return oc.hosts
-proc getFlake*(): string      = return oc.flake
-proc isResetCache*(): bool    = return oc.resetCache
-proc isCi*(): bool            = return oc.ci
-proc isLocal*(): bool         = return oc.flake.dirExists
+
