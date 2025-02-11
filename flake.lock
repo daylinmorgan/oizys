@@ -189,11 +189,9 @@
         "hyprcursor": "hyprcursor",
         "hyprgraphics": "hyprgraphics",
         "hyprland-protocols": "hyprland-protocols",
-        "hyprland-qtutils": [
-          "hyprland-qtutils"
-        ],
-        "hyprlang": "hyprlang",
-        "hyprutils": "hyprutils",
+        "hyprland-qtutils": "hyprland-qtutils",
+        "hyprlang": "hyprlang_2",
+        "hyprutils": "hyprutils_2",
         "hyprwayland-scanner": "hyprwayland-scanner",
         "nixpkgs": [
           "nixpkgs"
@@ -270,14 +268,17 @@
       "inputs": {
         "hyprlang": [
           "hyprland",
+          "hyprland-qtutils",
           "hyprlang"
         ],
         "nixpkgs": [
           "hyprland",
+          "hyprland-qtutils",
           "nixpkgs"
         ],
         "systems": [
           "hyprland",
+          "hyprland-qtutils",
           "systems"
         ]
       },
@@ -297,13 +298,8 @@
     },
     "hyprland-qtutils": {
       "inputs": {
-        "hyprland-qt-support": [
-          "hyprland-qt-support"
-        ],
-        "hyprlang": [
-          "hyprland",
-          "hyprlang"
-        ],
+        "hyprland-qt-support": "hyprland-qt-support",
+        "hyprlang": "hyprlang",
         "hyprutils": [
           "hyprland",
           "hyprutils"
@@ -332,6 +328,34 @@
       }
     },
     "hyprlang": {
+      "inputs": {
+        "hyprutils": "hyprutils",
+        "nixpkgs": [
+          "hyprland",
+          "hyprland-qtutils",
+          "nixpkgs"
+        ],
+        "systems": [
+          "hyprland",
+          "hyprland-qtutils",
+          "systems"
+        ]
+      },
+      "locked": {
+        "lastModified": 1737634606,
+        "narHash": "sha256-W7W87Cv6wqZ9PHegI6rH1+ve3zJPiyevMFf0/HwdbCQ=",
+        "owner": "hyprwm",
+        "repo": "hyprlang",
+        "rev": "f41271d35cc0f370d300413d756c2677f386af9d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hyprwm",
+        "repo": "hyprlang",
+        "type": "github"
+      }
+    },
+    "hyprlang_2": {
       "inputs": {
         "hyprutils": [
           "hyprland",
@@ -384,6 +408,35 @@
       }
     },
     "hyprutils": {
+      "inputs": {
+        "nixpkgs": [
+          "hyprland",
+          "hyprland-qtutils",
+          "hyprlang",
+          "nixpkgs"
+        ],
+        "systems": [
+          "hyprland",
+          "hyprland-qtutils",
+          "hyprlang",
+          "systems"
+        ]
+      },
+      "locked": {
+        "lastModified": 1737632363,
+        "narHash": "sha256-X9I8POSlHxBVjD0fiX1O2j7U9Zi1+4rIkrsyHP0uHXY=",
+        "owner": "hyprwm",
+        "repo": "hyprutils",
+        "rev": "006620eb29d54ea9086538891404c78563d1bae1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hyprwm",
+        "repo": "hyprutils",
+        "type": "github"
+      }
+    },
+    "hyprutils_2": {
       "inputs": {
         "nixpkgs": [
           "hyprland",
@@ -735,8 +788,6 @@
         "flake-utils": "flake-utils",
         "hyprland": "hyprland",
         "hyprland-contrib": "hyprland-contrib",
-        "hyprland-qt-support": "hyprland-qt-support",
-        "hyprland-qtutils": "hyprland-qtutils",
         "hyprman": "hyprman",
         "jj": "jj",
         "lib-aggregate": "lib-aggregate",
