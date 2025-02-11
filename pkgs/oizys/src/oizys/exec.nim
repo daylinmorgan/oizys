@@ -45,11 +45,12 @@ proc runCmdCapt*(
     errstrm = peekableErrorStream p
   result.exitCode = -1
   var line: string
+  # BUG: the readLine's hang if there is no data. would peek also hang?
   while true:
-    if CaptStdout in capture and not isNil(outstrm):
+    if CaptStdout in capture and not outstrm.atEnd():
       if outstrm.readLine(line):
         result.stdout.add line & '\n'
-    if CaptStderr in capture and not isNil(errstrm):
+    if CaptStderr in capture and not errstrm.atEnd():
       if errstrm.readLine(line):
         result.stderr.add line & '\n'
     result.exitCode = peekExitCode(p)
