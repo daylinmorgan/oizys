@@ -336,7 +336,7 @@ proc build(path: string, drv: NixDerivation, rest: seq[string]): BuildResult =
   var cmd = "nix build"
   cmd.addArgs path & "^*", "--no-link"
   cmd.addArgs rest
-  let (stdout, stderr, buildCode) = runCmdCapt(cmd, {CaptStdout, CaptStderr})
+  let (stdout, stderr, buildCode) = runCmdCapt(cmd, {CaptStderr})
   result.duration = now() - startTime
   result.stdout = stdout
   result.stderr = stderr
