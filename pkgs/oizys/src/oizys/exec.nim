@@ -46,17 +46,17 @@ proc runCmdCapt*(
   result.exitCode = -1
   var line: string
   while true:
-    if CaptStdout in capture:
+    if CaptStdout in capture and not isNil(outstrm):
       if outstrm.readLine(line):
         result.stdout.add line & '\n'
-    if CaptStderr in capture:
+    if CaptStderr in capture and not isNil(errstrm):
       if errstrm.readLine(line):
         result.stderr.add line & '\n'
     result.exitCode = peekExitCode(p)
     if result.exitCode != -1:
-      if CaptStdout in capture:
+      if CaptStdout in capture and not isNil(outstrm):
         result.stdout.add outstrm.readAll()
-      if CaptStderr in capture:
+      if CaptStderr in capture and not isNil(errstrm):
         result.stderr.add errstrm.readAll()
       break
 
