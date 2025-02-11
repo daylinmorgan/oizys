@@ -23,8 +23,8 @@ in
   roc = (flake.pkgs "roc").cli;
   roc-lang-server = (flake.pkgs "roc").lang-server;
 
-  attic-client = (flake.pkgs "lix-attic").attic-client;
-  attic-server = (flake.pkgs "lix-attic").attic-server;
+  # attic-client = (flake.pkgs "lix-attic").attic-client;
+  # attic-server = (flake.pkgs "lix-attic").attic-server;
 }
 // (flake.toPackageAttrs [
   "pixi"

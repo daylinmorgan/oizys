@@ -45,6 +45,12 @@
     # master as of 2024.12.12
     NixVirt.url = "github:AshleyYakeley/NixVirt?rev=9063243af5e6674359a0ff7cec57f02eeacf0cea";
 
+    # zig-overlay.url = "github:mitchellh/zig-overlay";
+    # zig-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    # zls.url = "github:zigtools/zls";
+    # zls.inputs.nixpkgs.follows = "nixpkgs";
+    # zls.inputs.zig-overlay.follows = "zig-overlay";
+
     # Follows
 
     ## nixpkgs
@@ -69,12 +75,6 @@
     hyprman.inputs.nim2nix.follows = "nim2nix";
     tsm.inputs.nim2nix.follows = "nim2nix";
     utils.inputs.nim2nix.follows = "nim2nix";
-
-    # zig-overlay.url = "github:mitchellh/zig-overlay";
-    # zig-overlay.inputs.nixpkgs.follows = "nixpkgs";
-    # zls.url = "github:zigtools/zls";
-    # zls.inputs.nixpkgs.follows = "nixpkgs";
-    # zls.inputs.zig-overlay.follows = "zig-overlay";
 
     # further flake.lock minimization shenanigans
     # hyprland-qt-support.url = "github:hyprwm/hyprland-qt-support";
