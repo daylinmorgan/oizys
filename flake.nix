@@ -30,7 +30,7 @@
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     nix-index-database.url = "github:nix-community/nix-index-database";
     sops-nix.url = "github:Mic92/sops-nix";
-    hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1&ref=refs/tags/v0.47.2";
     hyprland-contrib.url = "github:hyprwm/contrib";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
