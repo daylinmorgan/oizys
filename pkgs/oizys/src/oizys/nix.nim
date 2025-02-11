@@ -316,11 +316,6 @@ type
   BuildResult = object
     duration*: Duration
     successful*: bool
-    stdout*: string
-    stderr*: string
-
-proc show(br: BuildResult) =
-  error "\n" & formatStdoutStderr(br.stdout, br.stderr)
 
 func formatDuration(d: Duration): string =
   ## convert duration to: X minutes and Y seconds
@@ -336,16 +331,22 @@ proc build(path: string, drv: NixDerivation, rest: seq[string]): BuildResult =
   var cmd = "nix build"
   cmd.addArgs path & "^*", "--no-link"
   cmd.addArgs rest
-  let (stdout, stderr, buildCode) = runCmdCapt(cmd, {CaptStderr})
+
+  let (stdout, stderr, buildCode) =
+    if "-L" in rest or "--print-build-logs" in rest: ("","", runCmd(cmd))
+    else: runCmdCapt(cmd, {CaptStderr})
+
   result.duration = now() - startTime
-  result.stdout = stdout
-  result.stderr = stderr
+
+  # result.stdout = stdout
+  # result.stderr = stderr
   if buildCode == 0:
     result.successful = true
     info "succesfully built: " & splitDrv(path).name
   else:
     error "failed to build: " & splitDrv(path).name
-    show result
+    error "\n" & formatStdoutStderr(stdout, stderr)
+
   info "-> duration: " & formatDuration(result.duration)
 
 func outputsPaths(drv: NixDerivation): seq[string] =
