@@ -64,7 +64,7 @@ hwylCli:
       service:
         T string
         ? "name of cache service"
-        * "harmonica"
+        * "store"
       jobs:
         T int
         ? "jobs when pushing paths"
