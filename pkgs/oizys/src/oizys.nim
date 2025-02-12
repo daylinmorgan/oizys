@@ -60,7 +60,7 @@ hwylCli:
       name:
         T string
         ? "name/host of binary cache"
-        * "algiz"
+        * "nix-cache.dayl.in"
       service:
         T string
         ? "name of cache service"
