@@ -61,6 +61,7 @@ jobs:
 
       - name: Build
         run: >
+          NIX_SSHOPTS='-l daylin'
           nix run .
           --
           cache

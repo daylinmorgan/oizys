@@ -27,7 +27,15 @@ runs:
         BTRFS: ${{ inputs.btrfs }}
       run: exec ${{ github.action_path }}/prepare.sh
 
-    - uses: daylinmorgan/lix-gha-installer-action@latest
+    # need ssh access for `oizys cache --service harmonica`
+    - name: Setup SSH
+      uses: MrSquaare/ssh-setup-action@v3
+      with:
+        host: nix-cache.dayl.in
+        private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Install Lix
+      uses: daylinmorgan/lix-gha-installer-action@latest
       with:
         extra-conf: ${{ inputs.nix_conf }}
 
