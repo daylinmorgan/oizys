@@ -377,20 +377,58 @@ proc prettyDerivation*(path: string): BbString =
   drv.name.trunc(maxLen) & " " & drv.hash.bb("faint")
 
 
+type NixCacheKind = enum
+  Store      ## Nix-serve-ng, Harmonia
+  Service    ## Attic, Cachix
+
+type NixCache = object
+  case kind: NixCacheKind
+  of Store:
+    host: string
+  of Service:
+    exe: string
+    name: string
+
+
+proc toCache(service: string, name: string): NixCache =
+  case service
+  of "harmonica", "nix-serve-ng":
+    info bbfmt"building and pushing to /nix/store/ host: [b]{name}"
+    result = NixCache(kind: Store, host: name)
+  of "attic", "cachix":
+    info bbfmt"building and pushing to {service} cache: [b]{name}"
+    if findExe(service) == "":
+      fatalQuit fmt"is {service} installed?"
+    result = NixCache(kind: Service, name: name, exe: service)
+  else:
+    fatalQuit fmt"unknown cache service: {service}"
+
+proc pushPathsToCache(cache: NixCache, paths: openArray[string], jobs: int) =
+  var cmd: string
+  case cache.kind:
+  of Service:
+    cmd.addArgs cache.exe, "push", cache.name, "--jobs", $jobs
+    cmd.addArgs paths
+  of Store:
+    # TODO: how to handle user, this will probably error on remote machine
+    # Could try using NIX_SSHOPTS='-l daylin' on github actions
+    cmd.addArgs "nix-copy-closure", "-s", cache.host
+    cmd.addArgs paths
+
+  let pushErr = runCmd(cmd)
+  if pushErr != 0:
+    errorQuit "failed to push build to cache"
+
 proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: int, dry: bool) =
   ## build individual derivations not cached and push to cache
 
-  if findExe(service) == "": fatalQuit fmt"is {service} installed?"
-  info bbfmt"building and pushing to cache: [b]{name}"
+  let cache = toCache(service, name)
   debug "determining missing cache hits"
 
   let drvs = getOizysDerivations()
   if drvs.len == 0:
     info "nothing to build"
     quit "exiting...", QuitSuccess
-
-  # TODO: fix this so it works with table
-  # info fmt("need to build {drvs.len} derivations:\n") & drvs.mapIt(prettyDerivation("  " & it.outputs["out"].path)).join("\n")
 
   info fmt("need to build {drvs.len} dervations")
   for _, drv in drvs:
@@ -413,16 +451,7 @@ proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: 
     reportResults(results)
 
   if outs.len > 0:
-    # TODO: push after build not at once?
-    var cmd = service
-    cmd.addArg "push"
-    cmd.addArg name
-    cmd.addArg "--jobs"
-    cmd.addArg $jobs
-    cmd.addArgs outs
-    let pushErr = runCmd(cmd)
-    if pushErr != 0:
-      errorQuit "failed to push build to cache"
+    pushPathsToCache(cache, outs, jobs)
 
 proc getUpdatedLockFile() =
   info "getting updated flake.lock as updated.lock"

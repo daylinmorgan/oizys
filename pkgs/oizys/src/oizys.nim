@@ -59,12 +59,12 @@ hwylCli:
     flags:
       name:
         T string
-        ? "name of binary cache"
-        * "oizys"
+        ? "name/host of binary cache"
+        * "algiz"
       service:
         T string
         ? "name of cache service"
-        * "attic"
+        * "harmonica"
       jobs:
         T int
         ? "jobs when pushing paths"
