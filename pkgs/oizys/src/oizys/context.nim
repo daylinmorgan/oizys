@@ -12,6 +12,7 @@ type
     ci: bool
     verbose: Count
     resetCache: bool
+    substitute: bool
 
 let currentHost* = getHostName()
 
@@ -26,6 +27,7 @@ proc initContext*(): OizysContext =
     result.flake = envVar
   result.ci = getEnv("GITHUB_STEP_SUMMARY") != ""
 
+
 var oc = initContext()
 
 proc getVerbosity*(): int     = return oc.verbose.val
@@ -34,6 +36,7 @@ proc getFlake*(): string      = return oc.flake
 proc isResetCache*(): bool    = return oc.resetCache
 proc isCi*(): bool            = return oc.ci
 proc isLocal*(): bool         = return oc.flake.dirExists
+proc isSubstitute*(): bool     = return oc.substitute
 
 
 
@@ -46,10 +49,12 @@ proc updateContext*(
   host: seq[string],
   flake: string,
   verbose: Count,
-  resetCache: bool
+  resetCache: bool,
+  substitute: bool
 ) =
-  if host.len > 0: oc.hosts = host
   oc.verbose = verbose
+  oc.substitute = substitute
+  if host.len > 0: oc.hosts = host
   if verbose.val > 1:
     consoleLogger.levelThreshold = lvlAll
   oc.resetCache = resetCache

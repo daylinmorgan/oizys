@@ -8,6 +8,29 @@ import hwylterm, hwylterm/logging, jsony
 
 import ./[context, exec]
 
+
+# TODO: autogenerate/deduplicate from modules/essentials.nix?
+# const subFlags = [
+#   "--extra-substituters",
+#   "https://nix-cache.dayl.in",
+#   "--extra-trusted-public-keys",
+#   "nix-cache.dayl.in-1:lj22Sov7m1snupBz/43O1fxyEfy/S7cxBpweD7iREcs="
+# ]
+
+type
+  Substituters = object
+    `extra-substituters`: seq[string]
+    `extra-trusted-public-keys`: seq[string]
+
+func makeSubFlags(): seq[string] =
+  let subs = slurp("substituters.json").fromJson(Substituters)
+  for k, v in subs.fieldPairs():
+    result.add "--" & k
+    result.add "\"" & v.join(" ") & "\""
+
+
+const subFlags = makeSubFlags()
+
 proc nixCommand*(cmd: string, nom: bool = false): string =
   if nom:
     if findExe("nom") == "":
@@ -20,6 +43,8 @@ proc nixCommand*(cmd: string, nom: bool = false): string =
     result.addArg "--narinfo-cache-negative-ttl 0"
   if not (nom or isCi()):
     result.addArg "--log-format multiline"
+  if isSubstitute():
+    result.addArgs subFlags
 
 proc nixosConfigAttr(host: string): string =
   getFlake() & "#nixosConfigurations." & host & ".config.system.build.toplevel"
