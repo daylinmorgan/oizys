@@ -7,6 +7,7 @@
     # by default is accessible only by root:root which should work with above service
     secrets.restic-algiz = { };
     secrets.atticd-env = { };
+    secrets.harmonia-key = {};
   };
 
 }

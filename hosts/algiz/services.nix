@@ -6,6 +6,7 @@
 }:
 let
   atticPort = "5656";
+  harmoniaPort = "5657";
   static = pkgs.runCommandLocal "static-files" { } ''
     mkdir $out
     cp ${./caddy/index.html} $out/index.html
@@ -70,19 +71,33 @@ in
     };
   };
 
+  services.harmonia = enabled // {
+    signKeyPaths = [ config.sops.secrets.harmonia-key.path ];
+    settings = {
+      bind = "[::]:${harmoniaPort}";
+    };
+  };
+
   services.caddy = enabled // {
     extraConfig = builtins.readFile ./caddy/Caddyfile;
-    virtualHosts."attic.dayl.in".extraConfig = ''
-      redir /oizys /
 
-      handle / {
-        root * ${static}
-        file_server
-      }
+    virtualHosts = {
+      "attic.dayl.in".extraConfig = ''
+        redir /oizys /
 
-      handle /* {
-        reverse_proxy http://localhost:${atticPort}
-      }
-    '';
+        handle / {
+          root * ${static}
+          file_server
+        }
+
+        handle /* {
+          reverse_proxy http://localhost:${atticPort}
+        }
+      '';
+
+      "nix-cache.dayl.in".extraConfig = ''
+        reverse_proxy http://localhost:${harmoniaPort}
+      '';
+    };
   };
 }

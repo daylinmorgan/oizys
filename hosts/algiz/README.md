@@ -45,3 +45,19 @@ atticd-atticadm make-token --sub daylin --push "*" --pull "*" --validity '1y' --
 
 If I handled secrets via `sops` or `agenix` I think this could be stored directly in the repo.
 I also had to modify the firewall so that docker would forward along the requests by caddy to `host.docker.internal` correctly.
+
+## Setting up Harmonia
+
+Generated a signing key with the following command:
+
+```sh
+nix-store --generate-binary-cache-key nix-cache.dayl.in-1 ./secret ./public
+```
+
+public key:
+
+```txt
+nix-cache.dayl.in-1:lj22Sov7m1snupBz/43O1fxyEfy/S7cxBpweD7iREcs=
+```
+
+Then enabled the service using the nixos module and used sops to store the private key.
