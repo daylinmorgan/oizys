@@ -45,6 +45,14 @@ jobs:
         with:
           attic_token: ${{ secrets.ATTIC_TOKEN }}
 
+      # need ssh access for `oizys cache --service harmonica`
+      # TODO: use this in actions/nix?
+      - name: Setup SSH
+        uses: MrSquaare/ssh-setup-action@v3
+        with:
+          host: nix-cache.dayl.in
+          private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - run: git checkout -B flake-lock
 
       - name: Update nix flake
