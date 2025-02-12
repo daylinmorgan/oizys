@@ -30,7 +30,7 @@
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     nix-index-database.url = "github:nix-community/nix-index-database";
     sops-nix.url = "github:Mic92/sops-nix";
-    hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1&ref=refs/tags/v0.47.2";
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
     hyprland-contrib.url = "github:hyprwm/contrib";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
@@ -77,17 +77,17 @@
     utils.inputs.nim2nix.follows = "nim2nix";
 
     # further flake.lock minimization shenanigans
-    # hyprland-qt-support.url = "github:hyprwm/hyprland-qt-support";
-    # hyprland-qt-support.inputs.hyprlang.follows = "hyprland/hyprlang";
-    # hyprland-qt-support.inputs.nixpkgs.follows = "hyprland/nixpkgs";
-    # hyprland-qt-support.inputs.systems.follows = "hyprland/systems";
-    # hyprland-qtutils.url = "github:hyprwm/hyprland-qtutils";
-    # hyprland-qtutils.inputs.hyprland-qt-support.follows = "hyprland-qt-support";
-    # hyprland-qtutils.inputs.hyprlang.follows = "hyprland/hyprlang";
-    # hyprland-qtutils.inputs.hyprutils.follows = "hyprland/hyprutils";
-    # hyprland-qtutils.inputs.nixpkgs.follows = "hyprland/nixpkgs";
-    # hyprland-qtutils.inputs.systems.follows = "hyprland/systems";
-    # hyprland.inputs.hyprland-qtutils.follows = "hyprland-qtutils";
+    hyprland-qt-support.url = "github:hyprwm/hyprland-qt-support";
+    hyprland-qt-support.inputs.hyprlang.follows = "hyprland/hyprlang";
+    hyprland-qt-support.inputs.nixpkgs.follows = "hyprland/nixpkgs";
+    hyprland-qt-support.inputs.systems.follows = "hyprland/systems";
+    hyprland-qtutils.url = "github:hyprwm/hyprland-qtutils";
+    hyprland-qtutils.inputs.hyprland-qt-support.follows = "hyprland-qt-support";
+    hyprland-qtutils.inputs.hyprlang.follows = "hyprland/hyprlang";
+    hyprland-qtutils.inputs.hyprutils.follows = "hyprland/hyprutils";
+    hyprland-qtutils.inputs.nixpkgs.follows = "hyprland/nixpkgs";
+    hyprland-qtutils.inputs.systems.follows = "hyprland/systems";
+    hyprland.inputs.hyprland-qtutils.follows = "hyprland-qtutils";
 
     systems.url = "github:nix-systems/x86_64-linux";
     hyprland.inputs.systems.follows = "systems";
