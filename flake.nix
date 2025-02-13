@@ -11,18 +11,9 @@
     lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
     lix-module.inputs.nixpkgs.follows = "nixpkgs";
     lix-module.inputs.flake-utils.follows = "flake-utils";
-    lix = {
-      url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
-      flake = false;
-    };
     lix-module.inputs.lix.follows = "lix";
-
-    # lix-attic.url = "git+https://git.lix.systems/nrabulinski/attic.git";
-    # lix-attic.inputs.nixpkgs.follows = "nixpkgs";
-    # lix-attic.inputs.lix-module.follows = "lix-module";
-    # lix-attic.inputs.lix.follows = "lix-module/lix";
-    # lix-attic.inputs.flake-compat.follows = "";
-
+    lix.url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
+    lix.flake = false;
     # keep for when lix breaks :/
     # lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0.tar.gz";
 
