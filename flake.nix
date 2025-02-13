@@ -109,10 +109,10 @@
 
   nixConfig = {
     extra-substituters = [
-      "https://attic.dayl.in/oizys"
+      "https://nix-cache.dayl.in"
     ];
     extra-trusted-public-keys = [
-      "oizys:DSw3mwVMM/Y+PXSVpkDlU5dLwlORuiJRGPkwr5INSMc="
+      "nix-cache.dayl.in-1:lj22Sov7m1snupBz/43O1fxyEfy/S7cxBpweD7iREcs"
     ];
   };
 }
