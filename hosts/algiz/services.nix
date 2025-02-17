@@ -7,9 +7,13 @@
 let
   atticPort = "5656";
   harmoniaPort = "5657";
-  static = pkgs.runCommandLocal "static-files" { } ''
+  static-attic = pkgs.runCommandLocal "static-files" { } ''
     mkdir $out
     cp ${./caddy/index.html} $out/index.html
+  '';
+  static-nix-cache = pkgs.runCommandLocal "static-files-nix-cache" { } ''
+    mkdir $out
+    cp -r ${./caddy/nix-cache} $out
   '';
 
   check-attic = pkgs.writeShellScriptBin "check-attic" ''
@@ -86,7 +90,7 @@ in
         redir /oizys /
 
         handle / {
-          root * ${static}
+          root * ${static-attic}
           file_server
         }
 
@@ -96,7 +100,13 @@ in
       '';
 
       "nix-cache.dayl.in".extraConfig = ''
-        reverse_proxy http://localhost:${harmoniaPort}
+        handle / {
+          root * ${static-nix-cache}
+          file_server
+        }
+        handle /* {
+          reverse_proxy http://localhost:${harmoniaPort}
+        }
       '';
     };
   };
