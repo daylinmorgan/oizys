@@ -1,7 +1,9 @@
 import std/[logging, os, strformat, strutils]
 from std/nativesockets import getHostname
+
 import hwylterm, hwylterm/logging
 from hwylterm/hwylcli import Count
+
 import ./logging
 
 type
@@ -38,12 +40,15 @@ proc isCi*(): bool            = return oc.ci
 proc isLocal*(): bool         = return oc.flake.dirExists
 proc isBootstrap*(): bool     = return oc.bootstrap
 
-
-
 proc checkPath(s: string): string =
   ## fail if path doesn't exist
   if not s.dirExists: fatalQuit fmt"flake path: {s} does not exist"
   result = s
+
+func isGitFlakeUrl(flake: string): bool =
+  for s in ["github","git+"]:
+    if flake.startsWith(s):
+      return true
 
 proc updateContext*(
   host: seq[string],
@@ -58,13 +63,13 @@ proc updateContext*(
   if verbose.val > 1:
     consoleLogger.levelThreshold = lvlAll
   oc.resetCache = resetCache
-  if flake != "":
-    oc.flake =
-      if bootstrap: oc.flake
-      elif flake.startsWith("github") or flake.startsWith("git+"): flake
-      else: checkPath(flake.normalizedPath().absolutePath())
+  if flake != "" and flake.isGitFlakeUrl():
+    oc.flake = flake
+  else:
+    oc.flake = checkPath(flake.normalizedPath().absolutePath())
 
   debug bb(fmt"""[b]flake[/]: {oc.flake}, [b]hosts[/]: {oc.hosts.join(" ")}""")
-  if not (isLocal() and isBootstrap()):
+
+  if (not bootstrap) and (not isLocal()):
     warn "not using local directory for flake"
 
