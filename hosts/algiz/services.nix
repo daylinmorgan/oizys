@@ -87,6 +87,7 @@ in
 
     virtualHosts = {
       "attic.dayl.in".extraConfig = ''
+
         redir /oizys /
 
         handle / {
@@ -100,10 +101,16 @@ in
       '';
 
       "nix-cache.dayl.in".extraConfig = ''
-        handle / {
+        @frontend {
+          path /
+          path /daylin-nix-cache-logo.svg
+        }
+
+        handle @frontend {
           root * ${static-nix-cache}
           file_server
         }
+
         handle /* {
           reverse_proxy http://localhost:${harmoniaPort}
         }
