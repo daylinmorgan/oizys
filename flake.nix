@@ -30,7 +30,6 @@
     nim2nix.url = "github:daylinmorgan/nim2nix";
     utils.url = "git+https://git.dayl.in/daylin/utils.git";
     pixi.url = "github:daylinmorgan/pixi-flake";
-    jj.url = "github:martinvonz/jj/v0.26.0";
     roc.url = "github:roc-lang/roc/0.0.0-alpha2-rolling";
 
     # master as of 2024.12.12
@@ -49,7 +48,6 @@
     # hyprland.inputs.nixpkgs.follows = "nixpkgs";
     # hyprland-contrib.inputs.nixpkgs.follows = "nixpkgs";
     hyprman.inputs.nixpkgs.follows = "nixpkgs";
-    jj.inputs.nixpkgs.follows = "nixpkgs";
     nim2nix.inputs.nixpkgs.follows = "nixpkgs";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
@@ -85,7 +83,6 @@
     flake-utils.inputs.systems.follows = "systems";
 
     flake-utils.url = "github:numtide/flake-utils";
-    jj.inputs.flake-utils.follows = "flake-utils";
     lib-aggregate.inputs.flake-utils.follows = "flake-utils";
     roc.inputs.flake-utils.follows = "flake-utils";
 
@@ -97,10 +94,9 @@
 
     rust-overlay.url = "github:oxalica/rust-overlay";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
-    jj.inputs.rust-overlay.follows = "rust-overlay";
     roc.inputs.rust-overlay.follows = "rust-overlay";
 
-    ## nil inputs, I don't *ALL* your flake inputs...
+    ## nil inputs, I don't want *ALL* your flake inputs...
     # hyprland.inputs.pre-commit-hooks.follows = "";
     nixos-wsl.inputs.flake-compat.follows = "";
     nixpkgs-wayland.inputs.flake-compat.follows = "";

@@ -30,6 +30,4 @@ in
   "pixi"
   "f1multiviewer"
   "tsm"
-
-  "jj"
 ])
