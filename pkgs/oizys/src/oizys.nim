@@ -144,11 +144,13 @@ hwylCli:
       if minimal and system:
         echo "--minimal and --system are mutually exclusive"
       elif minimal:
-        showOizysDerivations()
-      elif system:
-        echo getSystemPaths().mapIt(it & "^*").join(" ")
+        echo missingDerivations().fmtDrvsForNix()
       else:
-        echo nixosConfigAttrs().join(" ")
+        echo nixosAttrs(
+          if system: "path"
+          else: "build.toplevel"
+        ).join(" ")
+
     [update]
     ... "update and run nixos-rebuild"
     flags:

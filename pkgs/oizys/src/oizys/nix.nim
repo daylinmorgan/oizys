@@ -1,21 +1,12 @@
 import std/[
-  algorithm, json,
-  enumerate, os, sequtils, sets, strformat,
-  strutils, sugar, logging, tables, times
+  algorithm, json, enumerate,
+  os, sequtils, strformat, strutils,
+  sugar, logging, tables, times
 ]
 export tables
 import hwylterm, hwylterm/logging, jsony
 
 import ./[context, exec]
-
-
-# TODO: autogenerate/deduplicate from modules/essentials.nix?
-# const subFlags = [
-#   "--extra-substituters",
-#   "https://nix-cache.dayl.in",
-#   "--extra-trusted-public-keys",
-#   "nix-cache.dayl.in-1:lj22Sov7m1snupBz/43O1fxyEfy/S7cxBpweD7iREcs="
-# ]
 
 type
   Substituters = object
@@ -28,7 +19,6 @@ func makeSubFlags(): seq[string] =
   for k, v in subs.fieldPairs():
     result.add "--" & k
     result.add "\"" & v.join(" ") & "\""
-
 
 const subFlags = makeSubFlags()
 
@@ -47,12 +37,14 @@ proc nixCommand*(cmd: string, nom: bool = false): string =
   if isBootstrap():
     result.addArgs subFlags
 
-proc nixosConfigAttr(host: string): string =
-  getFlake() & "#nixosConfigurations." & host & ".config.system.build.toplevel"
+proc nixosAttr(host: string, attr: string = "build.toplevel"): string =
+  getFlake() & "#nixosConfigurations." & host & ".config.system." & attr
 
-proc nixosConfigAttrs*(): seq[string] =
+proc nixosAttrs*(
+  attr: string = "build.toplevel"
+): seq[string] =
   for host in getHosts():
-    result.add nixosConfigAttr(host)
+    result.add nixosAttr(host, attr)
 
 type
   NixosRebuildSubcmd* = enum
@@ -158,7 +150,7 @@ proc display(output: DryRunOutput) =
 proc toBuildNixosConfiguration(): seq[string] =
   var cmd = nixCommand("build")
   cmd.addArg "--dry-run"
-  cmd.addArgs nixosConfigAttrs()
+  cmd.addArgs nixosAttrs()
   let (_, err) = runCmdCaptWithSpinner(
     cmd,
     "running dry run build for: " & (getHosts().join(" ").bb("bold")),
@@ -185,12 +177,12 @@ proc narHash*(s: string): string =
   let ss = s.split("-")
   result = ss[0].split("/")[^1]
 
-proc evaluateDerivations(drvs: openArray[string]): Table[string, NixDerivation] =
-  var cmd = "nix derivation show -r"
-  cmd.addArgs drvs
-  let (output, _) =
-    runCmdCaptWithSpinner(cmd, "evaluating derivations")
-  fromJson(output, Table[string, NixDerivation])
+# proc evaluateDerivations(drvs: openArray[string]): Table[string, NixDerivation] =
+#   var cmd = "nix derivation show -r"
+#   cmd.addArgs drvs
+#   let (output, _) =
+#     runCmdCaptWithSpinner(cmd, "evaluating derivations")
+#   fromJson(output, Table[string, NixDerivation])
 
 proc nixDerivationShow*(drvs: openArray[string]): Table[string, NixDerivation] =
   var cmd = "nix derivation show"
@@ -199,35 +191,9 @@ proc nixDerivationShow*(drvs: openArray[string]): Table[string, NixDerivation] =
     runCmdCaptWithSpinner(cmd, "evaluating " & drvs.join(" "))
   fromJson(output, Table[string, NixDerivation])
 
-
-# TODO: replace asserts in this proc, would be easier with results type
-proc findSystemPaths(drvs: Table[string, NixDerivation]): seq[string] =
-  let hosts = getHosts()
-  let systemDrvs = collect(
-    for k in drvs.keys():
-      if k.split("-",1)[1].startswith("nixos-system-"): k
-  )
-
-  assert len(hosts) == len(systemDrvs)
-  for name in systemDrvs:
-    for drv in drvs[name].inputDrvs.keys():
-      if drv.endsWith("system-path.drv"):
-        result.add drv
-
-  assert len(hosts) == len(result)
-
-# NOTE: is find system paths always called after a nixDerivationShow?
-proc getSystemPaths*(): seq[string] =
-  let systemDrvs = nixDerivationShow(nixosConfigAttrs())
-  result = findSystemPaths(systemDrvs)
-
-proc filterSeq(
-  drvs: seq[string],
-  filter: proc(s: string): bool,
-): tuple[yes: seq[string], no: seq[string]] =
-  for drv in drvs:
-    if filter(drv): result.yes.add drv
-    else: result.no.add drv
+proc getSystemPathDrvs*(): seq[string] =
+  for drv, _ in nixDerivationShow(nixosAttrs("path")):
+    result.add drv
 
 func getIgnoredPackages(): seq[string] =
   for l in slurp("ignored.txt").strip().splitLines():
@@ -243,9 +209,8 @@ func isIgnored(drv: string): bool =
       if name.startswith(pkg):
         return true
 
-proc getSystemPathDrvs*(): seq[string] =
-  let systemDrvs = nixDerivationShow(nixosConfigAttrs())
-  let systemPathDrvs = findSystemPaths(systemDrvs)
+proc getSystemPathInputDrvs*(): seq[string] =
+  let systemPathDrvs = getSystemPathDrvs()
 
   result =
     collect:
@@ -253,85 +218,57 @@ proc getSystemPathDrvs*(): seq[string] =
         for inputDrv, _ in drv.inputDrvs:
           inputDrv
 
-proc getOizysDerivations():Table[string, NixDerivation] =
+proc missingDerivations*():Table[string, NixDerivation] =
   let
     toBuildDrvs = toBuildNixosConfiguration()
-    systemPathDrvs = getSystemPathDrvs()
-    toActullyBuildDrvs = systemPathDrvs.filterIt(it in toBuildDrvs and not isIgnored(it))
+    systemPathInputDrvs = getSystemPathInputDrvs()
+    toActullyBuildDrvs = systemPathInputDrvs.filterIt(it in toBuildDrvs and not isIgnored(it))
+
   for path , drv in nixDerivationShow(toActullyBuildDrvs):
     result[path] = drv
 
-proc showOizysDerivations*() =
-  let drvs = getOizysDerivations()
-  for path, drv in drvs:
-    echo path & "^*"
+func fmtDrvsForNix*(drvs: seq[string]): string {.inline.} =
+  drvs.mapIt(it & "^*").join(" ")
 
-# TODO: remove this proc
-proc systemPathDrvsToBuild*(): seq[string] =
-  var inputDrvs, dropped: seq[string]
-  let toBuild = toBuildNixosConfiguration()
-  let drvs = evaluateDerivations(nixosConfigAttrs())
-
-  let systemPaths = findSystemPaths(drvs)
-  for p in systemPaths:
-    inputDrvs &= drvs[p].inputDrvs.keys().toSeq()
-
-  (result, _) = filterSeq(inputDrvs, (s) => s in toBuild)
-  (dropped, result) =  filterSeq(result, isIgnored)
-  debug fmt"ignored {dropped.len} derivations"
-  result = result.mapIt(it & "^*")
-
+func fmtDrvsForNix*(drvs: Table[string, NixDerivation]): string {.inline.} =
+  let formatted =
+    collect:
+      for k, _ in drvs:
+        k & "^*"
+  formatted.join(" ")
 
 func splitDrv(drv: string): tuple[name, hash:string] =
   assert drv.startsWith("/nix/store"), "is this a /nix/store path? $1" % [drv]
   let s = drv.split("-", 1)
   (s[1].replace(".drv",""),s[0].split("/")[^1])
 
-proc writeDervationsToStepSummary(drvs: seq[string]) =
-  let rows = collect(
-    for drv in drvs:
-      let (name,hash) = splitDrv(drv)
-      fmt"| {name} | `{hash}` |"
-  )
-  let summaryFilePath = getEnv("GITHUB_STEP_SUMMARY")
-  if summaryFilePath == "": fatalQuit "no github step summary found"
-  let output = open(summaryFilePath,fmAppend)
-  output.writeLine("| derivation | hash |\n|---|---|")
-  output.writeLine(rows.join("\n"))
-  close output
-
 proc nixBuild*(minimal: bool, nom: bool, rest: seq[string]) =
   var cmd = nixCommand("build", nom)
   if minimal:
     debug "populating args with derivations not built/cached"
-    let drvs = systemPathDrvsToBuild()
+    let drvs = missingDerivations()
     if drvs.len == 0:
       info "nothing to build"
       quit "exiting...", QuitSuccess
-    cmd.addArgs drvs
-    cmd.addArg "--no-link"
-    if isCi():
-      writeDervationsToStepSummary drvs
+    cmd.addArgs drvs.fmtDrvsForNix()
+    cmd.addArgs "--no-link"
+    # if isCi():
+    #   writeDervationsToStepSummary drvs
   cmd.addArgs rest
   quitWithCmd cmd
-
 
 proc nixBuildHostDry*(minimal: bool, rest: seq[string]) =
   var cmd = nixCommand("build")
   if minimal:
     debug "populating args with derivations not built/cached"
-    let drvs = systemPathDrvsToBuild()
+    let drvs = missingDerivations()
     if drvs.len == 0:
       info "nothing to build"
       quit "exiting...", QuitSuccess
-    cmd.addArgs drvs
+    cmd.addArgs drvs.fmtDrvsForNix()
     cmd.addArg "--no-link"
-
-    if isCi():
-      writeDervationsToStepSummary drvs
   else:
-    cmd.addArgs nixosConfigAttrs()
-
+    cmd.addArgs nixosAttrs()
   cmd.addArg "--dry-run"
   cmd.addArgs rest
   let (_, err) =
@@ -343,6 +280,7 @@ proc nixBuildHostDry*(minimal: bool, rest: seq[string]) =
   let output = parseDryRunOutput err
   display output
 
+# NOTE: two above procs are redundant
 
 type
   BuildResult = object
@@ -455,7 +393,7 @@ proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: 
   let cache = toCache(service, name)
   debug "determining missing cache hits"
 
-  let drvs = getOizysDerivations()
+  let drvs = missingDerivations()
   if drvs.len == 0:
     info "nothing to build"
     quit "exiting...", QuitSuccess
@@ -493,7 +431,7 @@ proc getUpdatedLockFile() =
 # probably duplicating logic above ¯\_(ツ)_/¯
 proc buildSystem(host: string, rest: seq[string]) =
   var cmd = nixCommand("build")
-  cmd.addArg nixosConfigAttr(host)
+  cmd.addArg nixosAttr(host)
   cmd.addArgs rest
   let code = runCmd cmd
   if code != 0:
