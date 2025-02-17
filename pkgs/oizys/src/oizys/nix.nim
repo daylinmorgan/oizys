@@ -435,8 +435,6 @@ proc pushPathsToCache(cache: NixCache, paths: openArray[string], jobs: int) =
     cmd.addArgs cache.exe, "push", cache.name, "--jobs", $jobs
     cmd.addArgs paths
   of Store:
-    # TODO: how to handle user, this will probably error on remote machine
-    # Could try using NIX_SSHOPTS='-l daylin' on github actions
     cmd.addArgs "nix-copy-closure", "-s", cache.host
     cmd.addArgs paths
 
@@ -457,7 +455,7 @@ proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: 
 
   info fmt("need to build {drvs.len} dervations")
   for _, drv in drvs:
-    info prettyDerivation(drv.outputs["out"].path)
+    info prettyDerivation("  " & drv.outputs["out"].path)
 
   if dry:
     quit "exiting...", QuitSuccess
