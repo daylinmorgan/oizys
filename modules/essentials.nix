@@ -26,6 +26,7 @@
 
     pkgs.nix-output-monitor
     sops
+    nix-eval-jobs
   ];
 
   nixpkgs.config.allowUnfree = true;
