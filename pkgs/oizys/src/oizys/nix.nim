@@ -198,6 +198,7 @@ proc nixDerivationShow*(drvs: openArray[string]): Table[string, NixDerivation] =
     runCmdCaptWithSpinner(cmd, "evaluating " & drvs.join(" "))
   fromJson(output, Table[string, NixDerivation])
 
+
 # TODO: replace asserts in this proc, would be easier with results type
 proc findSystemPaths(drvs: Table[string, NixDerivation]): seq[string] =
   let hosts = getHosts()
@@ -214,6 +215,10 @@ proc findSystemPaths(drvs: Table[string, NixDerivation]): seq[string] =
 
   assert len(hosts) == len(result)
 
+# NOTE: is find system paths always called after a nixDerivationShow?
+proc getSystemPaths*(): seq[string] =
+  let systemDrvs = nixDerivationShow(nixosConfigAttrs())
+  result = findSystemPaths(systemDrvs)
 
 proc filterSeq(
   drvs: seq[string],
@@ -240,6 +245,7 @@ func isIgnored(drv: string): bool =
 proc getSystemPathDrvs*(): seq[string] =
   let systemDrvs = nixDerivationShow(nixosConfigAttrs())
   let systemPathDrvs = findSystemPaths(systemDrvs)
+
   result =
     collect:
       for k, drv in nixDerivationShow(systemPathDrvs):

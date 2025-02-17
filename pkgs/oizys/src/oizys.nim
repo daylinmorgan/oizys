@@ -138,12 +138,17 @@ hwylCli:
     ... "nixos config attr"
     flags:
       ^minimal
+      system:
+        ? "show system path"
     run:
-      if not minimal:
-        echo nixosConfigAttrs().join(" ")
-      else:
+      if minimal and system:
+        echo "--minimal and --system are mutually exclusive"
+      elif minimal:
         showOizysDerivations()
-
+      elif system:
+        echo getSystemPaths().mapIt(it & "^*").join(" ")
+      else:
+        echo nixosConfigAttrs().join(" ")
     [update]
     ... "update and run nixos-rebuild"
     flags:
