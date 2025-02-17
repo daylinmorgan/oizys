@@ -1,5 +1,4 @@
 {
-  inputs,
   pkgs,
   config,
   lib,
@@ -13,9 +12,9 @@ let
   cfg = config.oizys.hyprland;
 in
 {
-  imports = [
-    inputs.hyprland.nixosModules.default
-  ];
+  # imports = [
+  #   inputs.hyprland.nixosModules.default
+  # ];
 
   options.oizys.hyprland.enable = mkEnableOption "hyprland";
 
