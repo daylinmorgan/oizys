@@ -12,7 +12,7 @@ type
     ci: bool
     verbose: Count
     resetCache: bool
-    substitute: bool
+    bootstrap: bool
 
 let currentHost* = getHostName()
 
@@ -36,7 +36,7 @@ proc getFlake*(): string      = return oc.flake
 proc isResetCache*(): bool    = return oc.resetCache
 proc isCi*(): bool            = return oc.ci
 proc isLocal*(): bool         = return oc.flake.dirExists
-proc isSubstitute*(): bool     = return oc.substitute
+proc isBootstrap*(): bool     = return oc.bootstrap
 
 
 
@@ -50,22 +50,21 @@ proc updateContext*(
   flake: string,
   verbose: Count,
   resetCache: bool,
-  substitute: bool
+  bootstrap: bool,
 ) =
   oc.verbose = verbose
-  oc.substitute = substitute
+  oc.bootstrap = bootstrap
   if host.len > 0: oc.hosts = host
   if verbose.val > 1:
     consoleLogger.levelThreshold = lvlAll
   oc.resetCache = resetCache
   if flake != "":
     oc.flake =
-      if flake.startsWith("github") or flake.startsWith("git+"): flake
+      if bootstrap: oc.flake
+      elif flake.startsWith("github") or flake.startsWith("git+"): flake
       else: checkPath(flake.normalizedPath().absolutePath())
 
   debug bb(fmt"""[b]flake[/]: {oc.flake}, [b]hosts[/]: {oc.hosts.join(" ")}""")
-  if not isLocal():
+  if not (isLocal() and isBootstrap()):
     warn "not using local directory for flake"
-
-
 

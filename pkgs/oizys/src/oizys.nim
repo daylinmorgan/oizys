@@ -28,10 +28,9 @@ hwylCli:
     `reset-cache`:
       ? "set cache timeout to 0"
       ident resetCache
-    substitute:
-      ? "use builtin substituter"
-      - s
-
+    bootstrap:
+      ? "enable bootstrap mode"
+      - b
     [misc]
     yes:
       - y
@@ -41,7 +40,7 @@ hwylCli:
       - m
   preSub:
     setupLoggers()
-    updateContext(host, flake, verbose, resetCache, substitute)
+    updateContext(host, flake, verbose, resetCache, bootstrap)
 
   subcommands:
     [build]

@@ -22,6 +22,7 @@ type
     `extra-substituters`: seq[string]
     `extra-trusted-public-keys`: seq[string]
 
+# TODO: replace with nim string defines?
 func makeSubFlags(): seq[string] =
   let subs = slurp("substituters.json").fromJson(Substituters)
   for k, v in subs.fieldPairs():
@@ -43,7 +44,7 @@ proc nixCommand*(cmd: string, nom: bool = false): string =
     result.addArg "--narinfo-cache-negative-ttl 0"
   if not (nom or isCi()):
     result.addArg "--log-format multiline"
-  if isSubstitute():
+  if isBootstrap():
     result.addArgs subFlags
 
 proc nixosConfigAttr(host: string): string =
