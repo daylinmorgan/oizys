@@ -144,7 +144,7 @@ hwylCli:
       if minimal and system:
         echo "--minimal and --system are mutually exclusive"
       elif minimal:
-        echo missingDerivations().fmtDrvsForNix()
+        echo missingDrvNixEvalJobs().fmtDrvsForNix()
       else:
         echo nixosAttrs(
           if system: "path"

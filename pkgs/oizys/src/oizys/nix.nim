@@ -13,6 +13,28 @@ type
     `extra-substituters`: seq[string]
     `extra-trusted-public-keys`: seq[string]
 
+  NixosRebuildSubcmd* = enum
+    switch, boot, test, build, `dry-build`,`dry-activate`, `edit`,
+    repl, `build-vm`, `build-vm-with-bootloader`, `list-generations`
+
+  # should I just convert these to NixDerivation?
+  NixEvalOutput = object
+    name: string
+    drvPath: string
+    isCached: bool
+    outputs: Table[string, string]
+
+  DerivationOutput = object
+    path*: string
+    # hashAlgo: string
+    # hash: string
+  NixDerivation = object
+    inputDrvs*: Table[string, JsonNode]
+    name*: string
+    outputs*: Table[string, DerivationOutput]
+
+
+
 # TODO: replace with nim string defines?
 func makeSubFlags(): seq[string] =
   let subs = slurp("substituters.json").fromJson(Substituters)
@@ -45,11 +67,6 @@ proc nixosAttrs*(
 ): seq[string] =
   for host in getHosts():
     result.add nixosAttr(host, attr)
-
-type
-  NixosRebuildSubcmd* = enum
-    switch, boot, test, build, `dry-build`,`dry-activate`, `edit`,
-    repl, `build-vm`, `build-vm-with-bootloader`, `list-generations`
 
 proc handleRebuildArgs(subcmd: NixosRebuildSubcmd, args: openArray[string], remote: bool): string =
   if not remote: result.add "sudo"
@@ -159,16 +176,6 @@ proc toBuildNixosConfiguration(): seq[string] =
   let output = parseDryRunOutput err
   return output.toBuild.mapIt(it.path)
 
-type
-  DerivationOutput = object
-    path*: string
-    # hashAlgo: string
-    # hash: string
-  NixDerivation = object
-    inputDrvs*: Table[string, JsonNode]
-    name*: string
-    outputs*: Table[string, DerivationOutput]
-
 # here a results var would be nice...
 proc narHash*(s: string): string =
   ## get hash from nix store path
@@ -200,9 +207,8 @@ func getIgnoredPackages(): seq[string] =
     if not l.startsWith("#"):
       result.add l
 
-func isIgnored(drv: string): bool =
+func isIgnored(name: string): bool =
   const ignoredPackages = getIgnoredPackages()
-  let name = drv.split("-", 1)[1].replace(".drv","")
   result = name in ignoredPackages
   if not result:
     for pkg in ignoredPackages:
@@ -218,14 +224,34 @@ proc getSystemPathInputDrvs*(): seq[string] =
         for inputDrv, _ in drv.inputDrvs:
           inputDrv
 
-proc missingDerivations*():Table[string, NixDerivation] =
-  let
-    toBuildDrvs = toBuildNixosConfiguration()
-    systemPathInputDrvs = getSystemPathInputDrvs()
-    toActullyBuildDrvs = systemPathInputDrvs.filterIt(it in toBuildDrvs and not isIgnored(it))
+proc missingDrvNixEvalJobs*(): seq[NixEvalOutput] =
+  ## get all derivations not cached using nix-eval-jobs
+  var cmd = ("nix-eval-jobs")
+  cmd.addArgs "--flake", "--check-cache-status"
+  cmd.addArgs getHosts().mapIt(".#systemPaths." & it)
 
-  for path , drv in nixDerivationShow(toActullyBuildDrvs):
-    result[path] = drv
+  let (output, _) = runCmdCaptWithSpinner(
+    cmd,
+    bb"running [b]nix-eval-jobs[/] for system paths: " & (getHosts().join(" ").bb("bold")),
+  )
+
+  var cached: seq[NixEvalOutput]
+  var ignored: seq[NixEvalOutput]
+
+  for line in output.strip().splitLines():
+    let output = line.fromJson(NixEvalOutput)
+    if output.isCached:
+      cached.add output
+    elif output.name.isIgnored():
+      ignored.add output
+    else:
+      result.add  output
+
+  debug "cached derivations: ", bb($cached.len, "yellow")
+  debug "ignored derivations: ", bb($ignored.len, "yellow")
+
+func fmtDrvsForNix*(drvs: seq[NixEvalOutput]): string {.inline.} =
+  drvs.mapIt(it.drvPath & "^*").join(" ")
 
 func fmtDrvsForNix*(drvs: seq[string]): string {.inline.} =
   drvs.mapIt(it & "^*").join(" ")
@@ -246,7 +272,7 @@ proc nixBuild*(minimal: bool, nom: bool, rest: seq[string]) =
   var cmd = nixCommand("build", nom)
   if minimal:
     debug "populating args with derivations not built/cached"
-    let drvs = missingDerivations()
+    let drvs = missingDrvNixEvalJobs()
     if drvs.len == 0:
       info "nothing to build"
       quit "exiting...", QuitSuccess
@@ -261,7 +287,7 @@ proc nixBuildHostDry*(minimal: bool, rest: seq[string]) =
   var cmd = nixCommand("build")
   if minimal:
     debug "populating args with derivations not built/cached"
-    let drvs = missingDerivations()
+    let drvs = missingDrvNixEvalJobs()
     if drvs.len == 0:
       info "nothing to build"
       quit "exiting...", QuitSuccess
@@ -294,57 +320,6 @@ func formatDuration(d: Duration): string =
     result.add $(seconds div 60) & " minutes"
     result.add " and "
   result.add $(seconds mod 60) & " seconds"
-
-# TODO: by default collect the build result
-proc build(path: string, drv: NixDerivation, rest: seq[string]): BuildResult =
-  let startTime = now()
-  var cmd = "nix build"
-  cmd.addArgs path & "^*", "--no-link"
-  cmd.addArgs rest
-
-  let (stdout, stderr, buildCode) =
-    if "-L" in rest or "--print-build-logs" in rest: ("","", runCmd(cmd))
-    else: runCmdCapt(cmd, {CaptStderr})
-
-  result.duration = now() - startTime
-
-  # result.stdout = stdout
-  # result.stderr = stderr
-  if buildCode == 0:
-    result.successful = true
-    info "succesfully built: " & splitDrv(path).name
-  else:
-    error "failed to build: " & splitDrv(path).name
-    error "\n" & formatStdoutStderr(stdout, stderr)
-
-  info "-> duration: " & formatDuration(result.duration)
-
-func outputsPaths(drv: NixDerivation): seq[string] =
-  for _, output in drv.outputs:
-    result.add output.path
-
-proc reportResults(results: seq[(string, NixDerivation, BuildResult)]) =
-  let rows = collect(
-    for (path, drv, res) in results:
-      let (name, hash) = splitDrv(path)
-      fmt"| {name} | `{hash}` | " & (
-        if res.successful: ":white_check_mark:"
-        else: ":x:"
-      ) & " |" & $(res.duration)
-  )
-  let summaryFilePath = getEnv("GITHUB_STEP_SUMMARY")
-  if summaryFilePath == "": fatalQuit "no github step summary found"
-  let output = open(summaryFilePath, fmAppend)
-  output.writeLine "| derivation | hash | build | time |"
-  output.writeLine "|---|---|---|---|"
-  output.writeLine rows.join("\n")
-  close output
-
-
-proc prettyDerivation*(path: string): BbString =
-  const maxLen = 40
-  let drv = path.toDerivation()
-  drv.name.trunc(maxLen) & " " & drv.hash.bb("faint")
 
 
 type NixCacheKind = enum
@@ -387,33 +362,83 @@ proc pushPathsToCache(cache: NixCache, paths: openArray[string], jobs: int) =
   if pushErr != 0:
     errorQuit "failed to push build to cache"
 
+
+# TODO: by default collect the build result
+proc build(drv: NixEvalOutput, rest: seq[string]): BuildResult =
+  let startTime = now()
+  var cmd = "nix build"
+  cmd.addArgs drv.drvPath & "^*", "--no-link"
+  cmd.addArgs rest
+
+  let (stdout, stderr, buildCode) =
+    if "-L" in rest or "--print-build-logs" in rest: ("","", runCmd(cmd))
+    else: runCmdCapt(cmd, {CaptStderr})
+
+  result.duration = now() - startTime
+
+  if buildCode == 0:
+    result.successful = true
+    info "succesfully built: " & drv.name
+  else:
+    error "failed to build: " & drv.name
+    error "\n" & formatStdoutStderr(stdout, stderr)
+
+  info "-> duration: " & formatDuration(result.duration)
+
+func outputsPaths(drv: NixDerivation): seq[string] =
+  for _, output in drv.outputs:
+    result.add output.path
+
+proc reportResults(results: seq[(NixEvalOutput, BuildResult)]) =
+  let rows = collect(
+    for (drv, res) in results:
+      let (name, hash) = splitDrv(drv.drvPath)
+      fmt"| {name} | `{hash}` | " & (
+        if res.successful: ":white_check_mark:"
+        else: ":x:"
+      ) & " |" & $(res.duration)
+  )
+  let summaryFilePath = getEnv("GITHUB_STEP_SUMMARY")
+  if summaryFilePath == "": fatalQuit "no github step summary found"
+  let output = open(summaryFilePath, fmAppend)
+  output.writeLine "| derivation | hash | build | time |"
+  output.writeLine "|---|---|---|---|"
+  output.writeLine rows.join("\n")
+  close output
+
+
+proc prettyDerivation*(path: string): BbString =
+  const maxLen = 40
+  let drv = path.toDerivation()
+  drv.name.trunc(maxLen) & " " & drv.hash.bb("faint")
+
+
 proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: int, dry: bool) =
   ## build individual derivations not cached and push to cache
 
   let cache = toCache(service, name)
   debug "determining missing cache hits"
 
-  let drvs = missingDerivations()
-  if drvs.len == 0:
-    info "nothing to build"
+  let missing = missingDrvNixEvalJobs()
+
+  info "derivations to build: ", bb($missing.len, "yellow")
+  if missing.len == 0:
     quit "exiting...", QuitSuccess
 
-  info fmt("need to build {drvs.len} dervations")
-  for _, drv in drvs:
-    info prettyDerivation("  " & drv.outputs["out"].path)
+  info "derivations:\n" & missing.mapIt("  " & prettyDerivation(it.outputs["out"])).join("\n")
 
   if dry:
     quit "exiting...", QuitSuccess
 
   let results =
     collect:
-      for path, drv in drvs:
-        (path, drv, build(path, drv, rest))
+      for drv in missing:
+        (drv, build(drv, rest))
 
   var outs: seq[string]
-  for (path, drv, res) in results:
+  for (drv, res) in results:
     if res.successful:
-      outs &= drv.outputsPaths
+      outs &= drv.outputs.values.toSeq
 
   if isCi():
     reportResults(results)

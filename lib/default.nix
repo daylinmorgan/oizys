@@ -89,6 +89,17 @@ let
       }
     );
     formatter = forAllSystems (pkgs: (evalTreeFmt pkgs).config.build.wrapper);
+    systemPaths =
+      (readDir ../hosts)
+      |> mapAttrs (
+        name: _:
+        self.nixosConfigurations.othalan.config.environment.systemPackages
+        |> map (pkg: {
+          name = pkg.name;
+          value = pkg;
+        })
+        |> listToAttrs
+      );
   };
 in
 {
