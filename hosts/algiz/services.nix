@@ -9,11 +9,11 @@ let
   harmoniaPort = "5657";
   static-attic = pkgs.runCommandLocal "static-files" { } ''
     mkdir $out
-    cp ${./caddy/index.html} $out/index.html
+    cp ${./caddy/attic/index.html} $out/index.html
   '';
   static-nix-cache = pkgs.runCommandLocal "static-files-nix-cache" { } ''
     mkdir $out
-    cp -r ${./caddy/nix-cache} $out
+    cp -r ${./caddy/nix-cache}/* $out
   '';
 
   check-attic = pkgs.writeShellScriptBin "check-attic" ''
