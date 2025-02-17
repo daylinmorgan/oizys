@@ -42,10 +42,11 @@ jobs:
 
       - uses: daylin-bot/actions/setup@main
       - uses: ./.github/actions/nix
-        with:
-          attic_token: ${{ secrets.ATTIC_TOKEN }}
 
-      # need ssh access for `oizys cache --service harmonica`
+      #   with:
+      #     attic_token: ${{ secrets.ATTIC_TOKEN }}
+      #
+      # need ssh access for `oizys cache --service store`
       # TODO: use this in actions/nix?
       - name: Setup SSH
         uses: MrSquaare/ssh-setup-action@v3
@@ -65,7 +66,6 @@ jobs:
       - name: Pre-build oizys
         run: |
           nix build .
-          attic push oizys result
 
       - name: Build
         run: >
