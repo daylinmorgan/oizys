@@ -2,12 +2,10 @@
   config,
   pkgs,
   mkOizysModule,
-  flake,
   ...
 }:
 mkOizysModule config "backups" {
-  # environment.systemPackages = with pkgs; [ rclone ];
-  environment.systemPackages = [ (flake.pkgs "self").rclone ];
+  environment.systemPackages = with pkgs; [ rclone ];
 
   services.restic.backups.gdrive = {
     # BUG: if .conda/environments.txt doesn't exist then this won't work

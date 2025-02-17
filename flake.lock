@@ -133,33 +133,6 @@
         "url": "https://git.dayl.in/daylin/hyprman.git"
       }
     },
-    "jj": {
-      "inputs": {
-        "flake-utils": [
-          "flake-utils"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "rust-overlay": [
-          "rust-overlay"
-        ]
-      },
-      "locked": {
-        "lastModified": 1738805560,
-        "narHash": "sha256-jGy+0VDxQrgNhj+eX06FRhPP31V8QZVAM4j4yBosAGE=",
-        "owner": "martinvonz",
-        "repo": "jj",
-        "rev": "613742dfbbd89324b25672a75ef8ce9e671ae0d3",
-        "type": "github"
-      },
-      "original": {
-        "owner": "martinvonz",
-        "ref": "v0.26.0",
-        "repo": "jj",
-        "type": "github"
-      }
-    },
     "lib-aggregate": {
       "inputs": {
         "flake-utils": [
@@ -451,7 +424,6 @@
         "flake-utils": "flake-utils",
         "hyprland-contrib": "hyprland-contrib",
         "hyprman": "hyprman",
-        "jj": "jj",
         "lib-aggregate": "lib-aggregate",
         "lix": "lix",
         "lix-module": "lix-module",

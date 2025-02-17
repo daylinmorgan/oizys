@@ -11,10 +11,6 @@ in
   distrobox = pkgs.callPackage ./distrobox { };
   llm-with-plugins = pkgs.callPackage ./llm/llm-with-plugins { };
 
-  # added for access to https://github.com/rclone/rclone/issues/8351
-  # can remove when rclone v1.70 hits nixpkgs
-  rclone = pkgs.callPackage ./rclone { };
-
   nimlangserver = pkgs.callPackage ./nim/nimlangserver { };
   procs = pkgs.callPackage ./nim/procs { };
   nimble = pkgs.callPackage ./nim/nimble { };
