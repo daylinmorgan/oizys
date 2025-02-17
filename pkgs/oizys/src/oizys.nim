@@ -139,6 +139,7 @@ hwylCli:
       ^minimal
       system:
         ? "show system path"
+        - s
     run:
       if minimal and system:
         echo "--minimal and --system are mutually exclusive"
