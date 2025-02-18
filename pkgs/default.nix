@@ -17,7 +17,7 @@ in
 
   lix = (flake.pkg "lix-module");
 
-  nix-eval-jobs = pkgs.nix-eval-jobs;
+  nix-eval-jobs = (flake.pkgs "lix-module").nix-eval-jobs;
 
   roc = (flake.pkgs "roc").cli;
   roc-lang-server = (flake.pkgs "roc").lang-server;
