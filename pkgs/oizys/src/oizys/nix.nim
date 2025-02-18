@@ -1,7 +1,7 @@
 import std/[
   algorithm, json, enumerate,
   os, sequtils, strformat, strutils,
-  sugar, logging, tables, times
+  sugar, logging, tables, times, sets
 ]
 export tables
 import hwylterm, hwylterm/logging, jsony
@@ -226,14 +226,16 @@ proc getSystemPathInputDrvs*(): seq[string] =
 
 proc missingDrvNixEvalJobs*(): seq[NixEvalOutput] =
   ## get all derivations not cached using nix-eval-jobs
-  var cmd = ("nix-eval-jobs")
+  var cmd = "nix-eval-jobs"
   cmd.addArgs "--flake", "--check-cache-status"
-  cmd.addArgs getHosts().mapIt(".#systemPaths." & it)
+  var output: string
 
-  let (output, _) = runCmdCaptWithSpinner(
-    cmd,
-    bb"running [b]nix-eval-jobs[/] for system paths: " & (getHosts().join(" ").bb("bold")),
-  )
+  for host in getHosts():
+    let (o, _) = runCmdCaptWithSpinner(
+      cmd & (getFlake() & "#systemPaths." & host),
+      bb"running [b]nix-eval-jobs[/] for system path: " & host.bb("bold")
+    )
+    output.add o
 
   var cached: seq[NixEvalOutput]
   var ignored: seq[NixEvalOutput]
@@ -245,10 +247,12 @@ proc missingDrvNixEvalJobs*(): seq[NixEvalOutput] =
     elif output.name.isIgnored():
       ignored.add output
     else:
-      result.add  output
+      result.add output
 
   debug "cached derivations: ", bb($cached.len, "yellow")
   debug "ignored derivations: ", bb($ignored.len, "yellow")
+
+  result = result.toSet().toSeq()
 
 func fmtDrvsForNix*(drvs: seq[NixEvalOutput]): string {.inline.} =
   drvs.mapIt(it.drvPath & "^*").join(" ")
@@ -385,9 +389,9 @@ proc build(drv: NixEvalOutput, rest: seq[string]): BuildResult =
 
   info "-> duration: " & formatDuration(result.duration)
 
-func outputsPaths(drv: NixDerivation): seq[string] =
-  for _, output in drv.outputs:
-    result.add output.path
+# func outputsPaths(drv: NixDerivation): seq[string] =
+#   for _, output in drv.outputs:
+#     result.add output.path
 
 proc reportResults(results: seq[(NixEvalOutput, BuildResult)]) =
   let rows = collect(
@@ -411,7 +415,6 @@ proc prettyDerivation*(path: string): BbString =
   const maxLen = 40
   let drv = path.toDerivation()
   drv.name.trunc(maxLen) & " " & drv.hash.bb("faint")
-
 
 proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: int, dry: bool) =
   ## build individual derivations not cached and push to cache
