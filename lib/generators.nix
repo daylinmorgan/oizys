@@ -49,22 +49,6 @@ let
         ]
         ++ (selfModules ''oizys'')
         ++ (nixosModules ''lix-module|sops-nix'')
-        ++ [
-          (
-            { ... }:
-            {
-              nixpkgs.overlays = [
-                (final: prev: {
-                  # override what the lix-module set
-                  # make sure attic is using this lix
-                  nix = inputs.self.${final.system}.lix;
-                })
-
-              ];
-            }
-          )
-
-        ]
         ++ (hostFiles hostName);
 
       specialArgs = commonSpecialArgs // {

@@ -232,7 +232,7 @@ proc missingDrvNixEvalJobs*(): HashSet[NixEvalOutput] =
 
   for host in getHosts():
     let (o, _) = runCmdCaptWithSpinner(
-      fmt"{cmd} {getFlake()}#systemPaths.{host}",
+      fmt"{cmd} {getFlake()}#hydraJobs.systemPackages.{host}",
       bb"running [b]nix-eval-jobs[/] for system path: " & host.bb("bold")
     )
     output.add o
