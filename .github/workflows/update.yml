@@ -43,10 +43,15 @@ jobs:
       - uses: daylin-bot/actions/setup@main
       - uses: ./.github/actions/nix
 
+      - name: Install nix-eval-jobs
+        run: |
+          nix profile install '.#nix-eval-jobs'
+
       #   with:
       #     attic_token: ${{ secrets.ATTIC_TOKEN }}
       #
       # need ssh access for `oizys cache --service store`
+
       # TODO: use this in actions/nix?
       - name: Setup SSH
         uses: MrSquaare/ssh-setup-action@v3
