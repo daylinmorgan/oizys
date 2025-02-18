@@ -429,7 +429,14 @@ proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: 
   if missing.len == 0:
     quit "exiting...", QuitSuccess
 
-  info "derivations:\n" & missing.mapIt("  " & prettyDerivation(it.outputs["out"])).join("\n")
+  var prettyDrvList: seq[BbString]
+  for drv in missing:
+    if "out" in drv.outputs:
+      prettyDrvList.add prettyDerivation(drv.outputs["out"])
+    else:
+      error $drv.name, "does not have an 'out' attribute?"
+
+  info "derivations:\n" & prettyDrvList.join("\n")
 
   if dry:
     quit "exiting...", QuitSuccess
