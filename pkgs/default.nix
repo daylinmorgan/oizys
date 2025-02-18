@@ -16,6 +16,9 @@ in
   nimble = pkgs.callPackage ./nim/nimble { };
 
   lix = (flake.pkg "lix-module");
+
+  nix-eval-jobs = pkgs.nix-eval-jobs;
+
   roc = (flake.pkgs "roc").cli;
   roc-lang-server = (flake.pkgs "roc").lang-server;
 

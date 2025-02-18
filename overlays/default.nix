@@ -3,6 +3,7 @@
 ++ [
   inputs.nim2nix.overlays.default # adds buildNimPackage
 
+  inputs.lix-module.overlays.default
   (final: prev: {
 
     nix = inputs.self.packages.${final.system}.lix;
