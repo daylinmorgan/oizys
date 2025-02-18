@@ -224,7 +224,7 @@ proc getSystemPathInputDrvs*(): seq[string] =
         for inputDrv, _ in drv.inputDrvs:
           inputDrv
 
-proc missingDrvNixEvalJobs*(): seq[NixEvalOutput] =
+proc missingDrvNixEvalJobs*(): HashSet[NixEvalOutput] =
   ## get all derivations not cached using nix-eval-jobs
   var cmd = "nix-eval-jobs"
   cmd.addArgs "--flake", "--check-cache-status"
@@ -232,27 +232,28 @@ proc missingDrvNixEvalJobs*(): seq[NixEvalOutput] =
 
   for host in getHosts():
     let (o, _) = runCmdCaptWithSpinner(
-      cmd & (getFlake() & "#systemPaths." & host),
+      fmt"{cmd} {getFlake()}#systemPaths.{host}",
       bb"running [b]nix-eval-jobs[/] for system path: " & host.bb("bold")
     )
     output.add o
 
-  var cached: seq[NixEvalOutput]
-  var ignored: seq[NixEvalOutput]
+  var cached: HashSet[NixEvalOutput]
+  var ignored: HashSet[NixEvalOutput]
 
   for line in output.strip().splitLines():
     let output = line.fromJson(NixEvalOutput)
     if output.isCached:
-      cached.add output
+      cached.incl output
     elif output.name.isIgnored():
-      ignored.add output
+      ignored.incl output
     else:
-      result.add output
+      result.incl output
 
   debug "cached derivations: ", bb($cached.len, "yellow")
   debug "ignored derivations: ", bb($ignored.len, "yellow")
 
-  result = result.toSet().toSeq()
+func fmtDrvsForNix*(drvs: HashSet[NixEvalOutput]): string {.inline.} =
+  drvs.mapIt(it.drvPath & "^*").join(" ")
 
 func fmtDrvsForNix*(drvs: seq[NixEvalOutput]): string {.inline.} =
   drvs.mapIt(it.drvPath & "^*").join(" ")
