@@ -164,18 +164,6 @@ proc display(output: DryRunOutput) =
     echo fmt"to fetch: [bold cyan]{output.toFetch.len()}[/]".bb
   display("to build", output.toBuild)
 
-proc toBuildNixosConfiguration(): seq[string] =
-  var cmd = nixCommand("build")
-  cmd.addArg "--dry-run"
-  cmd.addArgs nixosAttrs()
-  let (_, err) = runCmdCaptWithSpinner(
-    cmd,
-    "running dry run build for: " & (getHosts().join(" ").bb("bold")),
-    capture = {CaptStderr}
-  )
-  let output = parseDryRunOutput err
-  return output.toBuild.mapIt(it.path)
-
 # here a results var would be nice...
 proc narHash*(s: string): string =
   ## get hash from nix store path
@@ -183,13 +171,6 @@ proc narHash*(s: string): string =
     fatalQuit "failed to extract narHash from: " &  s
   let ss = s.split("-")
   result = ss[0].split("/")[^1]
-
-# proc evaluateDerivations(drvs: openArray[string]): Table[string, NixDerivation] =
-#   var cmd = "nix derivation show -r"
-#   cmd.addArgs drvs
-#   let (output, _) =
-#     runCmdCaptWithSpinner(cmd, "evaluating derivations")
-#   fromJson(output, Table[string, NixDerivation])
 
 proc nixDerivationShow*(drvs: openArray[string]): Table[string, NixDerivation] =
   var cmd = "nix derivation show"
