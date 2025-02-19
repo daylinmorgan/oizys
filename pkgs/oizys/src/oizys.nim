@@ -14,33 +14,18 @@ hwylCli:
   settings ShowHelp
   flags:
     [global]
-    flake:
-      T string
-      ? "path/to/flake"
-    host:
-      T seq[string]
-      ? "host(s) to build"
-    verbose:
-      T Count
-      ? "increase verbosity (up to 2)"
-      - v
-      * Count(val: 0)
-    `reset-cache`:
-      ? "set cache timeout to 0"
-      ident resetCache
-    bootstrap:
-      ? "enable bootstrap mode"
-      - b
+    flake(string, "path/to/flake")
+    host(seq[string], "host(s) to build")
+    v|verbose(Count(val:0), Count, "increase verbosity (up to 2)")
+    `reset-cache`("set cache timeout to 0")
+    b|bootstrap("enable bootstrap mode")
+
     [misc]
-    yes:
-      - y
-      ? "skip all confirmation prompts"
-    minimal:
-      ? "set minimal"
-      - m
+    y|yes "skip all confirmation prompts"
+    m|minimal "set minimal"
   preSub:
     setupLoggers()
-    updateContext(host, flake, verbose, resetCache, bootstrap)
+    updateContext(host, flake, verbose, `reset-cache`, bootstrap)
 
   subcommands:
     [build]
@@ -49,8 +34,7 @@ hwylCli:
       args seq[string]
     flags:
       ^minimal
-      nom:
-        ? "use nom"
+      nom "use nom"
     run:
       nixBuild(minimal, nom, args)
 
@@ -59,22 +43,10 @@ hwylCli:
     positionals:
       args seq[string]
     flags:
-      name:
-        T string
-        ? "name/host of binary cache"
-        * "nix-cache.dayl.in"
-      service:
-        T string
-        ? "name of cache service"
-        * "store"
-      jobs:
-        T int
-        ? "jobs when pushing paths"
-        * countProcessors()
-        - j
-      `dry-run`:
-        - n
-        ? "don't actually build derivations"
+      name("nix-cache.dayl.in", string, "name/host of binary cache")
+      service("store", string, "name of cache service")
+      j|jobs(countProcessors(),int, "jobs when pushing paths")
+      n|`dry-run` "don't actually build derivations"
     run:
       nixBuildWithCache(name, args, service, jobs, `dry-run`)
 
@@ -98,13 +70,8 @@ hwylCli:
     positionals:
       workflow string
     flags:
-      inputs:
-        T seq[KVString]
-        ? "inputs for dispatch"
-      `ref`:
-        T string
-        ? "git ref/branch/tag to trigger workflow on"
-        * "main"
+      inputs(seq[KVString], "inputs for dispatch")
+      `ref`("main", string, "git ref/branch/tag to trigger workflow on")
     run:
       # TODO: support file operations like gh
       # i.e. @flake.lock means read a file at flake.lock and use it's contents as a string
@@ -127,9 +94,7 @@ hwylCli:
       subcmd NixosRebuildSubcmd
       args seq[string]
     flags:
-      remote:
-        ? "host is remote"
-        - r
+      r|remote "host is remote"
     run:
       nixosRebuild(subcmd, args, remote)
 
@@ -137,9 +102,7 @@ hwylCli:
     ... "nixos config attr"
     flags:
       ^minimal
-      system:
-        ? "show system path"
-        - s
+      s|system "show system path"
     run:
       if minimal and system:
         echo "--minimal and --system are mutually exclusive"
@@ -155,9 +118,7 @@ hwylCli:
     ... "update and run nixos-rebuild"
     flags:
       ^yes
-      preview:
-        ? "show preview and exit"
-        - p
+      p|preview "show preview and exit"
     run:
       let hosts = getHosts()
       if hosts.len > 1: fatalQuit "operation only supports one host"
@@ -188,9 +149,7 @@ hwylCli:
     positionals:
       installables seq[string]
     flags:
-      cache:
-        ? "url of nix binary cache, can be repeated"
-        T seq[string]
+      c|cache(seq[string], "url of nix binary cache, can be repeated")
     run:
       if installables.len == 0:
         fatalQuit "expected at least one positional argument"
@@ -203,7 +162,6 @@ hwylCli:
     currently just runs `jq < flake.lock '.nodes | keys[] | select(contains("_"))' -r`
     """
     run:
-      # use absolute value for flake.lock?
       if not isLocal():
         quit "`oizys lock` should be run with a local flake"
 
