@@ -10,7 +10,6 @@ let
   cfg = config.oizys.languages;
 
   python = pkgs.python3.withPackages (ps: with ps; [ pip ]);
-  pixi = flake.pkg "pixi";
 in
 {
   config = mkIfIn "python" cfg {
@@ -25,9 +24,10 @@ in
         export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH
         exec ${python}/bin/python "$@"
       '')
-      pixi
-      pkgs.uv
 
+      (flake.pkg "pixi")
+
+      pkgs.uv
       pkgs.python3Packages.pip # needed for viv to work
     ];
   };
