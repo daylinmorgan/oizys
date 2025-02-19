@@ -156,9 +156,8 @@ hwylCli:
     flags:
       ^yes
       preview:
-        - p
-        T bool
         ? "show preview and exit"
+        - p
     run:
       let hosts = getHosts()
       if hosts.len > 1: fatalQuit "operation only supports one host"
@@ -166,6 +165,8 @@ hwylCli:
       echo fmt"run created at: {run.created_at}"
       echo "nvd diff:\n", getUpdateSummary(run.id, hosts[0])
       if preview: quit 0
+      if not isLocal(): fatalQuit bb"[b]oizys update[/] only supported for local oizys flakes"
+      if dirExists(getFlake() / ".jj"): fatalQuit bb"[b]oizys update[/] does not support jujustu repos yet"
       if yes or confirm("Proceed with system update?"):
         updateRepo()
         nixosRebuild(NixosRebuildSubcmd.switch)
