@@ -140,6 +140,12 @@ let
 
   pathFromHostName = host: ../. + "/hosts/${host}";
   hostFiles = host: host |> pathFromHostName |> listFilesRecursive |> filter isNixFile;
+  hostSystem =
+    host:
+    let
+      f = (host |> pathFromHostName) + "/settings/system";
+    in
+    if pathExists f then readLinesNoComment f else "x86_64-linux";
 
   # if the specified path doesn't exist returns an empty array
   tryReadLinesNoComment = f: if pathExists f then (readLinesNoComment f) else [ ];
@@ -208,6 +214,7 @@ in
     listify
     loadOverlays
     hostFiles
+    hostSystem
     oizysSettings
     tryPkgsFromFile
     ;

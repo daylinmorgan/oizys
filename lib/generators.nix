@@ -15,6 +15,7 @@ let
     listify
     readSettings
     hostFiles
+    hostSystem
     ;
   flake = flakeFromSystem "x86_64-linux";
   nixosModules = names: names |> listify |> map (n: inputs.${n}.nixosModules.default);
@@ -30,22 +31,29 @@ let
       ;
   };
 
-  mkIso = nixosSystem {
-    modules =
-      [
-        { nixpkgs.hostPlatform = "x86_64-linux"; }
-      ]
-      ++ (nixosModules "lix-module")
-      ++ (selfModules "essentials|iso");
-    specialArgs = commonSpecialArgs;
-  };
+  mkIso =
+    system:
+    nixosSystem {
+      system = system;
+      modules =
+        [
+          { nixpkgs.hostPlatform = system; }
+        ]
+        ++ (nixosModules "lix-module")
+        ++ (selfModules "essentials|iso");
+      specialArgs = commonSpecialArgs;
+    };
 
   mkSystem =
     hostName:
+    let
+      system = hostSystem hostName;
+    in
     nixosSystem {
+      inherit system;
       modules =
         [
-          { nixpkgs.hostPlatform = "x86_64-linux"; }
+          { nixpkgs.hostPlatform = system; }
         ]
         ++ (selfModules ''oizys'')
         ++ (nixosModules ''lix-module|sops-nix'')

@@ -64,7 +64,7 @@ let
       rec {
         default = oizys;
         oizys = pkgs.callPackage ../pkgs/oizys { };
-        iso = mkIso.config.system.build.isoImage;
+        iso-x86_64-linux = (mkIso "x86_64-linux").config.system.build.isoImage;
       }
       // (import ../pkgs { inherit pkgs lib inputs; })
     );
