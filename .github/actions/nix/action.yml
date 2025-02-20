@@ -39,7 +39,6 @@ runs:
     #   run: |
     #     nix profile install "nixpkgs#attic-client"
     #     attic login oizys https://attic.dayl.in "${{ inputs.attic_token}}"
-
     - name: "Show Nix Info"
       shell: bash
       run: nix run "nixpkgs#nix-info" -- -m

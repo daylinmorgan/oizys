@@ -1,13 +1,13 @@
 { pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
-      git
-      git-lfs
+    git
+    git-lfs
 
-      gh
-      lazygit
-      delta
+    gh
+    lazygit
+    delta
 
-      jujutsu
-    ];
+    jujutsu
+  ];
 }
