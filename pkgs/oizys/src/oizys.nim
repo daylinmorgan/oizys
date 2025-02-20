@@ -48,6 +48,8 @@ hwylCli:
       j|jobs(countProcessors(),int, "jobs when pushing paths")
       n|`dry-run` "don't actually build derivations"
     run:
+      if findExe("nix-eval-jobs") == "":
+        fatalQuit bb"[b]oizys cache[/] requires [b]nix-eval-jobs[/]"
       nixBuildWithCache(name, args, service, jobs, `dry-run`)
 
     [ci]

@@ -4,6 +4,7 @@
   self,
   hostName,
   pkgs,
+  config,
   ...
 }:
 let
@@ -13,6 +14,7 @@ let
     loadOverlays
     oizysSettings
     tryPkgsFromFile
+    listToAttrs
     ;
 in
 {
@@ -62,12 +64,25 @@ in
     };
     desktop.enable = mkEnableOption "is desktop";
     docker.enable = mkEnableOption "enable docker support";
+    packages = mkOption {
+      type = lib.types.attrsOf lib.types.package;
+      description = "attr set of all packages, for use with nix-eval-jobs by `oizys cache`";
+    };
   };
+
   config = {
     networking.hostName = hostName;
     time.timeZone = "US/Central";
     nixpkgs.overlays = import ../overlays { inherit inputs loadOverlays; };
-    oizys = oizysSettings hostName;
+    oizys = oizysSettings hostName // {
+      packages =
+        config.environment.systemPackages
+        |> map (drv: {
+          name = drv.name;
+          value = drv;
+        })
+        |> listToAttrs;
+    };
     environment.systemPackages = tryPkgsFromFile { inherit hostName pkgs; };
   };
 }
