@@ -215,7 +215,7 @@ proc missingDrvNixEvalJobs*(): HashSet[NixEvalOutput] =
     let flakeUrl = getFlake() & "#nixosConfigurations." & host & ".config.oizys.packages"
     let (o, _) = runCmdCaptWithSpinner(
       fmt"{cmd} {flakeUrl}",
-      bb"running [b]nix-eval-jobs[/] for system path: " & host.bb("bold")
+      bb"running [b]nix-eval-jobs[/] for " & host.bb("bold")
     )
     output.add o
 
