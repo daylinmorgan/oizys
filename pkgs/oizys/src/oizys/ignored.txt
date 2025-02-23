@@ -24,6 +24,7 @@ python
 net.conf
 rofi
 # small `packages` to build locally
+windows-vm-desktop-item
 lock
 gitea
 llm
