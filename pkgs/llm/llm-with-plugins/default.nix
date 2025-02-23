@@ -11,12 +11,12 @@ let
 
   pluginAttr = {
     anthropic = {
-      version = "0.12";
-      hash = "sha256-7+5j5jZBFfaaqnfjvLTI+mz1PUuG8sB5nD59UCpJuR4=";
+      version = "0.13";
+      hash = "sha256-eIppCyFu/2VKExkO88iRozC9AVDcRQaUKrNeLU89rrQ=";
     };
     gemini = {
-      version = "0.10";
-      hash = "sha256-+ghsBvEY8GQAphdvG7Rdu3T/7yz64vmkuA1VGvqw1fU=";
+      version = "0.11";
+      hash = "sha256-xYtfIajEU1iqHvSPDLmg9lHEllcKpVYyUuNZUGNcccw=";
     };
     cmd = {
       version = "0.2a0";
@@ -33,16 +33,8 @@ let
   };
 
   pluginPackages = pluginAttr |> mapAttrs mkPlugin |> attrValues;
+  pyWithLlm = (pkgs.python3.withPackages (_: [ llm ] ++ pluginPackages));
 
-  pyWithLlm = (
-    pkgs.python3.withPackages (
-      _:
-      [
-        llm
-      ]
-      ++ pluginPackages
-    )
-  );
 in
 pkgs.writeShellScriptBin "llm" ''
   exec ${pyWithLlm}/bin/llm "$@"

@@ -2,9 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
   pythonOlder,
   setuptools,
+
+  # deps
   click-default-group,
   numpy,
   openai,
@@ -18,11 +19,12 @@
   pytest-httpx,
   puremagic,
   sqlite-utils,
+
+  pytestCheckHook,
 }:
-let
-  llm = buildPythonPackage rec {
+  buildPythonPackage rec {
     pname = "llm";
-    version = "0.21";
+    version = "0.22";
     pyproject = true;
 
     build-system = [ setuptools ];
@@ -33,7 +35,7 @@ let
       owner = "simonw";
       repo = "llm";
       rev = "refs/tags/${version}";
-      hash = "sha256-gxmhdczgbcvbWJQTy+gek499C/3jm9WL5vKZmaGVWgU=";
+      hash = "sha256-l4tFBCIey5cOUvJ8IXLOjslc1zy9MnuiwFFP275S/Bg=";
     };
 
     # patches = [ ./001-disable-install-uninstall-commands.patch ];
@@ -69,10 +71,6 @@ let
 
     pythonImportsCheck = [ "llm" ];
 
-    passthru = {
-      inherit withPlugins;
-    };
-
     meta = with lib; {
       homepage = "https://github.com/simonw/llm";
       description = "Access large language models from the command-line";
@@ -84,13 +82,4 @@ let
         mccartykim
       ];
     };
-  };
-
-  withPlugins = throw ''
-    llm.withPlugins was confusing to use and has been removed.
-    Please migrate to using python3.withPackages(ps: [ ps.llm ]) instead.
-
-    See https://nixos.org/manual/nixpkgs/stable/#python.withpackages-function for more usage examples.
-  '';
-in
-llm
+  }
