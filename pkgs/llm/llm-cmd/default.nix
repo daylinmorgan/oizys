@@ -1,3 +1,4 @@
+{ version, hash }:
 {
   buildPythonPackage,
   fetchFromGitHub,
@@ -12,16 +13,16 @@
   ...
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
+  inherit version;
   pname = "llm-cmd";
-  version = "0.2a0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-cmd";
     rev = version;
-    hash = "sha256-RhwQEllpee/XP1p0nrgL4m+KjSZzf61J8l1jJGlg94E=";
+    inherit hash;
   };
 
   nativeBuildInputs = [

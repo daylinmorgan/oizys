@@ -1,3 +1,4 @@
+{ version, hash }:
 {
   buildPythonPackage,
   fetchFromGitHub,
@@ -12,16 +13,16 @@
   ...
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
+  inherit version;
   pname = "llm-gemini";
-  version = "0.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-gemini";
     rev = version;
-    hash = "sha256-+ghsBvEY8GQAphdvG7Rdu3T/7yz64vmkuA1VGvqw1fU=";
+    inherit hash;
   };
 
   nativeBuildInputs = [

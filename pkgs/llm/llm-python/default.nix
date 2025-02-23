@@ -12,21 +12,22 @@
 
 buildPythonPackage {
   inherit version;
-  pname = "llm-jq";
+  pname = "llm-python";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
-    repo = "llm-jq";
+    repo = "llm-python";
     rev = version;
     inherit hash;
-
   };
 
   nativeBuildInputs = [
     setuptools
     wheel
   ];
+
+  dependencies = [ ];
 
   dontCheckRuntimeDeps = true;
 }
