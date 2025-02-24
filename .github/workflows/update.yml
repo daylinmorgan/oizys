@@ -42,22 +42,21 @@ jobs:
 
       - uses: daylin-bot/actions/setup@main
       - uses: ./.github/actions/nix
+        with:
+          attic_token: ${{ secrets.ATTIC_TOKEN }}
+
 
       - name: Install nix-eval-jobs
         run: |
           nix profile install '.#nix-eval-jobs'
 
+      # # need ssh access for `oizys cache --service store`
+      # # TODO: use this in actions/nix?
+      # - name: Setup SSH
+      #   uses: MrSquaare/ssh-setup-action@v3
       #   with:
-      #     attic_token: ${{ secrets.ATTIC_TOKEN }}
-      #
-      # need ssh access for `oizys cache --service store`
-
-      # TODO: use this in actions/nix?
-      - name: Setup SSH
-        uses: MrSquaare/ssh-setup-action@v3
-        with:
-          host: nix-cache.dayl.in
-          private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      #     host: nix-cache.dayl.in
+      #     private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - run: git checkout -B flake-lock
 

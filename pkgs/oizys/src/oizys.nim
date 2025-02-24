@@ -43,8 +43,8 @@ hwylCli:
     positionals:
       args seq[string]
     flags:
-      name("nix-cache.dayl.in", string, "name/host of binary cache")
-      service("store", string, "name of cache service")
+      name("oizys", string, "name/host of binary cache")
+      service("attic", string, "name of cache service")
       j|jobs(countProcessors(),int, "jobs when pushing paths")
       n|`dry-run` "don't actually build derivations"
     run:
