@@ -45,7 +45,6 @@ jobs:
         with:
           attic_token: ${{ secrets.ATTIC_TOKEN }}
 
-
       - name: Install nix-eval-jobs
         run: |
           nix profile install '.#nix-eval-jobs'
