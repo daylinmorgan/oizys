@@ -186,8 +186,8 @@ type
   GitRepo = object
     path: string
 
-proc git(r: GitRepo, rest: varargs[string]): string =
-  result = "git"
+proc git(r: GitRepo, rest: varargs[string]): Command =
+  result.exe = "git"
   result.addArgs ["-C", r.path]
   result.addArgs rest
 
@@ -195,11 +195,11 @@ proc checkGit(code: int) =
   if code != 0: fatalQuit "git had a non-zero exit status"
 
 proc fetch(r: GitRepo) =
-  let code = runCmd r.git("fetch", "origin")
+  let code = r.git("fetch", "origin").run()
   checkGit code
 
 proc status(r: GitRepo) =
-  let (output, _, code) = runCmdCapt r.git("status", "--porcelain")
+  let (output, _, code) =  r.git("status", "--porcelain").runCapt()
   checkGit code
   if output.len > 0:
     info "unstaged commits, cowardly exiting..."
@@ -207,7 +207,7 @@ proc status(r: GitRepo) =
 
 proc rebase(r: GitRepo, `ref`: string) =
   r.status()
-  let code = runCmd r.git("rebase", `ref`)
+  let code = r.git("rebase", `ref`).run()
   checkGit code
 
 proc updateRepo*() =

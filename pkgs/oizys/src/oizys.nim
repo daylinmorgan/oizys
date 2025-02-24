@@ -167,7 +167,10 @@ hwylCli:
       if not isLocal():
         quit "`oizys lock` should be run with a local flake"
 
-      discard runCmd("nix flake lock " & getFlake())
+      newCommand("nix")
+        .withArgs("flake", "lock", getFlake())
+        .run()
+
       let lockfile = getFlake() / "flake.lock"
-      quitWithCmd(fmt"""jq '.nodes | keys[] | select(contains("_"))' -r {lockFile}""")
+      newCommand("jq").withArgs(".nodes | keys[] | select(contains(\"_\"))", "-r", lockFile).runQuit()
 

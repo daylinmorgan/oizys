@@ -1,42 +1,58 @@
 import std/[
-  osproc, strformat,
+  osproc, strformat, os,
   strutils, streams, logging
 ]
 
 import hwylterm
 
-func addArgs*(cmd: string, args: varargs[string]): string =
-  ## append to string for command
-  result = cmd & " " & args.join(" ")
+type
+  Command* = object
+    exe*: string
+    args*: seq[string]
 
-func addArgs*(cmd: var string, args: varargs[string]): string {.discardable.} =
-  ## append to string for command
-  cmd &= " " & args.join(" ")
-  result = cmd
+func newCommand*(s: string, args: varargs[string]): Command =
+  result.exe = s
+  result.args = @args
 
-# deprecate in favor of above?
-func addArg*(cmd: var string, arg: string ) =
-  cmd &= " " & arg
+func `$`*(c: Command): string =
+  c.exe & " " & c.args.join(" ")
 
-proc runCmd*(cmd: string): int =
-  debug fmt"running cmd: {cmd}"
-  execCmd cmd
+func toShell(c: Command): string =
+  quoteShellCommand(@[c.exe] & c.args)
 
+func addArgs*(c: var Command, args: varargs[string]) =
+  ## append args to command
+  c.args &= args
+
+func withArgs*(c: Command, args: varargs[string]): Command {.discardable.} =
+  result.exe = c.exe
+  result.args = (c.args & @args)
+
+
+proc run*(c: Command): int  {.discardable.}=
+  debug "running cmd: " & $c
+  execCmd toShell(c)
+
+
+proc runQuit*(cmd: Command) =
+  quit cmd.run()
+
+# Should all subcommands just go through a version of runCmdCapt?
 type
   CaptureGrp* = enum
     CaptStdout
     CaptStderr
 
 # TODO: support both capturing and inheriting the stream?
-proc runCmdCapt*(
-  cmd: string,
+# TODO: replace cmd with Command
+proc runCapt*(
+  cmd: Command,
   capture: set[CaptureGrp] = {CaptStdout},
 ): tuple[stdout, stderr: string, exitCode: int] =
   debug fmt"running cmd: {cmd}"
-  let args = cmd.splitWhitespace()
   let p = startProcess(
-    args[0],
-    args = args[1..^1],
+    cmd.exe,
+    args = cmd.args,
     options = {poUsePath}
   )
   # NOTE: if I didn't use streams could I just read from the file handle instead?
@@ -76,8 +92,8 @@ proc formatStdoutStderr*(stdout: string, stderr: string): BbString =
   add(stderr)
 
 
-proc runCmdCaptWithSpinner*(
-  cmd: string,
+proc runCaptWithSpinner*(
+  cmd: Command,
   msg: BbString | string = bb"",
   capture: set[CaptureGrp] = {CaptStdout},
   check: bool = true
@@ -86,14 +102,10 @@ proc runCmdCaptWithSpinner*(
     output, err: string
     code: int
   with(Dots2, msg):
-    (output, err, code) = runCmdCapt(cmd, capture)
+    (output, err, code) = runCapt(cmd, capture)
   if check and code != 0:
     stderr.write($formatStdoutStderr(output,err))
     error fmt"{cmd} had non zero exit"
     quit code
   return (output, err)
-
-proc quitWithCmd*(cmd: string) =
-  debug cmd
-  quit(execCmd cmd)
 

@@ -1,4 +1,7 @@
-import std/[strformat, strutils, osproc, sugar, httpclient, terminal, wordwrap]
+import std/[
+  strformat, strutils, sugar,
+  httpclient, terminal, wordwrap
+]
 import hwylterm, resultz
 import ./[nix, exec, logging]
 
@@ -7,9 +10,9 @@ proc checkBuild(installable: string): tuple[stdout: string, stderr: string] =
   var
     output, err: string
     code: int
-  let cmd = nixCommand("build").addArgs(installable)
+  let cmd = newNixCommand("build").withArgs(installable)
   with(Dots2, bbfmt"attempt to build: [b]{installable}"):
-    (output, err, code) = runCmdCapt(cmd, capture = {CaptStdout, CaptStderr})
+    (output, err, code) = cmd.runCapt(capture = {CaptStdout, CaptStderr})
   if code == 0:
     fatalQuit fmt"{cmd} had zero exit"
   result = (output, err)
@@ -27,7 +30,7 @@ proc getBuildHash*(installable: string): string =
 proc getCaches(): seq[string] =
   ## use nix to get the current cache urls
   debug "determing caches to check"
-  let (output, code) = execCmdEx("nix config show")
+  let (output, _, code) = newCommand("nix", "config", "show").runCapt()
   if code != 0:
     echo formatSubprocessError(output)
     fatalQuit "error running `nix config show`"

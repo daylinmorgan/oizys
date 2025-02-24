@@ -44,18 +44,19 @@ func makeSubFlags(): seq[string] =
 
 const subFlags = makeSubFlags()
 
-proc nixCommand*(cmd: string, nom: bool = false): string =
+proc newNixCommand*(subcmd: string, nom: bool = false): Command =
   if nom:
     if findExe("nom") == "":
       fatalQuit "--nom requires nix-output-monitor is installed"
-    result = "nom"
+    result.exe = "nom"
   else:
-    result = "nix"
-  result.addArg cmd
+    result.exe = "nix"
+
+  result.addArgs subcmd
   if isResetCache():
-    result.addArg "--narinfo-cache-negative-ttl 0"
+    result.addArgs "--narinfo-cache-negative-ttl", "0"
   if not (nom or isCi()):
-    result.addArg "--log-format multiline"
+    result.addArgs "--log-format", "multiline"
   if isBootstrap():
     result.addArgs subFlags
 
@@ -68,24 +69,28 @@ proc nixosAttrs*(
   for host in getHosts():
     result.add nixosAttr(host, attr)
 
-proc handleRebuildArgs(subcmd: NixosRebuildSubcmd, args: openArray[string], remote: bool): string =
-  if not remote: result.add "sudo"
-  result.addArgs "nixos-rebuild"
+proc newRebuildCommand(subcmd: NixosRebuildSubcmd, args: openArray[string], remote: bool): Command =
+  if not remote:
+    result.exe = "sudo"
+    result.addArgs "nixos-rebuild"
+  else:
+    result.exe = "nixos-rebuild"
+
   result.addArgs $subcmd
   result.addArgs "--flake", getFlake()
-  result.addArgs "--log-format multiline"
+  result.addArgs "--log-format","multiline"
   if remote:
     let host = getHosts()[0]
     if host == currentHost:
       fatalQuit "did you mean to specify a remote host?"
     result.addArgs "--target-host", host, "--use-remote-sudo"
-    result.addArgs args[1..^1]
+  result.addArgs args
 
 
 proc nixosRebuild*(subcmd: NixosRebuildSubcmd, args: openArray[string] = [], remote: bool = false) =
   if getHosts().len > 1: fatalQuit bb"[bold]oizys os[/] only supports one host"
-  let cmd = handleRebuildArgs(subcmd, args, remote)
-  quitWithCmd cmd
+  let cmd = newRebuildCommand(subcmd, args, remote)
+  cmd.runQuit()
 
 type
   DrvPath = object
@@ -173,10 +178,11 @@ proc narHash*(s: string): string =
   result = ss[0].split("/")[^1]
 
 proc nixDerivationShow*(drvs: openArray[string]): Table[string, NixDerivation] =
-  var cmd = "nix derivation show"
-  cmd.addArgs drvs
+  let cmd = newCommand("nix")
+    .withArgs("derivation", "show")
+    .withArgs(drvs)
   let (output, _ ) =
-    runCmdCaptWithSpinner(cmd, "evaluating " & drvs.join(" "))
+    cmd.runCaptWithSpinner("evaluating " & drvs.join(" "))
   fromJson(output, Table[string, NixDerivation])
 
 proc getSystemPathDrvs*(): seq[string] =
@@ -207,16 +213,14 @@ proc getSystemPathInputDrvs*(): seq[string] =
 
 proc missingDrvNixEvalJobs*(): HashSet[NixEvalOutput] =
   ## get all derivations not cached using nix-eval-jobs
-  var cmd = "nix-eval-jobs"
-  cmd.addArgs "--flake", "--check-cache-status"
+  var cmd = newCommand("nix-eval-jobs", "--flake", "--check-cache-status")
   var output: string
 
   for host in getHosts():
     let flakeUrl = getFlake() & "#nixosConfigurations." & host & ".config.oizys.packages"
-    let (o, _) = runCmdCaptWithSpinner(
-      fmt"{cmd} {flakeUrl}",
-      bb"running [b]nix-eval-jobs[/] for " & host.bb("bold")
-    )
+    let (o, _) = cmd
+      .withArgs(flakeUrl)
+      .runCaptWithSpinner(bb"running [b]nix-eval-jobs[/] for " & host.bb("bold"))
     output.add o
 
   var cached: HashSet[NixEvalOutput]
@@ -256,7 +260,7 @@ func splitDrv(drv: string): tuple[name, hash:string] =
   (s[1].replace(".drv",""),s[0].split("/")[^1])
 
 proc nixBuild*(minimal: bool, nom: bool, rest: seq[string]) =
-  var cmd = nixCommand("build", nom)
+  var cmd = newNixCommand("build", nom)
   if minimal:
     debug "populating args with derivations not built/cached"
     let drvs = missingDrvNixEvalJobs()
@@ -265,13 +269,11 @@ proc nixBuild*(minimal: bool, nom: bool, rest: seq[string]) =
       quit "exiting...", QuitSuccess
     cmd.addArgs drvs.fmtDrvsForNix()
     cmd.addArgs "--no-link"
-    # if isCi():
-    #   writeDervationsToStepSummary drvs
   cmd.addArgs rest
-  quitWithCmd cmd
+  cmd.runQuit()
 
 proc nixBuildHostDry*(minimal: bool, rest: seq[string]) =
-  var cmd = nixCommand("build")
+  var cmd = newNixCommand("build")
   if minimal:
     debug "populating args with derivations not built/cached"
     let drvs = missingDrvNixEvalJobs()
@@ -279,14 +281,13 @@ proc nixBuildHostDry*(minimal: bool, rest: seq[string]) =
       info "nothing to build"
       quit "exiting...", QuitSuccess
     cmd.addArgs drvs.fmtDrvsForNix()
-    cmd.addArg "--no-link"
+    cmd.addArgs "--no-link"
   else:
     cmd.addArgs nixosAttrs()
-  cmd.addArg "--dry-run"
+  cmd.addArgs "--dry-run"
   cmd.addArgs rest
-  let (_, err) =
-    runCmdCaptWithSpinner(
-      cmd,
+  let (_, err) = cmd
+      .runCaptWithSpinner(
       "evaluating derivation for: " & getHosts().join(" ").bb("bold"),
       {CaptStderr}
     )
@@ -336,16 +337,18 @@ proc toCache(service: string, name: string): NixCache =
     fatalQuit fmt"unknown cache service: {service}"
 
 proc pushPathsToCache(cache: NixCache, paths: openArray[string], jobs: int) =
-  var cmd: string
+  var cmd: Command
   case cache.kind:
   of Service:
-    cmd.addArgs cache.exe, "push", cache.name, "--jobs", $jobs
+    cmd.exe = cache.exe
+    cmd.addArgs "push", cache.name, "--jobs", $jobs
     cmd.addArgs paths
   of Store:
-    cmd.addArgs "nix-copy-closure", "-s", cache.host
+    cmd.exe = "nix-copy-closure"
+    cmd.addArgs "-s", cache.host
     cmd.addArgs paths
 
-  let pushErr = runCmd(cmd)
+  let pushErr = cmd.run()
   if pushErr != 0:
     errorQuit "failed to push build to cache"
 
@@ -353,13 +356,13 @@ proc pushPathsToCache(cache: NixCache, paths: openArray[string], jobs: int) =
 # TODO: by default collect the build result
 proc build(drv: NixEvalOutput, rest: seq[string]): BuildResult =
   let startTime = now()
-  var cmd = "nix build"
-  cmd.addArgs drv.drvPath & "^*", "--no-link"
-  cmd.addArgs rest
+  let cmd = newCommand("nix")
+    .withArgs(drv.drvPath & "^*", "--no-link")
+    .withArgs(rest)
 
   let (stdout, stderr, buildCode) =
-    if "-L" in rest or "--print-build-logs" in rest: ("","", runCmd(cmd))
-    else: runCmdCapt(cmd, {CaptStderr})
+    if "-L" in rest or "--print-build-logs" in rest: ("","", cmd.run())
+    else: cmd.runCapt({CaptStderr})
 
   result.duration = now() - startTime
 
@@ -371,10 +374,6 @@ proc build(drv: NixEvalOutput, rest: seq[string]): BuildResult =
     error "\n" & formatStdoutStderr(stdout, stderr)
 
   info "-> duration: " & formatDuration(result.duration)
-
-# func outputsPaths(drv: NixDerivation): seq[string] =
-#   for _, output in drv.outputs:
-#     result.add output.path
 
 proc reportResults(results: seq[(NixEvalOutput, BuildResult)]) =
   let rows = collect(
@@ -392,7 +391,6 @@ proc reportResults(results: seq[(NixEvalOutput, BuildResult)]) =
   output.writeLine "|---|---|---|---|"
   output.writeLine rows.join("\n")
   close output
-
 
 proc prettyDerivation*(path: string): BbString =
   const maxLen = 40
@@ -441,17 +439,19 @@ proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: 
 
 proc getUpdatedLockFile() =
   info "getting updated flake.lock as updated.lock"
-  let res = runCmdCapt("git --no-pager show origin/flake-lock:flake.lock")
+  let res = newCommand("git")
+    .withArgs("--no-pager","show","origin/flake-lock:flake.lock")
+    .runCapt()
   if res.exitCode != 0:
     fatalQuit "failed to fetch updated lock file using git"
   writeFile("updated.lock", res.stdout)
 
 # probably duplicating logic above ¯\_(ツ)_/¯
 proc buildSystem(host: string, rest: seq[string]) =
-  var cmd = nixCommand("build")
-  cmd.addArg nixosAttr(host)
-  cmd.addArgs rest
-  let code = runCmd cmd
+  let cmd = newNixCommand("build")
+    .withArgs(nixosAttr(host))
+    .withArgs(rest)
+  let code = cmd.run()
   if code != 0:
     fatalQuit "build failed"
 

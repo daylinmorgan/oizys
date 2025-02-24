@@ -21,6 +21,7 @@ let currentHost* = getHostName()
 proc initContext*(): OizysContext =
   result.hosts = @[currentHost]
   result.flake = "github:daylinmorgan/oizys"
+  # this logic alongside the `isBootstrap` should happen in updateContext
   let localDir = getHomeDir() / "oizys"
   if localDir.dirExists:
     result.flake = localDir
@@ -63,11 +64,14 @@ proc updateContext*(
   if verbose.val > 1:
     consoleLogger.levelThreshold = lvlAll
   oc.resetCache = resetCache
+
   if flake != "" and flake.isGitFlakeUrl():
     oc.flake = flake
   else:
     oc.flake = checkPath(flake.normalizedPath().absolutePath())
 
+  if bootstrap:
+    debug bb("[yellow]bootstrap mode![/]")
   debug bb(fmt"""[b]flake[/]: {oc.flake}, [b]hosts[/]: {oc.hosts.join(" ")}""")
 
   if (not bootstrap) and (not isLocal()):
