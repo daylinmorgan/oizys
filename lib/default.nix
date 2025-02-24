@@ -11,8 +11,6 @@ let
   inherit (lib)
     genAttrs
     loadOverlays
-    listify
-    enableAttrs
     ;
 
   inherit (import ./find-modules.nix { inherit lib; }) findModulesList;
@@ -32,22 +30,7 @@ let
       )
     );
 
-  evalTreeFmt =
-    pkgs:
-    (treefmt-nix.lib.evalModule pkgs (
-      { ... }:
-      {
-        projectRootFile = "flake.nix";
-        # don't warn me about missing formatters
-        settings.excludes = [
-          # likely to be nnl lockfiles
-          "pkgs/**/lock.json"
-          "hosts/**/secrets.yaml"
-        ];
-        settings.on-unmatched = "debug";
-        programs = "prettier|nixfmt" |> listify |> enableAttrs;
-      }
-    ));
+  evalTreeFmt = import ./treefmt.nix treefmt-nix;
 
   oizysFlake = {
     templates = {
