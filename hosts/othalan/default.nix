@@ -1,6 +1,5 @@
 {
   config,
-  pkgs,
   enabled,
 
   ...
@@ -28,8 +27,4 @@
       group = config.users.users.daylin.group;
     };
   };
-
-  environment.systemPackages = [
-    pkgs.stable.quarto
-  ];
 }

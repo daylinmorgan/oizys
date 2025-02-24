@@ -5,8 +5,6 @@
 
   (final: prev: {
 
-    # nix = inputs.self.packages.${final.system}.lix;
-
     stable = import inputs.stable {
       system = final.system;
       config.allowUnfree = true;
