@@ -20,15 +20,16 @@ let currentHost* = getHostName()
 
 proc initContext*(): OizysContext =
   result.hosts = @[currentHost]
-  result.flake = "github:daylinmorgan/oizys"
-  # this logic alongside the `isBootstrap` should happen in updateContext
-  let localDir = getHomeDir() / "oizys"
-  if localDir.dirExists:
-    result.flake = localDir
-  let envVar = getEnv("OIZYS_DIR")
-  if envVar != "":
-    result.flake = envVar
-  result.ci = getEnv("GITHUB_STEP_SUMMARY") != ""
+  #
+  # result.flake = "github:daylinmorgan/oizys"
+  # # this logic alongside the `isBootstrap` should happen in updateContext
+  # let localDir = getHomeDir() / "oizys"
+  # if localDir.dirExists:
+  #   result.flake = localDir
+  # let envVar = getEnv("OIZYS_DIR")
+  # if envVar != "":
+  #   result.flake = envVar
+  # result.ci = getEnv("GITHUB_STEP_SUMMARY") != ""
 
 
 var oc = initContext()
@@ -65,15 +66,27 @@ proc updateContext*(
     consoleLogger.levelThreshold = lvlAll
   oc.resetCache = resetCache
 
-  if flake != "" and flake.isGitFlakeUrl():
-    oc.flake = flake
+  if flake != "":
+    if flake.isGitFlakeUrl():
+      oc.flake = flake
+    else:
+      oc.flake = checkPath(flake.normalizedPath().absolutePath())
   else:
-    oc.flake = checkPath(flake.normalizedPath().absolutePath())
+    oc.flake = "github:daylinmorgan/oizys"
 
   if bootstrap:
     debug bb("[yellow]bootstrap mode![/]")
-  debug bb(fmt"""[b]flake[/]: {oc.flake}, [b]hosts[/]: {oc.hosts.join(" ")}""")
+  else:
+    let localDir = getHomeDir() / "oizys"
+    if localDir.dirExists:
+      oc.flake = localDir
+    let envVar = getEnv("OIZYS_DIR")
+    if envVar != "":
+      oc.flake = envVar
 
   if (not bootstrap) and (not isLocal()):
     warn "not using local directory for flake"
+
+  oc.ci = getEnv("GITHUB_STEP_SUMMARY") != ""
+  debug bb(fmt"""[b]flake[/]: {oc.flake}, [b]hosts[/]: {oc.hosts.join(" ")}""")
 

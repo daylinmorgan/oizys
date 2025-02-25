@@ -40,7 +40,7 @@ func makeSubFlags(): seq[string] =
   let subs = slurp("substituters.json").fromJson(Substituters)
   for k, v in subs.fieldPairs():
     result.add "--" & k
-    result.add "\"" & v.join(" ") & "\""
+    result.add v.join " "
 
 const subFlags = makeSubFlags()
 
