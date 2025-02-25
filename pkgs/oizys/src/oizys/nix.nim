@@ -353,10 +353,9 @@ proc pushPathsToCache(cache: NixCache, paths: openArray[string], jobs: int) =
     errorQuit "failed to push build to cache"
 
 
-# TODO: by default collect the build result
 proc build(drv: NixEvalOutput, rest: seq[string]): BuildResult =
   let startTime = now()
-  let cmd = newCommand("nix")
+  let cmd = newCommand("nix", "build")
     .withArgs(drv.drvPath & "^*", "--no-link")
     .withArgs(rest)
 
