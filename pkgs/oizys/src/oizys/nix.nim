@@ -425,16 +425,24 @@ proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: 
       for drv in missing:
         (drv, build(drv, rest))
 
-  var outs: seq[string]
+  var
+    outs: seq[string]
+    failures: int
+
   for (drv, res) in results:
     if res.successful:
       outs &= drv.outputs.values.toSeq
+    else:
+      inc failures
 
   if isCi():
     reportResults(results)
 
   if outs.len > 0:
     pushPathsToCache(cache, outs, jobs)
+
+  if failures > 0:
+    fatalQuit fmt"{failures} builds had non-zero exit"
 
 proc getUpdatedLockFile() =
   info "getting updated flake.lock as updated.lock"
