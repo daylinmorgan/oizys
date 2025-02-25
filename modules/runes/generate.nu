@@ -23,11 +23,9 @@ def convert [] {
 def nix-file [] {
   let rune = $in | convert
   $"{
-braille = ''
-($rune.braille)
+braille = ''($rune.braille)
 '';
-ascii = ''
-($rune.ascii)
+ascii = ''($rune.ascii)
 '';
 }
 " | save -f $"($rune.name).nix"
