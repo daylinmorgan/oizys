@@ -66,9 +66,9 @@ proc fmtNarinfo(s: string): BbString =
     let
       ss = line.split(": ", maxsplit = 1)
       (k, v) = (ss[0], ss[1])
-    result.add bbfmt("\n[b]{k}[/]: ")
+    result.add bbfmt("\n  [b]{k}[/]: ")
     if (len(v) - len(k) + 2) > maxWidth:
-      result.add "\n  " & wrapWords(v, maxLineWidth = maxWidth - 2, newLine="\n  ")
+      result.add "\n    " & wrapWords(v, maxLineWidth = maxWidth - 2, newLine="\n  ")
     else:
       result.add v
 
@@ -80,6 +80,7 @@ proc searchCaches(caches: seq[string], path: string): bool =
     of Some(narinfo):
       info fmt"exists in {cache}"
       debug fmtNarinfo(narinfo)
+      return true
     of None: discard
 
 proc checkForCache*(installables: seq[string], caches: seq[string]) =
