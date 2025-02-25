@@ -80,7 +80,7 @@ proc runCapt*(
   close p
 
 proc formatSubprocessError*(s: string): BbString =
-  for line in s.splitLines():
+  for line in s.strip().splitLines():
     result.add bb("[red]->[/] " & line & "\n")
 
 proc formatStdoutStderr*(stdout: string, stderr: string): BbString =
