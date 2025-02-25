@@ -1,4 +1,6 @@
 {
+  self,
+  inputs,
   pkgs,
   config,
   lib,
@@ -27,6 +29,25 @@ let
     "[1;3${number}m\n" + runes.${name}.${kind} + "\n[0m";
 
   cfg = config.oizys.rune;
+
+  # TODO: include time? things would be simpler with epoch and printf/date
+  dateFromFlake =
+    flake:
+    flake.lastModifiedDate |> builtins.match "(.{4})(.{2})(.{2}).*" |> builtins.concatStringsSep "-";
+  nixpkgsDate = dateFromFlake inputs.nixpkgs;
+  oizysDate = dateFromFlake self;
+  mkMotd =
+    rune:
+    rune
+    + ''
+      nixpkgs:
+        last modified: ${nixpkgsDate}
+        rev: ${inputs.nixpkgs.rev}
+      oizys:
+        last modified: ${oizysDate}
+        rev: ${self.rev or "dirty"}
+    '';
+
 in
 {
   options.oizys = {
@@ -56,17 +77,24 @@ in
   config = mkMerge [
     (mkIf cfg.enable {
       environment.etc.issue = {
-        source = pkgs.writeText "issue" (mkRune {
-          name = cfg.name;
-          kind = cfg.kind;
-        });
+        source = pkgs.writeText "issue" (
+          {
+            name = cfg.name;
+            kind = cfg.kind;
+          }
+          |> mkRune
+          |> mkMotd
+        );
       };
     })
     (mkIf cfg.motd.enable {
-      users.motd = mkRune {
-        number = "2"; # todo: autogenerate based on hostname?
-        name = cfg.name;
-      };
+      users.motd =
+        {
+          number = "2"; # todo: autogenerate based on hostname?
+          name = cfg.name;
+        }
+        |> mkRune
+        |> mkMotd;
     })
   ];
 }
