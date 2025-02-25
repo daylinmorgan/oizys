@@ -46,7 +46,7 @@
     ## nixpkgs
     f1multiviewer.inputs.nixpkgs.follows = "nixpkgs";
     # hyprland.inputs.nixpkgs.follows = "nixpkgs";
-    # hyprland-contrib.inputs.nixpkgs.follows = "nixpkgs";
+    hyprland-contrib.inputs.nixpkgs.follows = "nixpkgs";
     hyprman.inputs.nixpkgs.follows = "nixpkgs";
     nim2nix.inputs.nixpkgs.follows = "nixpkgs";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
