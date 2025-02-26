@@ -1,7 +1,7 @@
 {
   anthropic = {
-    version = "0.13";
-    hash = "sha256-eIppCyFu/2VKExkO88iRozC9AVDcRQaUKrNeLU89rrQ=";
+    version = "0.14";
+    hash = "sha256-T9TajSdps8uJaaLq7fHj+sAfOZHjkAtBsXm+2w1RTqY=";
   };
   gemini = {
     version = "0.11";
