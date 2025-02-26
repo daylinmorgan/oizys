@@ -1,0 +1,12 @@
+diff --git a/llm/cli.py b/llm/cli.py
+index e821c28..a28fb2d 100644
+--- a/llm/cli.py
++++ b/llm/cli.py
+@@ -130,6 +130,7 @@ def _validate_metadata_json(ctx, param, value):
+     cls=DefaultGroup,
+     default="prompt",
+     default_if_no_args=True,
++    context_settings={"help_option_names": ["-h","--help"]}
+ )
+ @click.version_option()
+ def cli():

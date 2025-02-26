@@ -38,7 +38,7 @@ buildPythonPackage rec {
     hash = "sha256-l4tFBCIey5cOUvJ8IXLOjslc1zy9MnuiwFFP275S/Bg=";
   };
 
-  # patches = [ ./001-disable-install-uninstall-commands.patch ];
+  patches = [ ./short-help.patch ];
 
   dependencies = [
     click-default-group
@@ -78,8 +78,7 @@ buildPythonPackage rec {
     license = licenses.asl20;
     mainProgram = "llm";
     maintainers = with maintainers; [
-      aldoborrero
-      mccartykim
+      daylinmorgan
     ];
   };
 }
