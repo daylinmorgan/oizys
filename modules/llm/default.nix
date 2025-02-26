@@ -6,5 +6,5 @@
 }:
 
 mkOizysModule config "llm" {
-  environment.systemPackages = [ (flake.pkgs "self").llm-with-plugins ];
+  environment.systemPackages = [ (flake.pkgs "self").llm];
 }

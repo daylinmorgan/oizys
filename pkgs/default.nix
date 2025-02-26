@@ -9,7 +9,7 @@ let
 in
 {
   distrobox = pkgs.callPackage ./distrobox { };
-  llm-with-plugins = pkgs.callPackage ./llm/llm-with-plugins { };
+  llm = pkgs.callPackage ./llm/llm-with-plugins { };
 
   nimlangserver = pkgs.callPackage ./nim/nimlangserver { };
   procs = pkgs.callPackage ./nim/procs { };
