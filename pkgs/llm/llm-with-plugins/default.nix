@@ -11,9 +11,9 @@ let
   pluginVersions = import ../versions.nix;
 
   pluginPackages = pluginVersions |> mapAttrs mkPlugin |> attrValues;
-  pyWithLlm = (pkgs.python3.withPackages (_: [ llm ] ++ pluginPackages));
+  pyWithLlm = (pkgs.python3.withPackages (p: [ llm  p.rich-click] ++ pluginPackages));
 
 in
 pkgs.writeShellScriptBin "llm" ''
-  exec ${pyWithLlm}/bin/llm "$@"
+  exec ${pyWithLlm}/bin/rich-click llm.cli:cli "$@"
 ''
