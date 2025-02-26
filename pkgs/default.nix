@@ -9,7 +9,6 @@ let
 in
 {
   distrobox = pkgs.callPackage ./distrobox { };
-  llm = pkgs.callPackage ./llm/llm-with-plugins { };
 
   nimlangserver = pkgs.callPackage ./nim/nimlangserver { };
   procs = pkgs.callPackage ./nim/procs { };
@@ -29,4 +28,5 @@ in
   "pixi"
   "f1multiviewer"
   "tsm"
+  "llm-nix"
 ])

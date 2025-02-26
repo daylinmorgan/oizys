@@ -197,6 +197,29 @@
         "url": "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz"
       }
     },
+    "llm-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "pyproject-build-systems": "pyproject-build-systems",
+        "pyproject-nix": "pyproject-nix",
+        "uv2nix": "uv2nix"
+      },
+      "locked": {
+        "lastModified": 1740580693,
+        "narHash": "sha256-zfUYn6pjKOOU2N4ABNFPTosFqaMTz5zz4IffIbXUZaM=",
+        "owner": "daylinmorgan",
+        "repo": "llm-nix",
+        "rev": "0db6c749e1e61b37257c5964c13b6b1cf8342b97",
+        "type": "github"
+      },
+      "original": {
+        "owner": "daylinmorgan",
+        "repo": "llm-nix",
+        "type": "github"
+      }
+    },
     "my-nixpkgs": {
       "locked": {
         "lastModified": 1714076141,
@@ -349,6 +372,56 @@
         "type": "github"
       }
     },
+    "pyproject-build-systems": {
+      "inputs": {
+        "nixpkgs": [
+          "llm-nix",
+          "nixpkgs"
+        ],
+        "pyproject-nix": [
+          "llm-nix",
+          "pyproject-nix"
+        ],
+        "uv2nix": [
+          "llm-nix",
+          "uv2nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1740362541,
+        "narHash": "sha256-S8Mno07MspggOv/xIz5g8hB2b/C5HPiX8E+rXzKY+5U=",
+        "owner": "pyproject-nix",
+        "repo": "build-system-pkgs",
+        "rev": "e151741c848ba92331af91f4e47640a1fb82be19",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pyproject-nix",
+        "repo": "build-system-pkgs",
+        "type": "github"
+      }
+    },
+    "pyproject-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "llm-nix",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1739758351,
+        "narHash": "sha256-Aoa4dEoC7Hf6+gFVk/SDquZTMFlmlfsgdTWuqQxzePs=",
+        "owner": "pyproject-nix",
+        "repo": "pyproject.nix",
+        "rev": "1329712f7f9af3a8b270764ba338a455b7323811",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pyproject-nix",
+        "repo": "pyproject.nix",
+        "type": "github"
+      }
+    },
     "roc": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -387,6 +460,7 @@
         "lib-aggregate": "lib-aggregate",
         "lix": "lix",
         "lix-module": "lix-module",
+        "llm-nix": "llm-nix",
         "my-nixpkgs": "my-nixpkgs",
         "nim2nix": "nim2nix",
         "nix-index-database": "nix-index-database",
@@ -542,6 +616,31 @@
       "original": {
         "type": "git",
         "url": "https://git.dayl.in/daylin/utils.git"
+      }
+    },
+    "uv2nix": {
+      "inputs": {
+        "nixpkgs": [
+          "llm-nix",
+          "nixpkgs"
+        ],
+        "pyproject-nix": [
+          "llm-nix",
+          "pyproject-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1740497536,
+        "narHash": "sha256-K+8wsVooqhaqyxuvew3+62mgOfRLJ7whv7woqPU3Ypo=",
+        "owner": "pyproject-nix",
+        "repo": "uv2nix",
+        "rev": "d01fd3a141755ad5d5b93dd9fcbd76d6401f5bac",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pyproject-nix",
+        "repo": "uv2nix",
+        "type": "github"
       }
     }
   },

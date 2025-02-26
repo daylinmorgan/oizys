@@ -24,11 +24,14 @@
     # hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
     hyprland-contrib.url = "github:hyprwm/contrib";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
-    f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
+
+    llm-nix.url = "github:daylinmorgan/llm-nix";
     tsm.url = "github:daylinmorgan/tsm?dir=nix";
     hyprman.url = "git+https://git.dayl.in/daylin/hyprman.git";
     nim2nix.url = "github:daylinmorgan/nim2nix";
     utils.url = "git+https://git.dayl.in/daylin/utils.git";
+
+    f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
     pixi.url = "github:daylinmorgan/pixi-flake";
     roc.url = "github:roc-lang/roc/0.0.0-alpha2-rolling";
 
@@ -48,6 +51,7 @@
     # hyprland.inputs.nixpkgs.follows = "nixpkgs";
     hyprland-contrib.inputs.nixpkgs.follows = "nixpkgs";
     hyprman.inputs.nixpkgs.follows = "nixpkgs";
+    llm-nix.inputs.nixpkgs.follows = "nixpkgs";
     nim2nix.inputs.nixpkgs.follows = "nixpkgs";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";

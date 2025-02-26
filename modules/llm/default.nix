@@ -6,5 +6,5 @@
 }:
 
 mkOizysModule config "llm" {
-  environment.systemPackages = [ (flake.pkgs "self").llm];
+  environment.systemPackages = [ (flake.pkg "llm-nix") ];
 }
