@@ -69,10 +69,10 @@ jobs:
       - name: Pre-build oizys
         run: |
           nix build .
+          attic push oizys ./result
 
       - name: Build
         run: >
-          NIX_SSHOPTS='-l daylin'
           nix run .
           --
           cache
