@@ -2,16 +2,14 @@
 final: prev: {
   zk = prev.zk.overrideAttrs (
     finalAttrs: _: {
-      version = "0.14.2-pr526";
+      version = "0.14.2-unstable";
 
       src = prev.fetchFromGitHub {
-        owner = "gyorb";
+        owner = "zk-org";
         repo = "zk";
-        rev = "fix-ctrl-e";
+        rev = "64ad7f4087d51b04751baddcc64a8a0c1986f4e3";
         sha256 = "sha256-NL9CgzB/VNONCmpz7RzrteQDKK0Y/PYAfwxqYjFoIrY=";
       };
-
     }
   );
-
 }
