@@ -8,7 +8,7 @@ final: prev: {
         owner = "zk-org";
         repo = "zk";
         rev = "64ad7f4087d51b04751baddcc64a8a0c1986f4e3";
-        sha256 = "sha256-NL9CgzB/VNONCmpz7RzrteQDKK0Y/PYAfwxqYjFoIrY=";
+        sha256 = "sha256-WEKtXnOLrNjmLFqtPBrwd1O/PsysmveDI//LlSObp5Y=";
       };
     }
   );
