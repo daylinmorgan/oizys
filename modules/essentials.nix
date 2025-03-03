@@ -6,6 +6,7 @@
   enabled,
   ...
 }:
+
 {
   imports = with self.nixosModules; [ git ];
   programs.zsh = enabled;
@@ -69,6 +70,7 @@
       #   # "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       #   # "daylin.cachix.org-1:fLdSnbhKjtOVea6H9KqXeir+PyhO+sDSPhEW66ClE/k="
       # ];
-    } // ((builtins.readFile ../pkgs/oizys/src/oizys/substituters.json) |> builtins.fromJSON);
+    } // (import ../lib/substituters.nix);
+    # ((builtins.readFile ../pkgs/oizys/src/oizys/substituters.json) |> builtins.fromJSON);
   };
 }

@@ -9,6 +9,7 @@ proc checkExes() =
 
 checkexes()
 
+
 hwylCli:
   name "oizys"
   settings ShowHelp

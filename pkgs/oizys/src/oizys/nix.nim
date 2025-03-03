@@ -35,12 +35,15 @@ type
 
 
 
-# TODO: replace with nim string defines?
 func makeSubFlags(): seq[string] =
-  let subs = slurp("substituters.json").fromJson(Substituters)
-  for k, v in subs.fieldPairs():
-    result.add "--" & k
-    result.add v.join " "
+  const extraSubstituters {.strdefine.} = ""
+  const extraTrustedPublicKeys {.strdefine.} = ""
+  if extraSubstituters != "":
+    result.add "--extra-substituters"
+    result.add extraSubstituters
+  if extraTrustedPublicKeys != "":
+    result.add "--extra-trusted-public-keys"
+    result.add extraTrustedPublicKeys
 
 const subFlags = makeSubFlags()
 

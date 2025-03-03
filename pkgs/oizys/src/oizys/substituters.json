@@ -1,8 +1,0 @@
-{
-  "extra-substituters": [
-    "https://nix-cache.dayl.in/oizys"
-  ],
-  "extra-trusted-public-keys": [
-    "oizys:DSw3mwVMM/Y+PXSVpkDlU5dLwlORuiJRGPkwr5INSMc="
-  ]
-}

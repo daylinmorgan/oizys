@@ -18,6 +18,8 @@ let
   #supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
   supportedSystems = [ "x86_64-linux" ];
 
+  substituters = (import ../lib/substituters.nix);
+
   forAllSystems =
     fn:
     genAttrs supportedSystems (
@@ -46,7 +48,9 @@ let
       pkgs:
       rec {
         default = oizys;
-        oizys = pkgs.callPackage ../pkgs/oizys { };
+        oizys = pkgs.callPackage ../pkgs/oizys {
+          inherit (substituters) extra-substituters extra-trusted-public-keys;
+        };
         iso-x86_64-linux = (mkIso "x86_64-linux").config.system.build.isoImage;
       }
       // (import ../pkgs { inherit pkgs lib inputs; })
