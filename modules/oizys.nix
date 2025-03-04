@@ -33,6 +33,7 @@ in
     qtile
     hyprland
     plasma
+    niri
 
     virtualbox
     docker
