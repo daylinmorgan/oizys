@@ -1,5 +1,5 @@
-links.dayl.in {
-  reverse_proxy http://localhost:9090
+wiki.dayl.in {
+    reverse_proxy http://localhost:8721
 }
 
 git.dayl.in {
