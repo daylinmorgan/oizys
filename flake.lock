@@ -359,11 +359,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1738776181,
-        "narHash": "sha256-3aA9+80nDtuo4DfpXygV0VWhjA9MLY3OYtaVFS7UcYY=",
+        "lastModified": 1741180895,
+        "narHash": "sha256-Zt9XjlkQwTB0UGeZISOlS2KSPPuTT/KqAikrE2Ok+Ns=",
         "owner": "daylinmorgan",
         "repo": "pixi-flake",
-        "rev": "06109b7625c6407000e4e0fff161dfc25ae6a5b6",
+        "rev": "299cfc650ea00b2faee22b60295bd3a32c2cb8e0",
         "type": "github"
       },
       "original": {
