@@ -5,7 +5,6 @@
   flake,
   ...
 }:
-
 mkOizysModule config "niri" {
 
     environment.systemPackages =

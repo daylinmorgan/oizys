@@ -2,6 +2,8 @@
 
 ## oizys
 
+- [ ] nix-eval-jobs errors are not printed on error
+
 ## software
 
 - [ ] why is my update ci always building llm and rofi?
