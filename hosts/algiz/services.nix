@@ -6,11 +6,6 @@
 }:
 let
   atticPort = "5656";
-  harmoniaPort = "5657";
-  static-attic = pkgs.runCommandLocal "static-files" { } ''
-    mkdir $out
-    cp ${./caddy/attic/index.html} $out/index.html
-  '';
   static-nix-cache = pkgs.runCommandLocal "static-files-nix-cache" { } ''
     mkdir $out
     cp -r ${./caddy/nix-cache}/* $out
@@ -75,32 +70,15 @@ in
     };
   };
 
-  services.harmonia = enabled // {
-    signKeyPaths = [ config.sops.secrets.harmonia-key.path ];
-    settings = {
-      bind = "[::]:${harmoniaPort}";
-    };
-  };
 
   services.caddy = enabled // {
     extraConfig = builtins.readFile ./caddy/Caddyfile;
 
     virtualHosts = {
-      "attic.dayl.in".extraConfig = ''
+      "nix-cache.dayl.in".extraConfig = ''
 
         redir /oizys /
 
-        handle / {
-          root * ${static-attic}
-          file_server
-        }
-
-        handle /* {
-          reverse_proxy http://localhost:${atticPort}
-        }
-      '';
-
-      "nix-cache.dayl.in".extraConfig = ''
         @frontend {
           path /
           path /daylin-nix-cache-logo.svg
@@ -112,7 +90,7 @@ in
         }
 
         handle /* {
-          reverse_proxy http://localhost:${harmoniaPort}
+          reverse_proxy http://localhost:${atticPort}
         }
       '';
     };
