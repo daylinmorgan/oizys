@@ -43,11 +43,13 @@ type
     CaptStdout
     CaptStderr
 
+
+
+
 # TODO: support both capturing and inheriting the stream?
 # TODO: replace cmd with Command
 proc runCapt*(
   cmd: Command,
-  capture: set[CaptureGrp] = {CaptStdout},
 ): tuple[stdout, stderr: string, exitCode: int] =
   debug fmt"running cmd: {cmd}"
   let p = startProcess(
@@ -55,29 +57,28 @@ proc runCapt*(
     args = cmd.args,
     options = {poUsePath}
   )
-  # NOTE: if I didn't use streams could I just read from the file handle instead?
+
   let
     outstrm = peekableOutputStream p
     errstrm = peekableErrorStream p
   result.exitCode = -1
-  var line: string
-  # BUG: the readLine's hang if there is no data. would peek also hang?
-  while true:
-    if CaptStdout in capture and not outstrm.atEnd():
-      if outstrm.readLine(line):
-        result.stdout.add line & '\n'
-    if CaptStderr in capture and not errstrm.atEnd():
-      if errstrm.readLine(line):
-        result.stderr.add line & '\n'
-    result.exitCode = peekExitCode(p)
-    if result.exitCode != -1:
-      if CaptStdout in capture and not isNil(outstrm):
-        result.stdout.add outstrm.readAll()
-      if CaptStderr in capture and not isNil(errstrm):
-        result.stderr.add errstrm.readAll()
-      break
 
+  var stdoutLines, stderrLines: seq[string]
+  var line: string
+  while outstrm.readLine(line):
+    stdoutLines.add line
+  result.stdout = stdoutLines.join("\n")
+
+  while errstrm.readLine(line):
+    stderrLines.add line
+  result.stderr = stderrLines.join("\n")
+
+  close outstrm
+  close errstrm
+
+  result.exitCode = p.waitForExit()
   close p
+
 
 proc formatSubprocessError*(s: string): BbString =
   for line in s.strip().splitLines():
@@ -92,17 +93,16 @@ proc formatStdoutStderr*(stdout: string, stderr: string): BbString =
   add(stderr)
 
 
-proc runCaptWithSpinner*(
+proc runCaptSpin*(
   cmd: Command,
   msg: BbString | string = bb"",
-  capture: set[CaptureGrp] = {CaptStdout},
   check: bool = true
 ): tuple[output, err: string] =
   var
     output, err: string
     code: int
   with(Dots2, msg):
-    (output, err, code) = runCapt(cmd, capture)
+    (output, err, code) = runCapt(cmd)
   if check and code != 0:
     stderr.write($formatStdoutStderr(output,err))
     error fmt"{cmd} had non zero exit"

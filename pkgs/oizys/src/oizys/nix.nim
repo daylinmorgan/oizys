@@ -185,7 +185,7 @@ proc nixDerivationShow*(drvs: openArray[string]): Table[string, NixDerivation] =
     .withArgs("derivation", "show")
     .withArgs(drvs)
   let (output, _ ) =
-    cmd.runCaptWithSpinner("evaluating " & drvs.join(" "))
+    cmd.runCaptSpin("evaluating " & drvs.join(" "))
   fromJson(output, Table[string, NixDerivation])
 
 proc getSystemPathDrvs*(): seq[string] =
@@ -223,7 +223,7 @@ proc missingDrvNixEvalJobs*(): HashSet[NixEvalOutput] =
     let flakeUrl = getFlake() & "#nixosConfigurations." & host & ".config.oizys.packages"
     let (o, _) = cmd
       .withArgs(flakeUrl)
-      .runCaptWithSpinner(bb"running [b]nix-eval-jobs[/] for " & host.bb("bold"))
+      .runCaptSpin(bb"running [b]nix-eval-jobs[/] for " & host.bb("bold"))
     output.add o
 
   var cached: HashSet[NixEvalOutput]
@@ -241,21 +241,19 @@ proc missingDrvNixEvalJobs*(): HashSet[NixEvalOutput] =
   debug "cached derivations: ", bb($cached.len, "yellow")
   debug "ignored derivations: ", bb($ignored.len, "yellow")
 
-func fmtDrvsForNix*(drvs: HashSet[NixEvalOutput]): string {.inline.} =
-  drvs.mapIt(it.drvPath & "^*").join(" ")
+func fmtDrvsForNix*(drvs: HashSet[NixEvalOutput]): seq[string] {.inline.} =
+  drvs.mapIt(it.drvPath & "^*")
 
-func fmtDrvsForNix*(drvs: seq[NixEvalOutput]): string {.inline.} =
-  drvs.mapIt(it.drvPath & "^*").join(" ")
+func fmtDrvsForNix*(drvs: seq[NixEvalOutput]): seq[string] {.inline.} =
+  drvs.mapIt(it.drvPath & "^*")
 
-func fmtDrvsForNix*(drvs: seq[string]): string {.inline.} =
-  drvs.mapIt(it & "^*").join(" ")
+func fmtDrvsForNix*(drvs: seq[string]): seq[string] {.inline.} =
+  drvs.mapIt(it & "^*")
 
-func fmtDrvsForNix*(drvs: Table[string, NixDerivation]): string {.inline.} =
-  let formatted =
-    collect:
-      for k, _ in drvs:
-        k & "^*"
-  formatted.join(" ")
+func fmtDrvsForNix*(drvs: Table[string, NixDerivation]): seq[string] {.inline.} =
+  collect:
+    for k, _ in drvs:
+      k & "^*"
 
 func splitDrv(drv: string): tuple[name, hash:string] =
   assert drv.startsWith("/nix/store"), "is this a /nix/store path? $1" % [drv]
@@ -290,9 +288,8 @@ proc nixBuildHostDry*(minimal: bool, rest: seq[string]) =
   cmd.addArgs "--dry-run"
   cmd.addArgs rest
   let (_, err) = cmd
-      .runCaptWithSpinner(
+      .runCaptSpin(
       "evaluating derivation for: " & getHosts().join(" ").bb("bold"),
-      {CaptStderr}
     )
   let output = parseDryRunOutput err
   display output
@@ -364,7 +361,7 @@ proc build(drv: NixEvalOutput, rest: seq[string]): BuildResult =
 
   let (stdout, stderr, buildCode) =
     if "-L" in rest or "--print-build-logs" in rest: ("","", cmd.run())
-    else: cmd.runCapt({CaptStderr})
+    else: cmd.runCapt()
 
   result.duration = now() - startTime
 

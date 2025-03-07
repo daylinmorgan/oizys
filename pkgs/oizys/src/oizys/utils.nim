@@ -12,7 +12,7 @@ proc checkBuild(installable: string): tuple[stdout: string, stderr: string] =
     code: int
   let cmd = newNixCommand("build").withArgs(installable)
   with(Dots2, bbfmt"attempt to build: [b]{installable}"):
-    (output, err, code) = cmd.runCapt(capture = {CaptStdout, CaptStderr})
+    (output, err, code) = cmd.runCapt()
   if code == 0:
     fatalQuit fmt"{cmd} had zero exit"
   result = (output, err)
