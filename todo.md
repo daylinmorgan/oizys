@@ -3,6 +3,7 @@
 ## oizys
 
 - [ ] nix-eval-jobs errors are not printed on error
+- [ ] `oizys gha <workflow>` should keep checking for something > than the current time
 
 ## software
 
