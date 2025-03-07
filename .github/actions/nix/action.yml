@@ -6,8 +6,8 @@ inputs:
     default: |
       accept-flake-config = true
       experimental-features = nix-command flakes pipe-operator
-      extra-substituters = https://nix-cache.dayl.in https://attic.dayl.in/oizys
-      extra-trusted-public-keys = nix-cache.dayl.in-1:lj22Sov7m1snupBz/43O1fxyEfy/S7cxBpweD7iREcs oizys:DSw3mwVMM/Y+PXSVpkDlU5dLwlORuiJRGPkwr5INSMc=
+      extra-substituters = https://nix-cache.dayl.in/oizys
+      extra-trusted-public-keys = oizys:DSw3mwVMM/Y+PXSVpkDlU5dLwlORuiJRGPkwr5INSMc=
       build-dir = /nix/var
       stalled-download-timeout = 0
       download-attempts = 10
