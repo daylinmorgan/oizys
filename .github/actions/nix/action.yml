@@ -38,7 +38,7 @@ runs:
       shell: bash
       run: |
         nix profile install "nixpkgs#attic-client"
-        attic login oizys https://attic.dayl.in "${{ inputs.attic_token}}"
+        attic login oizys https://nix-cache.dayl.in "${{ inputs.attic_token}}"
 
     - name: "Show Nix Info"
       shell: bash
