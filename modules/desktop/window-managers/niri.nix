@@ -10,8 +10,8 @@
 let
   niriService =
     {
-      description,
       serviceConfig,
+      description ? "",
     }:
     enabled
     // {
@@ -21,7 +21,8 @@ let
       after = [ "graphical-session.target" ];
       requisite = [ "graphical-session.target" ];
     };
-
+  eww = (flake.pkgs "nixpkgs-wayland").eww;
+  mako = (flake.pkgs "nixpkgs-wayland").mako;
 in
 mkOizysModule config "niri" {
 
@@ -42,15 +43,43 @@ mkOizysModule config "niri" {
   #   };
   # };
 
-  systemd.user.services."sway" = niriService {
-    description = "swaybg!";
-    serviceConfig = {
-      ExecStart = ''${pkgs.swaybg}/bin/swaybg -m fill -i "%h/stuff/wallpapers/mountain-temple/mountain-temple_00001_.png"'';
-      Restart = "on-failure";
+  systemd.user.services = {
+    mako = niriService {
+      serviceConfig = {
+        ExecStart = ''${mako}/bin/mako'';
+        Restart = "on-failure";
+      };
     };
+
+    udiskie = niriService {
+      serviceConfig = {
+        ExecStart = ''${pkgs.udiskie}/bin/udiskie'';
+        Restart = "on-failure";
+      };
+    };
+    kanshi = niriService {
+      serviceConfig = {
+        ExecStart = ''${pkgs.kanshi}/bin/kanshi'';
+        Restart = "on-failure";
+      };
+    };
+    sway = niriService {
+      description = "swaybg!";
+      serviceConfig = {
+        ExecStart = ''${pkgs.swaybg}/bin/swaybg -m fill -i "%h/stuff/wallpapers/mountain-temple/mountain-temple_00001_.png"'';
+        Restart = "on-failure";
+      };
+    };
+
+    eww = niriService {
+      description = "eww";
+      serviceConfig = {
+        ExecStart = ''${eww}/bin/eww daemon  --no-daemonize'';
+        Restart = "on-failure";
+      };
+    };
+
   };
-
-
   environment.systemPackages =
     (with pkgs; [
       niri
