@@ -3,14 +3,14 @@
   openssl,
   buildNimblePackage,
 
-  extra-substituters ? [ ],
-  extra-trusted-public-keys ? [ ],
+  substituters ? [ ],
+  trusted-public-keys ? [ ],
 }:
 
 let
   inherit (builtins) toString;
-  extraSubFlag = toString extra-substituters;
-  extraTrustedPubKeys = toString extra-trusted-public-keys;
+  subFlag = toString substituters;
+  trustedPubKeys = toString trusted-public-keys;
 in
 
 buildNimblePackage {
@@ -21,8 +21,8 @@ buildNimblePackage {
   nativeBuildInputs = [ openssl ];
   nimbleDepsHash = "sha256-ZNS/ak5UoH3cvOAnRdCoovo/20A8woxowa5wefluU5g=";
   nimFlags = [
-    "-d:extraSubstituters:\"${extraSubFlag}\""
-    "-d:extraTrustedPublicKeys:'${extraTrustedPubKeys}'"
+    "-d:substituters:\"${subFlag}\""
+    "-d:trustedPublicKeys:'${trustedPubKeys}'"
   ];
   meta = {
     description = "nix begat oizys";

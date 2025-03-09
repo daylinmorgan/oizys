@@ -36,14 +36,14 @@ type
 
 
 func makeSubFlags(): seq[string] =
-  const extraSubstituters {.strdefine.} = ""
-  const extraTrustedPublicKeys {.strdefine.} = ""
-  if extraSubstituters != "":
-    result.add "--extra-substituters"
-    result.add extraSubstituters
-  if extraTrustedPublicKeys != "":
-    result.add "--extra-trusted-public-keys"
-    result.add extraTrustedPublicKeys
+  const substituters {.strdefine.} = ""
+  const trustedPublicKeys {.strdefine.} = ""
+  if substituters != "":
+    result.add "--substituters"
+    result.add substituters
+  if trustedPublicKeys != "":
+    result.add "--trusted-public-keys"
+    result.add trustedPublicKeys
 
 const subFlags = makeSubFlags()
 

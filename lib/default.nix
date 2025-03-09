@@ -49,7 +49,7 @@ let
       rec {
         default = oizys;
         oizys = pkgs.callPackage ../pkgs/oizys {
-          inherit (substituters) extra-substituters extra-trusted-public-keys;
+          inherit (substituters) substituters trusted-public-keys;
         };
         iso-x86_64-linux = (mkIso "x86_64-linux").config.system.build.isoImage;
       }
