@@ -37,17 +37,8 @@ proc run*(c: Command): int  {.discardable.}=
 proc runQuit*(cmd: Command) =
   quit cmd.run()
 
-# Should all subcommands just go through a version of runCmdCapt?
-type
-  CaptureGrp* = enum
-    CaptStdout
-    CaptStderr
-
-
-
 
 # TODO: support both capturing and inheriting the stream?
-# TODO: replace cmd with Command
 proc runCapt*(
   cmd: Command,
 ): tuple[stdout, stderr: string, exitCode: int] =
@@ -72,9 +63,6 @@ proc runCapt*(
   while errstrm.readLine(line):
     stderrLines.add line
   result.stderr = stderrLines.join("\n")
-
-  close outstrm
-  close errstrm
 
   result.exitCode = p.waitForExit()
   close p
