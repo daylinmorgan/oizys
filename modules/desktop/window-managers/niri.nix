@@ -74,7 +74,7 @@ mkOizysModule config "niri" {
     eww = niriService {
       description = "eww";
       serviceConfig = {
-        ExecStart = ''${eww}/bin/eww daemon  --no-daemonize'';
+        ExecStart = ''${eww}/bin/eww daemon'';
         Restart = "on-failure";
       };
     };
