@@ -1,4 +1,5 @@
 flake:utils
+flake:f1multiviewer
 ghostty
 sops
 distrobox
