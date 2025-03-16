@@ -86,6 +86,7 @@ let
     xorg.libxkbfile
     xorg.libxshmfence
     zlib
+    libgbm
   ];
 
 in
