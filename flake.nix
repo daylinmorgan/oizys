@@ -24,6 +24,7 @@
     # hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
     hyprland-contrib.url = "github:hyprwm/contrib";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
 
     llm-nix.url = "github:daylinmorgan/llm-nix";
     tsm.url = "github:daylinmorgan/tsm?dir=nix";
@@ -52,6 +53,7 @@
     hyprland-contrib.inputs.nixpkgs.follows = "nixpkgs";
     hyprman.inputs.nixpkgs.follows = "nixpkgs";
     llm-nix.inputs.nixpkgs.follows = "nixpkgs";
+    neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
     nim2nix.inputs.nixpkgs.follows = "nixpkgs";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
@@ -93,7 +95,6 @@
     lib-aggregate.url = "github:nix-community/lib-aggregate";
     nixpkgs-wayland.inputs.lib-aggregate.follows = "lib-aggregate";
 
-
     nixpkgs-lib.url = "github:nix-community/nixpkgs.lib";
     lib-aggregate.inputs.nixpkgs-lib.follows = "nixpkgs-lib";
 
@@ -105,6 +106,10 @@
     # hyprland.inputs.pre-commit-hooks.follows = "";
     nixos-wsl.inputs.flake-compat.follows = "";
     nixpkgs-wayland.inputs.flake-compat.follows = "";
+    neovim-nightly-overlay.inputs.flake-compat.follows = "";
+    neovim-nightly-overlay.inputs.git-hooks.follows = "";
+    neovim-nightly-overlay.inputs.treefmt-nix.follows = "";
+    neovim-nightly-overlay.inputs.hercules-ci-effects.follows = "";
 
   };
 
