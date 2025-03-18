@@ -12,10 +12,11 @@ let
     {
       serviceConfig,
       description ? "",
+      path ? [],
     }:
     enabled
     // {
-      inherit description serviceConfig;
+      inherit description serviceConfig path;
       wantedBy = [ "niri.service" ];
       partOf = [ "graphical-session.target" ];
       after = [ "graphical-session.target" ];
@@ -63,7 +64,9 @@ mkOizysModule config "niri" {
         Restart = "on-failure";
       };
     };
-    sway = niriService {
+
+    # TODO: intregrate elsewhere or just go back to using swww?
+    swaybg = niriService {
       description = "swaybg!";
       serviceConfig = {
         ExecStart = ''${pkgs.swaybg}/bin/swaybg -m fill -i "%h/stuff/wallpapers/mountain-temple/mountain-temple_00001_.png"'';
@@ -71,14 +74,18 @@ mkOizysModule config "niri" {
       };
     };
 
-    eww = niriService {
-      description = "eww";
-      serviceConfig = {
-        ExecStart = ''${eww}/bin/eww daemon'';
-        Restart = "on-failure";
-      };
-    };
-
+    # having unexplained path issues?
+    # start manully for now so helper scripts are usable
+    # eww = niriService {
+    #   description = "eww";
+    #   # others?
+    #   path = with pkgs; [ bash ];
+    #   serviceConfig = {
+    #     ExecStart = ''${eww}/bin/eww daemon'';
+    #     Restart = "on-failure";
+    #   };
+    # };
+    #
   };
   environment.systemPackages =
     (with pkgs; [
