@@ -35,9 +35,9 @@ hwylCli:
       args seq[string]
     flags:
       ^minimal
-      nom "use nom"
+      `no-nom` "don't use nom"
     run:
-      nixBuild(minimal, nom, args)
+      nixBuild(minimal, `no-nom`, args)
 
     [cache]
     ... "build and push store paths"

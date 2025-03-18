@@ -47,18 +47,21 @@ func makeSubFlags(): seq[string] =
 
 const subFlags = makeSubFlags()
 
-proc newNixCommand*(subcmd: string, nom: bool = false): Command =
-  if nom:
+proc newNixCommand*(subcmd: string, noNom: bool = false): Command =
+  if not noNom:
     if findExe("nom") == "":
-      fatalQuit "--nom requires nix-output-monitor is installed"
-    result.exe = "nom"
+      warn "nom not found, falling back to nix"
+      result.exe = "nix"
+      # fatalQuit "--nom requires nix-output-monitor is installed"
+    else:
+      result.exe = "nom"
   else:
     result.exe = "nix"
 
   result.addArgs subcmd
   if isResetCache():
     result.addArgs "--narinfo-cache-negative-ttl", "0"
-  if not (nom or isCi()):
+  if not (noNom or isCi()):
     result.addArgs "--log-format", "multiline"
   if isBootstrap():
     result.addArgs subFlags
@@ -260,8 +263,8 @@ func splitDrv(drv: string): tuple[name, hash:string] =
   let s = drv.split("-", 1)
   (s[1].replace(".drv",""),s[0].split("/")[^1])
 
-proc nixBuild*(minimal: bool, nom: bool, rest: seq[string]) =
-  var cmd = newNixCommand("build", nom)
+proc nixBuild*(minimal: bool, noNom: bool, rest: seq[string]) =
+  var cmd = newNixCommand("build", noNom)
   if minimal:
     debug "populating args with derivations not built/cached"
     let drvs = missingDrvNixEvalJobs()
