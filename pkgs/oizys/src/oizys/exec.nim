@@ -1,6 +1,7 @@
 import std/[
   osproc, strformat, os,
-  strutils, streams, logging
+  strutils, streams, logging,
+  selectors, posix
 ]
 
 import hwylterm
@@ -38,10 +39,43 @@ proc runQuit*(cmd: Command) =
   quit cmd.run()
 
 
-# TODO: support both capturing and inheriting the stream?
-proc runCapt*(
-  cmd: Command,
-): tuple[stdout, stderr: string, exitCode: int] =
+#[
+  hasData, readAvailable, runCapt
+  partially generated with the help of claude ¯\_(ツ)_/¯
+]#
+
+proc hasData(handle: FileHandle, timeoutMs: int = 10): bool =
+  var selector = newSelector[int]()
+  selector.registerHandle(handle.int.FileHandle, {Event.Read}, 0)
+  result = selector.select(timeoutMs).len > 0
+  selector.close()
+
+proc readAvailable(fd: cint): string =
+  # Get current flags
+  let oldFlags = fcntl(fd, F_GETFL, 0)
+
+  # Set non-blocking
+  discard fcntl(fd, F_SETFL, oldFlags or O_NONBLOCK)
+
+  var
+    buffer = newString(4096)
+    bytesRead: int
+
+  # Read in chunks until no more data
+  while true:
+    bytesRead = read(fd, addr buffer[0], buffer.len)
+
+    if bytesRead > 0:
+      result.add(buffer[0..<bytesRead])
+    else:
+      break  # No more data or error
+
+  # Restore flags
+  discard fcntl(fd, F_SETFL, oldFlags)
+
+  return result
+
+proc runCapt*(cmd: Command): tuple[stdout, stderr: string, exitCode: int] =
   debug fmt"running cmd: {cmd}"
   let p = startProcess(
     cmd.exe,
@@ -49,23 +83,49 @@ proc runCapt*(
     options = {poUsePath}
   )
 
-  let
-    outstrm = peekableOutputStream p
-    errstrm = peekableErrorStream p
-  result.exitCode = -1
+  var stdoutData, stderrData: string
 
-  var stdoutLines, stderrLines: seq[string]
-  var line: string
-  while outstrm.readLine(line):
-    stdoutLines.add line
-  result.stdout = stdoutLines.join("\n")
+  # Get raw file descriptors
+  let stdoutFd = p.outputHandle.int.cint
+  let stderrFd = p.errorHandle.int.cint
 
-  while errstrm.readLine(line):
-    stderrLines.add line
-  result.stderr = stderrLines.join("\n")
+  # Main reading loop
+  while p.running():
+    var dataRead = false
 
-  result.exitCode = p.waitForExit()
-  close p
+    # Check if stdout has data
+    if p.outputHandle.hasData():
+      let data = readAvailable(stdoutFd)
+      if data.len > 0:
+        stdoutData.add(data)
+        dataRead = true
+
+    # Check if stderr has data
+    if p.errorHandle.hasData():
+      let data = readAvailable(stderrFd)
+      if data.len > 0:
+        stderrData.add(data)
+        dataRead = true
+
+    # Avoid tight loops
+    if not dataRead:
+      sleep(10)
+
+  # Process has ended, read any remaining data
+  if p.outputHandle.hasData():
+    let data = readAvailable(stdoutFd)
+    if data.len > 0:
+      stdoutData.add(data)
+
+  if p.errorHandle.hasData():
+    let data = readAvailable(stderrFd)
+    if data.len > 0:
+      stderrData.add(data)
+
+  result.exitCode = p.peekExitCode
+  result.stdout = stdoutData
+  result.stderr = stderrData
+  close(p)
 
 
 proc formatSubprocessError*(s: string): BbString =
@@ -96,4 +156,3 @@ proc runCaptSpin*(
     error fmt"{cmd} had non zero exit"
     quit code
   return (output, err)
-

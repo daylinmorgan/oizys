@@ -3,8 +3,8 @@
 ## oizys
 
 - [ ] nix-eval-jobs errors are not printed on error
-- [ ] nix-eval-jobs is reporting everything as cached
 - [ ] `oizys gha <workflow>` should keep checking for something greater than the current time
+- [ ] `nix run . -- cache` has file descriptor issues that `./result/bin/oizys cache`
 
 ## software
 
