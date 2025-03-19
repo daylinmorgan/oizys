@@ -12,7 +12,7 @@
     lix-module.inputs.nixpkgs.follows = "nixpkgs";
     lix-module.inputs.flake-utils.follows = "flake-utils";
     lix-module.inputs.lix.follows = "lix";
-    lix.url = "https://git.lix.systems/lix-project/lix/archive/6e6ff5827276ed2c4cf549b9fa898eb1e9566e57.tar.gz";
+    lix.url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
     lix.flake = false;
     # keep for when lix breaks :/
     # lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0.tar.gz";
