@@ -30,6 +30,7 @@
     tsm.url = "github:daylinmorgan/tsm?dir=nix";
     hyprman.url = "git+https://git.dayl.in/daylin/hyprman.git";
     nim2nix.url = "github:daylinmorgan/nim2nix";
+    niriman.url = "git+https://git.dayl.in/daylin/niriman.git";
     utils.url = "git+https://git.dayl.in/daylin/utils.git";
 
     f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
@@ -55,6 +56,7 @@
     llm-nix.inputs.nixpkgs.follows = "nixpkgs";
     neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
     nim2nix.inputs.nixpkgs.follows = "nixpkgs";
+    niriman.inputs.nixpkgs.follows = "nixpkgs";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
@@ -68,6 +70,7 @@
 
     ## nim2nix
     hyprman.inputs.nim2nix.follows = "nim2nix";
+    niriman.inputs.nim2nix.follows = "nim2nix";
     tsm.inputs.nim2nix.follows = "nim2nix";
     utils.inputs.nim2nix.follows = "nim2nix";
 

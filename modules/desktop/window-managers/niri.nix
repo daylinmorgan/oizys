@@ -12,7 +12,7 @@ let
     {
       serviceConfig,
       description ? "",
-      path ? [],
+      path ? [ ],
     }:
     enabled
     // {
@@ -51,7 +51,6 @@ mkOizysModule config "niri" {
         Restart = "on-failure";
       };
     };
-
     udiskie = niriService {
       serviceConfig = {
         ExecStart = ''${pkgs.udiskie}/bin/udiskie'';
@@ -73,22 +72,11 @@ mkOizysModule config "niri" {
         Restart = "on-failure";
       };
     };
-
-    # having unexplained path issues?
-    # start manully for now so helper scripts are usable
-    # eww = niriService {
-    #   description = "eww";
-    #   # others?
-    #   path = with pkgs; [ bash ];
-    #   serviceConfig = {
-    #     ExecStart = ''${eww}/bin/eww daemon'';
-    #     Restart = "on-failure";
-    #   };
-    # };
-    #
   };
+
   environment.systemPackages =
-    (with pkgs; [
+    [ (flake.pkg "niriman") ]
+    ++ (with pkgs; [
       niri
 
       wl-mirror

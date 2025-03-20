@@ -319,6 +319,29 @@
         "type": "github"
       }
     },
+    "niriman": {
+      "inputs": {
+        "nim2nix": [
+          "nim2nix"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1742511055,
+        "narHash": "sha256-HkihNmdrC4afilyHcjy9065cl/AxezDmO50thfNaT+I=",
+        "ref": "refs/heads/main",
+        "rev": "72b020964a4e472183e0a80ffe025765afd378da",
+        "revCount": 4,
+        "type": "git",
+        "url": "https://git.dayl.in/daylin/niriman.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://git.dayl.in/daylin/niriman.git"
+      }
+    },
     "nix-index-database": {
       "inputs": {
         "nixpkgs": [
@@ -527,6 +550,7 @@
         "my-nixpkgs": "my-nixpkgs",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nim2nix": "nim2nix",
+        "niriman": "niriman",
         "nix-index-database": "nix-index-database",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs",
