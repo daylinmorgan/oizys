@@ -61,7 +61,7 @@ proc newNixCommand*(subcmd: string, noNom: bool = false): Command =
   result.addArgs subcmd
   if isResetCache():
     result.addArgs "--narinfo-cache-negative-ttl", "0"
-  if not (noNom or isCi()):
+  if not (not noNom or isCi()):
     result.addArgs "--log-format", "multiline"
   if isBootstrap():
     result.addArgs subFlags
