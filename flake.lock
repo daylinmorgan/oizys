@@ -28,11 +28,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1742098027,
-        "narHash": "sha256-CWtRjQ7gy5KlffGyaflxPdITFtel+vC7NUzrJgl4dtU=",
+        "lastModified": 1742503515,
+        "narHash": "sha256-ge5iaj0r3XVVahD1jH4mE9WUSJXIgL+3GpXsmT7Q18E=",
         "owner": "daylinmorgan",
         "repo": "f1multiviewer-flake",
-        "rev": "5dbe17e315a5bee245f64d705592446fecdf0a19",
+        "rev": "f195375ff21bf6593e083eab67144bd33a4e5d72",
         "type": "github"
       },
       "original": {
