@@ -277,7 +277,7 @@ proc nixBuild*(minimal: bool, noNom: bool, rest: seq[string]) =
   cmd.runQuit()
 
 proc nixBuildHostDry*(minimal: bool, rest: seq[string]) =
-  var cmd = newNixCommand("build")
+  var cmd = newNixCommand("build", noNom=true)
   if minimal:
     debug "populating args with derivations not built/cached"
     let drvs = missingDrvNixEvalJobs()
