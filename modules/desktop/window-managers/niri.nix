@@ -1,5 +1,6 @@
 {
   pkgs,
+  inputs,
   config,
   mkOizysModule,
   enabled,
@@ -26,6 +27,9 @@ let
   mako = (flake.pkgs "nixpkgs-wayland").mako;
 in
 mkOizysModule config "niri" {
+  nixpkgs.overlays = [
+    inputs.nixpkgs-wayland.overlay
+  ];
 
   # systemd.user.services."sway" = enabled // {
   #
@@ -51,12 +55,14 @@ mkOizysModule config "niri" {
         Restart = "on-failure";
       };
     };
+
     udiskie = niriService {
       serviceConfig = {
         ExecStart = ''${pkgs.udiskie}/bin/udiskie'';
         Restart = "on-failure";
       };
     };
+
     kanshi = niriService {
       serviceConfig = {
         ExecStart = ''${pkgs.kanshi}/bin/kanshi'';
@@ -96,9 +102,6 @@ mkOizysModule config "niri" {
       catppuccin-cursors.mochaDark
 
       swaylock
-    ])
-
-    ++ (with (flake.pkgs "nixpkgs-wayland"); [
       mako
       eww
       wlr-randr
