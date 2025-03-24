@@ -105,6 +105,9 @@
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     roc.inputs.rust-overlay.follows = "rust-overlay";
 
+    flake-parts.url =  "github:hercules-ci/flake-parts";
+    neovim-nightly-overlay.inputs.flake-parts.follows = "flake-parts";
+
     ## nil inputs, I don't want *ALL* your flake inputs...
     # hyprland.inputs.pre-commit-hooks.follows = "";
     nixos-wsl.inputs.flake-compat.follows = "";
@@ -114,6 +117,14 @@
     neovim-nightly-overlay.inputs.treefmt-nix.follows = "";
     neovim-nightly-overlay.inputs.hercules-ci-effects.follows = "";
 
+    lix-attic.url = "git+https://git.lix.systems/nrabulinski/attic.git";
+    lix-attic.inputs.lix.follows = "lix-module/lix";
+    lix-attic.inputs.lix-module.follows = "lix-module";
+    lix-attic.inputs.nixpkgs.follows = "nixpkgs";
+    lix-attic.inputs.flake-parts.follows = "flake-parts";
+
+    lix-attic.inputs.flake-compat.follows = "";
+    lix-attic.inputs.nix-github-actions.follows = "";
   };
 
   nixConfig = {
