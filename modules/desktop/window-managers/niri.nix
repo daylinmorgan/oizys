@@ -84,27 +84,24 @@ mkOizysModule config "niri" {
     [ (flake.pkg "niriman") ]
     ++ (with pkgs; [
       niri
-
+      xwayland-satellite
       wl-mirror
+      wlr-randr
+
       kanshi
+      
+      libnotify
+      mako
 
       brightnessctl
       udiskie
 
-      libnotify
-
       wl-clipboard
-
       rofi-wayland
-
       pwvucontrol
-
       catppuccin-cursors.mochaDark
-
       swaylock
-      mako
       eww
-      wlr-randr
       swww
     ]);
 
