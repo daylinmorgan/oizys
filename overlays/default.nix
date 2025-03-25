@@ -30,5 +30,6 @@ in
 
     attic-client = inputs.self.packages.${final.system}.attic-client;
     attic-server = inputs.self.packages.${final.system}.attic-server;
+    hplip = nixpkgs-unstable.hplip;
   })
 ]
