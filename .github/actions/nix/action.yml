@@ -30,9 +30,9 @@ runs:
       run: exec ${{ github.action_path }}/prepare.sh
 
     - name: Install Lix
-      uses: daylinmorgan/lix-gha-installer-action@latest
+      uses: samueldr/lix-gha-installer-action@latest
       with:
-        extra-conf: ${{ inputs.nix_conf }}
+        extra_nix_config: ${{ inputs.nix_conf }}
 
     - name: Install and login to attic cache
       shell: bash
