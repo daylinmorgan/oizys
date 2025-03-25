@@ -3,10 +3,12 @@
 
   outputs = inputs: (import ./lib inputs).oizysFlake;
 
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    stable.url = "github:nixos/nixpkgs/nixos-24.05";
+  inputs = rec {
+    nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    stable.url = "github:nixos/nixpkgs/nixos-24.11";
     my-nixpkgs.url = "github:daylinmorgan/nixpkgs/nixos-unstable";
+    nixpkgs = nixos-unstable;
 
     lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
     lix-module.inputs.nixpkgs.follows = "nixpkgs";
@@ -100,12 +102,13 @@
 
     nixpkgs-lib.url = "github:nix-community/nixpkgs.lib";
     lib-aggregate.inputs.nixpkgs-lib.follows = "nixpkgs-lib";
+    flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs-lib";
 
     rust-overlay.url = "github:oxalica/rust-overlay";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     roc.inputs.rust-overlay.follows = "rust-overlay";
 
-    flake-parts.url =  "github:hercules-ci/flake-parts";
+    flake-parts.url = "github:hercules-ci/flake-parts";
     neovim-nightly-overlay.inputs.flake-parts.follows = "flake-parts";
 
     ## nil inputs, I don't want *ALL* your flake inputs...

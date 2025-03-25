@@ -1,25 +1,34 @@
 { inputs, loadOverlays }:
+
+let
+  inherit (inputs.nixpkgs.lib) listToAttrs;
+
+  allNixpkgs = [
+    "nixpkgs-stable"
+    "nixpkgs-unstable"
+    "mynixpkgs"
+  ];
+  nixpkgsOverlays =
+    final:
+    allNixpkgs
+    |> map (name: {
+      inherit name;
+      value = import inputs."${name}" {
+        inherit (final) system config;
+      };
+    })
+    |> listToAttrs;
+
+in
 (loadOverlays inputs ./.)
 ++ [
   inputs.nim2nix.overlays.default # adds buildNimPackage
-
-  (final: prev: {
-
-    stable = import inputs.stable {
-      system = final.system;
-      config.allowUnfree = true;
-    };
+]
+++ [
+  (final: prev: rec {
+    inherit (nixpkgsOverlays final) nixpkgs-unstable nixpkgs-stable mynixpkgs;
 
     attic-client = inputs.self.packages.${final.system}.attic-client;
     attic-server = inputs.self.packages.${final.system}.attic-server;
-
-    # # nixd + lix = problem, or am I just pulling in nix2.24 now?
-    # nixt = prev.nixt.override {
-    #   nix = final.nixVersions.nix_2_24;
-    # };
-    #
-    # nixd = prev.nixd.override {
-    #   nix = final.nixVersions.nix_2_24;
-    # };
   })
 ]
