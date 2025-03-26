@@ -15,6 +15,7 @@ let
   inherit (final)
     concatStringsSep
     hasSuffix
+    hasInfix
     mkEnableOption
     mkIf
     mkOption
@@ -135,6 +136,28 @@ let
     |> filter (f: f != "default.nix")
     |> map (f: import (../overlays + "/${f}") { inherit inputs; });
 
+  loadNixpkgOverlay = final: name: {
+    inherit name;
+    value = import inputs."${name}" {
+      inherit (final) system config;
+    };
+  };
+
+  loadNixpkgOverlays =
+    final:
+    inputs
+    |> attrNames
+    |> filter (name: (hasInfix "nixpkgs" name) && (name != "nixpkgs"))
+    |> map (loadNixpkgOverlay final)
+    #
+    # (name: {
+    #   inherit name;
+    #   value = import inputs."${name}" {
+    #     inherit (final) system config;
+    #   };
+    # })
+    |> listToAttrs;
+
   readLinesNoComment =
     f: f |> readFile |> splitString "\n" |> filter (line: !(hasPrefix "#" line) && line != "");
 
@@ -213,6 +236,7 @@ in
     flakeFromSystem
     listify
     loadOverlays
+    loadNixpkgOverlays
     hostFiles
     hostSystem
     oizysSettings

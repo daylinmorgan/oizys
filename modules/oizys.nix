@@ -11,7 +11,6 @@ let
   inherit (lib)
     mkEnableOption
     mkOption
-    loadOverlays
     oizysSettings
     tryPkgsFromFile
     listToAttrs
@@ -74,7 +73,7 @@ in
   config = {
     networking.hostName = hostName;
     time.timeZone = "US/Central";
-    nixpkgs.overlays = import ../overlays { inherit inputs loadOverlays; };
+    nixpkgs.overlays = import ../overlays { inherit inputs lib; };
     oizys = oizysSettings hostName // {
       packages =
         config.environment.systemPackages

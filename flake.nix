@@ -4,11 +4,11 @@
   outputs = inputs: (import ./lib inputs).oizysFlake;
 
   inputs = rec {
-    nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    stable.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
     my-nixpkgs.url = "github:daylinmorgan/nixpkgs/nixos-unstable";
-    nixpkgs = nixos-unstable;
+    nixpkgs = nixpkgs-nixos-unstable;
 
     lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
     lix-module.inputs.nixpkgs.follows = "nixpkgs";
@@ -126,6 +126,7 @@
     lix-attic.inputs.nixpkgs.follows = "nixpkgs";
     lix-attic.inputs.flake-parts.follows = "flake-parts";
 
+    lix-attic.inputs.nixpkgs-stable.follows = "";
     lix-attic.inputs.flake-compat.follows = "";
     lix-attic.inputs.nix-github-actions.follows = "";
   };

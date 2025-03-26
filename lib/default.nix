@@ -10,7 +10,6 @@ let
   inherit (builtins) mapAttrs readDir listToAttrs;
   inherit (lib)
     genAttrs
-    loadOverlays
     ;
 
   inherit (import ./find-modules.nix { inherit lib; }) findModulesList;
@@ -27,7 +26,7 @@ let
       fn (
         import nixpkgs {
           inherit system;
-          overlays = (import ../overlays { inherit inputs loadOverlays; });
+          overlays = (import ../overlays { inherit inputs lib; });
         }
       )
     );
