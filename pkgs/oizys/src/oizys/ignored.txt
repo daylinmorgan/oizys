@@ -27,5 +27,4 @@ rofi
 windows-vm-desktop-item
 lock
 gitea
-atticd-atticadm
 check-attic
