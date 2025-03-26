@@ -70,7 +70,6 @@ in
     };
   };
 
-
   services.caddy = enabled // {
     logFormat = ''
       output file /var/log/caddy/access.log

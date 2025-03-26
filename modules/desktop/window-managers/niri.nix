@@ -89,7 +89,7 @@ mkOizysModule config "niri" {
       wlr-randr
 
       kanshi
-      
+
       libnotify
       mako
 
