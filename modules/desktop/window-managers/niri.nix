@@ -23,30 +23,16 @@ let
       after = [ "graphical-session.target" ];
       requisite = [ "graphical-session.target" ];
     };
-  eww = (flake.pkgs "nixpkgs-wayland").eww;
-  mako = (flake.pkgs "nixpkgs-wayland").mako;
+  inherit (flake.pkgs "nixpkgs-wayland") eww mako;
 in
+
 mkOizysModule config "niri" {
+
+  programs.niri = enabled;
+
   nixpkgs.overlays = [
     inputs.nixpkgs-wayland.overlay
   ];
-
-  # systemd.user.services."sway" = enabled // {
-  #
-  #   wantedBy = [
-  #     "niri.service"
-  #   ];
-  #
-  #   partOf = [ "graphical-session.target" ];
-  #   after = [ "graphical-session.target" ];
-  #   requisite = [ "graphical-session.target" ];
-  #   description = "swaybg!";
-  #
-  #   serviceConfig = {
-  #     ExecStart = ''${pkgs.swaybg}/bin/swaybg -m fill -i "%h/stuff/wallpapers/mountain-temple/mountain-temple_00001_.png"'';
-  #     Restart = "on-failure";
-  #   };
-  # };
 
   systemd.user.services = {
     mako = niriService {
@@ -83,7 +69,6 @@ mkOizysModule config "niri" {
   environment.systemPackages =
     [ (flake.pkg "niriman") ]
     ++ (with pkgs; [
-      niri
       xwayland-satellite
       wl-mirror
       wlr-randr
