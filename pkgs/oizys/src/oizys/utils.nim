@@ -10,7 +10,7 @@ proc checkBuild(installable: string): tuple[stdout: string, stderr: string] =
   var
     output, err: string
     code: int
-  let cmd = newNixCommand("build").withArgs(installable)
+  let cmd = newNixCommand("build", noNom=true).withArgs(installable)
   with(Dots2, bbfmt"attempt to build: [b]{installable}"):
     (output, err, code) = cmd.runCapt()
   if code == 0:
