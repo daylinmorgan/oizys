@@ -2,33 +2,31 @@
   lib,
   fetchFromGitHub,
   buildNimPackage,
+
   # deps
   openssl,
   nim,
   makeWrapper,
-
 }:
 buildNimPackage (finalAttrs: {
+
   pname = "nimble";
-  version = "0.18.0";
+  version = "0.18.2";
+
   src = fetchFromGitHub {
     owner = "nim-lang";
     repo = "nimble";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HFuJiozRsRlVIXIv+vRjsfosrBlWfnUYtep27Fy/PPA=";
+    hash = "sha256-wgzFhModFkwB8st8F5vSkua7dITGGC2cjoDvgkRVZMs=";
     fetchSubmodules = true;
   };
+
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ openssl ];
 
   nimFlags = [ "--define:git_revision_override=${finalAttrs.src.rev}" ];
 
   doCheck = false; # it works on their machine
-
-  # TODO: remove
-  preConfigure = ''
-    echo -e "\n" >> config.nims
-  '';
 
   postInstall = ''
     wrapProgram $out/bin/nimble \
