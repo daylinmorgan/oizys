@@ -3,7 +3,7 @@ chrome
 desktop
 docker
 hp-scanner
-hyprland
+# hyprland
 llm
 podman
 utils
