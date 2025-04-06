@@ -1,13 +1,14 @@
 { fetchFromGitHub, buildNimPackage }:
 buildNimPackage (finalAttrs: {
   pname = "nimlangserver";
-  version = "1.10.2";
+  version = "1.10.2-unstable";
 
   src = fetchFromGitHub {
     owner = "nim-lang";
     repo = "langserver";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-CbdlDcEkX/pPXEbIsSM6S9INeBCwgjx7NxonjUJAHrk=";
+    # rev = "v${finalAttrs.version}";
+    rev = "380e4634f2891a926e40c334161931676b074b5a";
+    hash = "sha256-Tx/2aA5q2K44E2tSlbZNwubJDHV9V+8EDFwR5c0Gjn8=";
   };
 
   doCheck = false;
