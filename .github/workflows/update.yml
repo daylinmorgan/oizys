@@ -106,6 +106,13 @@ jobs:
       - name: Pre-build oizys
         run: nix build .
 
+      - name: Build lix and co
+        run: |
+          nix build \
+            --out-link 'lix-and-co' \
+            '.#nix-eval-jobs' '.#lix' '.#attic-server' '.#attic-client'
+          attic push oizys ./lix-and-co*
+
       - name: Build Current and Updated Systems
         run: >
           nix run .
