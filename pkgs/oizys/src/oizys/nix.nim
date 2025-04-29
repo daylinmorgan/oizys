@@ -353,7 +353,7 @@ proc pushPathsToCache(cache: NixCache, paths: openArray[string], jobs: int) =
 
   let pushErr = cmd.run()
   if pushErr != 0:
-    errorQuit "failed to push build to cache"
+    fatalQuit "failed to push build to cache"
 
 
 proc build(drv: NixEvalOutput, rest: seq[string]): BuildResult =
@@ -377,21 +377,24 @@ proc build(drv: NixEvalOutput, rest: seq[string]): BuildResult =
 
   info "-> duration: " & formatDuration(result.duration)
 
+
+proc makeStepSummaryRows(results: seq[(NixEvalOutput, BuildResult)]): string =
+  for (drv, res ) in results:
+    let (name, hash) = splitDrv(drv.drvPath)
+    let symbol =
+      if res.succesful: ":white_check_mark"
+      else: ":x:"
+    result.add fmt"| {name} | `{hash}` | {symbol} | {res.duration} |"
+    result.add "\n"
+
+# TODO: deprecate this?
 proc reportResults(results: seq[(NixEvalOutput, BuildResult)]) =
-  let rows = collect(
-    for (drv, res) in results:
-      let (name, hash) = splitDrv(drv.drvPath)
-      fmt"| {name} | `{hash}` | " & (
-        if res.successful: ":white_check_mark:"
-        else: ":x:"
-      ) & " |" & $(res.duration)
-  )
   let summaryFilePath = getEnv("GITHUB_STEP_SUMMARY")
   if summaryFilePath == "": fatalQuit "no github step summary found"
   let output = open(summaryFilePath, fmAppend)
   output.writeLine "| derivation | hash | build | time |"
   output.writeLine "|---|---|---|---|"
-  output.writeLine rows.join("\n")
+  output.writeLine  makeStepSummaryRows(results)
   close output
 
 proc prettyDerivation*(path: string): BbString =
@@ -416,7 +419,7 @@ proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: 
     if "out" in drv.outputs:
       prettyDrvList.add prettyDerivation(drv.outputs["out"])
     else:
-      error $drv.name, "does not have an 'out' attribute?"
+      error $drv.name, "does not have an 'out' attribute?\n" & "derivation: " & $drv
 
   info "derivations:\n" & prettyDrvList.join("\n")
 
