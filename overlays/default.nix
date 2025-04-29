@@ -5,6 +5,7 @@ in
 (loadOverlays inputs ./.)
 ++ [
   inputs.nim2nix.overlays.default # adds buildNimPackage
+  inputs.niri.overlays.default # adds main branch niri
 
   (final: prev: rec {
     inherit (loadNixpkgOverlays final) nixpkgs-unstable;

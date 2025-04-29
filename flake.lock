@@ -369,6 +369,30 @@
         "type": "github"
       }
     },
+    "niri": {
+      "inputs": {
+        "nix-filter": "nix-filter",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rust-overlay": [
+          "rust-overlay"
+        ]
+      },
+      "locked": {
+        "lastModified": 1745913113,
+        "narHash": "sha256-/Iph65fWHox7tVyfzw0+AGyCqL2FGuHSt+xjFUsxbOk=",
+        "owner": "YaLTeR",
+        "repo": "niri",
+        "rev": "5f117c61dc4dd91564e02b32836e98dd0e648246",
+        "type": "github"
+      },
+      "original": {
+        "owner": "YaLTeR",
+        "repo": "niri",
+        "type": "github"
+      }
+    },
     "niriman": {
       "inputs": {
         "nim2nix": [
@@ -390,6 +414,21 @@
       "original": {
         "type": "git",
         "url": "https://git.dayl.in/daylin/niriman.git"
+      }
+    },
+    "nix-filter": {
+      "locked": {
+        "lastModified": 1731533336,
+        "narHash": "sha256-oRam5PS1vcrr5UPgALW0eo1m/5/pls27Z/pabHNy2Ms=",
+        "owner": "numtide",
+        "repo": "nix-filter",
+        "rev": "f7653272fd234696ae94229839a99b73c9ab7de0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "nix-filter",
+        "type": "github"
       }
     },
     "nix-index-database": {
@@ -650,6 +689,7 @@
         "my-nixpkgs": "my-nixpkgs",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nim2nix": "nim2nix",
+        "niri": "niri",
         "niriman": "niriman",
         "nix-index-database": "nix-index-database",
         "nixos-wsl": "nixos-wsl",

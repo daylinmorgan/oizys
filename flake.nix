@@ -39,6 +39,9 @@
     pixi.url = "github:daylinmorgan/pixi-flake";
     roc.url = "github:roc-lang/roc/0.0.0-alpha2-rolling";
 
+    niri.url = "github:YaLTeR/niri";
+
+
     # master as of 2024.12.12
     NixVirt.url = "github:AshleyYakeley/NixVirt?rev=9063243af5e6674359a0ff7cec57f02eeacf0cea";
 
@@ -62,6 +65,7 @@
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
+    niri.inputs.nixpkgs.follows = "nixpkgs";
     NixVirt.inputs.nixpkgs.follows = "nixpkgs";
     pixi.inputs.nixpkgs.follows = "nixpkgs";
     roc.inputs.nixpkgs.follows = "nixpkgs";
@@ -107,6 +111,7 @@
     rust-overlay.url = "github:oxalica/rust-overlay";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     roc.inputs.rust-overlay.follows = "rust-overlay";
+    niri.inputs.rust-overlay.follows = "rust-overlay";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
     neovim-nightly-overlay.inputs.flake-parts.follows = "flake-parts";
