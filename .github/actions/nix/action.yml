@@ -1,4 +1,4 @@
-# adapted from https://github.com/azuwis/actions/tree/7236424fa0fdc8d82df7cd4bff831a9d2338ce9e/nix
+# originally adapted from https://github.com/azuwis/actions/tree/7236424fa0fdc8d82df7cd4bff831a9d2338ce9e/nix
 name: Install Nix and setup cache
 inputs:
   nix_conf:
@@ -6,28 +6,24 @@ inputs:
     default: |
       accept-flake-config = true
       experimental-features = nix-command flakes pipe-operator
+      build-dir = /nix/var
       extra-substituters = https://nix-cache.dayl.in/oizys
       extra-trusted-public-keys = oizys:DSw3mwVMM/Y+PXSVpkDlU5dLwlORuiJRGPkwr5INSMc=
-      build-dir = /nix/var
       stalled-download-timeout = 0
       download-attempts = 10
-  clean:
-    description: Clean up disk space
-    default: false
-  btrfs:
-    description: Use BTRFS to setup RAID0
-    default: false
   attic_token:
     description: token to access attic cache
+  hatchet-protocol:
+    description: level passed on the nothing-but-nix
+    default: 'cleave'
 
 runs:
   using: composite
   steps:
-    - shell: bash
-      env:
-        CLEAN: ${{ inputs.clean }}
-        BTRFS: ${{ inputs.btrfs }}
-      run: exec ${{ github.action_path }}/prepare.sh
+    - name: Nothing but Nix
+      uses: wimpysworld/nothing-but-nix@v5
+      with:
+        hatchet-protocol: ${{ inputs.hatchet-protocol }}
 
     - name: Install Lix
       uses: samueldr/lix-gha-installer-action@latest

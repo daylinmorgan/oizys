@@ -37,8 +37,6 @@ jobs:
       - uses: ./.github/actions/nix
         with:
           attic_token: ${{ secrets.ATTIC_TOKEN }}
-          # clean: true
-          btrfs: true
 
       - name: write lock file
         if: "${{ inputs.lockFile != '' }}"
