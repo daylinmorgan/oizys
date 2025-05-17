@@ -8,26 +8,17 @@ inputs:
       experimental-features = nix-command flakes pipe-operator
       extra-substituters = https://nix-cache.dayl.in/oizys
       extra-trusted-public-keys = oizys:DSw3mwVMM/Y+PXSVpkDlU5dLwlORuiJRGPkwr5INSMc=
-      build-dir = /nix/var
       stalled-download-timeout = 0
       download-attempts = 10
-  clean:
-    description: Clean up disk space
-    default: false
-  btrfs:
-    description: Use BTRFS to setup RAID0
-    default: false
   attic_token:
     description: token to access attic cache
 
 runs:
   using: composite
   steps:
-    - shell: bash
-      env:
-        CLEAN: ${{ inputs.clean }}
-        BTRFS: ${{ inputs.btrfs }}
-      run: exec ${{ github.action_path }}/prepare.sh
+    # TODO: hatchet protocol argument?
+    - name: Nothing but Nix
+      uses: wimpysworld/nothing-but-nix@v5
 
     - name: Install Lix
       uses: samueldr/lix-gha-installer-action@latest
