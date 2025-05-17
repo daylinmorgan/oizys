@@ -20,10 +20,9 @@ runs:
     - name: Nothing but Nix
       uses: wimpysworld/nothing-but-nix@v5
 
-    - run: |
-        mkdir -p /usr/share/fish/vendor_conf.d/
-        sleep 10
-      shell: bash
+    # why did I need to sleep?
+    - shell: bash
+      run: sleep 10
 
     - name: Install Lix
       uses: samueldr/lix-gha-installer-action@latest
@@ -35,7 +34,6 @@ runs:
       run: |
         nix profile install "nixpkgs#attic-client"
         attic login oizys https://nix-cache.dayl.in "${{ inputs.attic_token}}"
-
     - name: "Show Nix Info"
       shell: bash
       run: nix run "nixpkgs#nix-info" -- -m
