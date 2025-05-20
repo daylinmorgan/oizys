@@ -25,6 +25,10 @@ runs:
       with:
         hatchet-protocol: ${{ inputs.hatchet-protocol }}
 
+    - name: Wait for nothing-but-nix to get started to make some progress
+      shell: bash
+      run: sleep 5
+
     - name: Install Lix
       uses: samueldr/lix-gha-installer-action@latest
       with:
