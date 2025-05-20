@@ -23,11 +23,10 @@ runs:
     - name: Nothing but Nix
       uses: wimpysworld/nothing-but-nix@v5
       with:
+        # without this the lix-installer tries to add fish support and fails
+        witness-carnage: true
         hatchet-protocol: ${{ inputs.hatchet-protocol }}
 
-    - name: Wait for nothing-but-nix to get started to make some progress
-      shell: bash
-      run: sleep 5
 
     - name: Install Lix
       uses: samueldr/lix-gha-installer-action@latest
