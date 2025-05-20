@@ -39,6 +39,8 @@ in
       alacritty # backup to ghostty
 
       inkscape
+      adwaita-icon-theme # needed for icons in inkscape
+
       gimp
 
       zotero
