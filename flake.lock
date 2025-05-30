@@ -228,17 +228,17 @@
         "nixpkgs-stable": []
       },
       "locked": {
-        "lastModified": 1742679462,
-        "narHash": "sha256-L9q9KDqiJEREM/GRnSo4vB9VCvclmdRT9vXuFwBmb9Y=",
+        "lastModified": 1748616782,
+        "narHash": "sha256-L400ewsfCRc7E9h0JcVV0D9p5EjOWAHrz8V869hvXOQ=",
         "ref": "refs/heads/main",
-        "rev": "087bfe9234f8dc682dbf1d8f96c0b712f587c466",
-        "revCount": 368,
+        "rev": "c55a057e547625b937a77926abd3f9041c939b7c",
+        "revCount": 369,
         "type": "git",
-        "url": "https://git.lix.systems/nrabulinski/attic.git"
+        "url": "https://git.dayl.in/daylin/attic.git"
       },
       "original": {
         "type": "git",
-        "url": "https://git.lix.systems/nrabulinski/attic.git"
+        "url": "https://git.dayl.in/daylin/attic.git"
       }
     },
     "lix-module": {
