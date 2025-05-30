@@ -572,6 +572,7 @@
       "original": {
         "owner": "nix-community",
         "repo": "nixpkgs-wayland",
+        "rev": "8dcad9dcb5ce4eb28e2719ab025224308b318e79",
         "type": "github"
       }
     },
