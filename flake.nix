@@ -25,7 +25,7 @@
     sops-nix.url = "github:Mic92/sops-nix";
     # hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
     hyprland-contrib.url = "github:hyprwm/contrib";
-    nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
+    nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland/8dcad9dcb5ce4eb28e2719ab025224308b318e79";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
 
     llm-nix.url = "github:daylinmorgan/llm-nix";
