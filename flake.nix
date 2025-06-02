@@ -23,14 +23,12 @@
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     nix-index-database.url = "github:nix-community/nix-index-database";
     sops-nix.url = "github:Mic92/sops-nix";
-    # hyprland.url = "git+https://github.com/hyprwm/Hyprland/?submodules=1";
     hyprland-contrib.url = "github:hyprwm/contrib";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland/8dcad9dcb5ce4eb28e2719ab025224308b318e79";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
 
     llm-nix.url = "github:daylinmorgan/llm-nix";
     tsm.url = "github:daylinmorgan/tsm?dir=nix";
-    hyprman.url = "git+https://git.dayl.in/daylin/hyprman.git";
     nim2nix.url = "github:daylinmorgan/nim2nix";
     niriman.url = "git+https://git.dayl.in/daylin/niriman.git";
     utils.url = "git+https://git.dayl.in/daylin/utils.git";
@@ -55,9 +53,7 @@
 
     ## nixpkgs
     f1multiviewer.inputs.nixpkgs.follows = "nixpkgs";
-    # hyprland.inputs.nixpkgs.follows = "nixpkgs";
     hyprland-contrib.inputs.nixpkgs.follows = "nixpkgs";
-    hyprman.inputs.nixpkgs.follows = "nixpkgs";
     llm-nix.inputs.nixpkgs.follows = "nixpkgs";
     neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
     nim2nix.inputs.nixpkgs.follows = "nixpkgs";
@@ -75,26 +71,11 @@
     utils.inputs.nixpkgs.follows = "nixpkgs";
 
     ## nim2nix
-    hyprman.inputs.nim2nix.follows = "nim2nix";
     niriman.inputs.nim2nix.follows = "nim2nix";
     tsm.inputs.nim2nix.follows = "nim2nix";
     utils.inputs.nim2nix.follows = "nim2nix";
 
-    # further flake.lock minimization shenanigans
-    # hyprland-qt-support.url = "github:hyprwm/hyprland-qt-support";
-    # hyprland-qt-support.inputs.hyprlang.follows = "hyprland/hyprlang";
-    # hyprland-qt-support.inputs.nixpkgs.follows = "hyprland/nixpkgs";
-    # hyprland-qt-support.inputs.systems.follows = "hyprland/systems";
-    # hyprland-qtutils.url = "github:hyprwm/hyprland-qtutils";
-    # hyprland-qtutils.inputs.hyprland-qt-support.follows = "hyprland-qt-support";
-    # hyprland-qtutils.inputs.hyprlang.follows = "hyprland/hyprlang";
-    # hyprland-qtutils.inputs.hyprutils.follows = "hyprland/hyprutils";
-    # hyprland-qtutils.inputs.nixpkgs.follows = "hyprland/nixpkgs";
-    # hyprland-qtutils.inputs.systems.follows = "hyprland/systems";
-    # hyprland.inputs.hyprland-qtutils.follows = "hyprland-qtutils";
-
     systems.url = "github:nix-systems/x86_64-linux";
-    # hyprland.inputs.systems.follows = "systems";
     flake-utils.inputs.systems.follows = "systems";
 
     flake-utils.url = "github:numtide/flake-utils";
@@ -117,7 +98,6 @@
     neovim-nightly-overlay.inputs.flake-parts.follows = "flake-parts";
 
     ## nil inputs, I don't want *ALL* your flake inputs...
-    # hyprland.inputs.pre-commit-hooks.follows = "";
     nixos-wsl.inputs.flake-compat.follows = "";
     nixpkgs-wayland.inputs.flake-compat.follows = "";
     neovim-nightly-overlay.inputs.flake-compat.follows = "";

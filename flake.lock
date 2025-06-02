@@ -147,29 +147,6 @@
         "type": "github"
       }
     },
-    "hyprman": {
-      "inputs": {
-        "nim2nix": [
-          "nim2nix"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1740010876,
-        "narHash": "sha256-Nl23LUvxnHcUYeeQFpDutKHb47NockeDphPlNFWbek0=",
-        "ref": "refs/heads/main",
-        "rev": "a49b057bb6e5a3f6871acfa38798ec013940ff6b",
-        "revCount": 26,
-        "type": "git",
-        "url": "https://git.dayl.in/daylin/hyprman.git"
-      },
-      "original": {
-        "type": "git",
-        "url": "https://git.dayl.in/daylin/hyprman.git"
-      }
-    },
     "lib-aggregate": {
       "inputs": {
         "flake-utils": [
@@ -681,7 +658,6 @@
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",
         "hyprland-contrib": "hyprland-contrib",
-        "hyprman": "hyprman",
         "lib-aggregate": "lib-aggregate",
         "lix": "lix",
         "lix-attic": "lix-attic",
