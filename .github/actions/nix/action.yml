@@ -15,7 +15,7 @@ inputs:
     description: token to access attic cache
   hatchet-protocol:
     description: level passed on the nothing-but-nix
-    default: 'cleave'
+    default: "cleave"
 
 runs:
   using: composite
@@ -26,7 +26,6 @@ runs:
         # without this the lix-installer tries to add fish support and fails
         witness-carnage: true
         hatchet-protocol: ${{ inputs.hatchet-protocol }}
-
 
     - name: Install Lix
       uses: samueldr/lix-gha-installer-action@latest
