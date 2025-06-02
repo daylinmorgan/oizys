@@ -7,6 +7,6 @@ hp-scanner
 llm
 podman
 utils
-vbox
+# vbox
 vpn
 niri
