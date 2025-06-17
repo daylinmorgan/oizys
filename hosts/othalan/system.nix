@@ -21,13 +21,33 @@
 
   # rtkit is optional but recommended
   security.rtkit = enabled;
+
   services.pipewire = enabled // {
     audio = enabled;
     pulse = enabled;
     alsa = enabled // {
       support32Bit = true;
     };
+
+    # not sure this needed to be added 
+    # but was trying to get high-quality audio on the WH-1000XM4's
+    wireplumber.extraConfig.bluetoothEnhancements = {
+      "monitor.bluez.properties" = {
+        "bluez5.enable-sbc-xq" = true;
+        "bluez5.enable-msbc" = true;
+        "bluez5.enable-hw-volume" = true;
+        "bluez5.roles" = [
+          "hsp_hs"
+          "hsp_ag"
+          "hfp_hf"
+          "hfp_ag"
+          "a2dp_sink"
+          "a2dp_source"
+        ];
+      };
+    };
   };
+
   users.users.${config.oizys.user}.extraGroups = [ "audio" ];
   environment.systemPackages = with pkgs; [ pamixer ];
 
