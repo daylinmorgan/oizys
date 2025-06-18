@@ -52,7 +52,6 @@ proc newNixCommand*(subcmd: string, noNom: bool = false): Command =
     if findExe("nom") == "":
       warn "nom not found, falling back to nix"
       result.exe = "nix"
-      # fatalQuit "--nom requires nix-output-monitor is installed"
     else:
       result.exe = "nom"
   else:
@@ -84,7 +83,7 @@ proc newRebuildCommand(subcmd: NixosRebuildSubcmd, args: openArray[string], remo
 
   result.addArgs $subcmd
   result.addArgs "--flake", getFlake()
-  result.addArgs "--log-format","multiline"
+  result.addArgs "--log-format", "multiline"
   if remote:
     let host = getHosts()[0]
     if host == currentHost:
@@ -111,13 +110,13 @@ func toDerivation*(pkg: string): DrvPath =
   let s = path.split("-", 1)
   result.path = path
   result.hash = s[0].rsplit("/")[^1]
-  result.name = s[^1].replace(".drv","")
+  result.name = s[^1].replace(".drv", "")
 
 func toDerivations(lines: seq[string]): seq[DrvPath] =
   for pkg in lines:
     result.add (toDerivation pkg)
 
-proc cmpDrv(x, y: DrvPath): int = 
+proc cmpDrv(x, y: DrvPath): int =
   cmp(x.name, y.name)
 
 proc parseDryRunOutput(err: string): DryRunOutput =
@@ -159,7 +158,7 @@ proc trunc*(s: string, limit: int): string =
   if s.len <= limit:
     s
   else:
-    s[0..(limit-4)] & "..."
+    s[0 .. (limit - 4)] & "..."
 
 proc display(msg: string, drvs: seq[DrvPath]) =
   echo fmt"{msg}: [bold cyan]{drvs.len()}[/]".bb
@@ -179,7 +178,7 @@ proc display(output: DryRunOutput) =
 proc narHash*(s: string): string =
   ## get hash from nix store path
   if not s.startsWith("/nix/store/") and s.len >= 44:
-    fatalQuit "failed to extract narHash from: " &  s
+    fatalQuit "failed to extract narHash from: " & s
   let ss = s.split("-")
   result = ss[0].split("/")[^1]
 
@@ -211,11 +210,10 @@ func isIgnored(name: string): bool =
 proc getSystemPathInputDrvs*(): seq[string] =
   let systemPathDrvs = getSystemPathDrvs()
 
-  result =
-    collect:
-      for k, drv in nixDerivationShow(systemPathDrvs):
-        for inputDrv, _ in drv.inputDrvs:
-          inputDrv
+  result = collect:
+    for k, drv in nixDerivationShow(systemPathDrvs):
+      for inputDrv, _ in drv.inputDrvs:
+        inputDrv
 
 proc missingDrvNixEvalJobs*(): HashSet[NixEvalOutput] =
   ## get all derivations not cached using nix-eval-jobs
@@ -258,10 +256,10 @@ func fmtDrvsForNix*(drvs: Table[string, NixDerivation]): seq[string] {.inline.} 
     for k, _ in drvs:
       k & "^*"
 
-func splitDrv(drv: string): tuple[name, hash:string] =
+func splitDrv(drv: string): tuple[name, hash: string] =
   assert drv.startsWith("/nix/store"), "is this a /nix/store path? $1" % [drv]
   let s = drv.split("-", 1)
-  (s[1].replace(".drv",""),s[0].split("/")[^1])
+  (s[1].replace(".drv", ""), s[0].split("/")[^1])
 
 proc nixBuild*(minimal: bool, noNom: bool, rest: seq[string]) =
   var cmd = newNixCommand("build", noNom)
@@ -277,7 +275,7 @@ proc nixBuild*(minimal: bool, noNom: bool, rest: seq[string]) =
   cmd.runQuit()
 
 proc nixBuildHostDry*(minimal: bool, rest: seq[string]) =
-  var cmd = newNixCommand("build", noNom=true)
+  var cmd = newNixCommand("build", noNom = true)
   if minimal:
     debug "populating args with derivations not built/cached"
     let drvs = missingDrvNixEvalJobs()
@@ -341,7 +339,7 @@ proc toCache(service: string, name: string): NixCache =
 
 proc pushPathsToCache(cache: NixCache, paths: openArray[string], jobs: int) =
   var cmd: Command
-  case cache.kind:
+  case cache.kind
   of Service:
     cmd.exe = cache.exe
     cmd.addArgs "push", cache.name, "--jobs", $jobs
@@ -377,26 +375,6 @@ proc build(drv: NixEvalOutput, rest: seq[string]): BuildResult =
 
   info "-> duration: " & formatDuration(result.duration)
 
-
-proc makeStepSummaryRows(results: seq[(NixEvalOutput, BuildResult)]): string =
-  for (drv, res ) in results:
-    let (name, hash) = splitDrv(drv.drvPath)
-    let symbol =
-      if res.successful: ":white_check_mark:"
-      else: ":x:"
-    result.add fmt"| {name} | `{hash}` | {symbol} | {res.duration} |"
-    result.add "\n"
-
-# TODO: deprecate this?
-proc reportResults(results: seq[(NixEvalOutput, BuildResult)]) =
-  let summaryFilePath = getEnv("GITHUB_STEP_SUMMARY")
-  if summaryFilePath == "": fatalQuit "no github step summary found"
-  let output = open(summaryFilePath, fmAppend)
-  output.writeLine "| derivation | hash | build | time |"
-  output.writeLine "|---|---|---|---|"
-  output.writeLine  makeStepSummaryRows(results)
-  close output
-
 proc prettyDerivation*(path: string): BbString =
   const maxLen = 40
   let drv = path.toDerivation()
@@ -426,11 +404,10 @@ proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: 
   if dry:
     quit "exiting...", QuitSuccess
 
-  let results =
-    collect:
-      for drv in missing:
-        (drv, build(drv, rest))
-
+  let results = collect:
+    for drv in missing:
+      (drv, build(drv, rest))
+ 
   var
     outs: seq[string]
     failures: int
