@@ -382,7 +382,7 @@ proc makeStepSummaryRows(results: seq[(NixEvalOutput, BuildResult)]): string =
   for (drv, res ) in results:
     let (name, hash) = splitDrv(drv.drvPath)
     let symbol =
-      if res.successful: ":white_check_mark"
+      if res.successful: ":white_check_mark:"
       else: ":x:"
     result.add fmt"| {name} | `{hash}` | {symbol} | {res.duration} |"
     result.add "\n"
