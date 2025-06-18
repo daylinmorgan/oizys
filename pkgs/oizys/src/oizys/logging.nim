@@ -25,21 +25,21 @@ proc getOizysLogPath(): string =
 
 setLogFilter(lvlAll)
 
-var consoleLogger* = 
+var consoleLogger* =
   newHwylConsoleLogger(
       fmtPrefix = $bb"[b magenta]oizys",
       fmtSuffix = " ",
       levelThreshold = lvlInfo
   )
 
-proc setupLoggers*() =
-  addHandler(
-    consoleLogger
+template setupLoggers*(verbosity = 0) =
+  addHandler newHwylConsoleLogger(
+      fmtPrefix = $bb"[b magenta]oizys",
+      fmtSuffix = " ",
+      levelThreshold = if verbosity > 1: lvlAll else: lvlInfo
   )
-  addHandler(
-    newRollingFileLogger(
+  addHandler newRollingFileLogger(
       getOizysLogPath(),
       mode = fmAppend,
       fmtStr = "$datetime | $levelid:"
     )
-  )

@@ -62,10 +62,7 @@ proc updateContext*(
   oc.verbose = verbose
   oc.bootstrap = bootstrap
   if host.len > 0: oc.hosts = host
-  if verbose.val > 1:
-    consoleLogger.levelThreshold = lvlAll
   oc.resetCache = resetCache
-
   if flake != "":
     if flake.isGitFlakeUrl():
       oc.flake = flake

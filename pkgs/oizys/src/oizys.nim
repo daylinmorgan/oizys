@@ -25,7 +25,7 @@ hwylCli:
     y|yes "skip all confirmation prompts"
     m|minimal "set minimal"
   preSub:
-    setupLoggers()
+    setupLoggers(verbose.val)
     updateContext(host, flake, verbose, `reset-cache`, bootstrap)
 
   subcommands:

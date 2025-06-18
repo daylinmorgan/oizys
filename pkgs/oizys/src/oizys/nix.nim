@@ -4,9 +4,9 @@ import std/[
   sugar, logging, tables, times, sets
 ]
 export tables
-import hwylterm, hwylterm/logging, jsony
+import hwylterm, hwylterm/logging, jsony, malebolgia
 
-import ./[context, exec]
+import ./[context, exec, logging]
 
 type
   Substituters = object
@@ -354,26 +354,41 @@ proc pushPathsToCache(cache: NixCache, paths: openArray[string], jobs: int) =
     fatalQuit "failed to push build to cache"
 
 
-proc build(drv: NixEvalOutput, rest: seq[string]): BuildResult =
-  let startTime = now()
+proc build(drv: NixEvalOutput, rest: seq[string], verbosity: int): BuildResult {.gcsafe.} =
+  setupLoggers(verbosity) # thread-local setup for loggers
+
+  let showOutput = "-L" in rest or "--print-build-logs" in rest
+
   let cmd = newCommand("nix", "build")
     .withArgs(drv.drvPath & "^*", "--no-link")
     .withArgs(rest)
 
+  info "starting build for: " & drv.name
   let (stdout, stderr, buildCode) =
-    if "-L" in rest or "--print-build-logs" in rest: ("","", cmd.run())
+    if showOutput: ("","", cmd.run())
     else: cmd.runCapt()
-
-  result.duration = now() - startTime
 
   if buildCode == 0:
     result.successful = true
     info "succesfully built: " & drv.name
   else:
     error "failed to build: " & drv.name
-    error "\n" & formatStdoutStderr(stdout, stderr)
+    if not showOutput:
+      error "\n" & formatStdoutStderr(stdout, stderr)
 
-  info "-> duration: " & formatDuration(result.duration)
+
+proc buildAll(drvs: HashSet[NixEvalOutput], rest:seq[string]): seq[(NixEvalOutput, BuildResult)] =
+  let missing = drvs.toSeq()
+  var buildResults = newSeq[BuildResult](len(drvs))
+
+  var m = createMaster()
+  let verbosity = getVerbosity()
+  m.awaitAll:
+    for i, drv in missing:
+      m.spawn build(drv, rest, verbosity) -> buildResults[i]
+
+  for (drv, res) in zip(missing, buildResults):
+    result.add (drv, res)
 
 proc prettyDerivation*(path: string): BbString =
   const maxLen = 40
@@ -404,10 +419,8 @@ proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: 
   if dry:
     quit "exiting...", QuitSuccess
 
-  let results = collect:
-    for drv in missing:
-      (drv, build(drv, rest))
- 
+  let results = buildAll(missing, rest) 
+
   var
     outs: seq[string]
     failures: int
@@ -417,9 +430,6 @@ proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: 
       outs &= drv.outputs.values.toSeq
     else:
       inc failures
-
-  if isCi():
-    reportResults(results)
 
   if outs.len > 0:
     pushPathsToCache(cache, outs, jobs)
