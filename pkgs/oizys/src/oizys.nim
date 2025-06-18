@@ -117,7 +117,8 @@ hwylCli:
           else: "build.toplevel"
         ).join(" ")
 
-    [update]
+#[
+   [update]
     ... "update and run nixos-rebuild"
     flags:
       ^yes
@@ -134,6 +135,7 @@ hwylCli:
       if yes or confirm("Proceed with system update?"):
         updateRepo()
         nixosRebuild(NixosRebuildSubcmd.switch)
+]#
 
     [hash]
     ... "collect build hash from failure"
