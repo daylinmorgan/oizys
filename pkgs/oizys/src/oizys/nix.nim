@@ -418,9 +418,6 @@ proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: 
     else:
       inc failures
 
-  if isCi():
-    reportResults(results)
-
   if outs.len > 0:
     pushPathsToCache(cache, outs, jobs)
 
