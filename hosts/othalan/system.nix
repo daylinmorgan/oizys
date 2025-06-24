@@ -29,7 +29,7 @@
       support32Bit = true;
     };
 
-    # not sure this needed to be added 
+    # not sure this needed to be added
     # but was trying to get high-quality audio on the WH-1000XM4's
     wireplumber.extraConfig.bluetoothEnhancements = {
       "monitor.bluez.properties" = {
