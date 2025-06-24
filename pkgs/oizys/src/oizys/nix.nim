@@ -182,17 +182,19 @@ proc narHash*(s: string): string =
   let ss = s.split("-")
   result = ss[0].split("/")[^1]
 
-proc nixDerivationShow*(drvs: openArray[string]): Table[string, NixDerivation] =
-  let cmd = newCommand("nix")
+proc nixDerivationShow*(drvs: openArray[string], recursive = false): Table[string, NixDerivation] =
+  var cmd = newCommand("nix")
     .withArgs("derivation", "show")
     .withArgs(drvs)
+  if recursive:
+    cmd = cmd.withArgs("--recursive")
   let (output, _ ) =
     cmd.runCaptSpin("evaluating " & drvs.join(" "))
   fromJson(output, Table[string, NixDerivation])
 
 proc getSystemPathDrvs*(): seq[string] =
-  for drv, _ in nixDerivationShow(nixosAttrs("path")):
-    result.add drv
+  for drvName, _ in nixDerivationShow(nixosAttrs("path")):
+    result.add drvName
 
 func getIgnoredPackages(): seq[string] =
   for l in slurp("ignored.txt").strip().splitLines():
@@ -260,6 +262,32 @@ func splitDrv(drv: string): tuple[name, hash: string] =
   assert drv.startsWith("/nix/store"), "is this a /nix/store path? $1" % [drv]
   let s = drv.split("-", 1)
   (s[1].replace(".drv", ""), s[0].split("/")[^1])
+
+func isLixDependent(drv: NixDerivation): bool =
+  # these are some false positives we don't need to build/cache
+  if drv.name.startsWith("system-path") or drv.name.startsWith("lazy-options") or drv.name.startsWith("nixos-rebuild-ng"):
+    return false
+  for drvName, _ in drv.inputDrvs:
+    let (name, _) = splitDrv drvName
+    if name.startswith("lix-"):
+      return true
+
+func isLix(drv: NixDerivation): bool =
+  ## is it a lix derivation, disregarding 'lix-<hash>-{dev,debug}'
+  if drv.name.startswith("lix-"):
+    return not (
+      drv.name.endsWith("-debug") or drv.name.endsWith("-dev")
+    )
+
+proc getLixAndCo*(): seq[string] =
+  ## using `nix derivation show` output, generate a list of all
+  ## the derivations which depend on lix
+  ##
+  ## this is primarily used so that a CI step doesn't need to be manually updated
+
+  for drvName, drv in nixDerivationShow(nixosAttrs("path"), recursive = true):
+    if isLix(drv) or isLixDependent(drv):
+      result.add drvName
 
 proc nixBuild*(minimal: bool, noNom: bool, rest: seq[string]) =
   var cmd = newNixCommand("build", noNom)

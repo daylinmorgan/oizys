@@ -21,9 +21,12 @@ hwylCli:
     `reset-cache`("set cache timeout to 0")
     b|bootstrap("enable bootstrap mode")
 
+    [outputMods]
+    m|minimal "get [i]minimal[/] package set"
+    lix "get lix and lix dependents"
+
     [misc]
     y|yes "skip all confirmation prompts"
-    m|minimal "set minimal"
   preSub:
     setupLoggers()
     updateContext(host, flake, verbose, `reset-cache`, bootstrap)
@@ -87,7 +90,7 @@ hwylCli:
     positionals:
       args seq[string]
     flags:
-      ^minimal
+      ^[outputMods]
     run:
       nixBuildHostDry(minimal, args)
 
@@ -104,18 +107,21 @@ hwylCli:
     [output]
     ... "nixos config attr"
     flags:
-      ^minimal
+      ^[outputMods]
       s|system "show system path"
     run:
-      if minimal and system:
-        echo "--minimal and --system are mutually exclusive"
+      if count([minimal, system, lix], true) > 1:
+        echo "--minimal, --system and --lix are mutually exclusive"
+
+      if lix:
+        echo getLixandCo().fmtDrvsForNix().join("\n")
       elif minimal:
-        echo missingDrvNixEvalJobs().fmtDrvsForNix()
+        echo missingDrvNixEvalJobs().fmtDrvsForNix().join("\n")
       else:
         echo nixosAttrs(
           if system: "path"
           else: "build.toplevel"
-        ).join(" ")
+        ).join("\n")
 
 #[
    [update]
