@@ -68,7 +68,7 @@ jobs:
           nix build \
             --verbose \
             --out-link 'lix-and-co' \
-            "$(nix run . -- output --lix)"
+            "$(nix run . -- output --lix --host,="${{ env.hosts }}")"
           attic push oizys ./lix-and-co*
           rm -r ./lix-and-co*
 
