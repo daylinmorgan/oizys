@@ -68,8 +68,7 @@ jobs:
           nix build \
             --verbose \
             --out-link 'lix-and-co' \
-            '.#nix-eval-jobs' '.#lix' '.#lix.doc' \
-            '.#attic-server' '.#attic-client'
+            "$(nix run . -- output --lix)"
           attic push oizys ./lix-and-co*
           rm -r ./lix-and-co*
 
