@@ -19,6 +19,9 @@
   # https://github.com/NixOS/nixos-hardware/blob/c478b3d56969006e015e55aaece4931f3600c1b2/common/pc/ssd/default.nix
   services.fstrim = enabled;
 
+  users.users.${config.oizys.user}.extraGroups = [ "audio" ];
+  environment.systemPackages = with pkgs; [ pamixer ];
+
   # rtkit is optional but recommended
   security.rtkit = enabled;
 
@@ -47,9 +50,6 @@
       };
     };
   };
-
-  users.users.${config.oizys.user}.extraGroups = [ "audio" ];
-  environment.systemPackages = with pkgs; [ pamixer ];
 
   # catppuccin/tty move to "module"
   boot.kernelParams = [
