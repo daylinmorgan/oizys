@@ -65,11 +65,12 @@ jobs:
 
       - name: Build lix and co
         run: |
+          DRVS="$(nix run . -- output --lix --host,="${{ env.hosts }}" --flake .)"
           nix build \
             --verbose \
             --out-link 'lix-and-co' \
             -- \
-            $(nix run . -- output --lix --host,="${{ env.hosts }}")
+            $DRVS
           attic push oizys ./lix-and-co*
           rm -r ./lix-and-co*
 
