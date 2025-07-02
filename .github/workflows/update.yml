@@ -75,16 +75,21 @@ jobs:
           rm -r ./lix-and-co*
 
       - name: Build
-        run: >
-          nix run .
-          --
-          cache
-          --host,="${{ env.hosts }}"
-          --flake .
-          -vv
-          --
-          ${{ env.nix-flags }}
+        run: |
+          nix run . -- build $(nix run . -- output --system --flake . --host,="${{ env.hosts }}") -vv
+          attic push oizys ./result*
 
+      # - name: Build
+      #   run: >
+      #     nix run .
+      #     --
+      #     cache
+      #     --host,="${{ env.hosts }}"
+      #     --flake .
+      #     -vv
+      #     --
+      #     ${{ env.nix-flags }}
+      #
       - name: Commit Updates
         uses: daylin-bot/actions/commit-and-push@main
         with:
