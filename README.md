@@ -54,11 +54,34 @@ nix run "github:daylinmorgan/oizys"
 
 ![](./assets/capture.svg)
 
+## user dotfiles
+
+### Install
+
+from Source:
+
+```bash
+sh -c "$(curl -fsLS https://chezmoi.io/get)" -- init --apply git.dayl.in/daylin/oizys -S ~/oizys --ssh
+```
+
+from Github:
+
+```bash
+sh -c "$(curl -fsLS https://chezmoi.io/get)" -- init --apply daylinmorgan/oizys -S ~/oizys --ssh
+```
+
+with Nix:
+
+```bash
+nix run "nixpkgs#chezmoi" -- init --apply daylinmorgan/oizys -S ~/oizys
+```
+
+## Relevant XKCD
+
+<p align="center">
+<img src="https://imgs.xkcd.com/comics/borrow_your_laptop.png">
+</p>
+
 ## oizys?
 
 Oizys was birthed by the goddess Nyx/Nix and embodies suffering and misery. Which is all that awaits you if you embrace nix.
-
----
-
-> [!NOTE]
-> I don't use home-manager to manager my shell/user configs. You can find those in my separate `chezmoi`-managed [`dotfiles`](https://git.dayl.in/daylin/dotfiles) repository.
