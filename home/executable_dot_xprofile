@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# enable touch on only laptop monitor
+# this isn't working for some reason
+# xinput --map-to-output '18' eDP-1
+
+# xset 1200
+# xss-lock -- ~/bin/lock &
+
+# set a new random color
+~/.config/qtile/colors.py &
+
+SKIP_WM_RESET=1 autorandr -c --default default &
+
+# https://github.com/alacritty/alacritty/issues/3465
+export WINIT_X11_SCALE_FACTOR=1

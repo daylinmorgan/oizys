@@ -1,0 +1,125 @@
+@use "sass:list";
+@use "sass:math";
+@import "scss/Catppuccin";
+
+$accent: $teal;
+
+* {
+  all: unset; //Unsets everything so you can style everything from scratch
+}
+
+$tag-palette: (
+  $lavender,
+  $flamingo,
+  $maroon,
+  $yellow,
+  $green,
+  $teal,
+  $blue,
+  $sky,
+  $rosewater,
+);
+
+// colors
+$background: $base;
+$foreground: $text;
+
+.debug {
+  background-color: $red;
+  border: 1px dashed;
+}
+
+//Global Styles
+.bar {
+  color: $foreground;
+  padding: 2px 5px;
+  // font-family:"FiraCode Nerd Font Propo";
+  font-family: "FiraCode Nerd Font Propo";
+  font-size: 16px;
+}
+
+.panel {
+  margin: 0px 2px;
+  background-color: $background;
+  border: 2px solid;
+  border-radius: 15px;
+  padding: 3px 10px;
+  border-color: $accent;
+  box-shadow: 1px 1px 3px $accent;
+}
+
+.ws-button {
+  border-style: solid;
+  padding: 0px 10px;
+  border-radius: 5px;
+}
+
+.ws-active {
+  color: $background;
+  background-color: $accent;
+}
+
+.ws-button-open {
+  border-width: 0px 0px 2px;
+  border-style: solid;
+}
+
+// color each tag bubble from palette
+@each $color in $tag-palette {
+  .ws-button-#{index($tag-palette,$color)} {
+    color: $color;
+  }
+  .ws-button-active-#{index($tag-palette,$color)}{
+    color: $background;
+    background: $color;
+  }
+}
+
+.workspaces {
+  padding: 0;
+  border-radius: 15px;
+  padding: 0 5px;
+}
+
+.active {
+  all: unset;
+  border-radius: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+ 
+.box-launcher {
+  background-color: $accent;
+  color: $background;
+  font-size: 1.1em;
+  font-weight: bold;
+  border-radius: 15px;
+}
+
+.button-launcher {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.clock {
+  margin-left: 10px;
+  margin-right: 20px;
+}
+
+.sysinfo {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.icon-ws-layout {
+  margin-right: 10px;
+}
+
+.update {
+  margin-right: 10px;
+}
+
+.separator {
+  margin: 0px 5px;
+}

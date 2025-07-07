@@ -1,0 +1,9 @@
+#!/bin/sh
+
+case $(tty) in /dev/tty[0-9]*)
+	exit 0
+	;;
+*)
+	exit 1
+	;;
+esac

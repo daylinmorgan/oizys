@@ -1,0 +1,46 @@
+git:
+  # see ~/.config/git/config
+  branchLogCmd: "git l --color=always"
+  paging:
+    colorArg: always
+    pager: delta --dark --paging=never
+  overrideGpg: true
+  allBranchesLogCmds:
+    - git log --color=always
+customCommands:
+  - key: "W"
+    description: "wip in progess"
+    command: 'git commit -m "wip: $(date +"%Y.%m.%d %H:%M:%S")"'
+    context: "files"
+gui:
+  nerdFontsVersion: "3"
+  showIcons: true
+  showFileTree: true
+  # https://github.com/catppuccin/lazygit/blob/main/themes/mocha/rosewater.yml
+  theme:
+    activeBorderColor:
+      - '#f5e0dc'
+      - bold
+    inactiveBorderColor:
+      - '#a6adc8'
+    searchingActiveBorderColor:
+      - '#f9e2af'
+    optionsTextColor:
+      - '#89b4fa'
+    selectedLineBgColor:
+      - '#313244'
+    cherryPickedCommitFgColor:
+      - '#f5e0dc'
+    cherryPickedCommitBgColor:
+      - '#45475a'
+    unstagedChangesColor:
+      - '#f38ba8'
+    defaultFgColor:
+      - '#cdd6f4'
+    #
+    # # Foreground color of marked base commit (for rebase)
+    # markedBaseCommitFgColor:
+    #   - blue
+    # # Background color of marked base commit (for rebase)
+    # markedBaseCommitBgColor:
+    # - yellow

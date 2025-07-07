@@ -1,0 +1,61 @@
+# VS Code Extensions
+
+:general [
+  ms-vscode-remote.remote-ssh
+  ms-vscode-remote.remote-ssh-edit
+  ms-azuretools.vscode-docker
+  ms-vscode-remote.remote-containers
+  ms-vscode.remote-repositories
+  ms-vscode.remote-explorer
+  vscodevim.vim
+]
+
+:misc-tools [
+  janisdd.vscode-edit-csv
+  naumovs.color-highlight
+  davidhouchin.whitespace-plus
+  antfu.slidev
+  antfu.file-nesting
+  mhutchie.git-graph
+]
+
+:web-dev [
+  ritwickdey.liveserver
+  esbenp.prettier-vscode
+  astro-build.astro-vscode
+]
+
+:ui [
+  johnpapa.vscode-peacock
+  PKief.material-icon-theme
+  catppuccin.catppuccin-vsc
+  catppuccin.catppuccin-vsc-icons
+]
+
+:editing [
+  metaseed.metajump
+  christian-kohler.path-intellisense
+  aaron-bond.better-comments
+  streetsidesoftware.code-spell-checker
+]
+
+:python [
+  ms-python.python
+  ms-toolsai.jupyter
+  ms-toolsai.jupyter-keymap
+  quarto.quarto
+  charliermarsh.ruff
+]
+
+:languages [
+  golang.go
+  bbenoist.nix
+  antfu.unocss
+  budparr.language-hugo-vscode
+  snakemake.snakemake-lang
+  eww-yuck.yuck
+  tamasfe.even-better-toml
+  dlasagno.rasi
+  nimsaem.nimvscode
+]
+

@@ -1,0 +1,15 @@
+- .git/**
+- .vscode/**
+
+# office lock files
+- ~$*
+- .~*#
+
+# node
+- node_modules/**
+
+# python
+- .venv/**
+- venv/**
+- env/**
++ **

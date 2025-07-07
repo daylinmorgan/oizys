@@ -1,0 +1,5 @@
+#!/bin/zsh
+##? What is the weather?
+##? defaults to showing Austin, Tx
+
+curl "http://wttr.in/${1:-Austin,Tx}"

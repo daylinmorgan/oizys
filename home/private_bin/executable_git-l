@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+PREFIX='%C(bold magenta)%h%C(reset)%C(auto)%d%C(reset)' # hash, decorate
+SUFFIX='%C(dim white) %aN%C(reset) %C(green) %ar%C(reset)' #author, time
+format="$PREFIX %C(bold)󰍥 %s%C(reset) $SUFFIX"
+
+exec git \
+ log \
+ --format=tformat:"$format" \
+ "$@"

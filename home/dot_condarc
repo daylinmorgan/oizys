@@ -1,0 +1,5 @@
+channels:
+  - conda-forge
+changeps1: false
+shell_completion: true
+

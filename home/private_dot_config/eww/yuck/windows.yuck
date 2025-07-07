@@ -1,0 +1,51 @@
+; Windows
+
+(defwindow bar [monitor]
+  :monitor monitor
+  :windowtype "dock"
+  :stacking "fg"
+  :exclusive true
+  :geometry (geometry :x "0%"
+    :y "0%"
+    :width "100%"
+    :height "40px"
+    :anchor "top center")
+  (topbar :monitor monitor :minimal false))
+
+
+;(defwindow bar0
+;  :monitor '["eDP-1"]'
+;  :windowtype "dock"
+;  :stacking "fg"
+;  :exclusive true
+;  :geometry (geometry :x "0%"
+;    :y "0%"
+;    :width "100%"
+;    :height "40px"
+;    :anchor "top center")
+;  (bar :screen 0 :minimal false)
+;)
+;
+;(defwindow bar1
+;  :monitor '["ASUS MX239", "Acer H236HL", "KA242Y"]'
+;  :windowtype "dock"
+;  :exclusive true
+;  :geometry (geometry :x "0%"
+;    :y "0%"
+;    :width "100%"
+;    :height "40px"
+;    :anchor "top center")
+;  (bar :screen 1 :minimal false)
+;)
+;
+;(defwindow bar2
+;  :monitor '["VN279"]'
+;  :windowtype "dock"
+;  :exclusive true
+;  :geometry (geometry :x "0%"
+;    :y "0%"
+;    :width "100%"
+;    :height "40px"
+;    :anchor "top center")
+;  (bar :screen 2 :minimal true)
+;)

@@ -1,0 +1,4 @@
+#!/usr/bin/env zsh
+##? drop into a temporary directory
+
+pushd $(mktemp -d /tmp/${1:+$1.}XXXX)

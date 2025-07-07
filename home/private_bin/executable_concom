@@ -1,0 +1,148 @@
+#!/usr/bin/env python3
+
+import shlex
+import subprocess
+import sys
+from shutil import which
+from pathlib import Path
+
+def is_tool(name):
+    """Check whether `name` is on PATH and marked as executable."""
+    if not which(name):
+        print(f"ERROR: {name} is not found in your PATH")
+        sys.exit(1)
+
+def is_repo():
+    if not (Path.cwd() / ".git").is_dir():
+        print(color("Not a git repo.","9"))
+        print("exiting...")
+        sys.exit(1)
+
+def run(cmd, capture=True, returncode=False):
+    result = subprocess.run(
+        shlex.split(cmd),
+        stdout=subprocess.PIPE if capture else None,
+        text=True,
+        shell=False,
+    )
+
+    if returncode:
+        return result.returncode
+    elif capture:
+        return result.stdout.strip()
+
+
+def confirm(q):
+    return run(
+        "gum confirm "
+        "--selected.bold "
+        "--selected.background 11 "
+        "--selected.foreground 8 "
+        f"'{q}'",
+        returncode=True,
+    )
+
+
+# TODO: make gum (and git?) a class an obsufcate the commands
+
+def color(text, color):
+    return run(f"gum style --foreground {color} '{text}'")
+
+
+def nl_to_ol(text):
+    return " ".join([f"'{f}'" for f in text.splitlines()])
+
+
+def check_status():
+    files = nl_to_ol(run("git ls-files -dmo"))
+    if not files:
+        print(color("nothing to stage", "red"))
+        sys.exit(1)
+    else:
+        return files
+
+
+def stage_files(files):
+    to_add = run(f"gum choose --no-limit {files} ")
+    run(f"git add {to_add}")
+
+
+def get_staged_info():
+
+    staged = run("git diff --cached --stat")
+    fstaged = []
+    if not staged:
+        files = check_status()
+        print(color("nothing staged..", 9))
+        if files and confirm("Would you like to stage files?") == 0:
+            stage_files(files)
+            return get_staged_info()
+        else:
+            print("exiting...")
+            sys.exit(0)
+
+    for text in staged.splitlines()[-1].split(","):
+        if "changed" in text:
+            fstaged.append(color(text.strip(), 11))
+        elif "insertion" in text:
+            fstaged.append(color(text.strip(), 10))
+        elif "deletion" in text:
+            fstaged.append(color(text.strip(), 9))
+        else:
+            print(f"Unexpected output from git diff: {text}")
+
+    return "\n\t".join(fstaged)
+
+
+def main():
+    is_tool("gum")
+    is_tool("git")
+    is_repo()
+
+    run(
+        "gum style "
+        "--foreground 212 --border-foreground 212 --border rounded "
+        '--align center --width 30 --margin "1 4" '
+        f"'{color('ConCom',11)}'",
+        capture=False,
+    )
+
+    print(f" staged: \n\t{get_staged_info()}\n")
+
+    commit_type = run(
+        "gum choose fix feat docs style refactor test chore revert custom"
+    )
+
+    if not commit_type:
+        print("exiting...")
+        sys.exit(1)
+
+    elif commit_type == "custom":
+        commit_type = run('gum input --placeholder "type"')
+
+    scope = run('gum input --placeholder "scope"')
+    scope = f"({scope})" if scope else ""
+
+    summary = run(
+        f'gum input --value "{commit_type}{scope}: " --placeholder "Summary of this change"'
+    )
+
+    print(f"{color('message:',11)}\n  {summary}")
+
+    actions = {
+        "commit": lambda: run(f"git commit -m \'{summary}\'", capture=False),
+        "commit(with message)": lambda: run(
+            f"git commit -m '{summary}' -m '# note: abort with :cq!' -e", capture=False
+        ),
+        "quit": lambda: (print("exiting..."), sys.exit()),
+    }
+
+    print("\nHow to proceed?\n")
+    choices = " ".join([f"'{choice}'" for choice in actions])
+    choice = str(run(f"gum choose {choices}"))
+
+    actions[choice]()
+
+
+if __name__ == "__main__":
+    main()

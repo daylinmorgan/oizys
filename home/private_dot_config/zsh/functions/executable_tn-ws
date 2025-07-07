@@ -1,0 +1,31 @@
+#!/usr/bin/env zsh
+##? create a new tmux session
+##? use current directory name as a fallback
+##? create neovim and shell windows
+
+
+if [ -z "$1" ]; then
+	SESSION="${PWD:A:t2}"
+else
+	SESSION="$1"
+fi
+
+echo $(which tmux)
+# sanitize name
+SESSION="${SESSION:gs/\./_}"
+
+if ! tmux list-sessions | grep $SESSION 2>/dev/null; then
+	tmux new-session -d -s $SESSION
+
+	tmux rename-window -t $SESSION:0 'neovim'
+	tmux send-keys -t 'neovim' 'nvim' Enter
+
+	tmux new-window -t $SESSION:1 -n 'shell'
+	tmux send-keys -t 'shell'
+
+	#TODO: open as many windows as defined by '$2'
+fi
+
+tmux attach -t $SESSION
+
+

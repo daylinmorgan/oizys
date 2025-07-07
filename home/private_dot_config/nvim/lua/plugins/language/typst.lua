@@ -1,0 +1,15 @@
+-- todo: treesitter?
+-- return {
+--   {
+--     "neovim/nvim-lspconfig",
+--     opts = {
+--       servers = {
+--         tinymist = {
+--           mason = false
+--         }
+--       },
+--     },
+--   },
+-- }
+--
+return require("util").setup_lang({lsp = {"tinymist"}})

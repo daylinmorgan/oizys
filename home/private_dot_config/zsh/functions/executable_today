@@ -1,0 +1,4 @@
+#!/usr/bin/env zsh
+
+local sep=${1:-}
+date "+%Y${sep}%m${sep}%d"

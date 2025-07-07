@@ -1,0 +1,69 @@
+[global]
+target = "~/bin/"
+asset_filters = ["^musl"]
+
+["solidiquis/erdtree"]
+asset_filters = ["x86_64-unknown-linux-gnu"]
+file = "et"
+
+["ellie/atuin"]
+
+["sharkdp/bat"]
+asset_filters = ["x86_64-unknown-linux-gnu"]
+
+["ClementTsang/bottom"]
+asset_filters = ["x86_64-unknown-linux-gnu.tar.gz"]
+file = "btm"
+
+["aristocratos/btop"]
+
+["cli/cli"]
+asset_filters = ["linux_amd64.tar.gz"]
+target = "~/bin/gh"
+
+["dandavison/delta"]
+asset_filters = ["x86_64-unknown-linux-gnu"]
+
+["sharkdp/fd"]
+asset_filters = ["x86_64-unknown-linux-gnu"]
+
+["Schniz/fnm"]
+
+["junegunn/fzf"]
+
+["dundee/gdu"]
+asset_filters = ["gdu_linux_amd64.tgz", "^gdu_linux_amd64_static.tgz"]
+target = "~/bin/gdu"
+
+["profclems/glab"]
+asset_filters = ["Linux_x86_64.tar.gz"]
+
+["charmbracelet/gum"]
+asset_filters = ["linux_x86_64.tar.gz", "^.sbom"]
+
+["casey/just"]
+
+["jesseduffield/lazydocker"]
+
+["jesseduffield/lazygit"]
+
+["gokcehan/lf"]
+
+["Peltoche/lsd"]
+asset_filters = ["-x86_64-unknown-linux-gnu.tar.gz"]
+
+["neovim/neovim"]
+target = "nvim"
+
+["BurntSushi/ripgrep"]
+target = "rg"
+
+["mvdan/sh"]
+target = "shfmt"
+
+["rossmacarthur/sheldon"]
+
+["starship/starship"]
+asset_filters = ["starship-x86_64-unknown-linux-gnu.tar.gz"]
+
+["ajeetdsouza/zoxide"]

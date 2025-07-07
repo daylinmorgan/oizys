@@ -1,0 +1,94 @@
+[user]
+name = {{ .name }}
+email = {{ .email }}
+signingkey = 7AD9DB430EE2B3C1D86BF3243CD66E04B8072F3E
+
+[commit]
+gpgSign = true
+
+[tab]
+gpgSign = true
+
+[credential]
+helper = cache
+
+[submodule]
+recurse = true
+
+[pull]
+rebase = true
+
+[init]
+defaultBranch = main
+
+[branch]
+autosetuprebase = always
+sort = committerdate
+
+[push]
+autoSetupRemote = true
+
+[column]
+ui = auto
+
+[tag]
+sort = version:refname
+
+[alias]
+; l = log --format=tformat:'%C(bold magenta)%h%C(reset) %C(bold)%s%C(reset)%C(auto)%d%C(reset) %C(green)%ar%C(reset) %C(dim white)%aN%C(reset)'
+adog = log --all --decorate --oneline --graph
+lf = log --graph --format=tformat:'%C(bold yellow)%h%C(reset) %C(cyan)%aD%C(reset) %C(green)(%ar) %C(dim white)%aN%C(reset)%w(0,0,9)%n %C(bold)%s%C(auto)%+d%C(reset)%w(0,0,10)%+b'
+lg = "!f() { x=${1-6};\
+  length=$(expr $x + 8);\
+  git log --color --graph --all \
+    --format=format:\"%>|($length)%C(bold blue)%h%C(reset) %C(bold green)%><(15,trunc)%ar%C(reset)%C(bold yellow)%d%C(reset) %s - %C(red)%an%C(reset)\";\
+    };\
+    f"
+ignore = "!gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}; gi"
+root = rev-parse --show-toplevel
+last = log -1 HEAD --stat
+st = status -sb
+s = status -s
+dd = !git diff | delta
+sd = !git show | delta
+co = checkout
+cob = checkout -b
+br = branch --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate
+undo = reset HEAD~1 --mixed
+wip = !git add -A && git commit -m \"wip: $(date +\"%Y.%m.%d %H:%M:%S\")\"
+cmtnum = "!git add -A && git commit -m \"commit #$(( $(git rev-list --count HEAD) + 1 ))\""
+save = !git add -A && git commit -m \"save: $(date +\"%Y.%m.%d %H:%M:%S\")\"
+aliases = "!git config -l | grep alias | cut -c 7-"
+gl = config --global -l
+rb5 = rebase -i HEAD~5
+frbi = "!f() { git rebase -i $(git log --pretty=oneline --color=always --abbrev-commit | fzf --ansi | cut -d ' ' -f1)^ ; }; f"
+
+
+[filter "lfs"]
+clean = git-lfs clean -- %f
+smudge = git-lfs smudge -- %f
+process = git-lfs filter-process
+required = true
+
+[help]
+autocorrect = 20
+
+[delta]
+line-numbers = true
+navigate = true    # use n and N to move between diff sections
+theme = catppuccin
+; hunk-header-decoration-style = none
+diff-so-fancy = true
+hunk-header-style = bold
+
+[core]
+pager = delta
+
+[interactive]
+diffFilter = delta --color-only
+
+[merge]
+conflictstyle = diff3
+
+[diff]
+colorMoved = default

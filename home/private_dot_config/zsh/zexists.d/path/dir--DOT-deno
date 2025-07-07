@@ -1,0 +1,4 @@
+#!/usr/bin/env zsh
+
+export DENO_INSTALL="$HOME/.deno"
+path=("$DENO_INSTALL/bin" $path)

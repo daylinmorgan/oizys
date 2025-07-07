@@ -1,0 +1,109 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+
+palette:
+  rosewater: "#f5e0dc"
+  sky: "#89dceb"
+transient_prompt:
+  template: "❯ "
+  foreground: cyan
+  background: transparent
+blocks:
+- type: prompt
+  alignment: left
+  segments:
+  - properties:
+      cache_duration: none
+    template: "\ue235  {{ .Full }} "
+    foreground: yellow
+    type: python
+    style: plain
+  - properties:
+      cache_duration: none
+    template: "\ue627 {{ .Full }} "
+    foreground: cyan
+    type: go
+    style: plain
+  - properties:
+      cache_duration: none
+    template: "\ue7a8 {{ .Full }} "
+    foreground: red
+    type: rust
+    style: plain
+  - properties:
+      cache_duration: none
+    template: "\ue718 {{ .Full }} "
+    foreground: p:sky
+    type: node
+    style: plain
+  - properties:
+      cache_duration: none
+    template: "{{ if .Error }} {{ .Error }}{{ else -}} {{ if .Version }}\uf487 {{.Version}}{{ end -}} {{ if .Name }} {{ .Name }} {{ end }}{{ end -}}"
+    foreground: p:rosewater
+    type: project
+    style: plain
+  - properties:
+      branch_max_length: 25
+      cache_duration: none
+      fetch_stash_count: true
+      fetch_status: true
+      fetch_upstream_icon: true
+    template: "{{ .UpstreamIcon }}{{ .HEAD }}{{ if .BranchStatus }} {{ .BranchStatus }}{{ end -}} {{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end -}} {{ if .Staging.Changed }} \uf046 {{ .Staging.String }}{{ end -}} {{ if gt .StashCount 0 }} \ueb4b {{ .StashCount }}{{ end -}}"
+    foreground: magenta
+    type: git
+    style: plain
+- type: prompt
+  alignment: left
+  segments:
+  - properties:
+      cache_duration: none
+      style: unique
+    template:  {{ .Path }}
+    foreground: cyan
+    type: path
+    style: plain
+  newline: true
+- type: prompt
+  alignment: right
+  segments:
+  - properties:
+      cache_duration: none
+    template: " x{{ reason .Code }} "
+    foreground: green
+    type: status
+    style: plain
+    foreground_templates:
+    - "{{ if gt .Code 0 }}red{{ end }}"
+  - properties:
+      cache_duration: none
+      style: austin
+    template: " {{ .FormattedMs }} "
+    foreground: green
+    type: executiontime
+    style: plain
+    foreground_templates:
+    - "{{ if gt .Code 0 }}red{{ end }}"
+  - properties:
+      cache_duration: none
+    template: "{{ if .SSHSession }}\ueba9 {{ .HostName }}{{ end }}"
+    foreground: darkGray
+    type: session
+    style: plain
+- type: prompt
+  alignment: left
+  segments:
+  - properties:
+      cache_duration: none
+    template: "!"
+    foreground: red
+    type: root
+    style: plain
+  - properties:
+      cache_duration: none
+    template: ❯
+    foreground: green
+    type: text
+    style: plain
+  newline: true
+version: 3
+shell_integration: true
+final_space: true

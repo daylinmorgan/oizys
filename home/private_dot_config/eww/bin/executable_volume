@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+# https://raw.githubusercontent.com/adi1090x/widgets/main/eww/arin/scripts/volume
+# add commit info
+# Get Volume
+
+get_volume() {
+  status=$(pamixer --get-mute)
+
+	if [[ $status == "false" ]]; then
+		volume=$(pamixer --get-volume-human)
+		echo "$volume"
+	else
+		echo "Mute"
+	fi
+}
+
+# Get icons
+get_icon() {
+	vol="$(get_volume)"
+
+	if [[ $vol == "Mute" ]]; then
+		echo "󰖁"
+	else
+		echo "󰕾"
+	fi
+}
+
+# Increase Volume
+inc_volume() {
+  pamixer --unmute
+  pamixer --increase 5
+}
+
+# Decrease Volume
+dec_volume() {
+  pamixer --decrease 5
+}
+
+# Toggle Mute
+toggle_mute() {
+  pamixer --toggle-mute
+}
+
+usage() {
+	cat <<HELP
+
+volume [option]
+
+--get      returns the current volume [default flag]
+--icon     returns icon based on current volume
+--inc      increments volume by 5%
+--dec      decreases volumbe by 5%
+--toggle   toggle's mute status of volume
+-h,--help  print this page and exit
+
+HELP
+	exit 0
+}
+
+[[ -z "$*" ]] && get_volume
+
+for opt in "$@"; do
+	case $opt in
+	-h | --help)
+		usage
+		;;
+	--get)
+		get_volume
+		;;
+	--icon)
+		get_icon
+		;;
+	--inc)
+		inc_volume
+		;;
+	--dec)
+		dec_volume
+		;;
+	--toggle)
+		toggle_mute
+		;;
+	-*)
+		echo "Invalid option: $opt"
+		usage
+		;;
+	esac
+done

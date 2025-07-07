@@ -1,0 +1,4 @@
+#!/usr/bin/env zsh
+
+replace=${2:--}
+mv -i "$1" "${1// /${replace}}"

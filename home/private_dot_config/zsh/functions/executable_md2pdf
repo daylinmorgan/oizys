@@ -1,0 +1,19 @@
+#!/usr/bin/env zsh
+#? quick and dirty script to generate a pdf from markdown with pandoc/latex
+
+root=$1
+# get extension and root path: https://stackoverflow.com/a/40928328
+fname="${root#.}"
+fname="${root%"$fname"}${fname%.*}"
+ext="${root#"$fname"}"
+echo "converting $root to pdf"
+
+if [[ $ext != ".md" ]]; then
+	echo "error! expected a markdown file"
+	echo "unrecognized extension: $ext"
+	return 1
+fi
+
+pandoc -V geometry:a5paper -V geometry:margin=.5in --dpi=300 -o ${fname}.pdf $root
+
+

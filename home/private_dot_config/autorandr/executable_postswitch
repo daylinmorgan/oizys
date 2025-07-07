@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+if [[ -n $SKIP_WM_RESET ]]; then
+	notify-send 'autorandr' '\nmonitor change detected\nskipping WM reset'
+	exit 0
+fi
+
+# WM Agnostic
+notify-send 'autorandr' '\nmonitor change detected\nresetting WM'
+sleep 3
+xdotool key Shift_L+Super_L+R

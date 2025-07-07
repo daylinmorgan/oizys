@@ -1,0 +1,6 @@
+#!/usr/bin/env zsh
+
+##? update lazy.vim plugins/lock-file
+
+nvim --headless "+Lazy! update" +qa
+chezmoi add $HOME/.config/nvim/lazy-lock.json

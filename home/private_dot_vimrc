@@ -1,0 +1,31 @@
+" Custom Mappings
+imap jk <Esc>
+vmap jk <Esc>
+"---------------
+" Tabs
+"---------------
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set noexpandtab
+
+" Use case insensitive search, except when using capital letters
+set ignorecase
+set smartcase
+
+" When opening a new line and no filetype-specific indenting is enabled, keep
+" the same indent as the line you're currently on. Useful for READMEs, etc.
+set autoindent
+
+" Display line numbers on the left
+set number
+
+" Increase undo limit
+set history=1000
+
+" Disable swap files
+set noswapfile
+
+" Attempt to show end of paragraph
+set display+=lastline
+

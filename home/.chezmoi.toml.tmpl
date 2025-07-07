@@ -1,0 +1,15 @@
+sourceDir = "~/.dotfiles"
+
+{{ if promptBool "set default umask" false -}}
+umask = 0o22
+{{ end -}}
+
+[diff]
+command = 'delta'
+
+{{ $email := promptString "git email" "me@dayl.in" -}}
+{{ $name := promptString "git name" "Daylin Morgan" -}}
+[data]
+email = {{ $email | quote }}
+name = {{ $name | quote }}
+

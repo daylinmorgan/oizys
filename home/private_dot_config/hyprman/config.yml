@@ -1,0 +1,23 @@
+wallpapers: ~/stuff/wallpapers/mountain-temple
+default-icon: 
+no-client: "-"
+classes:
+  "[Running] - Oracle VM VirtualBox": 
+  "Visual Studio Code": 
+  "code-url-handler": 
+  "vivaldi-stable": 󰖟
+  "google-chrome": 
+  "chromium-browser": 
+  "LibreOffice": 
+  # "Geneious Prime": 󰚄
+  "com-biomatters-iseek-application-ISeekMain": 󰚄
+  "firefox": 
+  "- NVIM": 
+  "Alacritty": 
+  "- Wezterm": 
+  "org.wezfurlong.wezterm": 
+  "com.mitchellh.ghostty": 
+  "MultiViewer for F1": 
+  calibre-gui: ""
+
+

@@ -1,0 +1,2 @@
+source "$HOME/opt/google-cloud-sdk/completion.zsh.inc"
+path=("$HOME/opt/google-cloud-sdk/bin" $path)

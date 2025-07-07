@@ -1,0 +1,8 @@
+#!/usr/bin/env zsh
+
+if [ $# -eq 0 ];
+then
+	curl -s cheat.sh | less -R
+else
+	curl -s cheat.sh/${@} | less -R
+fi

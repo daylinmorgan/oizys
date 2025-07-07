@@ -1,0 +1,38 @@
+#### Python ####
+# Byte-compiled / optimized / DLL files
+__pycache__
+
+.tox/
+.nox/
+.coverage
+.cache
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# ruff
+.ruff_cache/
+
+#### Zig ####
+.zig-cache/
+
+#### Node ####
+node_modules/
+.npm
+
+

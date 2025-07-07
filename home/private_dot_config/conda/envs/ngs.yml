@@ -1,0 +1,7 @@
+name: ngs
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - fastqc
+  - multiqc

@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+
+from viv import Env, ViVenv
+
+SPECS = (["black"], ["pre-commit"], ["pdm"])
+for spec in SPECS:
+    vivenv = ViVenv(spec)
+    if not vivenv.loaded or Env().viv_force:
+        vivenv.create()
+        vivenv.install_pkgs()
+    vivenv.meta.write()

@@ -1,0 +1,3 @@
+return {
+  { "raivivek/vim-snakemake" },
+}

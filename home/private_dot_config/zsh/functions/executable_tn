@@ -1,0 +1,10 @@
+#!/usr/bin/env zsh
+##? create a new tmux session
+##? use current directory name as a fallback
+
+if [ -z "$1" ]; then
+	tmux new-session -s "${PWD:A:t2}"
+else
+	tmux new-session -s "$1"
+fi
+

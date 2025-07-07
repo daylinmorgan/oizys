@@ -1,0 +1,29 @@
+# pre-reqs
+QuarticCat/zsh-smartcache
+mattmc3/zephyr path:plugins/zfunctions
+
+# general use-plugins
+mattmc3/zephyr path:plugins/utility
+
+# tools
+89luca89/distrobox kind:fpath path:completions/zsh
+junegunn/fzf path:shell/completion.zsh
+junegunn/fzf path:shell/key-bindings.zsh
+wfxr/forgit
+
+# prompt
+romkatv/powerlevel10k kind:fpath
+${ZDOTDIR}/plugins/prompt
+
+# wrap-up
+mattmc3/zephyr path:plugins/confd
+${ZDOTDIR}/plugins/zexists
+${ZDOTDIR}/plugins/clipboard
+${ZDOTDIR}/plugins/llm-cmd-comp
+${ZDOTDIR}/plugins/extract
+
+
+# deferred
+# zsh-users/zsh-autosuggestions
+zdharma-continuum/fast-syntax-highlighting kind:defer
+Aloxaf/fzf-tab kind:defer

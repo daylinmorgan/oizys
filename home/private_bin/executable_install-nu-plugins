@@ -1,0 +1,19 @@
+#!/usr/bin/env nu
+
+if (which cargo | length) == 0 {
+  print -e $"(ansi red)cargo not found(ansi reset)"
+  exit 1
+}
+
+cargo install nu_plugin_polars
+
+glob ~/.cargo/bin/nu_plugin_*
+| each { |name|
+    print -e $">> (ansi cyan)($name)(ansi reset)"
+    try {
+      plugin add $name
+    } catch { |err|
+        print -e $"(ansi red)($err.msg)(ansi reset)"
+    }
+  }
+| ignore

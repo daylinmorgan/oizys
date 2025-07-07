@@ -1,0 +1,24 @@
+#!/usr/bin/env zsh
+
+[[ -r $ZDOTDIR/.zstyles ]] && . $ZDOTDIR/.zstyles
+
+[[ -d ${ZDOTDIR:-~}/.antidote ]] ||
+  git clone https://github.com/mattmc3/antidote ${ZDOTDIR:-~}/.antidote
+
+
+# antidote load
+# a "faster" antidote load
+zplugins=${ZDOTDIR:-~}/.zplugins
+if [[ ! ${zplugins}.zsh -nt $zplugins ]]; then 
+  (
+    source ${ZDOTDIR:-~}/.antidote/antidote.zsh
+    antidote bundle <${zplugins} > ${zplugins}.zsh
+  )
+fi
+source ${zplugins}.zsh
+
+path=(
+  $HOME/{,.dotfiles/}{,s}bin(N)
+  $path
+)
+

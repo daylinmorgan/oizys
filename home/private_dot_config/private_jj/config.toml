@@ -1,0 +1,85 @@
+[user]
+name = "Daylin Morgan"
+email = "me@dayl.in"
+
+[signing]
+behavior = "own"
+backend = "gpg"
+signingkey = "7AD9DB430EE2B3C1D86BF3243CD66E04B8072F3E"
+
+[git]
+private-commits = "description(glob:'wip*') | description(glob:'private:*')"
+
+[ui]
+# default-command = "log"
+default-command = "l"
+pager = "delta"
+diff-editor = ":builtin"
+diff-formatter = ":git"
+
+[aliases]
+wip = ["ci", "-m", "wip"]
+la = ["log", "-r", "all()"]
+l = ["log", "-T", "log_oneline"]
+lh = ["log", "-r", "heads()"]
+
+bsm = [
+  "bookmark", "set", "main", "-r", "last"
+]
+dl = ["desc", "-r", "last"]
+tug = ["bookmark", "move", "--from", "closest_bookmark(@-)", "--to", "@-"]
+
+
+[revsets]
+log = '@ | ancestors(trunk()..(visible_heads() & mine()), 2) | trunk()'
+# default
+# log = "present(@) | ancestors(immutable_heads().., 2) | present(trunk())"
+
+
+[templates]
+draft_commit_description = '''
+concat(
+  coalesce(description, default_commit_description, "\n"),
+  surround(
+    "\nJJ: This commit contains the following changes:\n", "",
+    indent("JJ:     ", diff.stat(72)),
+  ),
+  "\nJJ: ignore-rest\n",
+  diff.git(),
+)
+'''
+
+[template-aliases]
+# adapted from log oneline
+log_oneline = '''
+if(root,
+  format_root_commit(self),
+  label(if(current_working_copy, "working_copy"),
+    concat(
+      separate(" ",
+        format_short_change_id_with_hidden_and_divergent_info(self),
+        if(author.email(), author.email().local(), email_placeholder),
+        if(description,
+          description.first_line(),
+          label(if(empty, "empty"), description_placeholder),
+        ),
+        if(empty, label("empty", "(empty)")),
+        bookmarks,
+        tags,
+        working_copies,
+        if(git_head, label("git_head", "git_head()")),
+        if(conflict, label("conflict", "conflict")),
+      ) ++ "\n",
+    ),
+  )
+)
+'''
+
+[revset-aliases]
+"heads" = '@ | ancestors(trunk()..(visible_heads()), 2) | trunk()'
+"last" = 'latest(::@ & ~empty())'
+'closest_bookmark(to)' = 'heads(::to & bookmarks())'
+
+[experimental-advance-branches]
+enabled-branches = ["glob:*"]
+disabled-branches = ["main", "trunk"]

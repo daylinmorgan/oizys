@@ -1,0 +1,155 @@
+#!/usr/bin/env -S viv run rich 'git+https://github.com/usu-dev/usu-py.git' -s
+
+import argparse
+import shlex
+import subprocess
+import sys
+from pathlib import Path
+
+import usu
+from rich.align import Align
+from rich.columns import Columns
+from rich.console import Console
+from rich.panel import Panel
+from rich.prompt import Confirm
+from rich.table import Table
+
+console = Console()
+
+
+def run(cmd, capture=True, returncode=False):
+    result = subprocess.run(
+        shlex.split(cmd),
+        stdout=subprocess.PIPE if capture else None,
+        text=True,
+        shell=False,
+    )
+
+    if returncode:
+        return result.returncode
+    elif capture:
+        return result.stdout.strip()
+
+
+def parse_exts(usu_file):
+    exts = usu.loads(Path(usu_file).read_text())
+    all = [v for ext_list in exts.values() for v in ext_list]
+    return exts, sorted(all)
+
+
+class SubcommandHelpFormatter(argparse.RawDescriptionHelpFormatter):
+    def _format_action(self, action):
+        parts = super(argparse.RawDescriptionHelpFormatter, self)._format_action(action)
+        if action.nargs == argparse.PARSER:
+            parts = "\n".join(parts.split("\n")[1:])
+        return parts
+
+
+def get_args():
+    p = argparse.ArgumentParser(formatter_class=SubcommandHelpFormatter)
+    sp = p.add_subparsers(title="commands", metavar="", dest="command", required=True)
+    check = sp.add_parser(
+        "check",
+        help="check the extensions which have already been installed",
+        aliases=["c"],
+    )
+    check.add_argument("--verbose", help="show more information", action="store_true")
+    install = sp.add_parser(
+        "install", help="install the extensions from the spec", aliases=["i"]
+    )
+    install.add_argument(
+        "-f", "--force", help="force the installation of exts", action="store_true"
+    )
+    sp.add_parser("remove", help="remove all extra packages", aliases=["r"])
+
+    p.add_argument(
+        "-s",
+        "--spec",
+        help="mardown spec list (default ./exts.usu)",
+        default=Path.cwd() / "exts.usu",
+    )
+
+    if len(sys.argv) < 2:
+        p.print_help()
+        sys.exit(1)
+
+    return p.parse_args()
+
+
+def get_extra_exts(spec, installed):
+    # sanitize lists
+    spec = [ext.lower() for ext in spec]
+    installed = [ext.lower() for ext in installed]
+
+    return [ext for ext in spec if ext not in installed], [
+        ext for ext in installed if ext not in spec
+    ]
+
+
+def code(flag, exts, force=False):
+    cmd = "code " + " ".join([f"{flag} {ext}" for ext in exts])
+    if force:
+        cmd += " --force"
+    run(cmd, capture=False)
+
+
+def header():
+    console.print(
+        Panel(
+            Align("[yellow]VS Code Extensions Installer", align="center"),
+            style="magenta",
+        )
+    )
+
+
+def installed_table(head, exts, not_installed):
+    table = Table(title=head)
+    table.add_column("extension")
+    table.add_column("installed?")
+    for ext in exts:
+        installed = ext.lower() not in not_installed
+        table.add_row(
+            ext, "Y" if installed else "N", style = 'green' if installed else "red"
+        )
+    return table
+
+
+def main():
+    args = get_args()
+    header()
+
+    spec_sections, spec_list = parse_exts(args.spec)
+
+    not_installed, extra_installed = get_extra_exts(
+        spec_list, run("code --list-extensions").splitlines()
+    )
+
+    if args.command == "check" or args.command == "c":
+        tables = (
+            installed_table(head, exts, not_installed)
+            for head, exts in spec_sections.items()
+        )
+        console.print(Columns(tables))
+        if not_installed:
+            console.print(f"[yellow]missing {len(not_installed)} extensions")
+        if extra_installed:
+            console.print(f"[red]{len(extra_installed)} extra extensions installed")
+            if not args.verbose:
+                console.print("[dim]run with --verbose to see extra extensions")
+            else:
+                console.print(Columns(extra_installed))
+
+
+    elif args.command == "install" or args.command == "i":
+        console.print("[bold]Installing extensions from spec list")
+        code("--install-extension", spec_list, args.force)
+
+    elif args.command == "remove" or args.command == "r":
+        console.print("[red]Removing unspecified extensions")
+        console.print(Columns(extra_installed))
+        if Confirm.ask(f"Remove the above {len(extra_installed)} packages?"):
+            code("--uninstall-extension", extra_installed)
+
+
+if __name__ == "__main__":
+    main()

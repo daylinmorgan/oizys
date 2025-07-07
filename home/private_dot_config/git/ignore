@@ -1,0 +1,13 @@
+.vscode/
+tmp/
+_TODO.md
+.todo.md
+
+# LibreOffice locks
+.~lock.*#
+
+.direnv
+.envrc
+
+ignored.md
+node_modules

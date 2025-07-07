@@ -1,0 +1,23 @@
+# othalan alias not working?
+# output "InfoVision Optoelectronics (Kunshan) Co.Ltd China 0x8C44" alias $othalan
+output "Ancor Communications Inc VN279 M4LMQS079020" alias $work-tall
+output "Ancor Communications Inc ASUS MX239 H4LMTJ010711" alias $work-middle
+output "Acer Technologies Acer H236HL LX1AA0044210" alias $home-monitor
+
+
+profile default {
+  output eDP-1 mode 1920x1200 position 0,0
+}
+
+profile home {
+  output eDP-1         mode 1920x1200 position 1920,0
+  output $home-monitor mode 1920x1080 position 0,0
+}
+
+# three monitors :)
+profile work {
+  output eDP-1        mode 1920x1200 position 3000,960
+  output $work-middle mode 1920x1080 position 1080,960
+  output $work-tall   mode 1920x1080 position 0,0 transform 90
+}
+

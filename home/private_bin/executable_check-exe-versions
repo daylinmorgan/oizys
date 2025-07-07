@@ -1,0 +1,89 @@
+#!/usr/bin/env nu
+
+def "check gh" [repo] {
+  if $in.exit_code != 0 {
+    print $"(ansi red) failed to run gh request for repo: ($repo)\n($in | reject exit_code)"
+    exit $in.exit_code
+  };
+  $in.stdout
+}
+
+def drop-v [] {
+  $in | each {|it|
+    if ($it | str starts-with 'v') {
+      $it | str substring 1..
+    } else { $it }
+  }
+}
+
+def "get tags" [] {
+  let repo = $in
+  (
+    gh api
+    -H "Accept: application/vnd.github+json" 
+    -H "X-GitHub-Api-Version: 2022-11-28"
+    --paginate $"repos/($repo)/tags"
+  )
+  | complete
+  | check gh $repo
+  | from json
+  | where name =~ '^v?\d'
+  | get name
+  | drop-v
+}
+
+def repo-to-bin [] {
+  let name = $in | split row '/' | last
+  match $name {
+    "ripgrep" => "rg"
+    "cli" => "gh"
+    "neovim" => "nvim"
+    "nushell" => "nu"
+    _ => $name
+  }
+}
+
+def current-version [] {
+  run-external $in "--version"
+  | split row "\n"
+  | each {|s| $'|  ' + $s}
+  | str join "\n"
+}
+
+def check-exe [] {
+  if (which $in | length ) == 0 {
+    print $"(ansi red_bold)($in) is not installed(ansi reset)"
+    return false
+  }
+  return true
+}
+
+def compare-versions [] {
+  each {||
+  let repo = $in
+  let $bin = $repo | repo-to-bin
+  if not ($bin | check-exe) { return }
+  let latest = $repo | get tags | first
+  let current = $bin | current-version
+  print $"(ansi cyan_bold)($repo)(ansi reset):
+latest: ($latest)
+current:
+($current)
+"
+  }
+}
+
+
+[
+  junegunn/fzf
+  cli/cli
+  sharkdp/fd
+  jesseduffield/lazygit
+  neovim/neovim
+  BurntSushi/ripgrep
+  nushell/nushell
+  zyedidia/eget
+  prefix-dev/pixi
+]
+| compare-versions
+| ignore

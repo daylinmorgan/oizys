@@ -1,0 +1,29 @@
+#!/usr/bin/env zsh
+
+zstyle ':antidote:bundle' file ${ZDOTDIR:-~}/.zplugins
+zstyle ':antidote:static' file ${ZDOTDIR:-~}/.zplugins.zsh
+zstyle ':antidote:bundle' use-friendly-names 'yes'
+zstyle ':antidote:bundle:*' zcompile 'yes'
+zstyle ':antidote:static:*' zcompile 'yes'
+zstyle ':antidote:plugin:*' defer-options '-p'
+
+# Set this to whatever you want to use to edit a command
+zstyle :zle:edit-command-line editor vim
+
+# let make handle it's own shell completion
+zstyle ':completion::complete:make:*:targets' call-command true
+
+# fzf-tab completions
+# set descriptions format to enable group support
+zstyle ':completion:*:descriptions' format '[%d]'
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+if (( $+commands[eza] )); then
+  zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza --tree --level 2 --color always --icons always $realpath'
+fi
+
+# NOTE: This may lead to unexpected behavior since some flags break this plugin.
+# See Aloxaf/fzf-tab#455.
+zstyle ':fzf-tab:*' use-fzf-default-opts yes
+

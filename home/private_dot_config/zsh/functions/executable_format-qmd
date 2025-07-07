@@ -1,0 +1,5 @@
+#!/usr/bin/env zsh
+##? format-qmd - use jupytext and ruff to format qmd
+
+jupytext --from qmd $1 --pipe 'ruff format {}' --opt 'notebook_metadata_filter=-all'
+

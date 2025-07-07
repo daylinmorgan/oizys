@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+##? append date/time and `.bak` to file
+
+local now f
+now=$(date +"%Y%m%d-%H%M%S")
+for f in "$@"; do
+  if [[ ! -e "$f" ]]; then
+    echo "file not found: $f" >&2
+    continue
+  fi
+  cp -Rv "$f" "$f".$now.bak
+done

@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+
+if [[ "$*" == *"-j"* || "$*" == *"--jobs"* || "$*" == *"--cores"* ]]; then
+    snakemake $@
+else
+    snakemake --cores all $@
+fi

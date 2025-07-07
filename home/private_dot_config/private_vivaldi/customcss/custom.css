@@ -1,0 +1,17 @@
+.tab {
+  border-width: 1px 1px 1px 1px;
+  border-radius: 10px !important;
+  border-style: solid;
+  border-color: transparent;
+}
+
+.tab.active {
+  border-color: var(--colorHighlightBg);
+}
+.svg-tab-stack rect {
+  stroke-width: 0;
+}
+
+.color-behind-tabs-off .svg-tab-stack .stack-frame {
+  stroke: none !important;
+}

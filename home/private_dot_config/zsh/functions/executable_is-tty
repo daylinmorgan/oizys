@@ -1,0 +1,11 @@
+##? check if running in a tty
+
+case $(tty) in /dev/tty[0-9]*)
+	return 0
+	;;
+*)
+	return 1
+	;;
+esac
+
+# vim: ft=zsh sw=2 ts=2 et

@@ -1,0 +1,6 @@
+#!/usr/bin/env zsh
+##? drop into a directory in ~/scratch/%Y/%U
+
+dir=$(mkscratch "$@")
+
+pushd $dir

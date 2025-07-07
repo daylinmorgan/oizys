@@ -1,0 +1,6 @@
+##? reload zshell configs
+
+source ~/.zshenv
+source $ZDOTDIR/.zshrc
+
+# vim: ft=zsh sw=2 ts=2 et
