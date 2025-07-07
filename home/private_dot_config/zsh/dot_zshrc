@@ -18,7 +18,7 @@ fi
 source ${zplugins}.zsh
 
 path=(
-  $HOME/{,.dotfiles/}{,s}bin(N)
+  $HOME/{,oizys/}{,s}bin(N)
   $path
 )
 

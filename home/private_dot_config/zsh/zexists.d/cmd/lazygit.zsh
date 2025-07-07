@@ -1,3 +1,3 @@
 alias lg=lazygit
 
-alias dots-git='lazygit -p ~/.dotfiles'
+# alias dots-git='lazygit -p ~/.dotfiles'
