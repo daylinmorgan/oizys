@@ -56,6 +56,8 @@ nix run "github:daylinmorgan/oizys"
 
 ## user dotfiles
 
+Dotfiles are managed with [`chezmoi`](https://chezmoi.io).
+
 ### Install
 
 from Source:
