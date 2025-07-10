@@ -67,7 +67,7 @@ jobs:
         run: |
           DRVS="$(nix run . -- output --lix --host,="${{ env.hosts }}" --flake .)"
           nix build \
-            --verbose \
+            --print-build-logs \
             --out-link 'lix-and-co' \
             -- \
             $DRVS
