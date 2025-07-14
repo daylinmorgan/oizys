@@ -29,4 +29,5 @@ in
   "f1multiviewer"
   "tsm"
   "llm-nix"
+  "niriman"
 ])
