@@ -1,6 +1,6 @@
-sourceDir = "~/.dotfiles"
+sourceDir = "~/oizys"
 
-{{ if promptBool "set default umask" false -}}
+{{ if hasPrefix "rentcomp" .chezmoi.hostname -}}
 umask = 0o22
 {{ end -}}
 
