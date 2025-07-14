@@ -22,8 +22,7 @@
 divider="---------"
 goback="Back"
 
-styles="$(dirname $(which $0))/../styles"
-rofi_cmd="rofi -theme $styles/bluetooth.rasi -dmenu -p"
+rofi_cmd="rofi -theme bluetooth -dmenu -p"
 
 # Checks if bluetooth controller is powered on
 power_on() {
@@ -309,8 +308,6 @@ device_menu() {
 #     esac
 # }
 
-# Rofi command to pipe into, can add any options here
-# rofi_command="rofi -dmenu -theme $rofi_styles/bluetooth.rasi -no-fixed-num-lines -yoffset -100 -i -p "
 
 while true; do
 

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-styles="$(dirname $(which $0))/../styles"
-rofi_command="rofi -theme $styles/confirm.rasi"
+rofi_command="rofi -theme confirm"
 
 options="yes\nno"
 

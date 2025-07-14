@@ -1,0 +1,6 @@
+@import "launcher.rasi"
+
+configuration {
+  disable-history: true;
+  parse-known-hosts: false;
+}

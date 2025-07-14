@@ -2,6 +2,9 @@
 @import "colors.rasi"
 @import "launcher.rasi"
 
+configuration {
+    show-icons: true;
+}
 window {
-    width: 60%;
+  width: 60%;
 }

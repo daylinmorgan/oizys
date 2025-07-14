@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-styles="$(dirname $(which $0))/../styles"
-rofi_command="rofi -theme $styles/powermenu.rasi"
+## TODO: reimplement as rofi script?
+
+rofi_command="rofi -theme powermenu"
 
 #### Options ###
 shutdown=""
@@ -20,7 +21,7 @@ confirm_exit() {
 
 # Message
 msg() {
-	rofi -theme "$styles/message.rasi" -e "Available Options  -  yes / y / no / n"
+	rofi -theme "message" -e "Available Options  -  yes / y / no / n"
 }
 
 chosen="$(echo -e "$options" | $rofi_command -p "󱎫  $uptime " -dmenu -selected-row 2)"

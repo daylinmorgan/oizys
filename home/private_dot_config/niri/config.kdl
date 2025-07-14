@@ -345,12 +345,12 @@ binds {
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+Shift+Return { spawn "ghostty"; }
-    // Mod+D { spawn "fuzzel"; }
-    Mod+P { spawn "~/.config/rofi/bin/launcher.sh"; }
-    // I which this was a simple 
-    Mod+W { spawn "~/.config/rofi/bin/windows.sh"; }
-    Mod+Ctrl+P { spawn "~/.config/rofi/bin/powermenu.sh"; }
     Mod+Ctrl+N { spawn "swaylock"; }
+
+    // Rofi
+    Mod+P { spawn "rofi" "-show" "drun" "-theme" "launcher"; }
+    Mod+W { spawn "rofi" "-show" "windows" "-theme" "windows";}
+    Mod+Ctrl+P { spawn "~/.config/rofi/bin/powermenu.sh"; }
 
     // You can also use a shell. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument in the end.

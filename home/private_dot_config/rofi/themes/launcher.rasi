@@ -1,6 +1,10 @@
 @import "default.rasi"
 @import "colors.rasi"
 
+configuration {
+    show-icons: true;
+}
+
 mainbox {
     padding: 12px;
 }

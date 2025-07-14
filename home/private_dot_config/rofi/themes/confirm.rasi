@@ -2,7 +2,7 @@
 @import "colors.rasi"
 
 configuration {
-    disable-history: false;
+  disable-history: false;
 	sidebar-mode: false;
 	show-icons: false;
 }
