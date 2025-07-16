@@ -308,16 +308,16 @@ proc getNixpkgsPrStatus*(number: int): NixpkgsPrStatus =
     owner = "nixos"
     repo  = "nixpkgs"
 
-  let pr = getGhPull(owner, repo, number)
-  result.number = number
-  result.merged = pr.merged
+  with(Dots2, fmt"checking on status of PR [b]#{number}"):
 
-  if not result.merged:
-    return result
+    let pr = getGhPull(owner, repo, number)
+    result.number = number
+    result.merged = pr.merged
 
-  result.nixpkgsUnstable = prInBranch(owner, repo, getGhBranch(owner, repo, "nixpkgs-unstable"),pr)
-  result.nixosUnstableSmall = prInBranch(owner, repo, getGhBranch(owner, repo, "nixos-unstable-small"),pr)
-  result.nixosUnstable = prInBranch(owner, repo, getGhBranch(owner, repo, "nixos-unstable"), pr)
+    if result.merged:
+      result.nixpkgsUnstable = prInBranch(owner, repo, getGhBranch(owner, repo, "nixpkgs-unstable"),pr)
+      result.nixosUnstableSmall = prInBranch(owner, repo, getGhBranch(owner, repo, "nixos-unstable-small"),pr)
+      result.nixosUnstable = prInBranch(owner, repo, getGhBranch(owner, repo, "nixos-unstable"), pr)
 
 proc bb*(status: NixpkgsPrStatus): BbString =
   var s: string
@@ -328,7 +328,7 @@ proc bb*(status: NixpkgsPrStatus): BbString =
   s.add fmt"[b]PR #{status.number}[/] status:"
 
   if not status.merged:
-    s.add "not merged"
+    s.add " not merged"
   else:
     s.add "\n"
     s.add fmt"├──── " & (mark status.nixpkgsUnstable) & " nixpkgs-unstable"
