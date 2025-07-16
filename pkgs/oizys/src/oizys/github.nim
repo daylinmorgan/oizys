@@ -57,9 +57,13 @@ proc getGhApi(url: string): Response =
   try:
     result = client.get(url)
   except:
+    error getCurrentExceptionMsg()
     error fmt"github api request failed: {url}"
-    error fmt"response: {result.body}"
+    if result != nil:
+      error fmt"response: {result.body}"
     quit QuitFailure
+  finally:
+    close client
 
 proc postGhApi(url: string, body: JsonNode) =
   checkToken()
@@ -75,6 +79,8 @@ proc postGhApi(url: string, body: JsonNode) =
     info fmt"Status: {response.code}"
   except:
     errorQuit "failed to get response code"
+  finally:
+    close client
   if response.code != Http204:
     errorQuit "failed to post github api request"
 
@@ -214,3 +220,122 @@ proc updateRepo*() =
   let repo = GitRepo(path: getFlake())
   fetch repo
   rebase(repo, "origin/flake-lock")
+
+type
+  GhPullResponse = object
+    id*: int
+    state: string
+    title: string
+    merged: bool
+    merge_commit_sha: string
+
+  GhCommit = object
+    sha, url: string
+
+  GhBranch = object
+    name: string
+    commit: GhCommit
+    protected: bool
+
+proc getGhPull*(owner: string, repo: string, number: int): GhPullResponse =
+  fromJson(
+    getGhApi(
+      fmt"https://api.github.com/repos/{owner}/{repo}/pulls/{number}"
+    ).body,
+    typeof(result)
+  )
+
+
+proc getGhBranches*(owner: string, repo: string): seq[GhBranch] =
+  # NOTE: there are pages...
+  fromJson(
+    getGhApi(
+      fmt"https://api.github.com/repos/{owner}/{repo}/branches"
+    ).body,
+    typeof(result)
+  )
+
+
+proc getGhBranch(owner: string, repo: string, branch: string): GhBranch =
+  fromJson(
+    getGhapi(
+      fmt"https://api.github.com/repos/{owner}/{repo}/branches/{branch}"
+    ).body,
+    typeof(result)
+  )
+
+type
+  GhCompare = object
+    status: string
+
+proc ghRepoCompare(owner: string, repo: string, base: string, head: string): GhCompare =
+  fromJson(
+    getGhApi(
+      fmt"https://api.github.com/repos/{owner}/{repo}/compare/{base}...{head}"
+    ).body,
+    typeof(result)
+  )
+  
+  # "status": "behind",
+
+proc prInBranch(owner: string, repo: string, branch: GhBranch,  pr: GhPullResponse): bool =
+  if not pr.merged:
+    return false
+
+  let compare = ghRepoCompare(owner, repo, pr.merge_commit_sha, branch.commit.sha)
+
+  case compare.status:
+  of "behind", "identical":
+    return false
+  of "ahead":
+    return true
+  of "diverged":
+    fatalQuit "compared status of 'diverged' is not yet supported"
+  else:
+    fatalQuit "unknown status: " & compare.status
+
+
+type
+  NixpkgsPrStatus* = object
+    number: int
+    merged: bool
+    nixpkgsUnstable: bool
+    nixosUnstableSmall: bool
+    nixosUnstable: bool
+
+proc getNixpkgsPrStatus*(number: int): NixpkgsPrStatus =
+  const
+    owner = "nixos"
+    repo  = "nixpkgs"
+
+  let pr = getGhPull(owner, repo, number)
+  result.number = number
+  result.merged = pr.merged
+
+  if not result.merged:
+    return result
+
+  result.nixpkgsUnstable = prInBranch(owner, repo, getGhBranch(owner, repo, "nixpkgs-unstable"),pr)
+  result.nixosUnstableSmall = prInBranch(owner, repo, getGhBranch(owner, repo, "nixos-unstable-small"),pr)
+  result.nixosUnstable = prInBranch(owner, repo, getGhBranch(owner, repo, "nixos-unstable"), pr)
+
+proc bb*(status: NixpkgsPrStatus): BbString =
+  var s: string
+
+  template mark(cond: bool): untyped =
+    if cond: "[green]✓[/]" else: "[red]✗[/]"
+
+  s.add fmt"[b]PR #{status.number}[/] status:"
+
+  if not status.merged:
+    s.add "not merged"
+  else:
+    s.add "\n"
+    s.add fmt"├──── " & (mark status.nixpkgsUnstable) & " nixpkgs-unstable"
+    s.add "\n"
+    s.add fmt"├─ " & mark(status.nixosUnstableSmall) & " nixos-unstable-small"
+    s.add "\n"
+    s.add fmt"╰─ " & mark(status.nixosUnstable) & " nixos-unstable"
+
+  bb(s)
+

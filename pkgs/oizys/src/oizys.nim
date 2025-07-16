@@ -183,3 +183,10 @@ hwylCli:
       let lockfile = getFlake() / "flake.lock"
       newCommand("jq").withArgs(".nodes | keys[] | select(contains(\"_\"))", "-r", lockFile).runQuit()
 
+    [pr]
+    ... """check merge status of nixpkgs PR"""
+    positionals:
+      number int
+    run:
+      echo bb(getNixpkgsPrStatus(number))
+  
