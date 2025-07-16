@@ -8,8 +8,7 @@ in
   # inputs.niri.overlays.default # adds main branch niri
 
   (final: prev: rec {
-    inherit (loadNixpkgOverlays final) nixpkgs-unstable;
-    inherit (loadNixpkgOverlays final) nixpkgs-master;
+    inherit (loadNixpkgOverlays final) nixpkgs-unstable nixpkgs-master nixpkgs-pr-425784;
 
     attic-client = inputs.self.packages.${final.system}.attic-client;
     attic-server = inputs.self.packages.${final.system}.attic-server;
