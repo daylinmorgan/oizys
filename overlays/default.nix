@@ -1,21 +1,22 @@
 { inputs, lib }:
 let
-  inherit (lib) loadOverlays loadNixpkgOverlays;
+  inherit (lib) loadOverlays pkgsFromMaster;
 in
 (loadOverlays inputs ./.)
 ++ [
   inputs.nim2nix.overlays.default # adds buildNimPackage
   # inputs.niri.overlays.default # adds main branch niri
 
-  (final: prev: rec {
-    inherit (loadNixpkgOverlays final) nixpkgs-unstable nixpkgs-master;
-
-    attic-client = inputs.self.packages.${final.system}.attic-client;
-    attic-server = inputs.self.packages.${final.system}.attic-server;
-
-    # TODO: automate this step with an associated PR number with nixpkgs/pr-tracker?
-    gimp = nixpkgs-master.gimp; # 425710
-    clisp = nixpkgs-master.clisp; # 425299
-    pcmanfm = nixpkgs-master.pcmanfm; # 425784
-  })
+  (
+    final: prev:
+    {
+      attic-client = inputs.self.packages.${final.system}.attic-client;
+      attic-server = inputs.self.packages.${final.system}.attic-server;
+    }
+    // pkgsFromMaster final [
+      "gimp" # 425710
+      "clisp" # 425299
+      "pcmanfm" # 425784
+    ]
+  )
 ]

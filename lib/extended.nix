@@ -149,13 +149,24 @@ let
     |> attrNames
     |> filter (name: (hasInfix "nixpkgs" name) && (name != "nixpkgs"))
     |> map (loadNixpkgOverlay final)
-    #
-    # (name: {
-    #   inherit name;
-    #   value = import inputs."${name}" {
-    #     inherit (final) system config;
-    #   };
-    # })
+    |> listToAttrs;
+
+  # generate an attr set that loads each package from some input named "nixpkgs-master"
+  # conventionally (mine) this is a flake to github:nixos/nixpkgs/master
+  pkgsFromMaster =
+    final: packageNames:
+    let
+      nixpkgs-master = (
+        import inputs.nixpkgs-master {
+          inherit (final) system config;
+        }
+      );
+    in
+    packageNames
+    |> map (name: {
+      inherit name;
+      value = nixpkgs-master."${name}";
+    })
     |> listToAttrs;
 
   readLinesNoComment =
@@ -237,6 +248,7 @@ in
     listify
     loadOverlays
     loadNixpkgOverlays
+    pkgsFromMaster
     hostFiles
     hostSystem
     oizysSettings
