@@ -17,7 +17,7 @@ $tag-palette: (
   $teal,
   $blue,
   $sky,
-  $rosewater,
+  $rosewater
 );
 
 // colors
@@ -69,7 +69,7 @@ $foreground: $text;
   .ws-button-#{index($tag-palette,$color)} {
     color: $color;
   }
-  .ws-button-active-#{index($tag-palette,$color)}{
+  .ws-button-active-#{index($tag-palette,$color)} {
     color: $background;
     background: $color;
   }
@@ -88,7 +88,6 @@ $foreground: $text;
   padding-bottom: 0;
 }
 
- 
 .box-launcher {
   background-color: $accent;
   color: $background;
