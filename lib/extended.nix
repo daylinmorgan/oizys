@@ -151,13 +151,12 @@ let
     |> map (loadNixpkgOverlay final)
     |> listToAttrs;
 
-  # generate an attr set that loads each package from some input named "nixpkgs-master"
-  # conventionally (mine) this is a flake to github:nixos/nixpkgs/master
-  pkgsFromMaster =
-    final: packageNames:
+  # overlay packages from a separate nixpkgs input then the default one
+  pkgsFromNixpkgs =
+    final: nixpkgsInput: packageNames:
     let
-      nixpkgs-master = (
-        import inputs.nixpkgs-master {
+      nixpkgs = (
+        import inputs."${nixpkgsInput}" {
           inherit (final) system config;
         }
       );
@@ -165,7 +164,7 @@ let
     packageNames
     |> map (name: {
       inherit name;
-      value = nixpkgs-master."${name}";
+      value = nixpkgs."${name}";
     })
     |> listToAttrs;
 
@@ -243,12 +242,12 @@ in
     flakeVer
     pkgsFromSystem
     pkgFromSystem
+    pkgsFromNixpkgs
     overlayFrom
     flakeFromSystem
     listify
     loadOverlays
     loadNixpkgOverlays
-    pkgsFromMaster
     hostFiles
     hostSystem
     oizysSettings

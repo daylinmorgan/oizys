@@ -1,6 +1,6 @@
 { inputs, lib }:
 let
-  inherit (lib) loadOverlays pkgsFromMaster;
+  inherit (lib) loadOverlays pkgsFromNixpkgs;
 in
 (loadOverlays inputs ./.)
 ++ [
@@ -13,9 +13,7 @@ in
       attic-client = inputs.self.packages.${final.system}.attic-client;
       attic-server = inputs.self.packages.${final.system}.attic-server;
     }
-    // pkgsFromMaster final [
-      "gimp" # 425710
-      "clisp" # 425299
+    // pkgsFromNixpkgs final "nixpkgs-unstable" [
       "pcmanfm" # 425784
     ]
   )
