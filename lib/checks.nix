@@ -12,7 +12,6 @@ let
     inherit system;
     overlays = [
       (flake.overlay "lix-module")
-      (flake.overlay "hyprland-contrib")
       (flake.overlay "nixpkgs-wayland")
     ];
   };

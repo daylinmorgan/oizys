@@ -39,8 +39,7 @@
 
     niri.url = "github:YaLTeR/niri";
 
-    # master as of 2024.12.12
-    NixVirt.url = "github:AshleyYakeley/NixVirt?rev=9063243af5e6674359a0ff7cec57f02eeacf0cea";
+    NixVirt.url = "github:AshleyYakeley/NixVirt/v0.6.0";
 
     # zig-overlay.url = "github:mitchellh/zig-overlay";
     # zig-overlay.inputs.nixpkgs.follows = "nixpkgs";

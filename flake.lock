@@ -7,17 +7,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1736736253,
-        "narHash": "sha256-GrktftEfXmmdKOU0yz3QXckDz1ncZ+f4KLU8XnYKYuA=",
+        "lastModified": 1748140003,
+        "narHash": "sha256-DNBZmuk1YRM2PmwbHzVdXumRjCUzQkMarg4iI/37rOQ=",
         "owner": "AshleyYakeley",
         "repo": "NixVirt",
-        "rev": "9063243af5e6674359a0ff7cec57f02eeacf0cea",
+        "rev": "5dfe108fd859b122f9a96981cb6bc12297653d6c",
         "type": "github"
       },
       "original": {
         "owner": "AshleyYakeley",
+        "ref": "v0.6.0",
         "repo": "NixVirt",
-        "rev": "9063243af5e6674359a0ff7cec57f02eeacf0cea",
         "type": "github"
       }
     },
@@ -124,26 +124,6 @@
       "original": {
         "owner": "lf-",
         "repo": "flakey-profile",
-        "type": "github"
-      }
-    },
-    "hyprland-contrib": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1752857088,
-        "narHash": "sha256-usBNOT/uzFdsKDe5Ik+C36zqL+BfT7Lp2rqKWrpQuqk=",
-        "owner": "hyprwm",
-        "repo": "contrib",
-        "rev": "481175e17e155f19a3b31416530b6edf725e7034",
-        "type": "github"
-      },
-      "original": {
-        "owner": "hyprwm",
-        "repo": "contrib",
         "type": "github"
       }
     },
@@ -657,7 +637,6 @@
         "f1multiviewer": "f1multiviewer",
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",
-        "hyprland-contrib": "hyprland-contrib",
         "lib-aggregate": "lib-aggregate",
         "lix": "lix",
         "lix-attic": "lix-attic",
