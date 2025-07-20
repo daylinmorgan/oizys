@@ -24,7 +24,6 @@
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     nix-index-database.url = "github:nix-community/nix-index-database";
     sops-nix.url = "github:Mic92/sops-nix";
-    hyprland-contrib.url = "github:hyprwm/contrib";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland/8dcad9dcb5ce4eb28e2719ab025224308b318e79";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
 
@@ -53,7 +52,6 @@
 
     ## nixpkgs
     f1multiviewer.inputs.nixpkgs.follows = "nixpkgs";
-    hyprland-contrib.inputs.nixpkgs.follows = "nixpkgs";
     llm-nix.inputs.nixpkgs.follows = "nixpkgs";
     neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
     nim2nix.inputs.nixpkgs.follows = "nixpkgs";
