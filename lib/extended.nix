@@ -136,6 +136,15 @@ let
     |> filter (f: f != "default.nix")
     |> map (f: import (../overlays + "/${f}") { inherit inputs; });
 
+  selfPkgsOverlays =
+    final: packages:
+    packages
+    |> map (name: {
+      inherit name;
+      value = inputs.self.packages."${final.system}"."${name}";
+    })
+    |> listToAttrs;
+
   loadNixpkgOverlay = final: name: {
     inherit name;
     value = import inputs."${name}" {
@@ -244,6 +253,7 @@ in
     pkgFromSystem
     pkgsFromNixpkgs
     overlayFrom
+    selfPkgsOverlays
     flakeFromSystem
     listify
     loadOverlays
