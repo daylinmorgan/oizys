@@ -8,13 +8,14 @@
     final: prev:
 
     lib.selfPkgsOverlays final [
-      "nimble"
-      "nimlangserver"
+      # "nimble"
+      # "nimlangserver"
       # "attic-client"
       # "attic-server"
     ]
 
-    # // lib.pkgsFromNixpkgs final "nixpkgs-unstable" [
-    # ]
+    // lib.pkgsFromNixpkgs final "nixpkgs-unstable" [
+      "nimble" # 426894
+    ]
   )
 ]
