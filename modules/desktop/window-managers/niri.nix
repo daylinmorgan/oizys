@@ -66,29 +66,30 @@ mkOizysModule config "niri" {
     };
   };
 
-  environment.systemPackages =
-    [ (flake.pkg "niriman") ]
-    ++ (with pkgs; [
-      xwayland-satellite
-      wl-mirror
-      wlr-randr
+  environment.systemPackages = [
+    (flake.pkg "niriman")
+  ]
+  ++ (with pkgs; [
+    xwayland-satellite
+    wl-mirror
+    wlr-randr
 
-      kanshi
+    kanshi
 
-      libnotify
-      mako
+    libnotify
+    mako
 
-      brightnessctl
-      udiskie
+    brightnessctl
+    udiskie
 
-      wl-clipboard
-      rofi-wayland
-      pwvucontrol
-      catppuccin-cursors.mochaDark
-      swaylock
-      eww
-      swww
-    ]);
+    wl-clipboard
+    rofi-wayland
+    pwvucontrol
+    catppuccin-cursors.mochaDark
+    swaylock
+    eww
+    swww
+  ]);
 
   services.getty = {
     extraArgs = [ "--skip-login" ];

@@ -35,12 +35,11 @@ let
     system:
     nixosSystem {
       system = system;
-      modules =
-        [
-          { nixpkgs.hostPlatform = system; }
-        ]
-        ++ (nixosModules "lix-module")
-        ++ (selfModules "essentials|iso");
+      modules = [
+        { nixpkgs.hostPlatform = system; }
+      ]
+      ++ (nixosModules "lix-module")
+      ++ (selfModules "essentials|iso");
       specialArgs = commonSpecialArgs;
     };
 
@@ -51,13 +50,12 @@ let
     in
     nixosSystem {
       inherit system;
-      modules =
-        [
-          { nixpkgs.hostPlatform = system; }
-        ]
-        ++ (selfModules ''oizys'')
-        ++ (nixosModules ''lix-module|sops-nix'')
-        ++ (hostFiles hostName);
+      modules = [
+        { nixpkgs.hostPlatform = system; }
+      ]
+      ++ (selfModules ''oizys'')
+      ++ (nixosModules ''lix-module|sops-nix'')
+      ++ (hostFiles hostName);
 
       specialArgs = commonSpecialArgs // {
         inherit
