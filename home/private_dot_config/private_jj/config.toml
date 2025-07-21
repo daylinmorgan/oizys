@@ -9,6 +9,7 @@ signingkey = "7AD9DB430EE2B3C1D86BF3243CD66E04B8072F3E"
 
 [git]
 private-commits = "description(glob:'wip*') | description(glob:'private:*')"
+write-change-id-header = true
 
 [ui]
 # default-command = "log"
