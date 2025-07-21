@@ -75,23 +75,6 @@ let
       }
     );
     formatter = forAllSystems (pkgs: (evalTreeFmt pkgs).config.build.wrapper);
-
-    # use nixosConfigurations.$host.config.oizys.packages instead
-    # hydraJobs = {
-    #   systemPackages =
-    #     (readDir ../hosts)
-    #     |> mapAttrs (
-    #       hostname: _:
-    #       self.nixosConfigurations."${hostname}".config.environment.systemPackages
-    #       |> map (drv: {
-    #         name = drv.name;
-    #         value = drv;
-    #       })
-    #       |> listToAttrs
-    #     );
-    #
-    #   inherit (self) packages;
-    # };
   };
 in
 {
