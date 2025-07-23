@@ -1,0 +1,7 @@
+[Default Applications]
+x-scheme-handler/f1mv=MultiViewer for F1.desktop
+x-scheme-handler/multiviewer=MultiViewer for F1.desktop
+x-scheme-handler/muvi=MultiViewer for F1.desktop
+x-scheme-handler/https=firefox.desktop
+x-scheme-handler/http=firefox.desktop
+text/html=firefox.desktop
