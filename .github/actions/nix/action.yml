@@ -28,7 +28,8 @@ runs:
         hatchet-protocol: ${{ inputs.hatchet-protocol }}
 
     - name: Install Lix
-      uses: samueldr/lix-gha-installer-action@latest
+      # uses: samueldr/lix-gha-installer-action@latest
+      uses: canidae-solutions/lix-quick-install-action@v3
       with:
         extra_nix_config: ${{ inputs.nix_conf }}
 
