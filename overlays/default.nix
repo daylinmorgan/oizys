@@ -15,7 +15,6 @@
     ]
 
     // lib.pkgsFromNixpkgs final "nixpkgs-unstable" [
-      "nimble" # 426894
     ]
   )
 ]
