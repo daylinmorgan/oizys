@@ -1,0 +1,26 @@
+<svg height="800" width="800" xmlns="http://www.w3.org/2000/svg"><!-- © 2024 Daylin Morgan | rev. 0.0.1 --><defs><style type="text/css">/* dark css */
+.background {
+  fill: #1e1e2e;
+}
+
+.fg {
+  fill: #f5e0dc;
+  stroke: #f5e0dc;
+}
+
+.border {
+  fill: none;
+  stroke-width: 5;
+}
+
+.logo {
+  stroke-width: 35;
+  fill: none;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.d {
+  stroke-width: 15;
+}
+</style></defs><g><g><circle class="background" cx="400.0" cy="400.0" r="400.0"></circle><circle class="fg border" cx="400.0" cy="400.0" r="380.0"></circle></g><g class="fg logo"><path class="m" d="M 280.4,548.0 l -160.0,0.0 l 80.0,-280.0 l 199.6,400.0 l 199.6,-400.0 l 80.0,280.0 l -160.0,0.0"></path><g class="d"><circle cx="400.0" cy="268.0" r="136.0"></circle><path class="fg" d="M 264.0,268.0 a 1 1 0 0 0 272.0 0 z"></path></g></g></g></svg>

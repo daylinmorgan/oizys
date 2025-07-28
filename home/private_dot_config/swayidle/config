@@ -1,5 +1,4 @@
-before-sleep 'lock'
-
-timeout 300 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'
-timeout 1800 'lock'
-timeout 3600 'systemctl suspend'
+timeout 601 'niri msg action power-off-monitors'
+timeout 600 'swaylock --daemonize'
+timeout 3600 'systmctl suspend'
+before-sleep 'swaylock --daemonize'

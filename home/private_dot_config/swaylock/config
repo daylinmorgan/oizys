@@ -1,3 +1,7 @@
+image=~/.config/swaylock/logo-b-circle-dark.svg
+indicator-y-position=100
+indicator-x-position=100
+scaling=center
 color=1e1e2e
 bs-hl-color=f5e0dc
 caps-lock-bs-hl-color=f5e0dc

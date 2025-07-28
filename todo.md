@@ -6,7 +6,7 @@
 
 ## software
 
-- [ ] add auto-sleep functionality to niri environment
+- [x] add auto-sleep functionality to niri environment
 
 ## hardware
 
