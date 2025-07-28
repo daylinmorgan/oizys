@@ -533,26 +533,6 @@
         "type": "github"
       }
     },
-    "pixi": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1741180895,
-        "narHash": "sha256-Zt9XjlkQwTB0UGeZISOlS2KSPPuTT/KqAikrE2Ok+Ns=",
-        "owner": "daylinmorgan",
-        "repo": "pixi-flake",
-        "rev": "299cfc650ea00b2faee22b60295bd3a32c2cb8e0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "daylinmorgan",
-        "repo": "pixi-flake",
-        "type": "github"
-      }
-    },
     "pyproject-build-systems": {
       "inputs": {
         "nixpkgs": [
@@ -656,7 +636,6 @@
         "nixpkgs-stable": "nixpkgs-stable",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixpkgs-wayland": "nixpkgs-wayland",
-        "pixi": "pixi",
         "roc": "roc",
         "rust-overlay": "rust-overlay",
         "sops-nix": "sops-nix",

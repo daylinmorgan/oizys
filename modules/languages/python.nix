@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  flake,
   ...
 }:
 let
@@ -24,11 +23,12 @@ in
         export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH
         exec ${python}/bin/python "$@"
       '')
-
-      (flake.pkg "pixi")
-
-      pkgs.uv
-      pkgs.python3Packages.pip # needed for viv to work
-    ];
+    ]
+    ++ (with pkgs; [
+      pixi
+      uv
+      python3Packages.pip # needed for viv to work
+    ])
+    ;
   };
 }

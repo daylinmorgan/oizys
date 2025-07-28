@@ -34,7 +34,6 @@
     utils.url = "git+https://git.dayl.in/daylin/utils.git";
 
     f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
-    pixi.url = "github:daylinmorgan/pixi-flake";
     roc.url = "github:roc-lang/roc/0.0.0-alpha2-rolling";
 
     niri.url = "github:YaLTeR/niri";
@@ -60,7 +59,6 @@
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     niri.inputs.nixpkgs.follows = "nixpkgs";
     NixVirt.inputs.nixpkgs.follows = "nixpkgs";
-    pixi.inputs.nixpkgs.follows = "nixpkgs";
     roc.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
