@@ -64,6 +64,22 @@ mkOizysModule config "niri" {
         Restart = "on-failure";
       };
     };
+
+    swayidle = niriService {
+      path = with pkgs; [
+        swayidle
+        niri
+        swaylock
+      ];
+      serviceConfig = {
+        ExecStart = ''
+          swayidle -w
+        '';
+
+        Restart = "on-failure";
+      };
+    };
+
   };
 
   environment.systemPackages = [
