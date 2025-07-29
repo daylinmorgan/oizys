@@ -5,7 +5,7 @@ inputs:
     description: Extra nix.conf config
     default: |
       accept-flake-config = true
-      experimental-features = nix-command flakes pipe-operator
+      extra-experimental-features = nix-command flakes pipe-operator
       build-dir = /nix/var
       extra-substituters = https://nix-cache.dayl.in/oizys
       extra-trusted-public-keys = oizys:DSw3mwVMM/Y+PXSVpkDlU5dLwlORuiJRGPkwr5INSMc=
