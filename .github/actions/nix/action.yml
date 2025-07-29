@@ -40,6 +40,9 @@ runs:
       with:
         lix_conf: ${{ inputs.nix_conf }}
 
+    - shell: bash
+      run: cat ~/.config/nix/nix.conf
+
     - name: Install and login to attic cache
       shell: bash
       run: |
