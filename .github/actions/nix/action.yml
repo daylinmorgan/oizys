@@ -36,7 +36,7 @@ runs:
       # uses: samueldr/lix-gha-installer-action@latest
       # with:
       #   extra_nix_config: ${{ inputs.nix_conf }}
-      uses: canidae-solutions/lix-quick-install-action@v3
+      uses: daylinmorgan/lix-quick-install-action@main
       with:
         lix_conf: ${{ inputs.nix_conf }}
 
