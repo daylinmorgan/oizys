@@ -1,4 +1,4 @@
 timeout 601 'niri msg action power-off-monitors'
 timeout 600 'swaylock --daemonize'
-timeout 3600 'systmctl suspend'
+timeout 3600 'systemctl suspend'
 before-sleep 'swaylock --daemonize'
