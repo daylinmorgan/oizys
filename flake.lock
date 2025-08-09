@@ -731,11 +731,11 @@
       },
       "locked": {
         "dir": "nix",
-        "lastModified": 1738337180,
-        "narHash": "sha256-XXT8rGyMd1ow4jnir8qfLfYIwU2TgzDjpz6amMvs8ac=",
+        "lastModified": 1754761465,
+        "narHash": "sha256-P5VOMOlMOCd+QvlFDC7aOv0eYmUaD38nkewxd8zWAec=",
         "owner": "daylinmorgan",
         "repo": "tsm",
-        "rev": "9a22c559c5b13472528fc2f814149af7b341dfe5",
+        "rev": "90443daa1281e337aa6a334efc076a6ddb6ab50c",
         "type": "github"
       },
       "original": {
