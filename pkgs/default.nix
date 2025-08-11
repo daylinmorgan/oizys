@@ -25,7 +25,6 @@ in
   attic-server = (flake.pkgs "lix-attic").attic-server;
 }
 // (flake.toPackageAttrs [
-  "pixi"
   "f1multiviewer"
   "tsm"
   "llm-nix"
