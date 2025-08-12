@@ -40,10 +40,17 @@ in
     # Replace with absolute path to your credentials file
     environmentFile = config.sops.secrets."atticd-env".path;
 
+    # https://github.com/zhaofengli/attic/blob/main/server/src/config.rs
+    # best of luck to you converting this to nix, which is written by nix as toml to be read by attic
     settings = {
       listen = "[::]:${atticPort}";
 
-      jwt = { };
+      # jwt = { };
+
+      garbage-collection = {
+        interval = "60 minutes";
+        retention-period = "2 weeks";
+      };
 
       # Data chunking
       #
