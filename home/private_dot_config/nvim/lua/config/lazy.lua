@@ -29,6 +29,7 @@ require("lazy").setup({
     -- { import = "plugins.misc" },
 
     { import = "plugins.language.misc" },
+    { import = "plugins.language.org" },
     { import = "plugins.language.lua" },
     { import = "plugins.language.markdown" },
     { import = "plugins.language.shell" },

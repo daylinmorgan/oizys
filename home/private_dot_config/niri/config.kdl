@@ -321,6 +321,13 @@ window-rule {
     // block-out-from "screencast"
 }
 
+window-rule {
+  match app-id=r#"float.editor"#
+  open-floating true
+  default-column-width { proportion 0.75;}
+  default-window-height {proportion 0.75;}
+}
+
 // Example: enable rounded corners for all windows.
 // (This example rule is commented out with a "/-" in front.)
 window-rule {
@@ -346,6 +353,7 @@ binds {
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+Shift+Return { spawn "ghostty"; }
     Mod+Ctrl+N { spawn "swaylock"; }
+    Mod+N { spawn "ghostty" "--class=float.editor" "-e" "nvim +$ ~/org/note.org";}
 
     // Rofi
     Mod+P { spawn "rofi" "-show" "drun" "-theme" "launcher"; }
