@@ -7,6 +7,8 @@
 ## software
 
 - [x] add auto-sleep functionality to niri environment
+- [ ] eww based bluetooth module not updating?
+- [ ] neovim + ghostty + clipboards are spamming me ?
 
 ## hardware
 
