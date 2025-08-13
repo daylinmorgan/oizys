@@ -66,8 +66,13 @@ mkOizysModule config "niri" {
     };
 
     swayidle = niriService {
+      path = with pkgs; [
+        niri
+        swaylock
+        swayidle
+      ];
       serviceConfig = {
-        ExecStart = ''${pkgs.swayidle}/bin/swayidle -w'';
+        ExecStart = ''${pkgs.bash}/bin/bash -c "swayidle -w"'';
         Restart = "on-failure";
       };
     };
