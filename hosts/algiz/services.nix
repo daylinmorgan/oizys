@@ -45,10 +45,10 @@ in
     settings = {
       listen = "[::]:${atticPort}";
 
-      # jwt = { };
+      jwt = { };
 
       garbage-collection = {
-        interval = "60 minutes";
+        interval = "1 day";
         retention-period = "2 weeks";
       };
 
