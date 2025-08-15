@@ -40,6 +40,8 @@
 
     NixVirt.url = "github:AshleyYakeley/NixVirt/v0.6.0";
 
+    daylin-website.url = "https://git.dayl.in/daylin/dayl.in/archive/main.tar.gz";
+
     # zig-overlay.url = "github:mitchellh/zig-overlay";
     # zig-overlay.inputs.nixpkgs.follows = "nixpkgs";
     # zls.url = "github:zigtools/zls";
@@ -49,6 +51,7 @@
     # Follows
 
     ## nixpkgs
+    daylin-website.inputs.nixpkgs.follows = "nixpkgs";
     f1multiviewer.inputs.nixpkgs.follows = "nixpkgs";
     llm-nix.inputs.nixpkgs.follows = "nixpkgs";
     neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
@@ -72,6 +75,7 @@
 
     systems.url = "github:nix-systems/x86_64-linux";
     flake-utils.inputs.systems.follows = "systems";
+    daylin-website.inputs.bun2nix.inputs.systems.follows = "systems";
 
     flake-utils.url = "github:numtide/flake-utils";
     lib-aggregate.inputs.flake-utils.follows = "flake-utils";
@@ -92,6 +96,7 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     neovim-nightly-overlay.inputs.flake-parts.follows = "flake-parts";
 
+
     ## nil inputs, I don't want *ALL* your flake inputs...
     nixos-wsl.inputs.flake-compat.follows = "";
     nixpkgs-wayland.inputs.flake-compat.follows = "";
@@ -99,6 +104,7 @@
     neovim-nightly-overlay.inputs.git-hooks.follows = "";
     neovim-nightly-overlay.inputs.treefmt-nix.follows = "";
     neovim-nightly-overlay.inputs.hercules-ci-effects.follows = "";
+    daylin-website.inputs.bun2nix.inputs.treefmt-nix.follows = "";
 
     lix-attic.url = "git+https://git.lix.systems/nrabulinski/attic.git";
     # lix-attic.url = "git+https://git.dayl.in/daylin/attic.git";
@@ -110,6 +116,9 @@
     lix-attic.inputs.nixpkgs-stable.follows = "";
     lix-attic.inputs.flake-compat.follows = "";
     lix-attic.inputs.nix-github-actions.follows = "";
+
+
+
   };
 
   nixConfig = {

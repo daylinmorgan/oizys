@@ -21,6 +21,59 @@
         "type": "github"
       }
     },
+    "blueprint": {
+      "inputs": {
+        "nixpkgs": [
+          "daylin-website",
+          "bun2nix",
+          "nixpkgs"
+        ],
+        "systems": [
+          "daylin-website",
+          "bun2nix",
+          "systems"
+        ]
+      },
+      "locked": {
+        "lastModified": 1744632722,
+        "narHash": "sha256-0chvqUV1Kzf8BMQ7MsH3CeicJEb2HeCpwliS77FGyfc=",
+        "owner": "numtide",
+        "repo": "blueprint",
+        "rev": "49bbd5d072b577072f4a1d07d4b0621ecce768af",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "blueprint",
+        "type": "github"
+      }
+    },
+    "bun2nix": {
+      "inputs": {
+        "blueprint": "blueprint",
+        "nixpkgs": [
+          "daylin-website",
+          "nixpkgs"
+        ],
+        "systems": [
+          "systems"
+        ],
+        "treefmt-nix": []
+      },
+      "locked": {
+        "lastModified": 1750682174,
+        "narHash": "sha256-rUpcATQ0LiY8IYRndqTlPUhF4YGJH3lM2aMOs5vBDGM=",
+        "owner": "baileyluTCD",
+        "repo": "bun2nix",
+        "rev": "85d692d68a5345d868d3bb1158b953d2996d70f7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "baileyluTCD",
+        "repo": "bun2nix",
+        "type": "github"
+      }
+    },
     "crane": {
       "locked": {
         "lastModified": 1750266157,
@@ -34,6 +87,25 @@
         "owner": "ipetkov",
         "repo": "crane",
         "type": "github"
+      }
+    },
+    "daylin-website": {
+      "inputs": {
+        "bun2nix": "bun2nix",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1756309200,
+        "narHash": "sha256-ue62gJNDAuG3Ign68GinNyO8C7yDFWZLRZCXjYgtKFU=",
+        "rev": "a8f496cba38e1109dfec67cb02583c29088253ca",
+        "type": "tarball",
+        "url": "https://git.dayl.in/api/v1/repos/daylin/dayl.in/archive/a8f496cba38e1109dfec67cb02583c29088253ca.tar.gz?rev=a8f496cba38e1109dfec67cb02583c29088253ca"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://git.dayl.in/daylin/dayl.in/archive/main.tar.gz"
       }
     },
     "f1multiviewer": {
@@ -614,6 +686,7 @@
     "root": {
       "inputs": {
         "NixVirt": "NixVirt",
+        "daylin-website": "daylin-website",
         "f1multiviewer": "f1multiviewer",
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",

@@ -2,6 +2,7 @@
   config,
   pkgs,
   enabled,
+  flake,
   ...
 }:
 let
@@ -85,6 +86,16 @@ in
     extraConfig = builtins.readFile ./caddy/Caddyfile;
 
     virtualHosts = {
+      "www.dayl.in".extraConfig = ''
+        redir https://dayl.in{uri}
+      '';
+
+      "dayl.in".extraConfig = ''
+        root * ${flake.pkg "daylin-website"}
+        encode zstd gzip
+        file_server
+      '';
+
       "nix-cache.dayl.in".extraConfig = ''
 
         redir /oizys /
