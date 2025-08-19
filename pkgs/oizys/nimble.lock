@@ -3,12 +3,12 @@
   "packages": {
     "hwylterm": {
       "version": "0.1.0",
-      "vcsRevision": "1324ba54151eeb6c2a28d8236854ccfb9885b530",
+      "vcsRevision": "2b07e7b32f4950aa154bd1cb2035cd8d8eac853f",
       "url": "https://github.com/daylinmorgan/hwylterm",
       "downloadMethod": "git",
       "dependencies": [],
       "checksums": {
-        "sha1": "b5c3cc2e8ed4ce5514750d1216d0816cd4ef0dc7"
+        "sha1": "2b364527d6e0f683dcc54a4db2b5b2a189d7563a"
       }
     },
     "jsony": {
@@ -23,12 +23,12 @@
     },
     "resultz": {
       "version": "0.1.0",
-      "vcsRevision": "43ed7f7e991b326e738ec14db4909b7330de089b",
+      "vcsRevision": "5b83318700b9cca39e06ad2ee7a6e6db0a432ad0",
       "url": "https://github.com/daylinmorgan/resultz",
       "downloadMethod": "git",
       "dependencies": [],
       "checksums": {
-        "sha1": "4ac450fc6debba51e42f41d59aaffc6287b6d796"
+        "sha1": "28d0296dcdb4b23e0b7b29cd9af9893f12bd1063"
       }
     },
     "zippy": {

@@ -161,17 +161,17 @@ proc trunc*(s: string, limit: int): string =
     s[0 .. (limit - 4)] & "..."
 
 proc display(msg: string, drvs: seq[DrvPath]) =
-  echo fmt"{msg}: [bold cyan]{drvs.len()}[/]".bb
+  hecho fmt"{msg}: [bold cyan]{drvs.len()}[/]".bb
   if drvs.len > 0:
     let maxLen = min(max drvs.mapIt(it.name.len), 40)
     for drv in drvs:
-      echo "  ", drv.name.trunc(maxLen).alignLeft(maxLen), " ", drv.hash.bb("faint")
+      hecho "  ", drv.name.trunc(maxLen).alignLeft(maxLen), " ", drv.hash.bb("faint")
 
 proc display(output: DryRunOutput) =
   if getVerbosity() > 0:
     display("to fetch", output.toFetch)
   else:
-    echo fmt"to fetch: [bold cyan]{output.toFetch.len()}[/]".bb
+    hecho fmt"to fetch: [bold cyan]{output.toFetch.len()}[/]".bb
   display("to build", output.toBuild)
 
 # here a results var would be nice...

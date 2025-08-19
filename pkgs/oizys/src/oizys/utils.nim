@@ -32,7 +32,7 @@ proc getCaches(): seq[string] =
   debug "determing caches to check"
   let (output, _, code) = newCommand("nix", "config", "show").runCapt()
   if code != 0:
-    echo formatSubprocessError(output)
+    hecho formatSubprocessError(output)
     fatalQuit "error running `nix config show`"
 
   for line in output.splitLines():
@@ -42,7 +42,7 @@ proc getCaches(): seq[string] =
         result.add u
 
   if result.len == 0:
-    echo formatSubprocessError(output)
+    hecho formatSubprocessError(output)
     fatalQuit "error running `nix config show`"
 
 proc hasNarinfo*(cache: string, path: string): Opt[string] =

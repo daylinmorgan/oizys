@@ -1,7 +1,9 @@
 ## nix begat oizys
-import std/[os, osproc, sequtils, strformat, strutils, tables]
+import std/[os, osproc, sequtils, strutils, tables]
 import hwylterm, hwylterm/[hwylcli]
 import oizys/[context, github, nix, logging, utils, exec]
+
+setHwylConsoleFile(stderr)
 
 proc checkExes() =
   if findExe("nix") == "":
@@ -111,7 +113,7 @@ hwylCli:
       s|system "show system path"
     run:
       if count([minimal, system, lix], true) > 1:
-        echo "--minimal, --system and --lix are mutually exclusive"
+        hecho "--minimal, --system and --lix are mutually exclusive"
 
       if lix:
         echo getLixandCo().fmtDrvsForNix().join("\n")
@@ -188,5 +190,5 @@ hwylCli:
     positionals:
       number int
     run:
-      echo bb(getNixpkgsPrStatus(number))
+      hecho bb(getNixpkgsPrStatus(number))
   
