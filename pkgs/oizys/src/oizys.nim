@@ -1,5 +1,5 @@
 ## nix begat oizys
-import std/[os, osproc, sequtils, strutils, tables]
+import std/[os, osproc, sequtils, strutils, strtabs]
 import hwylterm, hwylterm/[hwylcli]
 import oizys/[context, github, nix, logging, utils, exec]
 
@@ -11,6 +11,23 @@ proc checkExes() =
 
 checkexes()
 
+iterator items[X,Y](kvs: seq[KV[X,Y]]): (X, Y) =
+  var i = 0
+  while i < kvs.len:
+    let kv = kvs[i]
+    yield (kv.key, kv.val)
+    inc i
+
+proc prepGhaInputs(inputs: seq[KVString]): StringTableRef =
+  result = newStringTable()
+  for (k, v) in inputs:
+    if not v.startsWith("@"):
+      result[k] = v
+    else:
+      let fname = v[1..^1]
+      if not fileExists(fname):
+        hwylCliError("expected file at: " & fname)
+      result[k] = readFile(fname)
 
 hwylCli:
   name "oizys"
@@ -81,10 +98,7 @@ hwylCli:
       inputs(seq[KVString], "inputs for dispatch")
       `ref`("main", string, "git ref/branch/tag to trigger workflow on")
     run:
-      # TODO: support file operations like gh
-      # i.e. @flake.lock means read a file at flake.lock and use it's contents as a string
-      let inputs =
-        inputs.mapIt((it.key, it.val)).toTable()
+      let inputs = prepGhaInputs(inputs)
       createDispatch(workflow, `ref`, inputs)
 
     [dry]

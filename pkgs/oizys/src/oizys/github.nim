@@ -1,4 +1,4 @@
-import std/[httpclient,logging, os, strformat, strutils, json, tables, tempfiles, times]
+import std/[httpclient,logging, os, strformat, strutils, json, tables, tempfiles, times, strtabs]
 import jsony, hwylterm, hwylterm/logging, zippy/ziparchives, resultz
 import ./[exec, context]
 
@@ -104,7 +104,12 @@ proc getInProgressRun(
 
   warn "timeout reached waiting for workflow to start"
 
-proc createDispatch*(workflowFileName: string, `ref`: string, inputs: Table[string, string]) =
+proc `%`*(table: StringTableRef): JsonNode =
+  ## Generic constructor for JSON data. Creates a new `JObject JsonNode`.
+  result = newJObject()
+  for k, v in table: result[k] = %v
+
+proc createDispatch*(workflowFileName: string, `ref`: string, inputs: StringTableRef) =
   ## https://docs.github.com/en/rest/actions/workflows?apiVersion=2022-11-28#create-a-workflow-dispatch-event
   let workflow =
     if workflowFileName.endsWith(".yml") or workflowFileName.endsWith(".yaml"): workflowFileName
