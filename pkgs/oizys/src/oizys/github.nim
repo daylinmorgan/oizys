@@ -94,7 +94,7 @@ proc getInProgressRun(
     start = now()
     timeoutDuration = initDuration(milliseconds = timeout)
 
-  with(Dots2, fmt"waiting for {workflow} workflow to start"):
+  withSpinner(fmt"waiting for {workflow} workflow to start"):
     while (now() - start) < timeoutDuration:
       let response = getGhApi(fmt"https://api.github.com/repos/daylinmorgan/oizys/actions/workflows/{workflow}/runs")
       let runs = fromJson(response.body,  ListGhWorkflowResponse).workflow_runs
@@ -307,7 +307,7 @@ proc getNixpkgsPrStatus*(number: int): NixpkgsPrStatus =
     owner = "nixos"
     repo  = "nixpkgs"
 
-  with(Dots2, fmt"checking on status of PR [b]#{number}"):
+  withSpinner(fmt"checking on status of PR [b]#{number}"):
 
     let pr = getGhPull(owner, repo, number)
     result.number = number

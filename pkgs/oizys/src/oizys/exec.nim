@@ -149,7 +149,7 @@ proc runCaptSpin*(
   var
     output, err: string
     code: int
-  with(Dots2, msg):
+  withSpinner(msg):
     (output, err, code) = runCapt(cmd)
   if check and code != 0:
     stderr.write($formatStdoutStderr(output,err))

@@ -191,4 +191,4 @@ hwylCli:
       number int
     run:
       hecho bb(getNixpkgsPrStatus(number))
-  
+

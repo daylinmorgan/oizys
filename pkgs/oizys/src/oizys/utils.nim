@@ -11,7 +11,7 @@ proc checkBuild(installable: string): tuple[stdout: string, stderr: string] =
     output, err: string
     code: int
   let cmd = newNixCommand("build", noNom=true).withArgs(installable)
-  with(Dots2, bbfmt"attempt to build: [b]{installable}"):
+  withSpinner(bbfmt"attempt to build: [b]{installable}"):
     (output, err, code) = cmd.runCapt()
   if code == 0:
     fatalQuit fmt"{cmd} had zero exit"
