@@ -30,6 +30,9 @@ bin/lock
 .config/swayidle
 .config/swaylock
 
+.config/niri
+.config/niriman
+
 .xinitrc
 .xprofile
 
