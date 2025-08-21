@@ -1,0 +1,20 @@
+#!/usr/bin/env zsh
+# md2dogfen() {
+
+parent=$(mktemp --directory --suffix=dogfen)
+dogfen_file="$parent/${1}.html"
+
+printf "%s\n\n%s\n" \
+    '<!DOCTYPE html><html><body><script src="https://unpkg.dev/dogfen"></script><textarea style="display:none;">' \
+    "$(< "$1")" > $dogfen_file
+
+
+# Open the temporary file in the default browser
+xdg-open "$dogfen_file" # For Linux
+# open "$TMPFILE"    # For macOS
+
+# Clean up the temporary file after a delay
+sleep 5
+rm -r $parent
+
+# }
