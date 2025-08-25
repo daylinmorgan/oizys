@@ -8,7 +8,7 @@ inputs:
       extra-experimental-features = nix-command flakes pipe-operator
       build-dir = /nix/var
       extra-substituters = https://nix-cache.dayl.in/oizys
-      extra-trusted-public-keys = oizys:DSw3mwVMM/Y+PXSVpkDlU5dLwlORuiJRGPkwr5INSMc=
+      extra-trusted-public-keys = oizys:8R6ZZzI9+2ug4S6dyknAelQgOy3D5k/rCzAUu8/90BY=
       stalled-download-timeout = 0
       download-attempts = 10
   attic_token:
