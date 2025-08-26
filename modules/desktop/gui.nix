@@ -31,8 +31,8 @@ in
       })
 
       libsForQt5.qtstyleplugin-kvantum
-      libsForQt5.okular
       libsForQt5.qt5ct
+      kdePackages.okular
       papirus-icon-theme
 
       pcmanfm
