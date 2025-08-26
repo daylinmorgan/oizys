@@ -1,15 +1,22 @@
-import std/[
-  osproc, strformat, os,
-  strutils, streams, logging,
-  selectors, posix
-]
+import std/[osproc, strformat, os, strutils, streams, logging, selectors, posix]
 
 import hwylterm
 
-type
-  Command* = object
-    exe*: string
-    args*: seq[string]
+iterator splitLinesFinal(s: string): tuple[line: string, final: bool] =
+  let lines = s.strip().splitLines(keepEol = true)
+  for i, line in lines:
+    yield (line: line, final: i == lines.high)
+
+proc appendError*(s1: BbString | string, s2: string, count: Natural = 2): BbString =
+  result.add s1
+  result.add ":\n"
+  for (l, final) in s2.splitLinesFinal():
+    result.add if final: "╰ ".bb("red") else: "│ ".bb("red")
+    result.add l
+
+type Command* = object
+  exe*: string
+  args*: seq[string]
 
 func newCommand*(s: string, args: varargs[string]): Command =
   result.exe = s
@@ -29,15 +36,12 @@ func withArgs*(c: Command, args: varargs[string]): Command {.discardable.} =
   result.exe = c.exe
   result.args = (c.args & @args)
 
-
-proc run*(c: Command): int  {.discardable.}=
+proc run*(c: Command): int {.discardable.} =
   debug "running cmd: " & $c
   execCmd toShell(c)
 
-
 proc runQuit*(cmd: Command) =
   quit cmd.run()
-
 
 #[
   hasData, readAvailable, runCapt
@@ -66,9 +70,9 @@ proc readAvailable(fd: cint): string =
     bytesRead = read(fd, addr buffer[0], buffer.len)
 
     if bytesRead > 0:
-      result.add(buffer[0..<bytesRead])
+      result.add(buffer[0 ..< bytesRead])
     else:
-      break  # No more data or error
+      break # No more data or error
 
   # Restore flags
   discard fcntl(fd, F_SETFL, oldFlags)
@@ -77,11 +81,7 @@ proc readAvailable(fd: cint): string =
 
 proc runCapt*(cmd: Command): tuple[stdout, stderr: string, exitCode: int] =
   debug fmt"running cmd: {cmd}"
-  let p = startProcess(
-    cmd.exe,
-    args = cmd.args,
-    options = {poUsePath}
-  )
+  let p = startProcess(cmd.exe, args = cmd.args, options = {poUsePath})
 
   var stdoutData, stderrData: string
 
@@ -127,7 +127,6 @@ proc runCapt*(cmd: Command): tuple[stdout, stderr: string, exitCode: int] =
   result.stderr = stderrData
   close(p)
 
-
 proc formatSubprocessError*(s: string): BbString =
   for line in s.strip().splitLines():
     result.add bb("[red]->[/] " & line & "\n")
@@ -135,16 +134,13 @@ proc formatSubprocessError*(s: string): BbString =
 proc formatStdoutStderr*(stdout: string, stderr: string): BbString =
   template add(stream: string) =
     if stream.strip() != "":
-      result.add astToStr(stream).bb("bold") & ":\n"
-      result.add formatSubprocessError(stream)
+      result.add astToStr(stream).bb("bold").appendError(stream)
+
   add(stdout)
   add(stderr)
 
-
 proc runCaptSpin*(
-  cmd: Command,
-  msg: BbString | string = bb"",
-  check: bool = true
+    cmd: Command, msg: BbString | string = bb"", check: bool = true
 ): tuple[output, err: string] =
   var
     output, err: string
@@ -152,7 +148,7 @@ proc runCaptSpin*(
   withSpinner(msg):
     (output, err, code) = runCapt(cmd)
   if check and code != 0:
-    stderr.write($formatStdoutStderr(output,err))
+    stderr.write($formatStdoutStderr(output, err) & "\n")
     error fmt"{cmd} had non zero exit"
     quit code
   return (output, err)
