@@ -64,16 +64,13 @@ let
         ];
       };
     });
+
     checks = forAllSystems (
-      pkgs:
-      import ./checks.nix {
-        inherit inputs lib self;
-        system = pkgs.system;
-      }
-      // {
+      pkgs: {
         formatter = (evalTreeFmt pkgs).config.build.check self;
       }
     );
+
     formatter = forAllSystems (pkgs: (evalTreeFmt pkgs).config.build.wrapper);
   };
 in
