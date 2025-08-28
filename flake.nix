@@ -11,12 +11,12 @@
     my-nixpkgs.url = "github:daylinmorgan/nixpkgs/nixos-unstable";
     nixpkgs = nixpkgs-nixos-unstable;
 
-    lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
-    lix-module.inputs.nixpkgs.follows = "nixpkgs";
-    lix-module.inputs.flake-utils.follows = "flake-utils";
-    lix-module.inputs.lix.follows = "lix";
-    lix.url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
-    lix.flake = false;
+    # lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
+    # lix-module.inputs.nixpkgs.follows = "nixpkgs";
+    # lix-module.inputs.flake-utils.follows = "flake-utils";
+    # lix-module.inputs.lix.follows = "lix";
+    # lix.url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
+    # lix.flake = false;
     # keep for when lix breaks :/
     # lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0.tar.gz";
 
@@ -106,19 +106,16 @@
     neovim-nightly-overlay.inputs.hercules-ci-effects.follows = "";
     daylin-website.inputs.bun2nix.inputs.treefmt-nix.follows = "";
 
-    lix-attic.url = "git+https://git.lix.systems/nrabulinski/attic.git";
-    # lix-attic.url = "git+https://git.dayl.in/daylin/attic.git";
-    lix-attic.inputs.lix.follows = "lix-module/lix";
-    lix-attic.inputs.lix-module.follows = "lix-module";
-    lix-attic.inputs.nixpkgs.follows = "nixpkgs";
-    lix-attic.inputs.flake-parts.follows = "flake-parts";
-
-    lix-attic.inputs.nixpkgs-stable.follows = "";
-    lix-attic.inputs.flake-compat.follows = "";
-    lix-attic.inputs.nix-github-actions.follows = "";
-
-
-
+    # lix-attic.url = "git+https://git.lix.systems/nrabulinski/attic.git";
+    # # lix-attic.url = "git+https://git.dayl.in/daylin/attic.git";
+    # lix-attic.inputs.lix.follows = "lix-module/lix";
+    # lix-attic.inputs.lix-module.follows = "lix-module";
+    # lix-attic.inputs.nixpkgs.follows = "nixpkgs";
+    # lix-attic.inputs.flake-parts.follows = "flake-parts";
+    #
+    # lix-attic.inputs.nixpkgs-stable.follows = "";
+    # lix-attic.inputs.flake-compat.follows = "";
+    # lix-attic.inputs.nix-github-actions.follows = "";
   };
 
   nixConfig = {

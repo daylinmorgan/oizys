@@ -31,7 +31,7 @@
   ];
 
   nixpkgs.config.allowUnfree = true;
-  nix.package = (flake.pkgs "self").lix;
+  nix.package = pkgs.lixPackageSets.stable.lix;
 
   nix = {
     optimise.automatic = true;

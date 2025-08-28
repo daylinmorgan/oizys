@@ -31,6 +31,7 @@ let
       ;
   };
 
+  # should this have sops-nix too?
   mkIso =
     system:
     nixosSystem {
@@ -38,7 +39,6 @@ let
       modules = [
         { nixpkgs.hostPlatform = system; }
       ]
-      ++ (nixosModules "lix-module")
       ++ (selfModules "essentials|iso");
       specialArgs = commonSpecialArgs;
     };
@@ -54,7 +54,7 @@ let
         { nixpkgs.hostPlatform = system; }
       ]
       ++ (selfModules ''oizys'')
-      ++ (nixosModules ''lix-module|sops-nix'')
+      ++ (nixosModules ''sops-nix'')
       ++ (hostFiles hostName);
 
       specialArgs = commonSpecialArgs // {
