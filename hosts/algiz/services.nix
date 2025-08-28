@@ -86,6 +86,12 @@ in
     extraConfig = builtins.readFile ./caddy/Caddyfile;
 
     virtualHosts = {
+
+      "https://cloud.dayl.in:443".extraConfig = ''
+        # reverse_proxy localhost:11000
+        respond "No service active"
+      '';
+
       "www.dayl.in".extraConfig = ''
         redir https://dayl.in{uri}
       '';
