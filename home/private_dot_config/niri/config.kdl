@@ -353,7 +353,7 @@ binds {
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+Shift+Return { spawn "ghostty"; }
     Mod+Ctrl+N { spawn "swaylock"; }
-    Mod+N { spawn "ghostty" "--class=float.editor" "-e" "nvim +$ ~/org/note.org";}
+    Mod+N { spawn "ghostty" "--class=float.editor" "-e" "nvim +$ ~/log.md";}
 
     // Rofi
     Mod+P { spawn "rofi" "-show" "drun" "-theme" "launcher"; }
@@ -596,6 +596,10 @@ binds {
     // moving the mouse or pressing any other key.
     // Mod+Shift+P { power-off-monitors; }
     Mod+O { toggle-overview; }
+
+    // center at 75%
+    // workaround until multiple actions is implemented https://github.com/YaLTeR/niri/issues/914
+    Mod+Shift+C { spawn "sh" "-c" "niri msg action set-window-width '75%' && niri msg action center-column"; }
 }
 
 overview {
