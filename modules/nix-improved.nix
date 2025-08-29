@@ -34,4 +34,7 @@
     fi
   '';
 
+  programs.nh = enabled // {
+    clean = true;
+  };
 }
