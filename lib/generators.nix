@@ -10,6 +10,7 @@ let
     mkDefaultOizysModule
     mkOizysModule
     enabled
+    disabled
     enableAttrs
     flakeFromSystem
     listify
@@ -28,6 +29,7 @@ let
       lib
       flake
       enabled
+      disabled
       ;
   };
 
