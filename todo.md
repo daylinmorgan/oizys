@@ -3,7 +3,15 @@
 ## oizys
 
 - [ ] `oizys gha <workflow>` should keep checking for something greater than the current time
-- [ ] remove implicit dep on `jq`
+- [ ] remove the implicit dep on `jq`
+- [ ] implement `oizys clean` which will can automate removing old system profiles...or just use `nh`
+
+more reading on nix garbage:
+
+- profiles:
+  essentially this set of [commands](https://discourse.nixos.org/t/list-and-delete-nixos-generations/29637/3)
+
+- gcroots: [pills](https://nixos.org/guides/nix-pills/11-garbage-collector.html)
 
 ## software
 
