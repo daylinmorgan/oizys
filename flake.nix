@@ -11,6 +11,7 @@
     my-nixpkgs.url = "github:daylinmorgan/nixpkgs/nixos-unstable";
     nixpkgs = nixpkgs-nixos-unstable;
 
+    # switch to lix stable from nixpkgs ... see also overlays/lix
     # lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
     # lix-module.inputs.nixpkgs.follows = "nixpkgs";
     # lix-module.inputs.flake-utils.follows = "flake-utils";
@@ -25,7 +26,6 @@
     nix-index-database.url = "github:nix-community/nix-index-database";
     sops-nix.url = "github:Mic92/sops-nix";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland/8dcad9dcb5ce4eb28e2719ab025224308b318e79";
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
 
     llm-nix.url = "github:daylinmorgan/llm-nix";
     tsm.url = "github:daylinmorgan/tsm?dir=nix";
@@ -54,7 +54,6 @@
     daylin-website.inputs.nixpkgs.follows = "nixpkgs";
     f1multiviewer.inputs.nixpkgs.follows = "nixpkgs";
     llm-nix.inputs.nixpkgs.follows = "nixpkgs";
-    neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
     nim2nix.inputs.nixpkgs.follows = "nixpkgs";
     niriman.inputs.nixpkgs.follows = "nixpkgs";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
@@ -94,15 +93,10 @@
     niri.inputs.rust-overlay.follows = "rust-overlay";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
-    neovim-nightly-overlay.inputs.flake-parts.follows = "flake-parts";
 
     ## nil inputs, I don't want *ALL* your flake inputs...
     nixos-wsl.inputs.flake-compat.follows = "";
     nixpkgs-wayland.inputs.flake-compat.follows = "";
-    neovim-nightly-overlay.inputs.flake-compat.follows = "";
-    neovim-nightly-overlay.inputs.git-hooks.follows = "";
-    neovim-nightly-overlay.inputs.treefmt-nix.follows = "";
-    neovim-nightly-overlay.inputs.hercules-ci-effects.follows = "";
     daylin-website.inputs.bun2nix.inputs.treefmt-nix.follows = "";
 
     # lix-attic.url = "git+https://git.lix.systems/nrabulinski/attic.git";

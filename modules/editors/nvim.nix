@@ -1,9 +1,8 @@
-{ pkgs, flake, ... }:
+{ pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
     vim
-    (flake.pkg "neovim-nightly-overlay")
-    # neovim
+    neovim
 
     # nixd
     tree-sitter
