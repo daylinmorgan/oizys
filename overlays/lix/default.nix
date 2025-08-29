@@ -1,14 +1,9 @@
-inputs: final: prev: {
-
-  nixos-rebuild-ng = prev.nixos-rebuild-ng.override {
-    nix = final.lixPackageSets.stable.lix;
-  };
-
-  comma = prev.comma.override {
-    nix = final.lixPackageSets.stable.lix;
-  };
-
-  inherit (final.lixPackageSets.stable)
+inputs: final: prev:
+let
+lixPackageSets = final.lixPackageSets.stable;
+  in
+{
+  inherit (lixPackageSets)
     nixpkgs-review
     nix-eval-jobs
     nix-index
@@ -20,3 +15,14 @@ inputs: final: prev: {
     # colmena
     ;
 }
+// (
+  [ "nixos-rebuild-ng" "comma"]
+  |> map (name: {
+    inherit name;
+    value = prev.${name}.override {
+      nix = lixPackageSets.lix;
+    };
+  })
+  |> prev.lib.listToAttrs
+
+)
