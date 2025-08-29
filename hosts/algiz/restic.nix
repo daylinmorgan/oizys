@@ -6,17 +6,22 @@
 
   services.restic.backups.gdrive = {
     # directories created by gitea and soft-serve aren't world readable
+    # in practice I don't know that it would ever be possible to restore these directories
+    # but it's better than nothing
     user = "root";
 
     rcloneConfigFile = "/home/daylin/.config/rclone/rclone.conf";
     repository = "rclone:g:archives/algiz";
     passwordFile = config.sops.secrets.restic-algiz.path;
-    paths = [
-      "/home/daylin/services/git/"
-      "/home/daylin/services/gotosocial/"
-      "/home/daylin/services/caddy/"
-      "/home/daylin/services/wedding-website/"
-      "/home/daylin/services/bsky-pds/"
-    ];
+    paths =
+      [
+        "git"
+        "gotosocial"
+        "caddy"
+        "wedding-website"
+        "bsky-pds"
+        "wiki"
+      ]
+      |> map (s: "/home/daylin/services/${s}/");
   };
 }
