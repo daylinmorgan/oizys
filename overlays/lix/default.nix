@@ -1,5 +1,9 @@
 inputs: final: prev: {
 
+  nixos-rebuild-ng = prev.nixos-rebuild-ng.override {
+    nix = final.lixPackageSets.stable.lix;
+  };
+
   comma = prev.comma.override {
     nix = final.lixPackageSets.stable.lix;
   };
