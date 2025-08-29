@@ -92,10 +92,10 @@ proc newRebuildCommand(subcmd: NixosRebuildSubcmd, args: openArray[string], remo
   result.addArgs args
 
 
-proc nixosRebuild*(subcmd: NixosRebuildSubcmd, args: openArray[string] = [], remote: bool = false) =
+proc nixosRebuild*(subcmd: NixosRebuildSubcmd, args: openArray[string] = [], remote: bool = false): int =
   if getHosts().len > 1: fatalQuit bb"[bold]oizys os[/] only supports one host"
   let cmd = newRebuildCommand(subcmd, args, remote)
-  cmd.runQuit()
+  cmd.run()
 
 type
   DrvPath = object

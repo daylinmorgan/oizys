@@ -1,5 +1,5 @@
 ## nix begat oizys
-import std/[os, osproc, sequtils, strutils, strtabs]
+import std/[os, osproc, sequtils, strutils, strtabs, strformat]
 import hwylterm, hwylterm/[hwylcli]
 import oizys/[context, github, nix, logging, utils, exec]
 
@@ -118,7 +118,12 @@ hwylCli:
     flags:
       r|remote "host is remote"
     run:
-      nixosRebuild(subcmd, args, remote)
+      let code = nixosRebuild(subcmd, args, remote)
+      if code != 0:
+        fatalQuit fmt"nixos-rebuild {subcmd} failed"
+      if subcmd in {switch, boot}:
+        quit chezmoiStatus()
+
 
     [output]
     ... "nixos config attr"

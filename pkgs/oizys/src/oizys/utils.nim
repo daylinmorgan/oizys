@@ -96,3 +96,18 @@ proc checkForCache*(installables: seq[string], caches: seq[string]) =
   for name, path in outs:
     if not searchCaches(caches, path):
       error "did not find above 'narinfo' in any caches"
+
+
+proc chezmoiStatus*(): int =
+  let cmd = newCommand("chezmoi", "status")
+  let (output, err, code) = cmd.runCapt
+  if code != 0:
+    stderr.write($formatStdoutStderr(output, err) & "\n")
+    error fmt"{cmd} had non zero exit"
+    return code
+  else:
+    if output != "":
+      info "fyi the dotfiles don't match:"
+      hecho output.strip().indent(2)
+
+
