@@ -772,7 +772,7 @@ abnormal-command-exit-runtime = 250
 # This is a future planned feature.
 # 
 # This can be changed at runtime but will only affect new terminal surfaces.
-scrollback-limit = 10000000
+scrollback-limit = 100000000
 
 # Match a regular expression against the terminal text and associate clicking
 # it with an action. This can be used to match URLs, file paths, etc. Actions
