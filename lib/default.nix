@@ -65,11 +65,9 @@ let
       };
     });
 
-    checks = forAllSystems (
-      pkgs: {
-        formatter = (evalTreeFmt pkgs).config.build.check self;
-      }
-    );
+    checks = forAllSystems (pkgs: {
+      formatter = (evalTreeFmt pkgs).config.build.check self;
+    });
 
     formatter = forAllSystems (pkgs: (evalTreeFmt pkgs).config.build.wrapper);
   };

@@ -28,7 +28,6 @@ in
       pixi
       uv
       python3Packages.pip # needed for viv to work
-    ])
-    ;
+    ]);
   };
 }

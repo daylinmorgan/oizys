@@ -1,7 +1,7 @@
 inputs: final: prev:
 let
-lixPackageSets = final.lixPackageSets.stable;
-  in
+  lixPackageSets = final.lixPackageSets.stable;
+in
 {
   inherit (lixPackageSets)
     nixpkgs-review
@@ -16,7 +16,10 @@ lixPackageSets = final.lixPackageSets.stable;
     ;
 }
 // (
-  [ "nixos-rebuild-ng" "comma"]
+  [
+    "nixos-rebuild-ng"
+    "comma"
+  ]
   |> map (name: {
     inherit name;
     value = prev.${name}.override {

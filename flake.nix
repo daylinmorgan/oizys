@@ -96,7 +96,6 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     neovim-nightly-overlay.inputs.flake-parts.follows = "flake-parts";
 
-
     ## nil inputs, I don't want *ALL* your flake inputs...
     nixos-wsl.inputs.flake-compat.follows = "";
     nixpkgs-wayland.inputs.flake-compat.follows = "";
