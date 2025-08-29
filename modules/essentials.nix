@@ -36,16 +36,14 @@
   nix = {
     optimise.automatic = true;
     gc = {
-      automatic = true;
+      # automatic = true; removed in favor of programs.nh.clean
       dates = "weekly";
       options = "--delete-older-than 7d";
     };
 
     # use the same nixpkgs for nix run "nixpkgs#hello" style commands
     registry.nixpkgs.flake = inputs.nixpkgs;
-  };
 
-  nix = {
     settings = {
       experimental-features = [
         "nix-command"
@@ -56,22 +54,7 @@
       trusted-users = [ "@wheel" ];
       accept-flake-config = true;
 
-      # extra-substituters = [
-      #   "https://attic.dayl.in/oizys"
-      #   "https://nix-cache.dayl.in"
-      #   # "https://nixpkgs-wayland.cachix.org"
-      #   # "https://hyprland.cachix.org"
-      #   # "https://daylin.cachix.org"
-      # ];
-      # extra-trusted-public-keys = [
-      #   "oizys:DSw3mwVMM/Y+PXSVpkDlU5dLwlORuiJRGPkwr5INSMc="
-      #   "nix-cache.dayl.in-1:lj22Sov7m1snupBz/43O1fxyEfy/S7cxBpweD7iREcs="
-      #   # "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
-      #   # "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-      #   # "daylin.cachix.org-1:fLdSnbhKjtOVea6H9KqXeir+PyhO+sDSPhEW66ClE/k="
-      # ];
     }
     // (import ../lib/substituters.nix);
-    # ((builtins.readFile ../pkgs/oizys/src/oizys/substituters.json) |> builtins.fromJSON);
   };
 }

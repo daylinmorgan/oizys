@@ -35,6 +35,6 @@
   '';
 
   programs.nh = enabled // {
-    clean = true;
+    clean = enabled;
   };
 }
