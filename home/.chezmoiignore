@@ -39,6 +39,7 @@ bin/lock
 .local/share/icons/default/index.theme
 .config/vivaldi
 .mozilla/
+.config/ghostty
 
 .config/libvirt
 {{- end }}
