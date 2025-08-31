@@ -12,8 +12,17 @@ proc forwardArgs(task_name: string): seq[string] =
   let arg_start = args.find(task_name) + 1
   return args[arg_start..^1]
 
+proc gorgeOk(cmd: string): string =
+  let (output, code) = gorgeEx cmd
+  if code != 0:
+    quit fmt"cmd `{cmd}` failed, with code {code}: " & output
+  output
+
 proc gorgeExCd(command: string, dir: string = getCurrentDir()): tuple[output: string, exitCode: int] =
   gorgeEx("cd $1 && $2" % [dir, command])
+
+proc gorgeOkCd(command: string, dir: string = getCurrentDir()): string =
+  gorgeOk("cd $1 && $2" % [dir, command])
 
 proc getGitRootMaybe(): string =
   ## Try to get the path to the current git root directory.
@@ -57,17 +66,29 @@ task i, "install package":
   exec "nimble install"
   setCommand("nop")
 
+const name = projectDir().lastPathPart
+
+proc vcsFiles(): seq[string] =
+  # should this use getGitRootMaybe?
+  gorgeOkCd("git ls-files").strip().splitLines()
 
 task lexidInc, "bump lexicographic id":
-  let (vsn, code) = gorgeExCd("git describe --tags --always --dirty=-dev")
-  if code != 0:
-    echo "is this a git repo?"
-    echo &"output: {vsn}"
-    quit 1
+  const version {.strdefine.} = ""
+  var v: string
+  when not defined(version):
+    let (tag, code) = gorgeExCd("git describe --tags --always --dirty=-dev --abbrev=0 ")
+    if code != 0:
+      echo "is this a git repo?"
+      echo fmt"output: {tag}"
+      quit 1
+    v = tag.replace("v","")
+  else:
+    v = version
   let
-    parts = vsn.split(".")
-    year = parts[0].replace("v","")
+    parts = v.split(".")
     build = parts[1]
+
+  let year = gorgeOk("date +'%Y'")
 
   if "-dev" in build:
     echo "warning! uncommitted work, stash or commit"
@@ -78,20 +99,21 @@ task lexidInc, "bump lexicographic id":
     next = $(parseInt($next[0])*11) & next[1..^1]
 
   let newVersion = &"{year}.{next}"
+  let files = vcsFiles()
 
+  echo "next version is: ", newVersion
+  echo gorgeOkCd(fmt"grep {v} " & files.join(" "))
+  when defined(replace):
+    exec fmt"sed -i s/{v}/{newVersion}/ " & files.join(" ")
   when defined(commit):
-    exec &"sed -i 's/version       = .*/version       = \"{newVersion}\"/' {pkgName}.nimble"
-    exec &"git add {pkgName}.nimble"
-    exec &"git commit -m 'chore: bump {year}.{build} -> {newVersion}'"
-    exec &"git tag v{newVersion}"
-  else:
-    echo "next version is: ", newVersion,"\n"
-
+    quit "this implementation was broken do it yourself"
+    # exec &"git add {name}.nimble"
+    # exec &"git commit -m 'chore: bump {year}.{build} -> {newVersion}'"
+    # exec &"git tag v{newVersion}"
 
 task h, "":
   exec "nim help"
 
-const name = projectDir().lastPathPart
 
 template buildProject() =
   switch("outdir", "bin")
@@ -135,5 +157,3 @@ task test, "run tests/tester.nim":
 # line delemiter for `nim help`
 task _,"_______________":
   discard
-
-
