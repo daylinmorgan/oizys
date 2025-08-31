@@ -93,26 +93,6 @@
         "url": "https://git.dayl.in/daylin/dayl.in/archive/main.tar.gz"
       }
     },
-    "f1multiviewer": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1743832731,
-        "narHash": "sha256-E2bmSMcdhaxB6GtmMfDpWECgmNShkvWGZ4IdW3g7BWs=",
-        "owner": "daylinmorgan",
-        "repo": "f1multiviewer-flake",
-        "rev": "9687be67dc5e632bf2b9036225af120f1c571e54",
-        "type": "github"
-      },
-      "original": {
-        "owner": "daylinmorgan",
-        "repo": "f1multiviewer-flake",
-        "type": "github"
-      }
-    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -212,6 +192,26 @@
       "original": {
         "owner": "daylinmorgan",
         "repo": "llm-nix",
+        "type": "github"
+      }
+    },
+    "multiviewer": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1756651972,
+        "narHash": "sha256-Bt6kI9r7GdtZe49duf54y34yg1O02p016M30/G+J+Og=",
+        "owner": "daylinmorgan",
+        "repo": "multiviewer-flake",
+        "rev": "28c0660a04589e830e80aa9975173e102e7c4888",
+        "type": "github"
+      },
+      "original": {
+        "owner": "daylinmorgan",
+        "repo": "multiviewer-flake",
         "type": "github"
       }
     },
@@ -540,11 +540,11 @@
       "inputs": {
         "NixVirt": "NixVirt",
         "daylin-website": "daylin-website",
-        "f1multiviewer": "f1multiviewer",
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",
         "lib-aggregate": "lib-aggregate",
         "llm-nix": "llm-nix",
+        "multiviewer": "multiviewer",
         "my-nixpkgs": "my-nixpkgs",
         "nim2nix": "nim2nix",
         "niri": "niri",

@@ -33,7 +33,7 @@
     niriman.url = "git+https://git.dayl.in/daylin/niriman.git";
     utils.url = "git+https://git.dayl.in/daylin/utils.git";
 
-    f1multiviewer.url = "github:daylinmorgan/f1multiviewer-flake";
+    multiviewer.url = "github:daylinmorgan/multiviewer-flake";
     roc.url = "github:roc-lang/roc/0.0.0-alpha2-rolling";
 
     niri.url = "github:YaLTeR/niri";
@@ -52,7 +52,7 @@
 
     ## nixpkgs
     daylin-website.inputs.nixpkgs.follows = "nixpkgs";
-    f1multiviewer.inputs.nixpkgs.follows = "nixpkgs";
+    multiviewer.inputs.nixpkgs.follows = "nixpkgs";
     llm-nix.inputs.nixpkgs.follows = "nixpkgs";
     nim2nix.inputs.nixpkgs.follows = "nixpkgs";
     niriman.inputs.nixpkgs.follows = "nixpkgs";
