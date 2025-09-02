@@ -24,6 +24,7 @@
     htop
 
     (flake.pkg "self")
+    (flake.pkgs "self").oizys-rs
 
     pkgs.nix-output-monitor
     sops

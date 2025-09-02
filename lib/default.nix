@@ -50,6 +50,9 @@ let
         oizys = pkgs.callPackage ../pkgs/oizys {
           inherit (substituters) substituters trusted-public-keys;
         };
+        oizys-rs = pkgs.callPackage ../pkgs/oizys-rs {
+          inherit substituters;
+        };
         iso-x86_64-linux = (mkIso "x86_64-linux").config.system.build.isoImage;
       }
       // (import ../pkgs { inherit pkgs lib inputs; })
@@ -61,6 +64,17 @@ let
           openssl
           nim
           self.packages.${pkgs.system}.nimble
+        ];
+      };
+      oizys-rs = pkgs.mkShell {
+        nativeBuildInputs = [ pkgs.pkg-config ];
+        buildInputs = [ pkgs.openssl ];
+
+        packages = with pkgs; [
+
+          cargo
+          rustc
+          rust-analyzer
         ];
       };
     });
