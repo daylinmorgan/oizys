@@ -28,11 +28,12 @@
   programs.nix-index.enableBashIntegration = false;
   programs.nix-index.enableFishIntegration = false;
 
-  system.activationScripts.diff = ''
-    if [[ -e /run/current-system ]]; then
-      ${pkgs.nix}/bin/nix store diff-closures /run/current-system "$systemConfig"
-    fi
-  '';
+  # not setup to use lix... (could switch back to nvd)
+  # system.activationScripts.diff = ''
+  #   if [[ -e /run/current-system ]]; then
+  #     ${pkgs.nix}/bin/nix store diff-closures /run/current-system "$systemConfig"
+  #   fi
+  # '';
 
   programs.nh = enabled // {
     clean = enabled;
