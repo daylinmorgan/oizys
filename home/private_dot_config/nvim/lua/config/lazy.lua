@@ -26,10 +26,11 @@ require("lazy").setup({
     { import = "plugins.disabled" },
     { import = "plugins.host" },
     { import = "plugins.ui" },
+    { import = "plugins.fixes" },
+
     -- { import = "plugins.misc" },
 
     { import = "plugins.language.misc" },
-    { import = "plugins.language.org" },
     { import = "plugins.language.lua" },
     { import = "plugins.language.markdown" },
     { import = "plugins.language.shell" },
