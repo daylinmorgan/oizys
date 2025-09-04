@@ -48,6 +48,9 @@
     # zls.inputs.nixpkgs.follows = "nixpkgs";
     # zls.inputs.zig-overlay.follows = "zig-overlay";
 
+    pinix.url = "github:remi-dupre/pinix";
+    pinix.inputs.nixpkgs.follows = "nixpkgs";
+
     # Follows
 
     ## nixpkgs

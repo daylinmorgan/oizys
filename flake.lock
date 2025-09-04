@@ -458,6 +458,26 @@
         "type": "github"
       }
     },
+    "pinix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1755156568,
+        "narHash": "sha256-fuLOLww23Y+aDu2a4zKYfnP+ufN4azTvWtr6P1rTOj8=",
+        "owner": "remi-dupre",
+        "repo": "pinix",
+        "rev": "94b12321b32e8b4788d6e3ae91f514ef0285e6bc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "remi-dupre",
+        "repo": "pinix",
+        "type": "github"
+      }
+    },
     "pyproject-build-systems": {
       "inputs": {
         "nixpkgs": [
@@ -558,6 +578,7 @@
         "nixpkgs-stable": "nixpkgs-stable",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixpkgs-wayland": "nixpkgs-wayland",
+        "pinix": "pinix",
         "roc": "roc",
         "rust-overlay": "rust-overlay",
         "sops-nix": "sops-nix",

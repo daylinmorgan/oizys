@@ -10,3 +10,4 @@ charm-freeze
 # quarto
 calibre
 attic-client
+flake:pinix
