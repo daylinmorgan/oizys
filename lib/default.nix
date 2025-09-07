@@ -1,6 +1,7 @@
 inputs@{
   nixpkgs,
   treefmt-nix,
+  crane,
   self,
   ...
 }:
@@ -50,6 +51,10 @@ let
         oizys = pkgs.callPackage ../pkgs/oizys {
           inherit (substituters) substituters trusted-public-keys;
         };
+        oizys-rs = pkgs.callPackage ../pkgs/oizys-rs {
+          inherit substituters;
+          inherit (inputs) crane;
+        };
         iso-x86_64-linux = (mkIso "x86_64-linux").config.system.build.isoImage;
       }
       // (import ../pkgs { inherit pkgs lib inputs; })
@@ -61,6 +66,14 @@ let
           openssl
           nim
           nimble
+        ];
+      };
+      oizys-rs = (crane.mkLib pkgs).devShell {
+        inputsFrom = [
+          self.packages.${pkgs.system}.oizys-rs
+        ];
+        packages = with pkgs; [
+          rust-analyzer
         ];
       };
     });

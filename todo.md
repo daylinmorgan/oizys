@@ -4,7 +4,6 @@
 
 - [ ] `oizys gha <workflow>` should keep checking for something greater than the current time
 - [ ] remove the implicit dep on `jq`
-- [ ] implement `oizys clean` which will can automate removing old system profiles...or just use `nh`
 
 more reading on nix garbage:
 

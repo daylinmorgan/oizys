@@ -1,0 +1,106 @@
+pub mod github;
+pub mod nix;
+pub mod process;
+pub mod substituters;
+pub mod ui;
+
+use indicatif::ProgressStyle;
+use prelude::*;
+use process::LoggedCommand;
+
+fn get_hash_from_output(output: &str) -> Result<String> {
+    let re = regex::Regex::new(r"(?m)^\s+got:\s+(?<hash>.*)$").unwrap();
+    let Some(caps) = re.captures(output) else {
+        bail!("no hash found");
+    };
+
+    Ok(caps["hash"].to_string())
+}
+
+pub fn get_hash(args: Vec<String>) -> Result<String> {
+    let stderr = LoggedCommand::new("nix")
+        .arg("build")
+        .args(args)
+        .stderr_fail()?;
+    Ok(get_hash_from_output(&stderr)?)
+}
+
+pub fn indent(s: String) -> String {
+    let mut indented = String::new();
+    for l in s.lines() {
+        indented.push_str("  ");
+        indented.push_str(l)
+    }
+    return indented;
+}
+
+pub fn check_lock_file(flake: &str) -> Result<()> {
+    let lock_file = std::path::PathBuf::from(flake).join("flake.lock");
+
+    // let json: serde_json::Value = serde_json::from_str(&std::fs::read_to_string(&lock_file)?)?;
+
+    // TODO: drop jq dependency
+    if !which::which("jq").is_ok() {
+        bail!("jq not found, but required for `oizys lock`")
+    }
+
+    let stdout = LoggedCommand::new("jq")
+        .arg(".nodes | keys[] | select(contains(\"_\"))")
+        .arg("-r")
+        .arg(lock_file)
+        .stdout_ok()?;
+
+    if stdout != "" {
+        println!("{}", stdout);
+    } else {
+        eprintln!("nothing to change :)");
+    }
+    Ok(())
+}
+
+fn default_progress_style() -> ProgressStyle {
+    ProgressStyle::with_template("{span_child_prefix}{spinner:.magenta} {span_name} {span_fields}")
+        .unwrap()
+        .tick_strings(&["⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"])
+}
+
+pub fn init_subscriber(verbose: u8) {
+    use tracing_subscriber::prelude::*;
+    use tracing_subscriber::{fmt, EnvFilter};
+    let indicatif_layer =
+        tracing_indicatif::IndicatifLayer::new().with_progress_style(default_progress_style());
+    let fmt_layer = fmt::layer()
+        .without_time()
+        .with_writer(indicatif_layer.get_stderr_writer());
+    // .with_writer(std::io::stderr);
+    let filter_layer = EnvFilter::try_from_default_env()
+        .or_else(|_| match verbose {
+            0 => EnvFilter::try_new("warn,oizys::progress=trace"),
+            1 => EnvFilter::try_new("warn,oizys=info"),
+            2 => EnvFilter::try_new("warn,oizys=debug"),
+            3 => EnvFilter::try_new("debug"),
+            _ => EnvFilter::try_new("trace"),
+        })
+        .unwrap();
+
+    tracing_subscriber::registry()
+        .with(fmt_layer)
+        .with(filter_layer)
+        .with(indicatif_layer)
+        .init();
+}
+
+#[macro_export]
+macro_rules! bar_span {
+    ($name:literal) => {
+        tracing::info_span!(target: "oizys::progress", $name)
+    };
+}
+
+pub mod prelude {
+    pub use bar_span;
+    pub use color_eyre::eyre::{bail, WrapErr};
+    pub use color_eyre::Result;
+    pub use console::style;
+    pub use crate::ui;
+}
