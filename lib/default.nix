@@ -60,7 +60,7 @@ let
         packages = with pkgs; [
           openssl
           nim
-          self.packages.${pkgs.system}.nimble
+          nimble
         ];
       };
     });
