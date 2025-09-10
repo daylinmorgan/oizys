@@ -13,9 +13,11 @@
   # nix.nixPath = [ "nixpkgs=/etc/channels/nixpkgs" ];
   # environment.etc."channels/nixpkgs".source = inputs.nixpkgs.outPath;
 
-  environment.systemPackages = [
-    pkgs.nixd
-    pkgs.nixfmt-rfc-style
+  environment.systemPackages = with pkgs; [
+    nixd
+    nixfmt-rfc-style
+    nix-output-monitor
+    nix-eval-jobs
   ];
 
   programs.nix-index-database.comma = enabled;
