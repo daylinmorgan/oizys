@@ -60,7 +60,7 @@ jobs:
 
       - name: Pre-build oizys
         run: |
-          nix build .
+          nix build '.#oizys-rs'
           attic push oizys ./result
 
       - name: Build lix and co
@@ -76,10 +76,11 @@ jobs:
 
       - name: Build
         run: >
-          nix run .
+          nix run '.#oizys-rs'
           --
+          ci
           cache
-          --host,="${{ env.hosts }}"
+          --host "${{ env.hosts }}"
           --flake .
           -vv
           --
