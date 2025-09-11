@@ -318,7 +318,9 @@ pub fn set_flake(flake: Option<String>) -> Result<String> {
     }
 
     if let Ok(path) = std::env::var("OIZYS_DIR") {
-        return Ok(path);
+        if path != "" {
+            return Ok(path);
+        }
     };
 
     let path = std::env::home_dir().unwrap().join("oizys");
