@@ -236,6 +236,8 @@ fn main() -> Result<()> {
                     if !drvs.is_empty() {
                         let results = nix.build_drvs_multi(&drvs)?;
                         push_to_attic_cache(results, "oizys")?;
+                    } else {
+                        eprintln!("no derivations to build :)")
                     }
                 }
             }

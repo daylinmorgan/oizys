@@ -170,7 +170,11 @@ pub fn get_not_cached_nix_eval_jobs(flake: &str, hosts: &Vec<String>) -> Result<
     }
     if !ignored.is_empty() {
         info!("ignored {} derivations", ignored.len());
-        debug!("ignored derviations:\n{:?}", ignored);
+        debug!("ignored derviations:\n{:?}", ignored.iter().map(|d| d.name.to_string()));
+    }
+
+    if drvs.is_empty() {
+        eprintln!("no derivations to build :)")
     }
     Ok(drvs.iter().map(|d| d.drv_path.to_string()).collect())
 }
