@@ -2,7 +2,7 @@ use clap::{CommandFactory, Parser, Subcommand};
 use clap_complete::aot::{generate, Generator, Shell};
 use oizys::{
     github,
-    nix::{push_to_attic_cache, run_current, set_flake, NixCommand, NixName, Nixos},
+    nix::{NixCommand, NixName, Nixos, NixosOps},
 };
 use oizys::{nix, prelude::*};
 
@@ -134,9 +134,9 @@ enum Commands {
 
 #[derive(Debug, Subcommand)]
 enum CiCommands {
-    /// build and cache, update nixos configurations (TBD)
+    /// two stage build of current and updated nixos configurations
     Update,
-    /// build and push store paths (WIP)
+    /// build and push store paths
     Cache,
 }
 
@@ -161,11 +161,12 @@ fn main() -> Result<()> {
     oizys::init_subscriber(cli.verbose);
 
     let nix = NixCommand::new(&cli.nix, cli.bootstrap);
-    let flake = set_flake(cli.flake)?;
+    let flake = nix::set_flake(cli.flake)?;
     let hosts = cli.host;
+    let systems = Nixos::new_multi(&flake, &hosts);
 
     match cli.command {
-        Commands::Current { args } => run_current(&nix, &flake, args),
+        Commands::Current { args } => nix::run_current(&nix, &flake, args),
         Commands::Completion { shell } => {
             let mut cmd = Cli::command();
             eprintln!("Generating completion file for {shell}...");
@@ -227,15 +228,12 @@ fn main() -> Result<()> {
         }
         Commands::Ci { command } => {
             match command {
-                CiCommands::Update => todo!(),
+                CiCommands::Update => systems.build_update_build()?,
                 CiCommands::Cache => {
-                    // current implementation is the naive implementation
-                    // future versions may rely on nix-eval-jobs
-
-                    let drvs = nix::get_not_cached_nix_eval_jobs(&flake, &hosts)?;
+                    let drvs = systems.not_cached()?;
                     if !drvs.is_empty() {
-                        let results = nix.build_drvs_multi(&drvs)?;
-                        push_to_attic_cache(results, "oizys")?;
+                        let to_push = nix.build_drvs_multi(&drvs)?;
+                        nix::AtticCache::new("oizys").push(to_push)?;
                     } else {
                         eprintln!("no derivations to build :)")
                     }

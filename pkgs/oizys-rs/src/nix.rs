@@ -56,6 +56,12 @@ impl NixName {
 }
 
 impl NixCommand {
+    pub fn default() -> Self {
+        Self {
+            bin: "nix".to_string(),
+            bootstrap: false,
+        }
+    }
     pub fn new(name: &NixName, bootstrap: bool) -> Self {
         Self {
             bin: if !bootstrap {
@@ -128,6 +134,15 @@ impl NixCommand {
         }
         Ok(results)
     }
+
+    pub fn flake_update(&self) -> Result<()> {
+        self.nix()
+            .arg("flake")
+            .arg("update")
+            .arg("--output-lock-file")
+            .arg("updated.lock")
+            .check_status()
+    }
 }
 
 use serde::Deserialize;
@@ -142,84 +157,23 @@ pub struct NixEvalOutput {
     outputs: BTreeMap<String, String>,
 }
 
-pub fn get_not_cached_nix_eval_jobs(flake: &str, hosts: &Vec<String>) -> Result<Vec<String>> {
-    let ignored_names = ignored_names();
-    let args = ["--flake", "--check-cache-status"];
-    let mut stdout = "".to_string();
-    for host in hosts {
-        let out = LoggedCommand::new("nix-eval-jobs")
-            .args(args)
-            .arg(format!(
-                "{flake}#nixosConfigurations.{host}.config.oizys.packages"
-            ))
-            .stdout_ok()?;
-        stdout.push_str(&out);
-    }
-
-    let mut drvs = HashSet::new();
-    let mut ignored = HashSet::new();
-    for line in stdout.lines() {
-        let drv: NixEvalOutput = serde_json::from_str(line).wrap_err(format!("line: {}", line))?;
-        if !drv.is_cached {
-            if !is_ignored(&drv.name, &ignored_names) {
-                drvs.insert(drv);
-            } else {
-                ignored.insert(drv);
-            }
-        }
-    }
-    if !ignored.is_empty() {
-        info!("ignored {} derivations", ignored.len());
-        debug!("ignored derviations:\n{:?}", ignored.iter().map(|d| d.name.to_string()));
-    }
-
-    if drvs.is_empty() {
-        eprintln!("no derivations to build :)")
-    }
-    Ok(drvs.iter().map(|d| d.drv_path.to_string()).collect())
+pub struct AtticCache {
+    name: String,
 }
 
-// NixEvalOutput = object
-//   name: string
-//   drvPath: string
-//   isCached: bool
-//   outputs: Table[string, string]
-//
-/*proc missingDrvNixEvalJobs*(): HashSet[NixEvalOutput] =
-  ## get all derivations not cached using nix-eval-jobs
-  var cmd = newCommand("nix-eval-jobs", "--flake", "--check-cache-status")
-  var output: string
+impl AtticCache {
+    pub fn new(name: &str) -> Self {
+        let name = name.to_string();
+        Self { name }
+    }
 
-  for host in getHosts():
-    let flakeUrl = getFlake() & "#nixosConfigurations." & host & ".config.oizys.packages"
-    let (o, _) = cmd
-      .withArgs(flakeUrl)
-      .runCaptSpin(bb"running [b]nix-eval-jobs[/] for " & host.bb("bold"))
-    output.add o
-
-  var cached: HashSet[NixEvalOutput]
-  var ignored: HashSet[NixEvalOutput]
-
-  for line in output.strip().splitLines():
-    let output = line.fromJson(NixEvalOutput)
-    if output.isCached:
-      cached.incl output
-    elif output.name.isIgnored():
-      ignored.incl output
-    else:
-      result.incl output
-
-  debug "cached derivations: ", bb($cached.len, "yellow")
-  debug "ignored derivations: ", bb($ignored.len, "yellow")
-
-*/
-
-pub fn push_to_attic_cache(drvs: Vec<String>, name: &str) -> Result<()> {
-    LoggedCommand::new("attic")
-        .arg("push")
-        .arg(name)
-        .args(drvs)
-        .check_status()
+    pub fn push(&self, drvs: Vec<String>) -> Result<()> {
+        LoggedCommand::new("attic")
+            .arg("push")
+            .arg(&self.name)
+            .args(drvs)
+            .check_status()
+    }
 }
 
 const IGNORED_RAW_TEXT: &str = include_str!("ignored.txt");
@@ -235,12 +189,7 @@ fn ignored_names() -> Vec<String> {
 }
 
 fn is_ignored(name: &str, ignored: &Vec<String>) -> bool {
-    for n in ignored {
-        if name.starts_with(n) {
-            return true;
-        }
-    }
-    return false;
+    ignored.iter().any(|n| name.starts_with(n))
 }
 
 pub fn extract_drvs(nix_output: &str) -> Result<Vec<String>> {
@@ -255,12 +204,16 @@ pub fn extract_drvs(nix_output: &str) -> Result<Vec<String>> {
     Ok(results)
 }
 
+#[derive(Debug)]
 pub struct Nixos {
     pub flake: String,
     pub host: String,
 }
 
 impl Nixos {
+    pub fn new_multi(flake: &str, hosts: &Vec<String>) -> Vec<Self> {
+        hosts.iter().map(|h| Self::new(&flake, &h)).collect()
+    }
     pub fn new(flake: &str, host: &str) -> Self {
         let host = host.to_string();
         let flake = flake.to_string();
@@ -279,6 +232,19 @@ impl Nixos {
             "{}#nixosConfigurations.{}.config.system.path",
             self.flake, self.host
         )
+    }
+
+    pub fn build_with_args<I, S>(&self, args: I) -> Result<()>
+    where
+        I: IntoIterator<Item = S>,
+        S: AsRef<std::ffi::OsStr>,
+    {
+        NixCommand::default()
+            .cmd()
+            .arg("build")
+            .arg(self.attr())
+            .args(args)
+            .check_status()
     }
 
     pub fn rebuild(&self, nix: NixName, subcmd: &str, extra_flags: Vec<String>) -> Result<()> {
@@ -306,6 +272,105 @@ impl Nixos {
 
         Ok(())
     }
+
+    fn oizys_packages_attr(&self) -> String {
+        format!(
+            "{}#nixosConfigurations.{}.config.oizys.packages",
+            self.flake, self.host
+        )
+    }
+
+    pub fn not_cached_system_path(&self) -> Result<HashSet<NixEvalOutput>> {
+        let _span =
+            tracing::info_span!(target: "oizys::bar", "running nix-eval-jobs", host = self.host)
+                .entered();
+        let stdout = LoggedCommand::new("nix-eval-jobs")
+            .arg("--flake")
+            .arg("--check-cache-status")
+            .arg(self.oizys_packages_attr())
+            .stdout_ok()?;
+
+        let mut drvs = HashSet::new();
+        for line in stdout.lines() {
+            let drv: NixEvalOutput =
+                serde_json::from_str(line).wrap_err(format!("failed to parse line: {}", line))?;
+            if !drv.is_cached {
+                drvs.insert(drv);
+            }
+        }
+        Ok(drvs)
+    }
+}
+
+pub trait NixosOps {
+    fn not_cached(&self) -> Result<Vec<String>>;
+    fn build_update_build(&self) -> Result<()>;
+}
+
+impl NixosOps for Vec<Nixos> {
+    fn not_cached(&self) -> Result<Vec<String>> {
+        let _span = bar_span!("checking for packages that need to be built").entered();
+        let mut drvs: HashSet<NixEvalOutput> = HashSet::new();
+        for system in self {
+            for d in system.not_cached_system_path()? {
+                drvs.insert(d);
+            }
+            // why doesn't union work?
+            // drvs = drvs.union(&not_cached).collect();
+        }
+
+        let ignored_names = ignored_names();
+        let mut to_build = HashSet::new();
+        let mut ignored = HashSet::new();
+        for drv in drvs {
+            if !is_ignored(&drv.name, &ignored_names) {
+                to_build.insert(drv);
+            } else {
+                ignored.insert(drv);
+            }
+        }
+        if !ignored.is_empty() {
+            info!("ignored {} derivations", ignored.len());
+            debug!(
+                "ignored derviations:\n{:?}",
+                ignored.iter().map(|d| d.name.to_string())
+            );
+        }
+
+        if to_build.is_empty() {
+            eprintln!("no derivations to build :)")
+        }
+        Ok(to_build.iter().map(|d| d.drv_path.to_string()).collect())
+    }
+
+    fn build_update_build(&self) -> Result<()> {
+        for system in self {
+            info!("building current system {:?}", system);
+            system.build_with_args(["--out-link", &format!("current-{}", system.host)])?;
+        }
+
+        NixCommand::default().flake_update()?;
+
+        for system in self {
+            info!("building updated system {:?}", system);
+            system.build_with_args([
+                "--out-link",
+                &format!("updated-{}", system.host),
+                "--reference-lock-file",
+                "updated.lock",
+            ])?;
+        }
+        Ok(())
+    }
+}
+
+/// check if some flake exists
+fn needs_to_be_built(flake: &str) -> Result<bool> {
+    let output = LoggedCommand::new("nix")
+        .arg("path-info")
+        .arg(&flake)
+        .output()?;
+    Ok(!output.status.success())
 }
 
 pub fn set_flake(flake: Option<String>) -> Result<String> {
@@ -335,16 +400,6 @@ pub fn set_flake(flake: Option<String>) -> Result<String> {
     info!("{:?} does not exist, using remote as fallback", path);
     Ok("github:daylinmorgan/oizys".to_string())
 }
-
-/// check if some flake exists
-fn needs_to_be_built(flake: &str) -> Result<bool> {
-    let output = LoggedCommand::new("nix")
-        .arg("path-info")
-        .arg(&flake)
-        .output()?;
-    Ok(!output.status.success())
-}
-
 // TODO: better error handling here
 pub fn run_current(nix: &NixCommand, flake: &str, args: Vec<String>) {
     let flake = format!("{flake}#oizys-rs");
