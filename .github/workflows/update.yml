@@ -64,16 +64,16 @@ jobs:
           nix build '.#oizys-rs'
           attic push oizys ./result
 
-      - name: Build lix and co
-        run: |
-          DRVS="$(nix run . -- output --lix --host,="${{ env.hosts }}" --flake .)"
-          nix build \
-            --print-build-logs \
-            --out-link 'lix-and-co' \
-            -- \
-            $DRVS
-          attic push oizys ./lix-and-co*
-          rm -r ./lix-and-co*
+      # - name: Build lix and co
+      #   run: |
+      #     DRVS="$(nix run . -- output --lix --host,="${{ env.hosts }}" --flake .)"
+      #     nix build \
+      #       --print-build-logs \
+      #       --out-link 'lix-and-co' \
+      #       -- \
+      #       $DRVS
+      #     attic push oizys ./lix-and-co*
+      #     rm -r ./lix-and-co*
 
       - name: Build
         run: >
