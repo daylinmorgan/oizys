@@ -47,6 +47,8 @@ in
 
       libreoffice-qt
       hunspell # spell check for libreoffice
+
+      (pkgs.writeShellScriptBin "dragon" "exec -a $0 ${dragon-drop}/bin/dragon-drop $@")
     ];
 
   };
