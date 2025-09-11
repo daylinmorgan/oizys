@@ -1,10 +1,10 @@
 use clap::{CommandFactory, Parser, Subcommand};
 use clap_complete::aot::{generate, Generator, Shell};
-use oizys::prelude::*;
 use oizys::{
     github,
     nix::{push_to_attic_cache, run_current, set_flake, NixCommand, NixName, Nixos},
 };
+use oizys::{nix, prelude::*};
 
 #[derive(Debug, Parser)]
 #[command(
@@ -231,11 +231,8 @@ fn main() -> Result<()> {
                 CiCommands::Cache => {
                     // current implementation is the naive implementation
                     // future versions may rely on nix-eval-jobs
-                    let attrs = hosts
-                        .iter()
-                        .map(|h| Nixos::new(&flake, &h).system_attr())
-                        .collect();
-                    let drvs = nix.not_cached(&attrs)?;
+
+                    let drvs = nix::get_not_cached_nix_eval_jobs(&flake, &hosts)?;
                     if !drvs.is_empty() {
                         let results = nix.build_drvs_multi(&drvs)?;
                         push_to_attic_cache(results, "oizys")?;

@@ -1,7 +1,8 @@
 use super::prelude::*;
 use super::process::LoggedCommand;
 use clap::ValueEnum;
-use tracing::info;
+use std::collections::{BTreeMap, HashSet};
+use tracing::{debug, info};
 
 #[derive(Debug, Clone, ValueEnum)]
 pub enum NixName {
@@ -94,7 +95,8 @@ impl NixCommand {
     }
 
     pub fn build_dry_run(&self, installables: &Vec<String>) -> Result<String> {
-        let stderr = self.nix()
+        let stderr = self
+            .nix()
             .arg("build")
             .args(installables)
             .arg("--dry-run")
@@ -127,6 +129,86 @@ impl NixCommand {
         Ok(results)
     }
 }
+
+use serde::Deserialize;
+
+#[derive(Debug, Deserialize, Eq, Hash, PartialEq)]
+pub struct NixEvalOutput {
+    name: String,
+    #[serde(rename = "drvPath")]
+    drv_path: String,
+    #[serde(rename = "isCached")]
+    is_cached: bool,
+    outputs: BTreeMap<String, String>,
+}
+
+pub fn get_not_cached_nix_eval_jobs(flake: &str, hosts: &Vec<String>) -> Result<Vec<String>> {
+    let ignored_names = ignored_names();
+    let args = ["--flake", "--check-cache-status"];
+    let mut stdout = "".to_string();
+    for host in hosts {
+        let out = LoggedCommand::new("nix-eval-jobs")
+            .args(args)
+            .arg(format!(
+                "{flake}#nixosConfigurations.{host}.config.oizys.packages"
+            ))
+            .stdout_ok()?;
+        stdout.push_str(&out);
+    }
+
+    let mut drvs = HashSet::new();
+    let mut ignored = HashSet::new();
+    for line in stdout.lines() {
+        let drv: NixEvalOutput = serde_json::from_str(line).wrap_err(format!("line: {}", line))?;
+        if !drv.is_cached {
+            if !is_ignored(&drv.name, &ignored_names) {
+                drvs.insert(drv);
+            } else {
+                ignored.insert(drv);
+            }
+        }
+    }
+    if !ignored.is_empty() {
+        info!("ignored {} derivations", ignored.len());
+        debug!("ignored derviations:\n{:?}", ignored);
+    }
+    Ok(drvs.iter().map(|d| d.drv_path.to_string()).collect())
+}
+
+// NixEvalOutput = object
+//   name: string
+//   drvPath: string
+//   isCached: bool
+//   outputs: Table[string, string]
+//
+/*proc missingDrvNixEvalJobs*(): HashSet[NixEvalOutput] =
+  ## get all derivations not cached using nix-eval-jobs
+  var cmd = newCommand("nix-eval-jobs", "--flake", "--check-cache-status")
+  var output: string
+
+  for host in getHosts():
+    let flakeUrl = getFlake() & "#nixosConfigurations." & host & ".config.oizys.packages"
+    let (o, _) = cmd
+      .withArgs(flakeUrl)
+      .runCaptSpin(bb"running [b]nix-eval-jobs[/] for " & host.bb("bold"))
+    output.add o
+
+  var cached: HashSet[NixEvalOutput]
+  var ignored: HashSet[NixEvalOutput]
+
+  for line in output.strip().splitLines():
+    let output = line.fromJson(NixEvalOutput)
+    if output.isCached:
+      cached.incl output
+    elif output.name.isIgnored():
+      ignored.incl output
+    else:
+      result.incl output
+
+  debug "cached derivations: ", bb($cached.len, "yellow")
+  debug "ignored derivations: ", bb($ignored.len, "yellow")
+
+*/
 
 pub fn push_to_attic_cache(drvs: Vec<String>, name: &str) -> Result<()> {
     LoggedCommand::new("attic")
