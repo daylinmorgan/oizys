@@ -64,7 +64,6 @@ enum Commands {
     /// nix build
     #[command(visible_alias = "b")]
     Build {
-        // TODO: change name?
         installables: Vec<String>,
     },
 
@@ -113,19 +112,18 @@ enum Commands {
         args: Vec<String>,
     },
 
-    /// dry run build (TBD)
+    /// dry run build
     Dry {},
 
     /// check active caches for nix derivation (TBD)
     Narinfo {},
 
-    /// check lock status for duplicates (TBD)
+    /// check lock status for duplicates (WIP)
     Lock {},
 
     /// generate shell completion
     Completion { shell: Shell },
 
-    /// builtin ci (WIP)
     Ci {
         #[command(subcommand)]
         command: CiCommands,
