@@ -6,7 +6,9 @@
 
   openssl,
   pkg-config,
+
   jq,
+  nix-eval-jobs,
 
   installShellFiles,
   makeWrapper,
@@ -44,7 +46,12 @@ craneLib.buildPackage (
 
     postInstall = ''
       wrapProgram $out/bin/oizys-rs \
-      --prefix PATH : ${lib.makeBinPath [ jq ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          jq
+          nix-eval-jobs
+        ]
+      }
 
       installShellCompletion --cmd oizys-rs \
       --zsh <($out/bin/oizys-rs completion zsh)
