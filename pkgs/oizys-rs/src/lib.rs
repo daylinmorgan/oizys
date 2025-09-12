@@ -29,7 +29,8 @@ pub fn indent(s: String) -> String {
     let mut indented = String::new();
     for l in s.lines() {
         indented.push_str("  ");
-        indented.push_str(l)
+        indented.push_str(l);
+        indented.push_str("\n");
     }
     return indented;
 }
