@@ -11,11 +11,15 @@ on:
       flake-inputs:
         description: "list of nix flake inputs"
         default: ""
-        type: "string"
+        type: string
       nix-flags:
         description: "flags forwared to nix commands"
         default: ""
         type: string
+      full-build:
+        description: "perform full system build for each host"
+        default: false
+        type: boolean
 
   # schedule:
   #   # At minute 00:00 on Monday, Wednesday, and Friday.
@@ -25,6 +29,7 @@ env:
   hosts: ${{ github.event_name == 'schedule' && 'othalan,algiz' || github.event.inputs.hosts }}
   flake-inputs: ${{ github.event_name == 'schedule' && '' || github.event.inputs.flake-inputs }}
   nix-flags: ${{ github.event_name == 'schedule' && '' || github.event.inputs.nix-flags }}
+  OIZYS_DIR: ${{ github.workspace }}
 
 permissions:
   contents: write
@@ -45,10 +50,6 @@ jobs:
         with:
           attic_token: ${{ secrets.ATTIC_TOKEN }}
 
-      - name: Install nix-eval-jobs
-        run: |
-          nix profile install '.#nix-eval-jobs'
-
       - run: git checkout -B flake-lock
 
       - name: Update nix flake
@@ -60,27 +61,16 @@ jobs:
 
       - name: Pre-build oizys
         run: |
-          nix build .
+          nix build '.#oizys-rs'
           attic push oizys ./result
-
-      - name: Build lix and co
-        run: |
-          DRVS="$(nix run . -- output --lix --host,="${{ env.hosts }}" --flake .)"
-          nix build \
-            --print-build-logs \
-            --out-link 'lix-and-co' \
-            -- \
-            $DRVS
-          attic push oizys ./lix-and-co*
-          rm -r ./lix-and-co*
 
       - name: Build
         run: >
-          nix run .
+          nix run '.#oizys-rs'
           --
+          ci
           cache
-          --host,="${{ env.hosts }}"
-          --flake .
+          --host "${{ env.hosts }}"
           -vv
           --
           ${{ env.nix-flags }}
@@ -91,6 +81,7 @@ jobs:
           push-args: --set-upstream --force origin flake-lock
 
   build-full:
+    if: ${{ inputs.full-build == true }}
     needs: build-minimal
     runs-on: ubuntu-latest
     steps:
@@ -109,11 +100,10 @@ jobs:
 
       - name: Build Current and Updated Systems
         run: >
-          nix run .
+          nix run '.#oizys-rs'
           --
           ci update
-          --host,="${{ env.hosts }}"
-          --flake .
+          --host "${{ env.hosts }}"
           -vv
           --
           ${{ env.nix-flags }}

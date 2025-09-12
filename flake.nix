@@ -49,7 +49,8 @@
     # zls.inputs.zig-overlay.follows = "zig-overlay";
 
     pinix.url = "github:remi-dupre/pinix";
-    pinix.inputs.nixpkgs.follows = "nixpkgs";
+    # pinix.inputs.nixpkgs.follows = "nixpkgs";
+    crane.url = "github:ipetkov/crane"; # todo: use tag?
 
     # Follows
 
