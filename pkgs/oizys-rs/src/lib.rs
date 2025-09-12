@@ -66,13 +66,10 @@ fn default_progress_style() -> ProgressStyle {
 
 pub fn init_subscriber(verbose: u8) {
     use tracing_subscriber::prelude::*;
-    use tracing_subscriber::{fmt, EnvFilter};
+    use tracing_subscriber::EnvFilter;
+
     let indicatif_layer =
         tracing_indicatif::IndicatifLayer::new().with_progress_style(default_progress_style());
-    let fmt_layer = fmt::layer()
-        .without_time()
-        .with_writer(indicatif_layer.get_stderr_writer());
-    // .with_writer(std::io::stderr);
     let filter_layer = EnvFilter::try_from_default_env()
         .or_else(|_| match verbose {
             0 => EnvFilter::try_new("warn,oizys::progress=trace"),
@@ -82,9 +79,14 @@ pub fn init_subscriber(verbose: u8) {
             _ => EnvFilter::try_new("trace"),
         })
         .unwrap();
-
+    let tree_layer = tracing_tree::HierarchicalLayer::new(2)
+        .with_writer(indicatif_layer.get_stderr_writer())
+        .with_indent_lines(true)
+        .with_targets(true)
+        .with_span_style(nu_ansi_term::Style::new().bold());
     tracing_subscriber::registry()
-        .with(fmt_layer)
+        // .with(fmt_layer)
+        .with(tree_layer)
         .with(filter_layer)
         .with(indicatif_layer)
         .init();
@@ -98,9 +100,9 @@ macro_rules! bar_span {
 }
 
 pub mod prelude {
+    pub use crate::ui;
     pub use bar_span;
     pub use color_eyre::eyre::{bail, WrapErr};
     pub use color_eyre::Result;
     pub use console::style;
-    pub use crate::ui;
 }
