@@ -110,10 +110,10 @@ jobs:
 
       - name: Build Current and Updated Systems
         run: >
-          nix run .
+          nix run '.#oizys-rs'
           --
           ci update
-          --host,="${{ env.hosts }}"
+          --host "${{ env.hosts }}"
           -vv
           --
           ${{ env.nix-flags }}
