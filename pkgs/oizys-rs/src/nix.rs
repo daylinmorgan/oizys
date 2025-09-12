@@ -346,7 +346,7 @@ impl NixosOps for Vec<Nixos> {
     fn build_update_build(&self) -> Result<()> {
         for system in self {
             info!("building current system {:?}", system);
-            system.build_with_args(["--out-link", &format!("current-{}", system.host)])?;
+            system.build_with_args(["--out-link", &format!("{}-current", system.host)])?;
         }
 
         NixCommand::default().flake_update()?;
@@ -355,7 +355,7 @@ impl NixosOps for Vec<Nixos> {
             info!("building updated system {:?}", system);
             system.build_with_args([
                 "--out-link",
-                &format!("updated-{}", system.host),
+                &format!("{}-updated", system.host),
                 "--reference-lock-file",
                 "updated.lock",
             ])?;
