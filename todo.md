@@ -5,12 +5,14 @@
 - [ ] `oizys gha <workflow>` should keep checking for something greater than the current time
 - [ ] remove the implicit dep on `jq`
 
-more reading on nix garbage:
+---
 
-- profiles:
-  essentially this set of [commands](https://discourse.nixos.org/t/list-and-delete-nixos-generations/29637/3)
+Possible weird networking errors as a result of the dayl.in build?
+get spammed with: `lseek() failed on /proc/net file: Illegal seek`
 
-- gcroots: [pills](https://nixos.org/guides/nix-pills/11-garbage-collector.html)
+It's possible this error is only on `lix`
+I opened a nix-shell with "nixpkgs#nix" and `sudo nix build` did not result in lseek errors
+As a stop-gap I switched to lixPackageSets.git
 
 ## software
 
