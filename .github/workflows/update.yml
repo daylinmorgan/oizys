@@ -11,11 +11,15 @@ on:
       flake-inputs:
         description: "list of nix flake inputs"
         default: ""
-        type: "string"
+        type: string
       nix-flags:
         description: "flags forwared to nix commands"
         default: ""
         type: string
+      full-build:
+        description: "perform full system build for each host"
+        default: false
+        type: boolean
 
   # schedule:
   #   # At minute 00:00 on Monday, Wednesday, and Friday.
@@ -92,6 +96,7 @@ jobs:
           push-args: --set-upstream --force origin flake-lock
 
   build-full:
+    if: ${{ inputs.full-build == true }}
     needs: build-minimal
     runs-on: ubuntu-latest
     steps:
