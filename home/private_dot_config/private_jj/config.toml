@@ -80,6 +80,7 @@ if(root,
 "heads" = '@ | ancestors(trunk()..(visible_heads()), 2) | trunk()'
 "last" = 'latest(::@ & ~empty())'
 'closest_bookmark(to)' = 'heads(::to & bookmarks())'
+"r(x)" = 'ancestors(@, x)'
 
 [experimental-advance-branches]
 enabled-branches = ["glob:*"]
