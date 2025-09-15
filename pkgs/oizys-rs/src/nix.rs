@@ -330,11 +330,9 @@ impl NixosOps for Vec<Nixos> {
             }
         }
         if !ignored.is_empty() {
+            let names: Vec<String> = ignored.iter().map(|d| d.name.to_string()).collect();
             info!("ignored {} derivations", ignored.len());
-            debug!(
-                "ignored derviations:\n{:?}",
-                ignored.iter().map(|d| d.name.to_string())
-            );
+            debug!("ignored derviations:\n{:?}", names);
         }
 
         if to_build.is_empty() {
