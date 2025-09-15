@@ -96,7 +96,7 @@ mkOizysModule config "niri" {
     udiskie
 
     wl-clipboard
-    rofi-wayland
+    rofi
     pwvucontrol
     catppuccin-cursors.mochaDark
     swaylock

@@ -44,7 +44,7 @@ in
         grimblast
         ksnip
         wl-clipboard
-        rofi-wayland
+        rofi
         pwvucontrol
 
         #hypr ecosystem
