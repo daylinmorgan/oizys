@@ -30,7 +30,7 @@
   ];
 
   nixpkgs.config.allowUnfree = true;
-  nix.package = pkgs.lixPackageSets.stable.lix;
+  nix.package = pkgs.lixPackageSets.git.lix;
 
   nix = {
     optimise.automatic = true;

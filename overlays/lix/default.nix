@@ -1,6 +1,7 @@
 inputs: final: prev:
 let
-  lixPackageSets = final.lixPackageSets.stable;
+  # issue in stable (2.93.3) with fetchurl while running as sudo
+  lixPackageSets = final.lixPackageSets.git;
 in
 {
   inherit (lixPackageSets)
