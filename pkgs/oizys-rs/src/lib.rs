@@ -1,4 +1,5 @@
 pub mod github;
+pub mod lock;
 pub mod nix;
 pub mod process;
 pub mod substituters;
@@ -7,6 +8,7 @@ pub mod ui;
 use indicatif::ProgressStyle;
 use prelude::*;
 use process::LoggedCommand;
+use std::path::PathBuf;
 
 fn get_hash_from_output(output: &str) -> Result<String> {
     let re = regex::Regex::new(r"(?m)^\s+got:\s+(?<hash>.*)$").unwrap();
@@ -36,11 +38,13 @@ pub fn indent(s: String) -> String {
 }
 
 pub fn check_lock_file(flake: &str) -> Result<()> {
-    let lock_file = std::path::PathBuf::from(flake).join("flake.lock");
+    let lock_file = PathBuf::from(flake).join("flake.lock");
+    lock::find_duplicates(lock_file)?;
+    Ok(())
+}
 
-    // let json: serde_json::Value = serde_json::from_str(&std::fs::read_to_string(&lock_file)?)?;
-
-    // TODO: drop jq dependency
+#[deprecated]
+pub fn check_lock_file_jq(lock_file: PathBuf) -> Result<()> {
     if !which::which("jq").is_ok() {
         bail!("jq not found, but required for `oizys lock`")
     }

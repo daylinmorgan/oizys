@@ -198,7 +198,9 @@ fn main() -> Result<()> {
             }
             print!("\n")
         }
-        Commands::Lock {} => oizys::check_lock_file(&flake)?,
+        Commands::Lock {} => {
+            oizys::check_lock_file(&flake)?;
+        }
         Commands::Dry {} => {
             let attrs = hosts
                 .iter()
