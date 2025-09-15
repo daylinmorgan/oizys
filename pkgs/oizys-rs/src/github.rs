@@ -104,8 +104,6 @@ struct ListGithubWorflowRun {
     workflow_runs: Vec<GithubWorkflowRun>,
 }
 
-static APP_USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"),);
-
 fn handle_response<T: DeserializeOwned>(resp: Response) -> Result<T> {
     match resp.status() {
         StatusCode::OK => {

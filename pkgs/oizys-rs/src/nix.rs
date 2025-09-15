@@ -1,6 +1,7 @@
 use super::prelude::*;
-use super::process::LoggedCommand;
+use super::{process::LoggedCommand, ui};
 use clap::ValueEnum;
+use reqwest::{blocking::Client, StatusCode};
 use std::collections::{BTreeMap, HashSet};
 use tracing::{debug, info};
 
@@ -428,4 +429,133 @@ pub fn run_current(nix: &NixCommand, flake: &str, args: Vec<String>) {
         err
     );
     std::process::exit(1);
+}
+
+#[derive(Debug, Hash, Eq, PartialEq)]
+pub struct NixCache {
+    url: String,
+}
+
+impl std::fmt::Display for NixCache {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        write!(f, "Cache({})", &self.url)?;
+        Ok(())
+    }
+}
+
+impl NixCache {
+    pub fn from(s: &str) -> Self {
+        Self { url: s.into() }
+    }
+
+    pub fn search(&self, hash: &str) -> Result<Option<String>> {
+        let url = format!("{}/{}.narinfo", self.url, hash);
+        let client = Client::builder().user_agent(APP_USER_AGENT).build()?;
+        debug!("GET: {}", url);
+        let resp = client.get(url).send()?;
+        match resp.status() {
+            StatusCode::OK => return Ok(Some(resp.text()?)),
+            StatusCode::NOT_FOUND => return Ok(None),
+            _ => bail!("unexpected failure, {:?}", resp),
+        }
+    }
+}
+
+pub trait Cache {
+    fn search(&self, hashes: Vec<String>, all: bool) -> Result<()>;
+}
+
+impl Cache for HashSet<NixCache> {
+    fn search(&self, hashes: Vec<String>, all: bool) -> Result<()> {
+        for hash in &hashes {
+            for cache in self {
+                if let Some(response) = cache.search(&hash)? {
+                    ui::show_narinfo(&response);
+                    if !all {
+                        continue;
+                    }
+                } else {
+                    debug!("{} not found in {}", &hash, &cache)
+                }
+            }
+        }
+        Ok(())
+    }
+}
+
+pub fn parse_substituters(stdout: &str) -> Result<HashSet<NixCache>> {
+    for line in stdout.lines() {
+        if line.starts_with("substituters =") {
+            let caches = line
+                .splitn(2, "=")
+                .nth(1)
+                .ok_or(eyre!("expected = in string"))?
+                .split_whitespace()
+                .filter(|s| s != &"")
+                .map(NixCache::from)
+                .collect();
+            return Ok(caches);
+        }
+    }
+    bail!("failed to find substituters line in `nix config show` output")
+}
+
+pub fn get_substituters() -> Result<HashSet<NixCache>> {
+    let stdout = LoggedCommand::new("nix")
+        .arg("config")
+        .arg("show")
+        .stdout_ok()?;
+    Ok(parse_substituters(&stdout)?)
+}
+
+#[derive(Deserialize, Debug)]
+struct NixOutput {
+    path: String,
+}
+
+#[derive(Deserialize, Debug)]
+#[allow(dead_code)]
+struct NixDerivation {
+    name: String,
+    outputs: BTreeMap<String, NixOutput>,
+}
+
+type NixDerivationShowOutput = BTreeMap<String, NixDerivation>;
+
+fn get_hash(path: &str) -> Result<String> {
+    const HASH_START_INDEX: usize = 11; // The hash always starts after "/nix/store/" which is 11 characters long.
+    const HASH_LENGTH: usize = 32; // The hash always has a length of 32 characters.
+    let hash_end_index = HASH_START_INDEX + HASH_LENGTH;
+    if path.len() >= hash_end_index {
+        return Ok(path[HASH_START_INDEX..hash_end_index].into());
+    }
+    bail!("failed to extract hash from: {}", path)
+}
+
+// using nix derivation show for each attr
+fn to_hashes(attrs: Vec<String>) -> Result<Vec<String>> {
+    let mut hashes = vec![];
+    for a in attrs {
+        let stdout = NixCommand::default()
+            .cmd()
+            .arg("derivation")
+            .arg("show")
+            .arg(a)
+            .stdout_ok()?;
+        let output: NixDerivationShowOutput = serde_json::from_str(&stdout)?;
+        for (_, drv) in output {
+            for (_, drv_output) in drv.outputs {
+                hashes.push(get_hash(&drv_output.path)?)
+            }
+        }
+    }
+
+    Ok(hashes)
+}
+
+pub fn narinfo(attrs: Vec<String>, all: bool) -> Result<()> {
+    let hashes = to_hashes(attrs)?;
+    let caches = get_substituters()?;
+    caches.search(hashes, all)?;
+    Ok(())
 }

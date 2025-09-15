@@ -24,7 +24,7 @@ struct Cli {
     /// 2: oizys debug
     /// 3: all debug
     /// 4: all trace
-    /// NOTE: use RUST_LOG for more control
+    /// NOTE: you can use RUST_LOG for more control
     #[arg(short, long, action = clap::ArgAction::Count, global = true, verbatim_doc_comment)]
     verbose: u8,
 
@@ -63,9 +63,7 @@ enum Commands {
 
     /// nix build
     #[command(visible_alias = "b")]
-    Build {
-        installables: Vec<String>,
-    },
+    Build { installables: Vec<String> },
 
     /// nixos-rebuild subcmd
     Os {
@@ -115,8 +113,15 @@ enum Commands {
     /// dry run build
     Dry {},
 
-    /// check active caches for nix derivation (TBD)
-    Narinfo {},
+    /// check active caches for nix derivation
+    Narinfo {
+        #[arg(required = true)]
+        attrs: Vec<String>,
+
+        /// search all substituters
+        #[arg(short, long)]
+        all: bool,
+    },
 
     /// check lock status for duplicates (WIP)
     Lock {},
@@ -124,6 +129,7 @@ enum Commands {
     /// generate shell completion
     Completion { shell: Shell },
 
+    /// builtin ci operations
     Ci {
         #[command(subcommand)]
         command: CiCommands,
@@ -178,7 +184,6 @@ fn main() -> Result<()> {
             host,
             extra_flags,
         } => {
-            // only one...
             Nixos::new(&flake, &host).rebuild(cli.nix, &cmd, extra_flags)?;
         }
         Commands::Output { system } => {
@@ -224,24 +229,22 @@ fn main() -> Result<()> {
                 run_id
             );
         }
-        Commands::Ci { command } => {
-            match command {
-                CiCommands::Update => systems.build_update_build()?,
-                CiCommands::Cache => {
-                    let drvs = systems.not_cached()?;
-                    if !drvs.is_empty() {
-                        let to_push = nix.build_drvs_multi(&drvs)?;
-                        nix::AtticCache::new("oizys").push(to_push)?;
-                    } else {
-                        eprintln!("no derivations to build :)")
-                    }
+        Commands::Ci { command } => match command {
+            CiCommands::Update => systems.build_update_build()?,
+            CiCommands::Cache => {
+                let drvs = systems.not_cached()?;
+                if !drvs.is_empty() {
+                    let to_push = nix.build_drvs_multi(&drvs)?;
+                    nix::AtticCache::new("oizys").push(to_push)?;
+                } else {
+                    eprintln!("no derivations to build :)")
                 }
             }
-        }
+        },
         Commands::Hash { args } => {
             print!("{}", oizys::get_hash(args)?)
         }
-        Commands::Narinfo {} => todo!(),
+        Commands::Narinfo { attrs, all } => oizys::nix::narinfo(attrs, all)?,
     }
 
     Ok(())

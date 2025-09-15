@@ -101,9 +101,11 @@ macro_rules! bar_span {
 }
 
 pub mod prelude {
+    pub static APP_USER_AGENT: &str =
+        concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
     pub use crate::ui;
     pub use bar_span;
-    pub use color_eyre::eyre::{bail, WrapErr};
+    pub use color_eyre::eyre::{bail, eyre, WrapErr};
     pub use color_eyre::Result;
     pub use console::style;
 }
