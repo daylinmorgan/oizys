@@ -82,7 +82,7 @@ pub fn init_subscriber(verbose: u8) {
         .unwrap();
     let tree_layer = tracing_tree::HierarchicalLayer::new(2)
         .with_writer(indicatif_layer.get_stderr_writer())
-        .with_indent_lines(true)
+        // .with_indent_lines(true)
         .with_targets(true)
         .with_span_style(nu_ansi_term::Style::new().bold());
     tracing_subscriber::registry()
