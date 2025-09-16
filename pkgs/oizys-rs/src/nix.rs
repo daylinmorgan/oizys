@@ -342,6 +342,7 @@ impl NixosOps for Vec<Nixos> {
         Ok(to_build.iter().map(|d| d.drv_path.to_string()).collect())
     }
 
+    // should this be reduced to two nix build commands?
     fn build_update_build(&self) -> Result<()> {
         for system in self {
             info!("building current system {:?}", system);
