@@ -71,7 +71,7 @@ fn default_progress_style() -> ProgressStyle {
 
 pub fn init_subscriber(verbose: u8) {
     use tracing_subscriber::prelude::*;
-    use tracing_subscriber::EnvFilter;
+    use tracing_subscriber::{fmt, EnvFilter};
 
     let indicatif_layer =
         tracing_indicatif::IndicatifLayer::new().with_progress_style(default_progress_style());
@@ -84,14 +84,17 @@ pub fn init_subscriber(verbose: u8) {
             _ => EnvFilter::try_new("trace"),
         })
         .unwrap();
-    let tree_layer = tracing_tree::HierarchicalLayer::new(2)
-        .with_writer(indicatif_layer.get_stderr_writer())
-        // .with_indent_lines(true)
-        .with_targets(true)
-        .with_span_style(nu_ansi_term::Style::new().bold());
+
+    // let tree_layer = tracing_tree::HierarchicalLayer::new(2)
+    //     .with_writer(indicatif_layer.get_stderr_writer())
+    //     // .with_indent_lines(true)
+    //     .with_targets(true)
+    //     .with_span_style(nu_ansi_term::Style::new().bold());
+
+    let fmt_layer = fmt::layer().without_time().with_writer(indicatif_layer.get_stderr_writer());
     tracing_subscriber::registry()
-        // .with(fmt_layer)
-        .with(tree_layer)
+        .with(fmt_layer)
+        // .with(tree_layer)
         .with(filter_layer)
         .with(indicatif_layer)
         .init();
