@@ -45,7 +45,7 @@ craneLib.buildPackage (
     doCheck = false; # unit tests are for the weak
 
     postInstall = ''
-      wrapProgram $out/bin/oizys-rs \
+      wrapProgram $out/bn/oizys-rs \
       --prefix PATH : ${
         lib.makeBinPath [
           jq

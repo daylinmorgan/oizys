@@ -157,7 +157,8 @@ fn print_completions<G: Generator>(generator: G, cmd: &mut clap::Command) {
     );
 }
 
-fn main() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     color_eyre::install()?;
 
     let cli = Cli::parse();
@@ -236,8 +237,12 @@ fn main() -> Result<()> {
             CiCommands::Cache => {
                 let drvs = systems.not_cached()?;
                 if !drvs.is_empty() {
-                    let to_push = nix.build_drvs_multi(&drvs)?;
-                    nix::AtticCache::new("oizys").push(to_push)?;
+                    let to_push = nix.build_drvs_multi(drvs).await?;
+                    if !to_push.is_empty() {
+                        nix::AtticCache::new("oizys").push(to_push)?;
+                    } else {
+                        eprintln!("nothing to push :)")
+                    }
                 } else {
                     eprintln!("no derivations to build :)")
                 }

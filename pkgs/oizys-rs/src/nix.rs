@@ -120,20 +120,37 @@ impl NixCommand {
         Ok(drvs)
     }
 
-    // NOTE this could (and should) be async
-    pub fn build_drvs_multi(&self, drvs: &Vec<String>) -> Result<Vec<String>> {
-        let mut results = vec![];
-        for d in drvs {
-            info!("building: {}", d);
-            let stdout = NixCommand::new(&NixName::Nix, self.bootstrap)
-                .cmd()
-                .arg("build")
-                .arg(format!("{}^*", d))
-                .arg("--print-out-paths")
-                .stdout_ok()?;
-            results.push(stdout.lines().map(|s| s.to_string()).collect());
+    pub async fn build_drvs_multi(&self, drvs: Vec<String>) -> Result<Vec<String>> {
+        let tasks: Vec<_> = drvs
+            .into_iter()
+            .map(|d| {
+                debug!("building {}", &d);
+                tokio::spawn(async move {
+                    tokio::process::Command::new("nix")
+                        .arg("build")
+                        .arg(format!("{}^*", &d))
+                        .arg("--print-out-paths")
+                        .output()
+                        .await
+                })
+            })
+            .collect();
+
+        let results = futures::future::join_all(tasks).await;
+        let mut to_push = vec![];
+        for result in results {
+            let output = result.wrap_err("task failure")?.wrap_err("Command error")?;
+            if output.status.success() {
+                to_push.push(String::from_utf8(output.stdout)?);
+            } else {
+                tracing::error!(
+                    "nix build failure:\n{}",
+                    String::from_utf8_lossy(&output.stderr)
+                );
+            }
         }
-        Ok(results)
+
+        Ok(to_push)
     }
 
     pub fn flake_update(&self) -> Result<()> {

@@ -104,3 +104,4 @@ impl LoggedCommand {
         Ok(stderr)
     }
 }
+
