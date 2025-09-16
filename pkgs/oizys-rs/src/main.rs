@@ -177,7 +177,7 @@ fn main() -> Result<()> {
             print_completions(shell, &mut cmd);
         }
         Commands::Build { installables } => {
-            let _ = nix.build(installables)?;
+            nix.build(installables)?;
         }
         Commands::Os {
             cmd,

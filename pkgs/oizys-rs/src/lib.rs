@@ -10,13 +10,12 @@ use prelude::*;
 use process::LoggedCommand;
 use std::path::PathBuf;
 
-fn get_hash_from_output(output: &str) -> Result<String> {
-    let re = regex::Regex::new(r"(?m)^\s+got:\s+(?<hash>.*)$").unwrap();
-    let Some(caps) = re.captures(output) else {
-        bail!("no hash found");
-    };
-
-    Ok(caps["hash"].to_string())
+// shouldn't this be an option?
+fn get_hash_from_output(output: &str) -> Option<String> {
+    regex::Regex::new(r"(?m)^\s+got:\s+(?<hash>.*)$")
+        .unwrap()
+        .captures(output)
+        .map(|caps| caps["hash"].into())
 }
 
 pub fn get_hash(args: Vec<String>) -> Result<String> {
@@ -24,7 +23,8 @@ pub fn get_hash(args: Vec<String>) -> Result<String> {
         .arg("build")
         .args(args)
         .stderr_fail()?;
-    Ok(get_hash_from_output(&stderr)?)
+
+    get_hash_from_output(&stderr).ok_or(eyre!("failed to extract hash from output"))
 }
 
 pub fn indent(s: String) -> String {
