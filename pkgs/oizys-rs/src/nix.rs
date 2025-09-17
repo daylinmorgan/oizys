@@ -141,7 +141,7 @@ impl NixCommand {
         for result in results {
             let output = result.wrap_err("task failure")?.wrap_err("Command error")?;
             if output.status.success() {
-                to_push.push(String::from_utf8(output.stdout)?);
+                to_push.push(String::from_utf8(output.stdout)?.trim().into());
             } else {
                 tracing::error!(
                     "nix build failure:\n{}",
