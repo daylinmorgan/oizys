@@ -3,6 +3,7 @@ use clap_complete::aot::{generate, Generator, Shell};
 use oizys::{
     github,
     nix::{NixCommand, NixName, Nixos, NixosOps},
+    process::LoggedCommand,
 };
 use oizys::{nix, prelude::*};
 
@@ -98,6 +99,10 @@ enum Commands {
         /// separated by '='
         #[arg(short, long, value_parser = parse_key_val::<String, String>)]
         inputs: Vec<(String, String)>,
+
+        /// open workflow run in browser
+        #[arg(long)]
+        open: bool,
     },
 
     /// collect build hash from failure
@@ -225,12 +230,17 @@ async fn main() -> Result<()> {
             workflow,
             ref_name,
             inputs,
+            open,
         } => {
             let run_id = github::oizys_gha_run(&workflow, &ref_name, inputs)?;
-            println!(
-                "view workflow run at: https://github.com/daylinmorgan/oizys/actions/runs/{}",
+            let url = format!(
+                "https://github.com/daylinmorgan/oizys/actions/runs/{}",
                 run_id
             );
+            println!("view workflow run at: {}", url);
+            if open {
+                LoggedCommand::new("xdg-open").arg(url).check_status()?
+            }
         }
         Commands::Ci { command } => match command {
             CiCommands::Update => systems.build_update_build()?,
