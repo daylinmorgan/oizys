@@ -48,10 +48,10 @@ let
       pkgs:
       rec {
         default = oizys;
-        oizys = pkgs.callPackage ../pkgs/oizys {
+        oizys-nim = pkgs.callPackage ../pkgs/oizys {
           inherit (substituters) substituters trusted-public-keys;
         };
-        oizys-rs = pkgs.callPackage ../pkgs/oizys-rs {
+        oizys = pkgs.callPackage ../pkgs/oizys-rs {
           inherit substituters;
           inherit (inputs) crane;
         };

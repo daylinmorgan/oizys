@@ -25,11 +25,6 @@ tracing-subscriber = { version = "0.3.20", features = ["env-filter"] }
 which = "8.0.0"
 
 
-# until and if it supplants the nim oizys
-[[bin]]
-name = "oizys-rs"
-path = "src/main.rs"
-
 [features]
 substituters = []
 

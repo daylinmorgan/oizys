@@ -19,7 +19,7 @@ let
   version = ./Cargo.toml |> readFile |> fromTOML |> getAttr "package" |> getAttr "version";
   craneLib = crane.mkLib pkgs;
   commonArgs = {
-    pname = "oizys-rs";
+    pname = "oizys";
     src = lib.cleanSource ./.;
     # src = craneLib.cleanCargoSource ./.;
     buildInputs = [ openssl ];
@@ -45,16 +45,16 @@ craneLib.buildPackage (
     doCheck = false; # unit tests are for the weak
 
     postInstall = ''
-      wrapProgram $out/bin/oizys-rs \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          jq
-          nix-eval-jobs
-        ]
-      }
+      wrapProgram $out/bin/oizys \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            jq
+            nix-eval-jobs
+          ]
+        }
 
-      installShellCompletion --cmd oizys-rs \
-      --zsh <($out/bin/oizys-rs completion zsh)
+      installShellCompletion --cmd oizys \
+        --zsh <($out/bin/oizys completion zsh)
     '';
 
   }

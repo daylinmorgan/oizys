@@ -24,7 +24,6 @@
     htop
 
     (flake.pkg "self")
-    (flake.pkgs "self").oizys-rs
 
     sops
   ];
