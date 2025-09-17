@@ -32,7 +32,7 @@ fn exists_or<'a>(bin: &'a str, fallback: &'a str) -> &'a str {
     match which::which(&bin) {
         Ok(_) => bin,
         Err(_) => {
-            info!("{bin} not found falling back to {fallback}");
+            tracing::warn!("{bin} not found falling back to {fallback}");
             fallback
         }
     }
