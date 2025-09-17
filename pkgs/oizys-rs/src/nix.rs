@@ -121,6 +121,7 @@ impl NixCommand {
     }
 
     pub async fn build_drvs_multi(&self, drvs: Vec<String>) -> Result<Vec<String>> {
+        debug!("building {} derivations: {:?}", drvs.len(), drvs);
         let tasks: Vec<_> = drvs
             .into_iter()
             .map(|d| {
