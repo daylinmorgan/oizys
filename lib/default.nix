@@ -70,7 +70,7 @@ let
       };
       oizys-rs = (crane.mkLib pkgs).devShell {
         inputsFrom = [
-          self.packages.${pkgs.system}.oizys-rs
+          self.packages.${pkgs.system}.oizys
         ];
         packages = with pkgs; [
           rust-analyzer
