@@ -121,7 +121,15 @@ impl NixCommand {
     }
 
     pub async fn build_drvs_multi(&self, drvs: Vec<String>) -> Result<Vec<String>> {
-        debug!("building {} derivations: {:?}", drvs.len(), drvs);
+        let drv_names = drvs.iter()
+                .map(|d| d[11..d.len() - 4].to_string())
+                .collect::<Vec<_>>()
+                .join(", ");
+        debug!(
+            "building {} derivations: {:}",
+            drvs.len(),
+            drv_names
+        );
         let tasks: Vec<_> = drvs
             .into_iter()
             .map(|d| {
@@ -354,9 +362,6 @@ impl NixosOps for Vec<Nixos> {
             debug!("ignored derviations:\n{:?}", names);
         }
 
-        if to_build.is_empty() {
-            eprintln!("no derivations to build :)")
-        }
         Ok(to_build.iter().map(|d| d.drv_path.to_string()).collect())
     }
 
