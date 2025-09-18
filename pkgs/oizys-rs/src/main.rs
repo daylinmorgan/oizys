@@ -129,7 +129,11 @@ enum Commands {
     },
 
     /// check lock status for duplicates (WIP)
-    Lock {},
+    Lock {
+        /// inputs which should be null
+        #[arg(long, default_values_t = ["flake-compat".to_string()])]
+        null: Vec<String>,
+    },
 
     /// generate shell completion
     Completion { shell: Shell },
@@ -204,8 +208,8 @@ async fn main() -> Result<()> {
             }
             print!("\n")
         }
-        Commands::Lock {} => {
-            oizys::check_lock_file(&flake)?;
+        Commands::Lock { null } => {
+            oizys::check_lock_file(&flake, null)?;
         }
         Commands::Dry {} => {
             let attrs = hosts

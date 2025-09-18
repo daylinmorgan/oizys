@@ -37,9 +37,17 @@ pub fn indent(s: String) -> String {
     return indented;
 }
 
-pub fn check_lock_file(flake: &str) -> Result<()> {
-    let lock_file = PathBuf::from(flake).join("flake.lock");
-    lock::find_duplicates(lock_file)?;
+pub fn check_lock_file(flake: &str, _null: Vec<String>) -> Result<()> {
+    let flake_lock = lock::FlakeLock::from_file(PathBuf::from(flake).join("flake.lock"))?;
+    let duplicates = flake_lock.duplicates();
+    if duplicates.is_empty() {
+        eprintln!("No duplicated inputs!")
+    } else {
+        ui::show_duplicates(duplicates);
+    }
+
+    // TODO: check null values
+
     Ok(())
 }
 

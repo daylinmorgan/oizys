@@ -30,7 +30,7 @@ enum InputReferences {
 
 #[derive(Deserialize, Debug, Clone)]
 #[allow(dead_code)] // validate by parsing
-struct FlakeInput {
+pub struct FlakeInput {
     inputs: Option<HashMap<String, InputReferences>>,
     // inputs: Option<HashMap<String, serde_json::Value>>,
     locked: Option<FlakeInputSource>,
@@ -61,7 +61,7 @@ impl FlakeInput {
 
 #[derive(Deserialize)]
 #[allow(dead_code)] // validate by parsing
-struct FlakeLock {
+pub struct FlakeLock {
     nodes: HashMap<String, FlakeInput>,
     root: String,
     version: i32,
@@ -70,6 +70,10 @@ struct FlakeLock {
 impl FlakeLock {
     fn from(s: &str) -> Result<Self> {
         Ok(serde_json::from_str(s)?)
+    }
+
+    pub fn from_file(p: PathBuf) -> Result<Self> {
+        Self::from(&std::fs::read_to_string(p)?)
     }
 
     /// matches should return the flake inputs where inputs contains the input
@@ -81,7 +85,7 @@ impl FlakeLock {
             .collect()
     }
 
-    fn duplicates(&self) -> HashMap<String, HashMap<String, FlakeInput>> {
+    pub fn duplicates(&self) -> HashMap<String, HashMap<String, FlakeInput>> {
         let names: Vec<String> = self
             .nodes
             .keys()
@@ -94,25 +98,5 @@ impl FlakeLock {
             .map(|n| (n.to_string(), self.matches(n)))
             .collect()
     }
-}
 
-pub fn find_duplicates(lock_file: PathBuf) -> Result<()> {
-    let parsed = FlakeLock::from(&std::fs::read_to_string(lock_file)?)?;
-    let duplicates = parsed.duplicates();
-    if duplicates.is_empty() {
-        eprintln!("No duplicated inputs!")
-    }
-    for (dupe, inputs) in duplicates {
-        println!(
-            "{}: {}",
-            style(dupe).bold(),
-            inputs
-                .keys()
-                .map(|s| s.as_str())
-                .collect::<Vec<&str>>()
-                .join("; ")
-        );
-    }
-
-    Ok(())
 }
