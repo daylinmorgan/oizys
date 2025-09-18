@@ -136,6 +136,7 @@ impl NixCommand {
                         .arg("build")
                         .arg(format!("{}^*", &d))
                         .arg("--print-out-paths")
+                        .arg("--no-link")
                         .output()
                         .await
                 })
