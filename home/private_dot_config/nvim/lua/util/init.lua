@@ -58,7 +58,7 @@ local function setup_lang(defs)
       end,
     },
     {
-      "williamboman/mason.nvim",
+      "mason-org/mason.nvim",
       opts = function(_, opts)
         opts.ensure_installed = vim.list_extend(opts.ensure_installed or {}, defs.mason or {})
       end,
