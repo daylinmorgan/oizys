@@ -292,15 +292,7 @@ impl Nixos {
             .wrap_err("nixos-rebuild failed")?;
 
         if subcmd == "switch" {
-            info!("check chezmoi status");
-            let stdout = LoggedCommand::new("chezmoi").arg("status").stdout_ok()?;
-            if stdout != "" {
-                println!(
-                    "\nfyi the dotfiles don't match, see below:\n{}\n{}",
-                    style("CHEZMOI STATUS").magenta().bold(),
-                    &super::indent(stdout)
-                )
-            }
+            chezmoi_status()?;
         }
 
         Ok(())
@@ -589,3 +581,17 @@ pub fn narinfo(attrs: Vec<String>, all: bool) -> Result<()> {
     caches.search(hashes, all)?;
     Ok(())
 }
+
+pub fn chezmoi_status() -> Result<()> {
+    info!("check chezmoi status");
+    let stdout = LoggedCommand::new("chezmoi").arg("status").stdout_ok()?;
+    if stdout != "" {
+        println!(
+            "\nfyi the dotfiles don't match, see below:\n{}:\n{}",
+            style("CHEZMOI STATUS").magenta().bold(),
+            &super::indent(stdout)
+        )
+    }
+    Ok(())
+}
+
