@@ -288,9 +288,9 @@ where
     Ok((s[..pos].parse()?, s[pos + 1..].parse()?))
 }
 
-use clap::builder::styling::{AnsiColor, Styles};
+use clap::builder::styling::{AnsiColor, Style, Styles};
 const CLAP_STYLING: Styles = Styles::styled()
     .header(AnsiColor::Magenta.on_default().bold())
-    .usage(AnsiColor::Cyan.on_default().bold())
-    .literal(AnsiColor::Cyan.on_default().bold())
+    .usage(Style::new().bold())
+    .literal(Style::new().bold())
     .placeholder(AnsiColor::Yellow.on_default());
