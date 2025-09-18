@@ -108,22 +108,6 @@
         "url": "https://git.dayl.in/daylin/dayl.in/archive/main.tar.gz"
       }
     },
-    "flake-compat": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1733328505,
-        "narHash": "sha256-NeCCThCEP3eCl2l/+27kNNK7QrwZB1IJCrXfrbv5oqU=",
-        "owner": "edolstra",
-        "repo": "flake-compat",
-        "rev": "ff81ac966bb2cae68946d5ed5fc4994f96d0ffec",
-        "type": "github"
-      },
-      "original": {
-        "owner": "edolstra",
-        "repo": "flake-compat",
-        "type": "github"
-      }
-    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -523,34 +507,6 @@
         "type": "github"
       }
     },
-    "roc": {
-      "inputs": {
-        "flake-compat": "flake-compat",
-        "flake-utils": [
-          "flake-utils"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "rust-overlay": [
-          "rust-overlay"
-        ]
-      },
-      "locked": {
-        "lastModified": 1740189990,
-        "narHash": "sha256-UU9ngaSnlDQBPdII2mKIfLE8ix0HpSkfytM7iI7r44o=",
-        "owner": "roc-lang",
-        "repo": "roc",
-        "rev": "5d6895908bcd2fd4c94633ab7b338ae3cdcbf8db",
-        "type": "github"
-      },
-      "original": {
-        "owner": "roc-lang",
-        "ref": "0.0.0-alpha2-rolling",
-        "repo": "roc",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "NixVirt": "NixVirt",
@@ -574,7 +530,6 @@
         "nixpkgs-stable": "nixpkgs-stable",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixpkgs-wayland": "nixpkgs-wayland",
-        "roc": "roc",
         "rust-overlay": "rust-overlay",
         "sops-nix": "sops-nix",
         "systems": "systems",

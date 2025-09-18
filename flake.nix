@@ -21,34 +21,30 @@
     # keep for when lix breaks :/
     # lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0.tar.gz";
 
-    treefmt-nix.url = "github:numtide/treefmt-nix";
-    nixos-wsl.url = "github:nix-community/NixOS-WSL";
-    nix-index-database.url = "github:nix-community/nix-index-database";
-    sops-nix.url = "github:Mic92/sops-nix";
-    nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland/8dcad9dcb5ce4eb28e2719ab025224308b318e79";
-
+    crane.url = "github:ipetkov/crane"; # todo: use tag?
     llm-nix.url = "github:daylinmorgan/llm-nix";
-    tsm.url = "github:daylinmorgan/tsm?dir=nix";
-    nim2nix.url = "github:daylinmorgan/nim2nix";
-    niriman.url = "git+https://git.dayl.in/daylin/niriman.git";
-    utils.url = "git+https://git.dayl.in/daylin/utils.git";
-
     multiviewer.url = "github:daylinmorgan/multiviewer-flake";
-    roc.url = "github:roc-lang/roc/0.0.0-alpha2-rolling";
-
     niri.url = "github:YaLTeR/niri";
-
+    nix-index-database.url = "github:nix-community/nix-index-database";
+    nixos-wsl.url = "github:nix-community/NixOS-WSL";
+    nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland/8dcad9dcb5ce4eb28e2719ab025224308b318e79";
     NixVirt.url = "github:AshleyYakeley/NixVirt/v0.6.0";
+    sops-nix.url = "github:Mic92/sops-nix";
+    treefmt-nix.url = "github:numtide/treefmt-nix";
 
     daylin-website.url = "https://git.dayl.in/daylin/dayl.in/archive/main.tar.gz";
+    nim2nix.url = "github:daylinmorgan/nim2nix";
+    niriman.url = "git+https://git.dayl.in/daylin/niriman.git";
+    tsm.url = "github:daylinmorgan/tsm?dir=nix";
+    utils.url = "git+https://git.dayl.in/daylin/utils.git";
 
+    # roc.url = "github:roc-lang/roc/0.0.0-alpha2-rolling";
     # zig-overlay.url = "github:mitchellh/zig-overlay";
     # zig-overlay.inputs.nixpkgs.follows = "nixpkgs";
     # zls.url = "github:zigtools/zls";
     # zls.inputs.nixpkgs.follows = "nixpkgs";
     # zls.inputs.zig-overlay.follows = "zig-overlay";
 
-    crane.url = "github:ipetkov/crane"; # todo: use tag?
 
     # Follows
 
@@ -63,7 +59,6 @@
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     niri.inputs.nixpkgs.follows = "nixpkgs";
     NixVirt.inputs.nixpkgs.follows = "nixpkgs";
-    roc.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     tsm.inputs.nixpkgs.follows = "nixpkgs";
@@ -80,7 +75,6 @@
 
     flake-utils.url = "github:numtide/flake-utils";
     lib-aggregate.inputs.flake-utils.follows = "flake-utils";
-    roc.inputs.flake-utils.follows = "flake-utils";
 
     lib-aggregate.url = "github:nix-community/lib-aggregate";
     nixpkgs-wayland.inputs.lib-aggregate.follows = "lib-aggregate";
@@ -91,7 +85,6 @@
 
     rust-overlay.url = "github:oxalica/rust-overlay";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
-    roc.inputs.rust-overlay.follows = "rust-overlay";
     niri.inputs.rust-overlay.follows = "rust-overlay";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
@@ -102,7 +95,7 @@
     daylin-website.inputs.bun2nix.inputs.treefmt-nix.follows = "";
 
     # lix-attic.url = "git+https://git.lix.systems/nrabulinski/attic.git";
-    # # lix-attic.url = "git+https://git.dayl.in/daylin/attic.git";
+    # lix-attic.url = "git+https://git.dayl.in/daylin/attic.git";
     # lix-attic.inputs.lix.follows = "lix-module/lix";
     # lix-attic.inputs.lix-module.follows = "lix-module";
     # lix-attic.inputs.nixpkgs.follows = "nixpkgs";
