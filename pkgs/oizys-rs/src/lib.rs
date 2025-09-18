@@ -37,7 +37,7 @@ pub fn indent(s: String) -> String {
     return indented;
 }
 
-pub fn check_lock_file(flake: &str, _null: Vec<String>) -> Result<()> {
+pub fn check_lock_file(flake: &str, null: Vec<String>) -> Result<()> {
     let flake_lock = lock::FlakeLock::from_file(PathBuf::from(flake).join("flake.lock"))?;
     let duplicates = flake_lock.duplicates();
     if duplicates.is_empty() {
@@ -46,8 +46,12 @@ pub fn check_lock_file(flake: &str, _null: Vec<String>) -> Result<()> {
         ui::show_duplicates(duplicates);
     }
 
-    // TODO: check null values
-
+    let non_nulls = flake_lock.check_null(null);
+    if non_nulls.is_empty() {
+        eprintln!("No \"non-null\" null inputs")
+    } else {
+        ui::show_non_nulls(non_nulls);
+    }
     Ok(())
 }
 
@@ -99,7 +103,9 @@ pub fn init_subscriber(verbose: u8) {
     //     .with_targets(true)
     //     .with_span_style(nu_ansi_term::Style::new().bold());
 
-    let fmt_layer = fmt::layer().without_time().with_writer(indicatif_layer.get_stderr_writer());
+    let fmt_layer = fmt::layer()
+        .without_time()
+        .with_writer(indicatif_layer.get_stderr_writer());
     tracing_subscriber::registry()
         .with(fmt_layer)
         // .with(tree_layer)

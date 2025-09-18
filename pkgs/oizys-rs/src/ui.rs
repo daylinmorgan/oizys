@@ -1,4 +1,6 @@
 use console::style;
+use super::lock::FlakeInput;
+use std::collections::HashMap;
 
 pub fn show_drvs(drvs: Vec<String>) {
     println!("{} derivation(s) to build:", drvs.len());
@@ -24,10 +26,8 @@ pub fn show_narinfo(info: &str) {
     }
 }
 
-use super::lock::FlakeInput;
-use std::collections::HashMap;
-
 pub fn show_duplicates(duplicates: HashMap<String, HashMap<String, FlakeInput>>) {
+    println!("{}:", style("DUPLICATED INPUTS").magenta());
     for (dupe, inputs) in duplicates {
         println!(
             "{}: {}",
@@ -38,5 +38,12 @@ pub fn show_duplicates(duplicates: HashMap<String, HashMap<String, FlakeInput>>)
                 .collect::<Vec<&str>>()
                 .join("; ")
         );
+    }
+}
+
+pub fn show_non_nulls(non_nulls: HashMap<String, Vec<String>>) {
+    println!("{}:", style("NON-NULL INPUTS").magenta());
+    for (name, inputs) in non_nulls {
+        println!("{}: {}", style(name).bold(), inputs.join("; "))
     }
 }

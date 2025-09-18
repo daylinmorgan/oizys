@@ -128,10 +128,12 @@ enum Commands {
         all: bool,
     },
 
-    /// check lock status for duplicates (WIP)
+    /// check lock status for duplicates
+    ///
+    /// I want to lock my flake not yours..
     Lock {
         /// inputs which should be null
-        #[arg(long, default_values_t = ["flake-compat".to_string()])]
+        #[arg(long,global = true, num_args=1.., value_delimiter = ',', default_values_t = ["flake-compat".to_string(), "treefmt-nix".to_string()])]
         null: Vec<String>,
     },
 

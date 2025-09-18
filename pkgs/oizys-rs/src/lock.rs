@@ -1,5 +1,4 @@
 use super::prelude::*;
-use console::style;
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::path::PathBuf;
@@ -57,6 +56,24 @@ impl FlakeInput {
         }
         false
     }
+
+    // TODO: more idiomatic code?
+    fn has_null_input(&self, null: &str) -> Option<InputReferences> {
+        self.inputs
+            .as_ref()
+            .map(|inputs| inputs.get(null).map(|n| n.clone()))
+            .flatten()
+
+        // if let Some(inputs) = &self.inputs {
+        //     return inputs.get(null).map(|n| n.clone())
+        //     // for (n, input) in inputs {
+        //     //     if n == null {
+        //     //         return Some(input.clone());
+        //     //     }
+        //     // }
+        // }
+        // None
+    }
 }
 
 #[derive(Deserialize)]
@@ -99,4 +116,21 @@ impl FlakeLock {
             .collect()
     }
 
+    pub fn check_null(&self, null: Vec<String>) -> HashMap<String, Vec<String>> {
+        let mut map: HashMap<String, Vec<String>> = HashMap::new();
+        for null_input in &null {
+            for (name, input) in self.nodes.iter() {
+                if name == "root" {
+                    continue;
+                }
+                // an input represented as InputReferences::List is in fact null
+                if let Some(InputReferences::Single(_)) = input.has_null_input(&null_input) {
+                    map.entry(null_input.clone())
+                        .or_insert_with(Vec::new)
+                        .push(name.clone());
+                }
+            }
+        }
+        map
+    }
 }
