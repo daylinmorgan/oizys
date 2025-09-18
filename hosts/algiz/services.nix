@@ -78,6 +78,7 @@ in
     };
   };
 
+  # TODO: abstract out most of this to a separate file/module?
   services.caddy = enabled // {
     logFormat = ''
       output file /var/log/caddy/access.log
@@ -97,9 +98,21 @@ in
       '';
 
       "dayl.in".extraConfig = ''
-        root * ${flake.pkg "daylin-website"}
-        encode zstd gzip
-        file_server
+
+        handle /* {
+          root * ${flake.pkg "daylin-website"}
+          encode zstd gzip
+          file_server
+        }
+
+        handle /.well-known/matrix/* {
+          # matrix well-known
+          reverse_proxy http://localhost:8448
+        }
+      '';
+
+      "matrix.dayl.in".extraConfig = ''
+        reverse_proxy http://localhost:8448
       '';
 
       "nix-cache.dayl.in".extraConfig = ''
