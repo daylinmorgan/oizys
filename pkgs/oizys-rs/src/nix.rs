@@ -280,6 +280,8 @@ impl Nixos {
     pub fn rebuild(&self, nix: NixName, subcmd: &str, extra_flags: Vec<String>) -> Result<()> {
         let attr = format!("{}#{}", self.flake, self.host);
 
+        // use nix/nom build if it's subcmd == switch?
+
         LoggedCommand::new("sudo")
             .arg(nix.choose_nixos_rebuild())
             .arg(subcmd)
@@ -294,7 +296,8 @@ impl Nixos {
             let stdout = LoggedCommand::new("chezmoi").arg("status").stdout_ok()?;
             if stdout != "" {
                 println!(
-                    "fyi the dotfiles don't match, see below:\n{}",
+                    "\nfyi the dotfiles don't match, see below:\n{}\n{}",
+                    style("CHEZMOI STATUS").magenta().bold(),
                     &super::indent(stdout)
                 )
             }
