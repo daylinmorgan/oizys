@@ -61,12 +61,12 @@ jobs:
 
       - name: Pre-build oizys
         run: |
-          nix build '.#oizys-rs'
+          nix build '.#oizys'
           attic push oizys ./result
 
       - name: Build
         run: >
-          nix run '.#oizys-rs'
+          nix run '.#oizys'
           --
           ci
           cache
@@ -96,11 +96,11 @@ jobs:
           attic_token: ${{ secrets.ATTIC_TOKEN }}
 
       - name: Pre-build oizys
-        run: nix build .
+        run: nix build '.#oizys'
 
       - name: Build Current and Updated Systems
         run: >
-          nix run '.#oizys-rs'
+          nix run '.#oizys'
           --
           ci update
           --host "${{ env.hosts }}"
