@@ -121,15 +121,12 @@ impl NixCommand {
     }
 
     pub async fn build_drvs_multi(&self, drvs: Vec<String>) -> Result<Vec<String>> {
-        let drv_names = drvs.iter()
-                .map(|d| d[11..d.len() - 4].to_string())
-                .collect::<Vec<_>>()
-                .join(", ");
-        debug!(
-            "building {} derivations: {:}",
-            drvs.len(),
-            drv_names
-        );
+        let drv_names = drvs
+            .iter()
+            .map(|d| d[11..d.len() - 4].to_string())
+            .collect::<Vec<_>>()
+            .join(", ");
+        debug!("building {} derivations: {:}", drvs.len(), drv_names);
         let tasks: Vec<_> = drvs
             .into_iter()
             .map(|d| {
@@ -150,7 +147,12 @@ impl NixCommand {
         for result in results {
             let output = result.wrap_err("task failure")?.wrap_err("Command error")?;
             if output.status.success() {
-                to_push.push(String::from_utf8(output.stdout)?.trim().into());
+                to_push.extend(
+                    String::from_utf8(output.stdout)?
+                        .trim()
+                        .lines()
+                        .map(String::from),
+                );
             } else {
                 tracing::error!(
                     "nix build failure:\n{}",
