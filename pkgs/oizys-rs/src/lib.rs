@@ -112,6 +112,9 @@ pub fn init_subscriber(verbose: u8) {
         .with(filter_layer)
         .with(indicatif_layer)
         .init();
+
+    tracing::debug!("run with -vvv to see third-party log messages");
+
 }
 
 #[macro_export]
