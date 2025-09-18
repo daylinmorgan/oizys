@@ -27,10 +27,10 @@ pub fn show_narinfo(info: &str) {
 }
 
 pub fn show_duplicates(duplicates: HashMap<String, HashMap<String, FlakeInput>>) {
-    println!("{}:", style("DUPLICATED INPUTS").magenta());
+    println!("{}:", style("DUPLICATED INPUTS").magenta().bold());
     for (dupe, inputs) in duplicates {
         println!(
-            "{}: {}",
+            "  {}: {}",
             style(dupe).bold(),
             inputs
                 .keys()
@@ -42,8 +42,8 @@ pub fn show_duplicates(duplicates: HashMap<String, HashMap<String, FlakeInput>>)
 }
 
 pub fn show_non_nulls(non_nulls: HashMap<String, Vec<String>>) {
-    println!("{}:", style("NON-NULL INPUTS").magenta());
+    println!("{}:", style("NON-NULL INPUTS").magenta().bold());
     for (name, inputs) in non_nulls {
-        println!("{}: {}", style(name).bold(), inputs.join("; "))
+        println!("  {}: {}", style(name).bold(), inputs.join("; "))
     }
 }

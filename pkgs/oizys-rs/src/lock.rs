@@ -103,16 +103,10 @@ impl FlakeLock {
     }
 
     pub fn duplicates(&self) -> HashMap<String, HashMap<String, FlakeInput>> {
-        let names: Vec<String> = self
-            .nodes
+        self.nodes
             .keys()
             .filter(|n| n.contains("_"))
-            .cloned()
-            .collect();
-
-        names
-            .iter()
-            .map(|n| (n.to_string(), self.matches(n)))
+            .map(|n| (n.to_string(), self.matches(&n)))
             .collect()
     }
 
