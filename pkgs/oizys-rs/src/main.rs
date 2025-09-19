@@ -7,17 +7,9 @@ use oizys::{
 };
 use oizys::{nix, prelude::*};
 
-#[derive(Debug, Parser)]
-#[command(
-    name = env!("CARGO_PKG_NAME"),
-    version = env!("CARGO_PKG_VERSION"),
-    about = "nix begat oizys",
-    styles = CLAP_STYLING
-)]
-struct Cli {
-    #[command(subcommand)]
-    command: Commands,
-
+#[derive(Debug, clap::Args)]
+#[command(next_help_heading = "Global options")]
+struct GlobalOptions {
     /// verbosity level (up to 4)
     ///
     /// 0: warn
@@ -45,6 +37,21 @@ struct Cli {
     /// hostname
     #[arg(long,global = true, num_args=1.., value_delimiter = ',', default_values_t = [default_host()])]
     host: Vec<String>,
+}
+
+#[derive(Debug, Parser)]
+#[command(
+    name = env!("CARGO_PKG_NAME"),
+    version = env!("CARGO_PKG_VERSION"),
+    about = "nix begat oizys",
+    styles = CLAP_STYLING
+)]
+struct Cli {
+    #[command(subcommand)]
+    command: Commands,
+
+    #[clap(flatten)]
+    global: GlobalOptions,
 }
 
 #[derive(Debug, Subcommand)]
@@ -174,11 +181,11 @@ async fn main() -> Result<()> {
 
     let cli = Cli::parse();
 
-    oizys::init_subscriber(cli.verbose);
+    oizys::init_subscriber(cli.global.verbose);
 
-    let nix = NixCommand::new(&cli.nix, cli.bootstrap);
-    let flake = nix::set_flake(cli.flake)?;
-    let hosts = cli.host;
+    let nix = NixCommand::new(&cli.global.nix, cli.global.bootstrap);
+    let flake = nix::set_flake(cli.global.flake)?;
+    let hosts = cli.global.host;
     let systems = Nixos::new_multi(&flake, &hosts);
 
     match cli.command {
@@ -196,7 +203,7 @@ async fn main() -> Result<()> {
             host,
             extra_flags,
         } => {
-            Nixos::new(&flake, &host).rebuild(cli.nix, &cmd, extra_flags)?;
+            Nixos::new(&flake, &host).rebuild(cli.global.nix, &cmd, extra_flags)?;
         }
         Commands::Output { system } => {
             for host in hosts {
