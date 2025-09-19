@@ -213,6 +213,7 @@ async fn main() -> Result<()> {
         Commands::Lock { null } => {
             oizys::check_lock_file(&flake, null)?;
         }
+        // todo: account for packages that will be fetched too
         Commands::Dry {} => {
             let attrs = hosts
                 .iter()
