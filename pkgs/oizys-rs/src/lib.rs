@@ -1,3 +1,4 @@
+pub mod cli;
 pub mod github;
 pub mod lock;
 pub mod nix;
@@ -114,7 +115,6 @@ pub fn init_subscriber(verbose: u8) {
         .init();
 
     tracing::debug!("run with -vvv to see third-party log messages");
-
 }
 
 #[macro_export]

@@ -1,185 +1,17 @@
-use clap::{CommandFactory, Parser, Subcommand};
-use clap_complete::aot::{generate, Generator, Shell};
+use clap::{CommandFactory, Parser};
+use oizys::prelude::*;
 use oizys::{
+    cli::{self, CiCommands, Cli, Commands},
     github,
-    nix::{NixCommand, NixName, Nixos, NixosOps},
+    nix::{self, NixCommand, Nixos, NixosOps},
     process::LoggedCommand,
 };
-use oizys::{nix, prelude::*};
-
-#[derive(Debug, clap::Args)]
-#[command(next_help_heading = "Global options")]
-struct GlobalOptions {
-    /// verbosity level (up to 4)
-    ///
-    /// 0: warn
-    /// 1: oizys info
-    /// 2: oizys debug
-    /// 3: all debug
-    /// 4: all trace
-    /// NOTE: you can use RUST_LOG for more control
-    #[arg(short, long, action = clap::ArgAction::Count, global = true, verbatim_doc_comment)]
-    verbose: u8,
-
-    // TODO: use a PathBuf?
-    /// path to flake
-    #[arg(short, long, global = true)]
-    flake: Option<String>,
-
-    /// enable bootstrap mode
-    #[arg(long, global = true)]
-    bootstrap: bool,
-
-    /// binary to use
-    #[arg(short, long, global = true, value_enum, default_value_t = NixName::Nom)]
-    nix: NixName,
-
-    /// hostname
-    #[arg(long,global = true, num_args=1.., value_delimiter = ',', default_values_t = [default_host()])]
-    host: Vec<String>,
-}
-
-#[derive(Debug, Parser)]
-#[command(
-    name = env!("CARGO_PKG_NAME"),
-    version = env!("CARGO_PKG_VERSION"),
-    about = "nix begat oizys",
-    styles = CLAP_STYLING
-)]
-struct Cli {
-    #[command(subcommand)]
-    command: Commands,
-
-    #[clap(flatten)]
-    global: GlobalOptions,
-}
-
-#[derive(Debug, Subcommand)]
-enum Commands {
-    #[command(hide = true, name = "self")]
-    Current {
-        #[arg(num_args = 0..)]
-        args: Vec<String>,
-    },
-
-    /// nixos config attr
-    Output {
-        /// show system attr
-        #[arg(short, long)]
-        system: bool,
-    },
-
-    /// nix build
-    #[command(visible_alias = "b")]
-    Build { installables: Vec<String> },
-
-    /// nixos-rebuild subcmd
-    Os {
-        /// subcmd
-        cmd: String,
-
-        /// additional flags passed to nixos-rebuild
-        extra_flags: Vec<String>,
-
-        /// hostname
-        #[arg(long, global = true, default_value_t = default_host())]
-        host: String,
-    },
-
-    /// check merge status of nixpkgs PR
-    Pr { number: i64 },
-
-    /// trigger GHA workflow
-    ///
-    /// example:
-    ///     oizys gha build --ref main --inputs lockFile=@flake.lock
-    Gha {
-        /// name of workflow (ext optional)
-        workflow: String,
-
-        /// name of git ref
-        #[arg(long, name = "ref", default_value_t = ("main").to_string())]
-        ref_name: String,
-
-        /// key value pairs for workflow
-        ///
-        /// separated by '='
-        #[arg(short, long, value_parser = parse_key_val::<String, String>)]
-        inputs: Vec<(String, String)>,
-
-        /// open workflow run in browser
-        #[arg(long)]
-        open: bool,
-    },
-
-    /// collect build hash from failure
-    ///
-    /// example:
-    ///     oizys hash '.' | wl-copy
-    #[command(verbatim_doc_comment)]
-    Hash {
-        /// nix-args
-        args: Vec<String>,
-    },
-
-    /// dry run build
-    Dry {},
-
-    /// check active caches for nix derivation
-    Narinfo {
-        #[arg(required = true)]
-        attrs: Vec<String>,
-
-        /// search all substituters
-        #[arg(short, long)]
-        all: bool,
-    },
-
-    /// check lock status for duplicates
-    ///
-    /// I want to lock my flake not yours..
-    Lock {
-        /// inputs which should be null
-        #[arg(long,global = true, num_args=1.., value_delimiter = ',', default_values_t = ["flake-compat".to_string(), "treefmt-nix".to_string()])]
-        null: Vec<String>,
-    },
-
-    /// generate shell completion
-    Completion { shell: Shell },
-
-    /// builtin ci operations
-    Ci {
-        #[command(subcommand)]
-        command: CiCommands,
-    },
-}
-
-#[derive(Debug, Subcommand)]
-enum CiCommands {
-    /// two stage build of current and updated nixos configurations
-    Update,
-    /// build and push store paths
-    Cache,
-}
-
-fn default_host() -> String {
-    hostname::get().unwrap().into_string().unwrap()
-}
-
-fn print_completions<G: Generator>(generator: G, cmd: &mut clap::Command) {
-    generate(
-        generator,
-        cmd,
-        cmd.get_name().to_string(),
-        &mut std::io::stdout(),
-    );
-}
 
 #[tokio::main]
 async fn main() -> Result<()> {
     color_eyre::install()?;
 
-    let cli = Cli::parse();
+    let cli = cli::Cli::parse();
 
     oizys::init_subscriber(cli.global.verbose);
 
@@ -193,7 +25,7 @@ async fn main() -> Result<()> {
         Commands::Completion { shell } => {
             let mut cmd = Cli::command();
             eprintln!("Generating completion file for {shell}...");
-            print_completions(shell, &mut cmd);
+            cli::print_completions(shell, &mut cmd);
         }
         Commands::Build { installables } => {
             nix.build(installables)?;
@@ -280,25 +112,3 @@ async fn main() -> Result<()> {
 
     Ok(())
 }
-
-use std::error::Error;
-/// supports parsing arguments as --arg k=v
-fn parse_key_val<T, U>(s: &str) -> Result<(T, U), Box<dyn Error + Send + Sync + 'static>>
-where
-    T: std::str::FromStr,
-    T::Err: Error + Send + Sync + 'static,
-    U: std::str::FromStr,
-    U::Err: Error + Send + Sync + 'static,
-{
-    let pos = s
-        .find('=')
-        .ok_or_else(|| format!("invalid KEY=value: no `=` found in `{s}`"))?;
-    Ok((s[..pos].parse()?, s[pos + 1..].parse()?))
-}
-
-use clap::builder::styling::{AnsiColor, Style, Styles};
-const CLAP_STYLING: Styles = Styles::styled()
-    .header(AnsiColor::Magenta.on_default().bold())
-    .usage(Style::new().bold())
-    .literal(Style::new().bold())
-    .placeholder(AnsiColor::Yellow.on_default());
