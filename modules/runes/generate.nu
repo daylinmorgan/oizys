@@ -56,4 +56,6 @@ $runes
 | each { nix-file }
 
 
-nix fmt
+const path_to_self = path self | path dirname
+
+nix fmt $path_to_self
