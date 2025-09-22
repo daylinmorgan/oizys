@@ -354,7 +354,9 @@ binds {
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+Shift+Return { spawn "ghostty"; }
     Mod+Ctrl+N { spawn "swaylock"; }
-    Mod+N { spawn "ghostty" "--class=float.editor" "-e" "nvim +$ ~/log.md";}
+
+    // `ghostty -e` changes mean I need to use an absolute path here?
+    Mod+N { spawn "ghostty" "--class=float.editor" "-e" "nvim" "+$" "/home/daylin/log.md";}
 
     // Rofi
     Mod+P { spawn "rofi" "-show" "drun" "-theme" "launcher"; }
