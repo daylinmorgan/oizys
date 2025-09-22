@@ -60,7 +60,8 @@ mkOizysModule config "niri" {
     swaybg = niriService {
       description = "swaybg!";
       serviceConfig = {
-        ExecStart = ''${pkgs.swaybg}/bin/swaybg -m fill -i "%h/stuff/wallpapers/mountain-temple/mountain-temple_00001_.png"'';
+        # current is a symlink
+        ExecStart = ''${pkgs.swaybg}/bin/swaybg -m fill -i "%h/stuff/wallpapers/current"'';
         Restart = "on-failure";
       };
     };
