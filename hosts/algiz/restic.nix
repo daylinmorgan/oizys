@@ -1,4 +1,5 @@
 {
+  lib,
   config,
   ...
 }:
@@ -14,14 +15,16 @@
     repository = "rclone:g:archives/algiz";
     passwordFile = config.sops.secrets.restic-algiz.path;
     paths =
-      [
-        "git"
-        "gotosocial"
-        "caddy"
-        "wedding-website"
-        "bsky-pds"
-        "wiki"
-      ]
+      ''
+        git
+        gotosocial
+        caddy
+        wedding-website
+        bsky-pds
+        wiki
+        continuwuity
+      ''
+      |> lib.listify
       |> map (s: "/home/daylin/services/${s}/");
   };
 }
