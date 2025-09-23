@@ -4,9 +4,12 @@
   self,
   flake,
   enabled,
+  lib,
   ...
 }:
-
+let
+  inherit (lib.data) lixVersion substituters;
+in
 {
   imports = with self.nixosModules; [ git ];
   programs.zsh = enabled;
@@ -29,7 +32,7 @@
   ];
 
   nixpkgs.config.allowUnfree = true;
-  nix.package = pkgs.lixPackageSets.git.lix;
+  nix.package = pkgs.lixPackageSets.${lixVersion}.lix;
 
   nix = {
     optimise.automatic = true;
@@ -53,6 +56,6 @@
       accept-flake-config = true;
 
     }
-    // (import ../lib/substituters.nix);
+    // substituters;
   };
 }

@@ -134,7 +134,13 @@ let
     readDir dir
     |> attrNames
     |> filter (f: f != "default.nix")
-    |> map (f: import (../overlays + "/${f}") { inherit inputs; });
+    |> map (
+      f:
+      import (../overlays + "/${f}") {
+        inherit inputs;
+        lib = final;
+      }
+    );
 
   selfPkgsOverlays =
     final: packages:
@@ -235,6 +241,7 @@ let
       line: if hasPrefix "flake:" line then (line |> removePrefix "flake:" |> flake.pkg) else pkgs.${line}
     );
 
+  data = (import ./data.nix);
 in
 {
   inherit
@@ -262,5 +269,6 @@ in
     hostSystem
     oizysSettings
     tryPkgsFromFile
+    data
     ;
 }

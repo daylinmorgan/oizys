@@ -1,7 +1,8 @@
-inputs: final: prev:
+{ lib, ... }:
+final: prev:
 let
   # issue in stable (2.93.3) with fetchurl while running as sudo
-  lixPackageSets = final.lixPackageSets.git;
+  lixPackageSets = final.lixPackageSets.${lib.data.lixVersion};
 in
 {
   inherit (lixPackageSets)

@@ -45,7 +45,6 @@
     # zls.inputs.nixpkgs.follows = "nixpkgs";
     # zls.inputs.zig-overlay.follows = "zig-overlay";
 
-
     # Follows
 
     ## nixpkgs
