@@ -2,22 +2,14 @@
   config,
   pkgs,
   enabled,
-  flake,
   ...
 }:
 let
-  atticPort = "5656";
-  static-nix-cache = pkgs.runCommandLocal "static-files-nix-cache" { } ''
-    mkdir $out
-    cp -r ${./caddy/nix-cache}/* $out
-  '';
-
   check-attic = pkgs.writeShellScriptBin "check-attic" ''
     sudo du -sh /var/lib/atticd/
   '';
 in
 {
-
   services.resolved = enabled;
 
   services.fail2ban = enabled // {
@@ -44,7 +36,7 @@ in
     # https://github.com/zhaofengli/attic/blob/main/server/src/config.rs
     # best of luck to you converting this to nix, which is written by nix as toml to be read by attic
     settings = {
-      listen = "[::]:${atticPort}";
+      listen = "[::]:5656";
 
       jwt = { };
 
@@ -78,61 +70,4 @@ in
     };
   };
 
-  # TODO: abstract out most of this to a separate file/module?
-  services.caddy = enabled // {
-    logFormat = ''
-      output file /var/log/caddy/access.log
-    '';
-
-    extraConfig = builtins.readFile ./caddy/Caddyfile;
-
-    virtualHosts = {
-
-      "https://cloud.dayl.in:443".extraConfig = ''
-        # reverse_proxy localhost:11000
-        respond "No service active"
-      '';
-
-      "www.dayl.in".extraConfig = ''
-        redir https://dayl.in{uri}
-      '';
-
-      "dayl.in".extraConfig = ''
-
-        handle /* {
-          root * ${flake.pkg "daylin-website"}
-          encode zstd gzip
-          file_server
-        }
-
-        handle /.well-known/matrix/* {
-          # matrix well-known
-          reverse_proxy http://localhost:8448
-        }
-      '';
-
-      "matrix.dayl.in".extraConfig = ''
-        reverse_proxy http://localhost:8448
-      '';
-
-      "nix-cache.dayl.in".extraConfig = ''
-
-        redir /oizys /
-
-        @frontend {
-          path /
-          path /daylin-nix-cache-logo.svg
-        }
-
-        handle @frontend {
-          root * ${static-nix-cache}
-          file_server
-        }
-
-        handle /* {
-          reverse_proxy http://localhost:${atticPort}
-        }
-      '';
-    };
-  };
 }

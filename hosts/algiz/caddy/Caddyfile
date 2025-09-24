@@ -1,16 +1,16 @@
 wiki.dayl.in {
-    reverse_proxy http://localhost:8721
+	reverse_proxy http://localhost:8721
 }
 
 git.dayl.in {
-  reverse_proxy http://localhost:3000
+	reverse_proxy http://localhost:3000
 }
 
 gts.dayl.in {
 	# Optional, but recommended, compress the traffic using proper protocols
 	encode zstd gzip
 
-  # TODO: change port?
+	# TODO: change port?
 	# The actual proxy configuration to port 8080 (unless you've chosen another port number)
 	reverse_proxy * http://localhost:3758 {
 		# Flush immediatly, to prevent buffered response to the client
@@ -19,14 +19,26 @@ gts.dayl.in {
 }
 
 daylin.bsky.dayl.in, bsky.dayl.in {
-  reverse_proxy http://localhost:6555
+	reverse_proxy http://localhost:6555
 }
 
 elizabeth-and-daylin.com {
-    reverse_proxy http://localhost:4321
+	reverse_proxy http://localhost:4321
 }
 
 elizabeth.dayl.in, www.elizabeth-and-daylin.com {
-  redir https://elizabeth-and-daylin.com{uri} permanent
+	redir https://elizabeth-and-daylin.com{uri} permanent
 }
 
+www.dayl.in {
+	redir https://dayl.in{uri}
+}
+
+https://cloud.dayl.in {
+	# reverse_proxy localhost:11000
+	respond "No service active"
+}
+
+matrix.dayl.in {
+	reverse_proxy http://localhost:8448
+}
