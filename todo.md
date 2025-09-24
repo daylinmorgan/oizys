@@ -3,7 +3,7 @@
 ## oizys
 
 - [ ] `oizys gha <workflow>` should keep checking for something greater than the current time
-- [ ] remove the implicit dep on `jq`
+- [ ] remove the implicit dep on `jq` (I did this with oizys-rs)
 
 ---
 
