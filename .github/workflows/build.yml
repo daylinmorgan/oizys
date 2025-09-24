@@ -52,7 +52,7 @@ jobs:
           nix run .
           --
           cache
-          --host,="${{ inputs.hosts }}"
+          --host "${{ inputs.hosts }}"
           --flake .
           -vv
           --
