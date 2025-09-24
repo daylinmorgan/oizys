@@ -1,5 +1,5 @@
 { fetchFromGitHub, buildNimPackage }:
-buildNimPackage (finalAttrs: {
+buildNimPackage (_finalAttrs: {
   pname = "nimlangserver";
   version = "1.10.2-unstable";
 
