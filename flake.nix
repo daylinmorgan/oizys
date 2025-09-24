@@ -27,7 +27,7 @@
     niri.url = "github:YaLTeR/niri";
     nix-index-database.url = "github:nix-community/nix-index-database";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
-    nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland/8dcad9dcb5ce4eb28e2719ab025224308b318e79";
+    nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     NixVirt.url = "github:AshleyYakeley/NixVirt/v0.6.0";
     sops-nix.url = "github:Mic92/sops-nix";
     treefmt-nix.url = "github:numtide/treefmt-nix";
