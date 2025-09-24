@@ -421,9 +421,10 @@ pub fn set_flake(flake: Option<String>) -> Result<String> {
     info!("{:?} does not exist, using remote as fallback", path);
     Ok("github:daylinmorgan/oizys".to_string())
 }
+
 // TODO: better error handling here
 pub fn run_current(nix: &NixCommand, flake: &str, args: Vec<String>) {
-    let flake = format!("{flake}#oizys-rs");
+    let flake = format!("{flake}#oizys");
     let to_build =
         needs_to_be_built(&flake).expect(&format!("failed to check path-info of: {}", &flake));
     if to_build {
