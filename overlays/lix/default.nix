@@ -1,8 +1,14 @@
 { lib, ... }:
 final: prev:
 let
+  inherit (lib.data) lixVersion;
   # issue in stable (2.93.3) with fetchurl while running as sudo
-  lixPackageSets = final.lixPackageSets.${lib.data.lixVersion};
+  lixPackageSets = final.lixPackageSets.${lixVersion};
+  overrideNix = name: {
+    value = prev.${name}.override {
+      nix = lixPackageSets.lix;
+    };
+  };
 in
 {
   inherit (lixPackageSets)
@@ -24,10 +30,8 @@ in
   ]
   |> map (name: {
     inherit name;
-    value = prev.${name}.override {
-      nix = lixPackageSets.lix;
-    };
+    inherit (overrideNix name) value;
   })
-  |> prev.lib.listToAttrs
+  |> lib.listToAttrs
 
 )
