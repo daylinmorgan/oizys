@@ -3,9 +3,10 @@
 ++ [
   inputs.nim2nix.overlays.default # adds buildNimPackage
   # inputs.niri.overlays.default # adds main branch niri
-
+]
+++ [
   (
-    final: prev:
+    final: _prev:
 
     lib.selfPkgsOverlays final [
       # "nimble"
