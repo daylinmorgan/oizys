@@ -1,4 +1,4 @@
-use super::nix::NixName;
+use crate::nix::NixName;
 use clap::{Subcommand, Parser};
 use clap_complete::aot::{generate, Generator, Shell};
 

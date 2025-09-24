@@ -1,5 +1,5 @@
-use super::prelude::*;
-use super::{process::LoggedCommand, ui};
+use crate::prelude::*;
+use crate::{process::LoggedCommand, ui};
 use clap::ValueEnum;
 use reqwest::{blocking::Client, StatusCode};
 use std::collections::{BTreeMap, HashSet};
@@ -78,7 +78,7 @@ impl NixCommand {
     pub fn cmd(&self) -> LoggedCommand {
         let mut cmd = LoggedCommand::new(&self.bin.clone());
         if self.bootstrap {
-            super::substituters::apply_subsituter_flags(&mut cmd);
+            crate::substituters::apply_subsituter_flags(&mut cmd);
         }
         cmd
     }
@@ -590,7 +590,7 @@ pub fn chezmoi_status() -> Result<()> {
         println!(
             "\nfyi the dotfiles don't match, see below:\n{}:\n{}",
             style("CHEZMOI STATUS").magenta().bold(),
-            &super::indent(stdout)
+            &crate::indent(stdout)
         )
     }
     Ok(())

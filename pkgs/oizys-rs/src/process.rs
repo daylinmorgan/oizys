@@ -1,4 +1,4 @@
-use super::prelude::*;
+use crate::prelude::*;
 use color_eyre::{eyre::eyre, Section, SectionExt};
 use std::{
     ffi::OsStr,

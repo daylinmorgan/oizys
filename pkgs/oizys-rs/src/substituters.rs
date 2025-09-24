@@ -1,6 +1,6 @@
 #![allow(dead_code)] // features are used and result in dead code
 
-use super::process::LoggedCommand;
+use crate::process::LoggedCommand;
 use serde::Deserialize;
 use tracing::error;
 use tracing::info;

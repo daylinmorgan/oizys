@@ -1,5 +1,5 @@
 use console::style;
-use super::lock::FlakeInput;
+use crate::lock::FlakeInput;
 use std::collections::HashMap;
 
 pub fn show_drvs(drvs: Vec<String>) {
