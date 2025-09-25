@@ -10,25 +10,27 @@ let
     ;
 in
 rec {
+  fileToModule = dir: name: [
+    {
+      name = elemAt (match "(.*)\\.nix" name) 0;
+      value = dir + "/${name}";
+    }
+  ];
+  dirToModule = dir: name: [
+    {
+      inherit name;
+      value = dir + "/${name}";
+    }
+  ];
 
   handleModule =
     dir: name: type:
     if type == "regular" then
-      [
-        {
-          name = elemAt (match "(.*)\\.nix" name) 0;
-          value = dir + "/${name}";
-        }
-      ]
+      fileToModule dir name
     else if (readDir (dir + "/${name}")) ? "default.nix" then
-      [
-        {
-          inherit name;
-          value = dir + "/${name}";
-        }
-      ]
+      dirToModule dir name
     else
       findModulesList (dir + "/${name}");
 
-  findModulesList = dir: (readDir dir) |> mapAttrs (handleModule dir) |> attrValues |> concatLists;
+  findModulesList = dir: dir |> readDir |> mapAttrs (handleModule dir) |> attrValues |> concatLists;
 }
