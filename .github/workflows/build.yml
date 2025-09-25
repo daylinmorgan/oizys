@@ -11,10 +11,6 @@ on:
       lockFile:
         description: "flake.lock file"
         type: string
-      nix-flags:
-        description: "flags forwared to nix commands"
-        type: string
-        default: "--keep-going"
 
   workflow_call:
     inputs:

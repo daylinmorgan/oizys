@@ -1,5 +1,5 @@
 use crate::nix::NixName;
-use clap::{Subcommand, Parser};
+use clap::{Parser, Subcommand};
 use clap_complete::aot::{generate, Generator, Shell};
 
 #[derive(Debug, clap::Args)]
@@ -53,6 +53,7 @@ pub struct Cli {
 pub enum Commands {
     #[command(hide = true, name = "self")]
     Current {
+        /// nix-args
         #[arg(num_args = 0..)]
         args: Vec<String>,
     },
@@ -66,19 +67,24 @@ pub enum Commands {
 
     /// nix build
     #[command(visible_alias = "b")]
-    Build { installables: Vec<String> },
+    Build {
+        /// nix-args
+        #[arg(num_args = 0..)]
+        args: Vec<String>,
+    },
 
     /// nixos-rebuild subcmd
     Os {
         /// subcmd
         cmd: String,
 
-        /// additional flags passed to nixos-rebuild
-        extra_flags: Vec<String>,
-
         /// hostname
         #[arg(long, global = true, default_value_t = default_host())]
         host: String,
+
+        /// nix-args
+        #[arg(num_args = 0..)]
+        args: Vec<String>,
     },
 
     /// check merge status of nixpkgs PR

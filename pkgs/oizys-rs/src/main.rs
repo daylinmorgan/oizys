@@ -27,15 +27,11 @@ async fn main() -> Result<()> {
             eprintln!("Generating completion file for {shell}...");
             cli::print_completions(shell, &mut cmd);
         }
-        Commands::Build { installables } => {
-            nix.build(installables)?;
+        Commands::Build { args } => {
+            nix.build(args)?;
         }
-        Commands::Os {
-            cmd,
-            host,
-            extra_flags,
-        } => {
-            Nixos::new(&flake, &host).rebuild(cli.global.nix, &cmd, extra_flags)?;
+        Commands::Os { cmd, host, args } => {
+            Nixos::new(&flake, &host).rebuild(cli.global.nix, &cmd, args)?;
         }
         Commands::Output { system } => {
             for host in hosts {
