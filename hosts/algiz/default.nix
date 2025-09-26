@@ -4,6 +4,7 @@
   ...
 }:
 {
+
   oizys = {
     rune.motd = enabled;
   };

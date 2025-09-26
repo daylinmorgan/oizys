@@ -74,6 +74,26 @@
         "type": "github"
       }
     },
+    "comin": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1757250234,
+        "narHash": "sha256-jHyksmOz9yQPUlsJwAgs0jQlz9dwstoS4M/hT+JA5Z0=",
+        "owner": "nlewo",
+        "repo": "comin",
+        "rev": "b8ab3eccbc3acf171b9ea377e88b8194f81c579d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nlewo",
+        "repo": "comin",
+        "type": "github"
+      }
+    },
     "crane": {
       "locked": {
         "lastModified": 1758686891,
@@ -509,6 +529,7 @@
     "root": {
       "inputs": {
         "NixVirt": "NixVirt",
+        "comin": "comin",
         "crane": "crane",
         "daylin-website": "daylin-website",
         "flake-parts": "flake-parts",

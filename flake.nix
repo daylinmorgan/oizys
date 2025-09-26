@@ -21,6 +21,7 @@
     # keep for when lix breaks :/
     # lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0.tar.gz";
 
+    comin.url = "github:nlewo/comin";
     crane.url = "github:ipetkov/crane"; # todo: use tag?
     llm-nix.url = "github:daylinmorgan/llm-nix";
     multiviewer.url = "github:daylinmorgan/multiviewer-flake";
@@ -48,6 +49,7 @@
     # Follows
 
     ## nixpkgs
+    comin.inputs.nixpkgs.follows = "nixpkgs";
     daylin-website.inputs.nixpkgs.follows = "nixpkgs";
     multiviewer.inputs.nixpkgs.follows = "nixpkgs";
     llm-nix.inputs.nixpkgs.follows = "nixpkgs";

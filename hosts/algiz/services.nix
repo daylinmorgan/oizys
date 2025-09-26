@@ -70,4 +70,13 @@ in
     };
   };
 
+  services.comin = enabled // {
+    remotes = [
+      {
+        name = "origin";
+        url = "https://github.com/daylinmorgan/oizys.git";
+        branches.main.name = "main";
+      }
+    ];
+  };
 }
