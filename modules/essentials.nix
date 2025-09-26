@@ -53,7 +53,7 @@ in
       ];
       use-xdg-base-directories = true;
       trusted-users = [ "@wheel" ];
-       accept-flake-config = false;
+      accept-flake-config = false;
 
     }
     // substituters;
