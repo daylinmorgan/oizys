@@ -293,6 +293,13 @@ animations {
 //     default-column-width {}
 // }
 
+
+window-rule {
+  match app-id=r#"^com\.mitchellh\.ghostty$"#
+  default-column-width { proportion 0.75; }
+}
+
+
 // Open the Firefox picture-in-picture player as floating by default.
 window-rule {
     // This app-id regular expression will work for both:
