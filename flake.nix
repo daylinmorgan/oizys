@@ -39,16 +39,13 @@
     tsm.url = "github:daylinmorgan/tsm?dir=nix";
     utils.url = "git+https://git.dayl.in/daylin/utils.git";
 
-    # roc.url = "github:roc-lang/roc/0.0.0-alpha2-rolling";
     # zig-overlay.url = "github:mitchellh/zig-overlay";
     # zig-overlay.inputs.nixpkgs.follows = "nixpkgs";
     # zls.url = "github:zigtools/zls";
     # zls.inputs.nixpkgs.follows = "nixpkgs";
     # zls.inputs.zig-overlay.follows = "zig-overlay";
 
-    # Follows
-
-    ## nixpkgs
+    # all the follows
     comin.inputs.nixpkgs.follows = "nixpkgs";
     daylin-website.inputs.nixpkgs.follows = "nixpkgs";
     multiviewer.inputs.nixpkgs.follows = "nixpkgs";
@@ -65,7 +62,6 @@
     tsm.inputs.nixpkgs.follows = "nixpkgs";
     utils.inputs.nixpkgs.follows = "nixpkgs";
 
-    ## nim2nix
     niriman.inputs.nim2nix.follows = "nim2nix";
     tsm.inputs.nim2nix.follows = "nim2nix";
     utils.inputs.nim2nix.follows = "nim2nix";
@@ -94,16 +90,5 @@
     nixos-wsl.inputs.flake-compat.follows = "";
     nixpkgs-wayland.inputs.flake-compat.follows = "";
     daylin-website.inputs.bun2nix.inputs.treefmt-nix.follows = "";
-
-    # lix-attic.url = "git+https://git.lix.systems/nrabulinski/attic.git";
-    # lix-attic.url = "git+https://git.dayl.in/daylin/attic.git";
-    # lix-attic.inputs.lix.follows = "lix-module/lix";
-    # lix-attic.inputs.lix-module.follows = "lix-module";
-    # lix-attic.inputs.nixpkgs.follows = "nixpkgs";
-    # lix-attic.inputs.flake-parts.follows = "flake-parts";
-    #
-    # lix-attic.inputs.nixpkgs-stable.follows = "";
-    # lix-attic.inputs.flake-compat.follows = "";
-    # lix-attic.inputs.nix-github-actions.follows = "";
   };
 }
