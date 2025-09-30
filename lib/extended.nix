@@ -26,9 +26,9 @@ let
     trim
     ;
   inherit (final.filesystem) listFilesRecursive;
+  inherit (import ./find-modules.nix) findModulesList;
 in
 let
-
   enabled = {
     enable = true;
   };
@@ -270,5 +270,6 @@ in
     oizysSettings
     tryPkgsFromFile
     data
+    findModulesList
     ;
 }

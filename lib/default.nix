@@ -9,9 +9,8 @@ let
   lib = (nixpkgs.lib.extend (import ./extended.nix inputs));
 
   inherit (builtins) mapAttrs readDir listToAttrs;
-  inherit (lib) genAttrs;
+  inherit (lib) genAttrs findModulesList;
   inherit (lib.data) substituters;
-  inherit (import ./find-modules.nix { inherit lib; }) findModulesList;
   inherit (import ./generators.nix { inherit lib self inputs; }) mkIso mkSystem;
 
   #supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
