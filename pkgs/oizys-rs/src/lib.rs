@@ -56,26 +56,6 @@ pub fn check_lock_file(flake: &str, null: Vec<String>) -> Result<()> {
     Ok(())
 }
 
-#[deprecated]
-pub fn check_lock_file_jq(lock_file: PathBuf) -> Result<()> {
-    if !which::which("jq").is_ok() {
-        bail!("jq not found, but required for `oizys lock`")
-    }
-
-    let stdout = LoggedCommand::new("jq")
-        .arg(".nodes | keys[] | select(contains(\"_\"))")
-        .arg("-r")
-        .arg(lock_file)
-        .stdout_ok()?;
-
-    if stdout != "" {
-        println!("{}", stdout);
-    } else {
-        eprintln!("nothing to change :)");
-    }
-    Ok(())
-}
-
 fn default_progress_style() -> ProgressStyle {
     ProgressStyle::with_template("{span_child_prefix}{spinner:.magenta} {span_name} {span_fields}")
         .unwrap()

@@ -7,7 +7,6 @@
   openssl,
   pkg-config,
 
-  jq,
   nix-eval-jobs,
 
   installShellFiles,
@@ -48,7 +47,6 @@ craneLib.buildPackage (
       wrapProgram $out/bin/oizys \
         --prefix PATH : ${
           lib.makeBinPath [
-            jq
             nix-eval-jobs
           ]
         }
