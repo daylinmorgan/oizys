@@ -12,14 +12,12 @@
     nixpkgs = nixpkgs-nixos-unstable;
 
     # switch to lix stable from nixpkgs ... see also overlays/lix
-    # lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
-    # lix-module.inputs.nixpkgs.follows = "nixpkgs";
-    # lix-module.inputs.flake-utils.follows = "flake-utils";
-    # lix-module.inputs.lix.follows = "lix";
-    # lix.url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
-    # lix.flake = false;
-    # keep for when lix breaks :/
-    # lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0.tar.gz";
+    lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
+    lix-module.inputs.nixpkgs.follows = "nixpkgs";
+    lix-module.inputs.flake-utils.follows = "flake-utils";
+    lix-module.inputs.lix.follows = "lix";
+    lix.url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
+    lix.flake = false;
 
     comin.url = "github:nlewo/comin";
     crane.url = "github:ipetkov/crane"; # todo: use tag?

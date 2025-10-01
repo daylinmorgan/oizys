@@ -133,7 +133,7 @@ let
     inputs: dir:
     readDir dir
     |> attrNames
-    |> filter (f: f != "default.nix")
+    |> filter (f: f != "default.nix" && !(hasPrefix "_" f))
     |> map (
       f:
       import (../overlays + "/${f}") {

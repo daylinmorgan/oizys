@@ -168,6 +168,21 @@
         "type": "github"
       }
     },
+    "flakey-profile": {
+      "locked": {
+        "lastModified": 1712898590,
+        "narHash": "sha256-FhGIEU93VHAChKEXx905TSiPZKga69bWl1VB37FK//I=",
+        "owner": "lf-",
+        "repo": "flakey-profile",
+        "rev": "243c903fd8eadc0f63d205665a92d4df91d42d9d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lf-",
+        "repo": "flakey-profile",
+        "type": "github"
+      }
+    },
     "lib-aggregate": {
       "inputs": {
         "flake-utils": [
@@ -189,6 +204,45 @@
         "owner": "nix-community",
         "repo": "lib-aggregate",
         "type": "github"
+      }
+    },
+    "lix": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1759066537,
+        "narHash": "sha256-9wdZxZqjWCobgQU6TDmdFHm2v8zOKFbg56+iThu63Vc=",
+        "rev": "f31e8e2b55419c7f250f29ae6fbc59be4a4c259e",
+        "type": "tarball",
+        "url": "https://git.lix.systems/api/v1/repos/lix-project/lix/archive/f31e8e2b55419c7f250f29ae6fbc59be4a4c259e.tar.gz?rev=f31e8e2b55419c7f250f29ae6fbc59be4a4c259e"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://git.lix.systems/lix-project/lix/archive/main.tar.gz"
+      }
+    },
+    "lix-module": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "flakey-profile": "flakey-profile",
+        "lix": [
+          "lix"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1756511062,
+        "narHash": "sha256-IgD1JR7scSEwlK/YAbmrcTWpAYT30LPldCUHdzXkaMs=",
+        "rev": "3f09a5eb772e02d98bb8878ab687d5b721f00d16",
+        "type": "tarball",
+        "url": "https://git.lix.systems/api/v1/repos/lix-project/nixos-module/archive/3f09a5eb772e02d98bb8878ab687d5b721f00d16.tar.gz?rev=3f09a5eb772e02d98bb8878ab687d5b721f00d16"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz"
       }
     },
     "llm-nix": {
@@ -535,6 +589,8 @@
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",
         "lib-aggregate": "lib-aggregate",
+        "lix": "lix",
+        "lix-module": "lix-module",
         "llm-nix": "llm-nix",
         "multiviewer": "multiviewer",
         "my-nixpkgs": "my-nixpkgs",

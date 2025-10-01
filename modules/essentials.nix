@@ -1,17 +1,15 @@
 {
-  inputs,
   pkgs,
   self,
   flake,
   enabled,
-  lib,
   ...
 }:
-let
-  inherit (lib.data) lixVersion substituters;
-in
 {
-  imports = with self.nixosModules; [ git ];
+  imports = with self.nixosModules; [
+    git
+    nix
+  ];
   programs.zsh = enabled;
   environment.systemPackages = with pkgs; [
     tmux
@@ -26,36 +24,9 @@ in
     curl
     htop
 
-    (flake.pkg "self")
-
     sops
+
+    (flake.pkg "self")
   ];
 
-  nixpkgs.config.allowUnfree = true;
-  nix.package = pkgs.lixPackageSets.${lixVersion}.lix;
-
-  nix = {
-    optimise.automatic = true;
-    gc = {
-      # automatic = true; removed in favor of programs.nh.clean
-      dates = "weekly";
-      options = "--delete-older-than 7d";
-    };
-
-    # use the same nixpkgs for nix run "nixpkgs#hello" style commands
-    registry.nixpkgs.flake = inputs.nixpkgs;
-
-    settings = {
-      experimental-features = [
-        "nix-command"
-        "flakes"
-        "pipe-operator"
-      ];
-      use-xdg-base-directories = true;
-      trusted-users = [ "@wheel" ];
-      accept-flake-config = false;
-
-    }
-    // substituters;
-  };
 }
