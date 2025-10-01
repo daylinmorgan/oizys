@@ -468,7 +468,9 @@ impl std::fmt::Display for NixCache {
 
 impl NixCache {
     pub fn from(s: &str) -> Self {
-        Self { url: s.trim_end_matches('/').into() }
+        Self {
+            url: s.trim_end_matches('/').into(),
+        }
     }
 
     pub fn search(&self, hash: &str) -> Result<Option<String>> {
@@ -537,10 +539,18 @@ struct NixOutput {
 }
 
 #[derive(Deserialize, Debug)]
+struct NixInputDrv {
+    // dynamicOutputs: ?
+    outputs: Vec<String>,
+}
+
+#[derive(Deserialize, Debug)]
 #[allow(dead_code)]
 struct NixDerivation {
     name: String,
     outputs: BTreeMap<String, NixOutput>,
+    #[serde(rename = "inputDrvs")]
+    input_drvs: BTreeMap<String, NixInputDrv>,
 }
 
 type NixDerivationShowOutput = BTreeMap<String, NixDerivation>;
@@ -592,6 +602,80 @@ pub fn chezmoi_status() -> Result<()> {
             style("CHEZMOI STATUS").magenta().bold(),
             &crate::indent(stdout)
         )
+    }
+    Ok(())
+}
+
+#[derive(Debug, Eq, Hash, PartialEq)]
+enum OizysPackageStatus {
+    Local,
+    Cached,
+}
+
+#[derive(Debug)]
+struct OizysPackage {
+    name: String,
+    drv: String,
+    outputs: Vec<String>,
+    status: HashSet<OizysPackageStatus>,
+}
+
+impl OizysPackage {
+    fn from(path: &str, drv: &NixDerivation) -> Self {
+        let outputs: Vec<String> = drv.outputs.values().map(|v| v.path.clone()).collect();
+
+        Self {
+            name: drv.name.clone(),
+            drv: path.into(),
+            outputs,
+            status: HashSet::new(),
+        }
+    }
+
+    async fn get_status(&mut self) -> Result<()> {
+        if self
+            .outputs
+            .iter()
+            // should maybe be using try_exists actually?
+            .all(|p| std::path::Path::new(p).exists())
+        {
+            self.status.insert(OizysPackageStatus::Local);
+        }
+        // TODO: now for each of these run a narinfo check (async tho...)
+        Ok(())
+    }
+}
+
+async fn nix_derivation_show(attrs: &Vec<String>) -> Result<NixDerivationShowOutput> {
+    println!("showing...");
+    let output = tokio::process::Command::new("nix")
+        .arg("derivation")
+        .arg("show")
+        .args(attrs)
+        .output()
+        .await?;
+
+    if output.status.success() {
+        Ok(serde_json::from_str(&String::from_utf8_lossy(
+            &output.stdout,
+        ))?)
+    } else {
+        bail!("nix derication show failed for drvs:\n{}", attrs.join("\n"))
+    }
+}
+
+pub async fn get_oizys_packages(nixos: &Nixos) -> Result<()> {
+    let system_drv = nix_derivation_show(&vec![nixos.system_attr().clone()]).await?;
+    let inputs: Vec<String> = system_drv.values().map(|v| v.input_drvs.keys().cloned()).flatten().collect();
+    let system_input_drvs = nix_derivation_show(&inputs).await?;
+    let mut packages: Vec<OizysPackage> = system_input_drvs.iter().map(|(k,v)| OizysPackage::from(k,v)).collect();
+    for pkg in &mut packages {
+        pkg.get_status().await?
+    }
+
+    for package in packages {
+        println!("{:?}", package.outputs);
+        println!("package = {:?}, {:?}", package.name, package.status);
     }
     Ok(())
 }
