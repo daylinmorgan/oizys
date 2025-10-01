@@ -468,7 +468,7 @@ impl std::fmt::Display for NixCache {
 
 impl NixCache {
     pub fn from(s: &str) -> Self {
-        Self { url: s.into() }
+        Self { url: s.trim_end_matches('/').into() }
     }
 
     pub fn search(&self, hash: &str) -> Result<Option<String>> {

@@ -2,7 +2,7 @@
   lixVersion = "git";
   substituters = {
     substituters = [
-      "https://cache.nixos.org/"
+      "https://cache.nixos.org"
       "https://nix-cache.dayl.in/oizys"
     ];
     trusted-public-keys = [
