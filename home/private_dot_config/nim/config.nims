@@ -127,6 +127,13 @@ template buildProject() =
 task b, fmt"build binary, default: {name}":
   buildProject()
 
+task run, fmt"run binary, default: {name}":
+  exec "nim b"
+  try: exec fmt"{projectDir()}/bin/{name}"
+  except: discard
+
+
+
 task updateLock, "workaround for nimble lock probs":
   let params = forwardArgs("updateLock")
   let nimbleFile =
