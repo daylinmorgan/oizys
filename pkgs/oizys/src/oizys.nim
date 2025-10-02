@@ -1,7 +1,7 @@
 ## nix begat oizys
 import std/[os, osproc, sequtils, strutils, strtabs, strformat]
 import hwylterm, hwylterm/[hwylcli]
-import oizys/[context, github, nix, logging, utils, exec]
+import oizys/[context, github, nix, logging, utils]
 
 setHwylConsoleFile(stderr)
 
@@ -51,6 +51,14 @@ hwylCli:
     updateContext(host, flake, verbose, `reset-cache`, bootstrap)
 
   subcommands:
+    [status]
+    ... "check oizys package status"
+    flags:
+      all "show all oizys packages"
+      `check-cache` "check configured substituters"
+    run:
+      oizysStatus(all, `check-cache`)
+
     [build]
     ... "nix build"
     positionals:
@@ -189,20 +197,21 @@ hwylCli:
 
     [lock]
     ... """
-    check lock status for duplicates
+    check lock file for duplicates and inputs which should be null
+
 
     currently just runs `jq < flake.lock '.nodes | keys[] | select(contains("_"))' -r`
     """
+    flags:
+      null:
+        ? "inputs that should always be null"
+        T seq[string]
+        * @["flake-compat", "treefmt-nix"]
     run:
       if not isLocal():
         quit "`oizys lock` should be run with a local flake"
 
-      newCommand("nix")
-        .withArgs("flake", "lock", getFlake())
-        .run()
-
-      let lockfile = getFlake() / "flake.lock"
-      newCommand("jq").withArgs(".nodes | keys[] | select(contains(\"_\"))", "-r", lockFile).runQuit()
+      checkFlakeLockFile(null)
 
     [pr]
     ... """check merge status of nixpkgs PR"""

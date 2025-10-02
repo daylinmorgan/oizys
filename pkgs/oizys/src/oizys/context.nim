@@ -31,7 +31,6 @@ proc initContext*(): OizysContext =
   #   result.flake = envVar
   # result.ci = getEnv("GITHUB_STEP_SUMMARY") != ""
 
-
 var oc = initContext()
 
 proc getVerbosity*(): int     = return oc.verbose.val
@@ -54,10 +53,10 @@ func isGitFlakeUrl(flake: string): bool =
 
 proc updateContext*(
   host: seq[string],
-  flake: string,
-  verbose: Count,
-  resetCache: bool,
-  bootstrap: bool,
+  flake: string = "",
+  verbose: Count = Count(val: 0),
+  resetCache: bool = false,
+  bootstrap: bool = false,
 ) =
   oc.verbose = verbose
   oc.bootstrap = bootstrap

@@ -14,7 +14,6 @@ let
 in
 
 buildNimblePackage {
-
   name = "oizys";
   version = "unstable";
   src = lib.cleanSource ./.;
