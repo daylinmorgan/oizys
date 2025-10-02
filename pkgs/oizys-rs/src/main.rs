@@ -20,12 +20,14 @@ async fn main() -> Result<()> {
     let hosts = cli.global.host;
     let systems = Nixos::new_multi(&flake, &hosts);
 
-    for nixos in &systems {
-        println!("{:?}", nixos);
-        let _ = nix::get_oizys_packages(&nixos).await;
-    }
-
     match cli.command {
+        Commands::Status {check_cache } => {
+            for nixos in &systems {
+                println!("{:?}", nixos);
+                nix::get_oizys_packages(&nixos, check_cache).await?;
+            }
+        }
+
         Commands::Current { args } => nix::run_current(&nix, &flake, args),
         Commands::Completion { shell } => {
             let mut cmd = Cli::command();

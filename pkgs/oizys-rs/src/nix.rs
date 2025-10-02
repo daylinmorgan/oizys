@@ -533,12 +533,12 @@ pub fn get_substituters() -> Result<HashSet<NixCache>> {
     Ok(parse_substituters(&stdout)?)
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 struct NixOutput {
     path: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 struct NixInputDrv {
     // dynamicOutputs: ?
     outputs: Vec<String>,
@@ -616,38 +616,65 @@ enum OizysPackageStatus {
 struct OizysPackage {
     name: String,
     drv: String,
-    outputs: Vec<String>,
+    outputs: BTreeMap<String, NixOutput>,
     status: HashSet<OizysPackageStatus>,
 }
 
 impl OizysPackage {
     fn from(path: &str, drv: &NixDerivation) -> Self {
-        let outputs: Vec<String> = drv.outputs.values().map(|v| v.path.clone()).collect();
-
         Self {
             name: drv.name.clone(),
             drv: path.into(),
-            outputs,
+            outputs: drv.outputs.clone(),
             status: HashSet::new(),
         }
     }
 
-    async fn get_status(&mut self) -> Result<()> {
-        if self
+    // async fn get_status(&mut self) -> Result<()> {
+    //     if self
+    //         .outputs
+    //         .iter()
+    //         // should maybe be using try_exists actually?
+    //         .all(|p| std::path::Path::new(p).exists())
+    //     {
+    //         self.status.insert(OizysPackageStatus::Local);
+    //     }
+    //     // TODO: now for each of these run a narinfo check (async tho...)
+    //     Ok(())
+    // }
+
+    /// TODO:
+    async fn get_status(&mut self, outputs: &Vec<String>, check_cache: bool) -> Result<()>{
+        let to_check: Vec<_> = self
             .outputs
             .iter()
-            // should maybe be using try_exists actually?
-            .all(|p| std::path::Path::new(p).exists())
-        {
+            .filter(|(k, _v)| outputs.contains(k))
+            .map(|(_, v)| v.path.clone())
+            .collect();
+        if to_check.iter().all(|p| std::path::Path::new(p).exists()) {
             self.status.insert(OizysPackageStatus::Local);
         }
-        // TODO: now for each of these run a narinfo check (async tho...)
+
+        if check_cache {
+            for p in to_check {
+                narinfo(vec![p], false)?;
+            }
+        }
         Ok(())
     }
+    //     if self
+    //         .outputs
+    //         .iter()
+    //         // should maybe be using try_exists actually?
+    //         .all(|p| std::path::Path::new(p).exists())
+    //     {
+    //         self.status.insert(OizysPackageStatus::Local);
+    //     }
 }
 
 async fn nix_derivation_show(attrs: &Vec<String>) -> Result<NixDerivationShowOutput> {
     println!("showing...");
+    let _span = bar_span!("running nix derivation show").entered();
     let output = tokio::process::Command::new("nix")
         .arg("derivation")
         .arg("show")
@@ -664,18 +691,54 @@ async fn nix_derivation_show(attrs: &Vec<String>) -> Result<NixDerivationShowOut
     }
 }
 
-pub async fn get_oizys_packages(nixos: &Nixos) -> Result<()> {
+pub async fn get_oizys_packages(nixos: &Nixos, check_cache: bool) -> Result<()> {
     let system_drv = nix_derivation_show(&vec![nixos.system_attr().clone()]).await?;
-    let inputs: Vec<String> = system_drv.values().map(|v| v.input_drvs.keys().cloned()).flatten().collect();
-    let system_input_drvs = nix_derivation_show(&inputs).await?;
-    let mut packages: Vec<OizysPackage> = system_input_drvs.iter().map(|(k,v)| OizysPackage::from(k,v)).collect();
-    for pkg in &mut packages {
-        pkg.get_status().await?
+    let inputs: BTreeMap<_, _> = system_drv
+        .values()
+        .map(|v| v.input_drvs.clone())
+        .flatten()
+        .collect();
+
+    let system_input_drvs = nix_derivation_show(&inputs.keys().cloned().collect()).await?;
+    let mut input_packages: BTreeMap<String, OizysPackage> = system_input_drvs
+        .iter()
+        .map(|(k, v)| (k.into(), OizysPackage::from(k, v)))
+        .collect();
+
+    for (name, input_drv) in &inputs {
+        if let Some(input) = input_packages.get_mut(name) {
+            input.get_status(&input_drv.outputs, check_cache).await?
+        }
     }
 
-    for package in packages {
+    for (name, package) in input_packages {
         println!("{:?}", package.outputs);
-        println!("package = {:?}, {:?}", package.name, package.status);
+        println!("package = {:?}, {:?}", name, package.status);
     }
+
     Ok(())
 }
+
+// pub async fn get_oizys_packages(nixos: &Nixos) -> Result<()> {
+//     let system_drv = nix_derivation_show(&vec![nixos.system_attr().clone()]).await?;
+//     let inputs: Vec<String> = system_drv
+//         .values()
+//         .map(|v| v.input_drvs.keys().cloned())
+//         .flatten()
+//         .collect();
+//     let system_input_drvs = nix_derivation_show(&inputs).await?;
+//
+//     let mut packages: Vec<OizysPackage> = system_input_drvs
+//         .iter()
+//         .map(|(k, v)| OizysPackage::from(k, v))
+//         .collect();
+//     for pkg in &mut packages {
+//         pkg.get_status().await?
+//     }
+//
+//     for package in packages {
+//         println!("{:?}", package.outputs);
+//         println!("package = {:?}, {:?}", package.name, package.status);
+//     }
+//     Ok(())
+// }

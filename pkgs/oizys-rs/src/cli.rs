@@ -58,6 +58,13 @@ pub enum Commands {
         args: Vec<String>,
     },
 
+    /// check oizys package status
+    Status {
+        /// search caches for outputs
+        #[arg(long)]
+        check_cache: bool,
+    },
+
     /// nixos config attr
     Output {
         /// show system attr
