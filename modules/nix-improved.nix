@@ -38,6 +38,8 @@
   '';
 
   programs.nh = enabled // {
-    clean = enabled;
+    clean = enabled // {
+      extraArgs = "--keep 5 --keep-since 7d";
+    };
   };
 }
