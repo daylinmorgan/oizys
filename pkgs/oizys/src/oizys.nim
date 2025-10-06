@@ -11,13 +11,6 @@ proc checkExes() =
 
 checkexes()
 
-iterator items[X,Y](kvs: seq[KV[X,Y]]): (X, Y) =
-  var i = 0
-  while i < kvs.len:
-    let kv = kvs[i]
-    yield (kv.key, kv.val)
-    inc i
-
 proc prepGhaInputs(inputs: seq[KVString]): StringTableRef =
   result = newStringTable()
   for (k, v) in inputs:

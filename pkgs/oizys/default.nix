@@ -18,7 +18,7 @@ buildNimblePackage {
   version = "unstable";
   src = lib.cleanSource ./.;
   nativeBuildInputs = [ openssl ];
-  nimbleDepsHash = "sha256-ExrA/oHZ5zgcZQVpq97gB6GRvHZDIXiSFy6NVzUkWS8=";
+  nimbleDepsHash = "sha256-nc5tP6GB1uNBHfvzeYorY/tKAVFHKzoleC7pQv7dPzw=";
   nimFlags = [
     "-d:substituters:\"${subFlag}\""
     "-d:trustedPublicKeys:'${trustedPubKeys}'"
