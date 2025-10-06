@@ -43,11 +43,11 @@ let
     packages = forAllSystems (
       pkgs:
       rec {
-        default = oizys;
+        default = oizys-nim;
         oizys-nim = pkgs.callPackage ../pkgs/oizys {
           inherit (substituters) substituters trusted-public-keys;
         };
-        oizys = pkgs.callPackage ../pkgs/oizys-rs {
+        oizys-rs = pkgs.callPackage ../pkgs/oizys-rs {
           inherit substituters;
           inherit (inputs) crane;
         };
