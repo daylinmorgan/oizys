@@ -131,36 +131,34 @@ proc extractInputDrvs(drvs: Table[string, NixDerivation]): Table[string, NixInpu
         result[name] = inputDrv
 
 type
-  OizysPackageStatus = enum
-    Ignored, Local, Cached
-
+  NarStatus = enum
+    Local, Cached
   OizysPackage = object
     name: string
-    outputs: seq[string]
-    status: HashSet[OizysPackageStatus]
+    outputs: Table[string, Hashset[NarStatus]]
+    ignored: bool
 
   OizysPackages = seq[OizysPackage]
 
 proc newOizysPackage(drv: NixDerivation, inputDrv: NixInputDrv): OizysPackage =
   result.name = drv.name
-  for output in inputDrv.outputs:
-    result.outputs.add drv.outputs[output].path
   if drv.name.isIgnored():
-    result.status.incl Ignored
+    result.ignored = true
+    return
+  for output in inputDrv.outputs:
+    let k = drv.outputs[output].path
+    result.outputs[k] = initHashSet[NarStatus]()
 
 proc checkLocal(p: var OizysPackage) =
-  for path in p.outputs:
-    if not (path.fileExists() or path.dirExists()):
-      return
-
-  p.status.incl Local
+  for path, status in p.outputs.mpairs:
+    if (path.fileExists() or path.dirExists()):
+      status.incl Local
 
 proc checkCaches(p: var OizysPackage, caches: seq[string]) =
-  for path in p.outputs:
+  for path, status in p.outputs.mpairs:
     let narinfo = caches.searchCaches(path)
-    if not narinfo.isSome():
-      return
-  p.status.incl Cached
+    if narinfo.isSome():
+      status.incl Cached
 
 proc getOizysPackages(): OizysPackages =
   let systemPathDrvs = nixDerivationShow(nixosAttrs("path"))
@@ -169,9 +167,12 @@ proc getOizysPackages(): OizysPackages =
   for path, drv in systemPathInputDrvs:
     result.add newOizysPackage(drv, inputDrvs[path])
 
-
 proc cmp(x, y: OizysPackage): int =
   cmp(x.name, y.name)
+
+func status(p: OizysPackage): HashSet[NarStatus] =
+  for s in p.outputs.values():
+    result = result + s
 
 proc statusTable(pkgs: OizysPackages): Bbstring =
   const width = 30
@@ -188,9 +189,10 @@ proc statusTable(pkgs: OizysPackages): Bbstring =
         pkg.name.alignLeft(width)
 
     result.add "\n"
+
     let style =
-      if pkg.status.len == 0: "bold yellow"
-      elif Ignored in pkg.status: "faint"
+      if pkg.ignored: "faint"
+      elif pkg.status.len == 0: "bold yellow"
       elif Local in pkg.status: ""
       elif Cached in pkg.status: ""
       else: ""
@@ -198,12 +200,11 @@ proc statusTable(pkgs: OizysPackages): Bbstring =
     result.add " "
     result.add pkg.status.toSeq().join(";")
 
-proc isIgnored(p: OizysPackage): bool {.inline.} = Ignored in p.status
 
 iterator toCheck(pkgs: var OizysPackages): var OizysPackage =
   ## iterate over a mutable subset of packages
   for pkg in pkgs.mitems:
-    if not pkg.isIgnored:
+    if not pkg.ignored:
       yield pkg
 
 proc setStatus(pkgs: var OizysPackages, checkCache: bool) =
@@ -217,6 +218,9 @@ proc setStatus(pkgs: var OizysPackages, checkCache: bool) =
         spinner.setText(fmt"checking remote status: {pkg.name}")
         pkg.checkCaches(caches)
 
+proc toBuild(pkgs: OizysPackages): seq[OizysPackage] =
+  pkgs.filterIt(it.status.len == 0 and not it.ignored)
+
 proc oizysStatus*(all: bool = false, checkCache: bool = false) =
   var pkgs = getOizysPackages()
 
@@ -225,10 +229,10 @@ proc oizysStatus*(all: bool = false, checkCache: bool = false) =
   if all:
     echo statusTable(pkgs)
   else:
-    let toShow = pkgs.filterIt(it.status.len == 0)
-    if toShow.len == 0:
+    let toBuild = pkgs.toBuild()
+    if toBuild.len == 0:
       echo "nothing to build/push :)"
     else:
-      echo toShow.mapIt(it.name).join("\n")
+      echo toBuild.mapIt(it.name).join("\n")
 
 
