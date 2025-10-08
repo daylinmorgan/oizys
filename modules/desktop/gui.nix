@@ -48,6 +48,8 @@ in
       libreoffice-qt
       hunspell # spell check for libreoffice
 
+      feh
+
       (pkgs.writeShellScriptBin "dragon" "exec -a $0 ${dragon-drop}/bin/dragon-drop $@")
     ];
 

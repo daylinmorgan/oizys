@@ -23,6 +23,7 @@
     wget
     curl
     htop
+    jq
 
     sops
 

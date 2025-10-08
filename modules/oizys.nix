@@ -52,8 +52,6 @@ in
     restic
 
     llm
-
-    utils
   ];
 
   options.oizys = {
