@@ -701,11 +701,11 @@
       },
       "locked": {
         "dir": "nix",
-        "lastModified": 1755006175,
-        "narHash": "sha256-2zMGaxqUeaWDb9wDswp+5FoR0KWP25GtLsUKFZfCFZY=",
+        "lastModified": 1759960831,
+        "narHash": "sha256-FrxT8+niFtsADg/urWDzuCX32+7dGatk2Val4Ctc8YA=",
         "owner": "daylinmorgan",
         "repo": "tsm",
-        "rev": "51070d4a033180ed80ec77767448784bfa5e0bfc",
+        "rev": "30e787f00cb85acaa21425a03a5acbba0a779f96",
         "type": "github"
       },
       "original": {
