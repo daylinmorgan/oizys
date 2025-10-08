@@ -4,11 +4,11 @@
   outputs = inputs: (import ./lib inputs).oizysFlake;
 
   inputs = rec {
-    nixpkgs-master.url = "github:nixos/nixpkgs/master";
-    nixpkgs-nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    # nixpkgs-master.url = "github:nixos/nixpkgs/master";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
-    my-nixpkgs.url = "github:daylinmorgan/nixpkgs/nixos-unstable";
+    # nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
+    # my-nixpkgs.url = "github:daylinmorgan/nixpkgs/nixos-unstable";
+    nixpkgs-nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs = nixpkgs-nixos-unstable;
 
     # to switch to lix stable from nixpkgs ... see also overlays/lix
