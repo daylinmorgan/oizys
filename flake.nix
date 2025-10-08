@@ -11,16 +11,16 @@
     my-nixpkgs.url = "github:daylinmorgan/nixpkgs/nixos-unstable";
     nixpkgs = nixpkgs-nixos-unstable;
 
-    # switch to lix stable from nixpkgs ... see also overlays/lix
+    # to switch to lix stable from nixpkgs ... see also overlays/lix
+    lix.url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
+    lix.flake = false;
     lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
     lix-module.inputs.nixpkgs.follows = "nixpkgs";
     lix-module.inputs.flake-utils.follows = "flake-utils";
     lix-module.inputs.lix.follows = "lix";
-    lix.url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
-    lix.flake = false;
 
     comin.url = "github:nlewo/comin";
-    crane.url = "github:ipetkov/crane"; # todo: use tag?
+    crane.url = "github:ipetkov/crane/v0.21.1"; # todo: use tag?
     llm-nix.url = "github:daylinmorgan/llm-nix";
     multiviewer.url = "github:daylinmorgan/multiviewer-flake";
     niri.url = "github:YaLTeR/niri";
