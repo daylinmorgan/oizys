@@ -2,7 +2,6 @@
 final: prev:
 let
   inherit (lib.data) lixVersion;
-  # issue in stable (2.93.3) with fetchurl while running as sudo
   lixPackageSets = final.lixPackageSets.${lixVersion};
   overrideNix = name: {
     value = prev.${name}.override {
@@ -15,15 +14,13 @@ in
     nixpkgs-review
     nix-eval-jobs
     nix-index
-
-    # nix-direnv... I think using programs.nix-direnv already overrides the nix version I think
-
-    # I don't actually use these..
-    # nix-fast-build
-    # colmena
+    nix-fast-build
+    colmena
+    # nix-direnv I think using programs.nix-direnv already overrides the nix version
     ;
 }
 // (
+  # these are not already included in lixPackageSets
   [
     "nixos-rebuild-ng"
     "comma"
