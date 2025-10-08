@@ -10,4 +10,10 @@
       "oizys:2Sdu3lyOnNLeEYF2A3Hu3S5uqFQRe66DNwuFDneQs4M="
     ];
   };
+  nixpkgs-overlays = {
+    nixpkgs-unstable = [
+      "pamixer" # 449312
+    ];
+  };
+  self-overlays = [];
 }

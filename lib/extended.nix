@@ -31,6 +31,7 @@ let
   inherit (import ./find-modules.nix) findModulesList;
 in
 let
+  data = (import ./data.nix);
   enabled = {
     enable = true;
   };
@@ -144,14 +145,21 @@ let
       }
     );
 
-  selfPkgsOverlays =
-    final: packages:
+  selfPkgOverlaysWithArgs =
+    { final, packages }:
     packages
     |> map (name: {
       inherit name;
-      value = inputs.self.packages."${final.system}"."${name}";
+      value = inputs.self.packages.${final.system}.${name};
     })
     |> listToAttrs;
+
+  selfPkgOverlays =
+    final:
+    selfPkgOverlaysWithArgs {
+      inherit final;
+      packages = data.self-overlays or [ ];
+    };
 
   loadNixpkgOverlay = final: name: {
     inherit name;
@@ -185,13 +193,21 @@ let
     })
     |> listToAttrs;
 
-  ## nixpkgsOverrides is an attrset like this:
-  ##   { nixpkgs-master = [ "pamixer"]; }
-  pkgsFromNixpkgs =
-    final: nixpkgsOverrides:
+  pkgsFromNixpkgsWithArgs =
+    {
+      final,
+      nixpkgs-overlays,
+    }:
     foldl' (acc: x: acc // x) { } (
-      nixpkgsOverrides |> mapAttrsToList (overlayPkgsFromNixpkgsInput final)
+      nixpkgs-overlays |> mapAttrsToList (overlayPkgsFromNixpkgsInput final)
     );
+
+  pkgsFromNixpkgs =
+    final:
+    pkgsFromNixpkgsWithArgs {
+      inherit final;
+      nixpkgs-overlays = data.nixpkgs-overlays or { };
+    };
 
   readLinesNoComment =
     f: f |> readFile |> splitString "\n" |> filter (line: !(hasPrefix "#" line) && line != "");
@@ -251,7 +267,6 @@ let
       line: if hasPrefix "flake:" line then (line |> removePrefix "flake:" |> flake.pkg) else pkgs.${line}
     );
 
-  data = (import ./data.nix);
 in
 {
   inherit
@@ -270,7 +285,7 @@ in
     pkgFromSystem
     pkgsFromNixpkgs
     overlayFrom
-    selfPkgsOverlays
+    selfPkgOverlays
     flakeFromSystem
     listify
     loadOverlays

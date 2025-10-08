@@ -5,17 +5,6 @@
   # inputs.niri.overlays.default # adds main branch niri
 ]
 ++ [
-  (
-    final: _prev:
-
-    lib.selfPkgsOverlays final [
-      # "nimble"
-      # "nimlangserver"
-      # "attic-client"
-      # "attic-server"
-    ]
-
-    // lib.pkgsFromNixpkgs final "nixpkgs-unstable" [
-    ]
-  )
+  # make this a single oizys overlay?
+  (final: _prev: lib.selfPkgOverlays final // lib.pkgsFromNixpkgs final)
 ]
