@@ -11,6 +11,7 @@ let
     readFile
     pathExists
     length
+    foldl'
     ;
   inherit (final)
     concatStringsSep
@@ -23,6 +24,7 @@ let
     hasPrefix
     splitString
     removePrefix
+    mapAttrsToList
     trim
     ;
   inherit (final.filesystem) listFilesRecursive;
@@ -167,11 +169,11 @@ let
     |> listToAttrs;
 
   # overlay packages from a separate nixpkgs input then the default one
-  pkgsFromNixpkgs =
+  overlayPkgsFromNixpkgsInput =
     final: nixpkgsInput: packageNames:
     let
       nixpkgs = (
-        import inputs."${nixpkgsInput}" {
+        import inputs.${nixpkgsInput} {
           inherit (final) system config;
         }
       );
@@ -179,9 +181,17 @@ let
     packageNames
     |> map (name: {
       inherit name;
-      value = nixpkgs."${name}";
+      value = nixpkgs.${name};
     })
     |> listToAttrs;
+
+  ## nixpkgsOverrides is an attrset like this:
+  ##   { nixpkgs-master = [ "pamixer"]; }
+  pkgsFromNixpkgs =
+    final: nixpkgsOverrides:
+    foldl' (acc: x: acc // x) { } (
+      nixpkgsOverrides |> mapAttrsToList (overlayPkgsFromNixpkgsInput final)
+    );
 
   readLinesNoComment =
     f: f |> readFile |> splitString "\n" |> filter (line: !(hasPrefix "#" line) && line != "");
