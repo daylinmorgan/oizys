@@ -13,6 +13,7 @@ in
     fonts.packages = with pkgs; [
       nerd-fonts.fira-code
       recursive
+      maple-mono.NF # nice monolisa alternative if needed
     ];
   };
 }
