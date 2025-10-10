@@ -3,15 +3,8 @@
 ## oizys
 
 - [ ] `oizys gha <workflow>` should keep checking for something greater than the current time
-- [ ] remove the implicit dep on `jq` (I did this with oizys-rs)
 
 ## software
-
-- [x] add auto-sleep functionality to niri environment
-- [x] eww based bluetooth module not updating?
-- [ ] volume total in eww bar is wrong
-- [ ] neovim + ghostty + clipboards are spamming me ?
-      looks like it might be this environment: equation is ghostty => distrobox (arch) => neovim
 
 ## hardware
 
