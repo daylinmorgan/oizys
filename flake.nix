@@ -19,8 +19,7 @@
     lix-module.inputs.flake-utils.follows = "flake-utils";
     lix-module.inputs.lix.follows = "lix";
 
-    comin.url = "github:nlewo/comin";
-    crane.url = "github:ipetkov/crane/v0.21.1"; # todo: use tag?
+    crane.url = "github:ipetkov/crane/v0.21.1";
     llm-nix.url = "github:daylinmorgan/llm-nix";
     multiviewer.url = "github:daylinmorgan/multiviewer-flake";
     niri.url = "github:YaLTeR/niri";
@@ -44,7 +43,6 @@
     # zls.inputs.zig-overlay.follows = "zig-overlay";
 
     # all the follows
-    comin.inputs.nixpkgs.follows = "nixpkgs";
     daylin-website.inputs.nixpkgs.follows = "nixpkgs";
     multiviewer.inputs.nixpkgs.follows = "nixpkgs";
     llm-nix.inputs.nixpkgs.follows = "nixpkgs";

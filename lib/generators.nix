@@ -54,7 +54,6 @@ let
       inherit system;
       modules = [
         { nixpkgs.hostPlatform = system; }
-        inputs.comin.nixosModules.comin # no .default module?
       ]
       ++ (selfModules ''oizys'')
       ++ (nixosModules ''sops-nix'')

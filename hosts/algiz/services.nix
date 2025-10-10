@@ -10,73 +10,65 @@ let
   '';
 in
 {
-  services.resolved = enabled;
-
-  services.fail2ban = enabled // {
-    maxretry = 5;
-    bantime = "24h";
-  };
-
-  services.openssh = enabled // {
-    settings.PasswordAuthentication = false;
-  };
-
-  security.polkit = enabled; # attic was looking for this...
-
   environment.systemPackages = [
     pkgs.attic-client
     check-attic
   ];
 
-  services.atticd = enabled // {
+  security.polkit = enabled; # attic was looking for this...
 
-    # Replace with absolute path to your credentials file
-    environmentFile = config.sops.secrets."atticd-env".path;
+  services = {
+    resolved = enabled;
 
-    # https://github.com/zhaofengli/attic/blob/main/server/src/config.rs
-    # best of luck to you converting this to nix, which is written by nix as toml to be read by attic
-    settings = {
-      listen = "[::]:5656";
+    fail2ban = enabled // {
+      maxretry = 5;
+      bantime = "24h";
+    };
 
-      jwt = { };
+    openssh = enabled // {
+      settings.PasswordAuthentication = false;
+    };
 
-      garbage-collection = {
-        interval = "1 day";
-        retention-period = "2 weeks";
-      };
+    atticd = enabled // {
 
-      # Data chunking
-      #
-      # Warning: If you change any of the values here, it will be
-      # difficult to reuse existing chunks for newly-uploaded NARs
-      # since the cutpoints will be different. As a result, the
-      # deduplication ratio will suffer for a while after the change.
-      chunking = {
-        # The minimum NAR size to trigger chunking
+      # Replace with absolute path to your credentials file
+      environmentFile = config.sops.secrets."atticd-env".path;
+
+      # https://github.com/zhaofengli/attic/blob/main/server/src/config.rs
+      # best of luck to you converting this to nix, which is written by nix as toml to be read by attic
+      settings = {
+        listen = "[::]:5656";
+
+        jwt = { };
+
+        garbage-collection = {
+          interval = "1 day";
+          retention-period = "2 weeks";
+        };
+
+        # Data chunking
         #
-        # If 0, chunking is disabled entirely for newly-uploaded NARs.
-        # If 1, all NARs are chunked.
-        nar-size-threshold = 64 * 1024; # 64 KiB
+        # Warning: If you change any of the values here, it will be
+        # difficult to reuse existing chunks for newly-uploaded NARs
+        # since the cutpoints will be different. As a result, the
+        # deduplication ratio will suffer for a while after the change.
+        chunking = {
+          # The minimum NAR size to trigger chunking
+          #
+          # If 0, chunking is disabled entirely for newly-uploaded NARs.
+          # If 1, all NARs are chunked.
+          nar-size-threshold = 64 * 1024; # 64 KiB
 
-        # The preferred minimum size of a chunk, in bytes
-        min-size = 16 * 1024; # 16 KiB
+          # The preferred minimum size of a chunk, in bytes
+          min-size = 16 * 1024; # 16 KiB
 
-        # The preferred average size of a chunk, in bytes
-        avg-size = 64 * 1024; # 64 KiB
+          # The preferred average size of a chunk, in bytes
+          avg-size = 64 * 1024; # 64 KiB
 
-        # The preferred maximum size of a chunk, in bytes
-        max-size = 256 * 1024; # 256 KiB
+          # The preferred maximum size of a chunk, in bytes
+          max-size = 256 * 1024; # 256 KiB
+        };
       };
     };
-  };
-
-  services.comin = enabled // {
-    remotes = [
-      {
-        name = "origin";
-        url = "https://github.com/daylinmorgan/oizys.git";
-        branches.main.name = "main";
-      }
-    ];
   };
 }

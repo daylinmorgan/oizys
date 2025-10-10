@@ -15,5 +15,5 @@
       "pamixer" # 449312
     ];
   };
-  self-overlays = [];
+  self-overlays = [ ];
 }
