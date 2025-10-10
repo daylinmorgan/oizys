@@ -94,4 +94,6 @@ return {
       })
     end,
   },
+  -- show git blame
+  -- { "f-person/git-blame.nvim", event = "VeryLazy" },
 }
