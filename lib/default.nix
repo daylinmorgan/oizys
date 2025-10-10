@@ -44,6 +44,7 @@ let
       pkgs:
       rec {
         default = oizys-nim;
+        oizys = oizys-nim;
         oizys-nim = pkgs.callPackage ../pkgs/oizys {
           inherit (substituters) substituters trusted-public-keys;
         };

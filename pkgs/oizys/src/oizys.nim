@@ -62,20 +62,6 @@ hwylCli:
     run:
       nixBuild(minimal, `no-nom`, args)
 
-    [cache]
-    ... "build and push store paths"
-    positionals:
-      args seq[string]
-    flags:
-      name("oizys", string, "name/host of binary cache")
-      service("attic", string, "name of cache service")
-      j|jobs(countProcessors(),int, "jobs when pushing paths")
-      n|`dry-run` "don't actually build derivations"
-    run:
-      if findExe("nix-eval-jobs") == "":
-        fatalQuit bb"[b]oizys cache[/] requires [b]nix-eval-jobs[/]"
-      nixBuildWithCache(name, args, service, jobs, `dry-run`)
-
     [ci]
     ... "builtin ci"
     subcommands:
@@ -85,6 +71,22 @@ hwylCli:
         args seq[string]
       run:
         ciUpdate(args)
+
+      [cache]
+      ... "build and push store paths"
+      positionals:
+        args seq[string]
+      flags:
+        name("oizys", string, "name/host of binary cache")
+        service("attic", string, "name of cache service")
+        j|jobs(countProcessors(),int, "jobs when pushing paths")
+        n|`dry-run` "don't actually build derivations"
+      run:
+        if findExe("nix-eval-jobs") == "":
+          fatalQuit bb"[b]oizys cache[/] requires [b]nix-eval-jobs[/]"
+        nixBuildWithCache(name, args, service, jobs, `dry-run`)
+
+
 
     [gha]
     ... """
