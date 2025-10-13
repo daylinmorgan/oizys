@@ -49,8 +49,9 @@ hwylCli:
     flags:
       all "show all oizys packages"
       `check-cache` "check configured substituters"
+      hide "hide ignored packages"
     run:
-      oizysStatus(all, `check-cache`)
+      oizysStatus(all, `check-cache`, hide)
 
     [build]
     ... "nix build"

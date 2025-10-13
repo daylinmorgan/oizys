@@ -174,7 +174,7 @@ func status(p: OizysPackage): HashSet[NarStatus] =
   for s in p.outputs.values():
     result = result + s
 
-proc statusTable(pkgs: OizysPackages): Bbstring =
+proc statusTable(pkgs: OizysPackages, hide = false): Bbstring =
   const width = 30
   let pkgs = pkgs.sorted(cmp)
   result.add "name".alignLeft(width).bb("bold")
@@ -182,6 +182,8 @@ proc statusTable(pkgs: OizysPackages): Bbstring =
   result.add "status".bb("bold")
 
   for pkg in pkgs:
+    if hide and pkg.ignored: continue
+
     let name =
       if pkg.name.len > width:
         pkg.name[0..width-4] & "..."
@@ -221,13 +223,13 @@ proc setStatus(pkgs: var OizysPackages, checkCache: bool) =
 proc toBuild(pkgs: OizysPackages): seq[OizysPackage] =
   pkgs.filterIt(it.status.len == 0 and not it.ignored)
 
-proc oizysStatus*(all: bool = false, checkCache: bool = false) =
+proc oizysStatus*(all = false, checkCache = false, hide = false) =
   var pkgs = getOizysPackages()
 
   setStatus pkgs, checkCache
 
   if all:
-    echo statusTable(pkgs)
+    echo statusTable(pkgs, hide)
   else:
     let toBuild = pkgs.toBuild()
     if toBuild.len == 0:
