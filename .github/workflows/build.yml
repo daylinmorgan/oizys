@@ -34,6 +34,9 @@ jobs:
         with:
           attic_token: ${{ secrets.ATTIC_TOKEN }}
 
+      - name: install nix-eval-jobs
+        run: nix profile install 'nixpkgs#nix-eval-jobs'
+
       - name: write lock file
         if: "${{ inputs.lockFile != '' }}"
         run: |

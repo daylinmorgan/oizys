@@ -50,6 +50,9 @@ jobs:
         with:
           attic_token: ${{ secrets.ATTIC_TOKEN }}
 
+      - name: install nix-eval-jobs
+        run: nix profile install '.#nix-eval-jobs'
+
       - run: git checkout -B flake-lock
 
       - name: Update nix flake
