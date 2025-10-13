@@ -18,7 +18,6 @@ nixos-wsl-welcome
 restic-gdrive
 code
 direnv
-comma-with-db
 nix-index-with-full-db
 python
 net.conf
