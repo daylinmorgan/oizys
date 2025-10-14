@@ -1,7 +1,7 @@
 ## nix begat oizys
 import std/[os, osproc, sequtils, strutils, strtabs, strformat]
 import hwylterm, hwylterm/[hwylcli]
-import oizys/[context, github, nix, logging, utils]
+import oizys/[context, github, nix, logging, utils, exec]
 
 setHwylConsoleFile(stderr)
 
@@ -172,8 +172,14 @@ hwylCli:
     ... "collect build hash from failure"
     positionals:
       installable string
+    flags:
+      show "write to stdout"
     run:
-      stdout.write getBuildHash(installable)
+      let hash = getBuildHash(installable)
+      if not show:
+        runQuit newCommand("wl-copy").withArgs(hash)
+      else:
+        stdout.write hash
 
     [narinfo]
     ... """
