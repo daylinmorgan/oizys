@@ -2,7 +2,8 @@
 gtk-single-instance = false
 
 theme = Catppuccin Mocha
-font-family = MonoLisa Nerd Font
+# font-family = MonoLisa Nerd Font
+font-family = Maple Mono NF
 
 window-padding-x = 5
 window-padding-y = 10
