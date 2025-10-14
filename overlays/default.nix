@@ -5,6 +5,5 @@
   # inputs.niri.overlays.default # adds main branch niri
 ]
 ++ [
-  # make this a single oizys overlay?
   (final: _prev: lib.selfPkgOverlays final // lib.pkgsFromNixpkgs final)
 ]
