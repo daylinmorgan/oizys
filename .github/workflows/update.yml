@@ -73,7 +73,7 @@ jobs:
           --
           ci
           cache
-          --host "${{ env.hosts }}"
+          --host,="${{ env.hosts }}"
           -vv
           --
           ${{ env.nix-flags }}
@@ -106,7 +106,7 @@ jobs:
           nix run '.#oizys'
           --
           ci update
-          --host "${{ env.hosts }}"
+          --host,="${{ env.hosts }}"
           -vv
           --
           ${{ env.nix-flags }}
