@@ -7,7 +7,6 @@
 
 mkOizysModule config "vpn" {
   environment.systemPackages = with pkgs; [
-
     openconnect
     openvpn
   ];
