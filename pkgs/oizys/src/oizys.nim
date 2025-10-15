@@ -5,11 +5,8 @@ import oizys/[context, github, nix, logging, utils, exec]
 
 setHwylConsoleFile(stderr)
 
-proc checkExes() =
-  if findExe("nix") == "":
-    fatalQuit "oizys requires nix"
-
-checkexes()
+if findExe("nix") == "":
+  fatalQuit "oizys requires nix"
 
 proc prepGhaInputs(inputs: seq[KVString]): StringTableRef =
   result = newStringTable()
@@ -25,6 +22,8 @@ proc prepGhaInputs(inputs: seq[KVString]): StringTableRef =
 hwylCli:
   name "oizys"
   settings ShowHelp
+  help:
+    styles: builtinStyles[AllSettings]
   flags:
     [global]
     flake(string, "path/to/flake")
@@ -33,12 +32,12 @@ hwylCli:
     `reset-cache`("set cache timeout to 0")
     b|bootstrap("enable bootstrap mode")
 
-    [outputMods]
+    [output]
     m|minimal "get [i]minimal[/] package set"
     lix "get lix and lix dependents"
 
-    [misc]
-    y|yes "skip all confirmation prompts"
+    # ["_misc"]
+    # y|yes "skip all confirmation prompts"
   preSub:
     setupLoggers()
     updateContext(host, flake, verbose, `reset-cache`, bootstrap)
@@ -110,7 +109,7 @@ hwylCli:
     positionals:
       args seq[string]
     flags:
-      ^[outputMods]
+      ^[output]
     run:
       nixBuildHostDry(minimal, args)
 
@@ -132,7 +131,7 @@ hwylCli:
     [output]
     ... "nixos config attr"
     flags:
-      ^[outputMods]
+      ^[output]
       s|system "show system path"
     run:
       if count([minimal, system, lix], true) > 1:
