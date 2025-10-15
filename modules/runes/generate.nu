@@ -1,6 +1,7 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -p nushell ascii-image-converter -i nu
+#!nix-shell -p nushell ascii-image-converter figlet -i nu
 
+use std repeat
 
 let runes = [
   {name: "algiz"   url: "https://upload.wikimedia.org/wikipedia/commons/1/14/Runic_letter_algiz.png"   },
@@ -9,14 +10,28 @@ let runes = [
   {name: "naudiz"  url: "https://upload.wikimedia.org/wikipedia/commons/b/b9/Runic_letter_naudiz.png"  },
 ]
 
+
+def add-blank-header [
+    count: int  # Number of blank lines to add
+    text: string  # The text to prepend blank lines to
+] {
+    (("\n" | repeat $count | str join) + $text)
+}
+
+def combine [rune, name] {
+  let padding = ($rune | lines | length) - ($name | lines | length)
+  let padded_name = add-blank-header $padding $name
+  $rune | lines | enumerate | each { |it| $"($it.item) ($padded_name | lines | get $it.index)" } | str join "\n"
+}
+
 def convert [] {
   let rune = $in
   let image = http get $rune.url
   let flags = [--height 15 --negative]
   {
     name: $rune.name
-    braille: ( $image | ascii-image-converter -  --braille ...$flags)
-    ascii: ( $image | ascii-image-converter - ...$flags)
+    braille: (combine ( $image | ascii-image-converter -  --braille ...$flags) ($rune.name | figlet))
+    ascii: (combine ( $image | ascii-image-converter - ...$flags) ($rune.name | figlet))
   }
 }
 
