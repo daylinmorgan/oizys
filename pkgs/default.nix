@@ -20,4 +20,5 @@ in
   "tsm"
   "llm-nix"
   "niriman"
+  "daylin-website"
 ])

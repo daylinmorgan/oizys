@@ -238,3 +238,14 @@ proc oizysStatus*(all = false, checkCache = false, hide = false) =
       echo toBuild.mapIt(it.name).join("\n")
 
 
+proc toOizysPackage(x: NixEvalOutput): OizysPackage =
+  result.name = x.name
+  for k, v in x.outputs.pairs:
+    result.outputs[v] = initHashSet[NarStatus]() # how to handle isCached
+  result.ignored = x.name.isIgnored
+  if not result.ignored:
+    checkLocal result
+
+    if x.isCached:
+      for v in result.outputs.mvalues:
+        v.incl Cached

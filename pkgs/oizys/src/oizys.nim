@@ -1,7 +1,7 @@
 ## nix begat oizys
 import std/[os, osproc, sequtils, strutils, strtabs, strformat]
 import hwylterm, hwylterm/[hwylcli]
-import oizys/[context, github, nix, logging, utils, exec]
+import oizys/[context, github, nix, logging, lib, exec]
 
 setHwylConsoleFile(stderr)
 
@@ -81,10 +81,11 @@ hwylCli:
         service("attic", string, "name of cache service")
         j|jobs(countProcessors(),int, "jobs when pushing paths")
         n|`dry-run` "don't actually build derivations"
+        packages(seq[string], "packages to ensure built/cached")
       run:
         if findExe("nix-eval-jobs") == "":
           fatalQuit bb"[b]oizys cache[/] requires [b]nix-eval-jobs[/]"
-        nixBuildWithCache(name, args, service, jobs, `dry-run`)
+        nixBuildWithCache(name, args, service, jobs, `dry-run`, packages)
 
 
 

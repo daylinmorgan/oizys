@@ -2,7 +2,7 @@ import std/[
   algorithm, enumerate,
   os, sequtils, strformat, strutils,
   sugar, logging, tables, times, sets,
-  wordwrap, terminal
+  wordwrap, terminal, options
 ]
 export tables
 import hwylterm, hwylterm/logging, jsony
@@ -10,20 +10,20 @@ import hwylterm, hwylterm/logging, jsony
 import ./[context, exec]
 
 type
-  Substituters = object
-    `extra-substituters`: seq[string]
-    `extra-trusted-public-keys`: seq[string]
+  # Substituters = object
+  #   `extra-substituters`: seq[string]
+  #   `extra-trusted-public-keys`: seq[string]
 
   NixosRebuildSubcmd* = enum
     switch, boot, test, build, `dry-build`,`dry-activate`, `edit`,
     repl, `build-vm`, `build-vm-with-bootloader`, `list-generations`
 
   # should I just convert these to NixDerivation?
-  NixEvalOutput = object
-    name: string
-    drvPath: string
-    isCached: bool
-    outputs: Table[string, string]
+  NixEvalOutput* = object
+    name*: string
+    drvPath*: string
+    isCached*: bool
+    outputs*: Table[string, string]
 
   DerivationOutput = object
     path*: string
@@ -355,7 +355,6 @@ type NixCache = object
     exe: string
     name: string
 
-
 proc toCache(service: string, name: string): NixCache =
   case service
   of "store", "harmonia", "nix-serve-ng":
@@ -412,8 +411,11 @@ proc prettyDerivation*(path: string): BbString =
   let drv = path.toDerivation()
   drv.name.trunc(maxLen) & " " & drv.hash.bb("faint")
 
-proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: int, dry: bool) =
+# integrate OizysPackage concept and make use of the provided `packages`
+
+proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: int, dry: bool, packages: seq[string]) =
   ## build individual derivations not cached and push to cache
+  warn "packages is currently ignored"
 
   let cache = toCache(service, name)
   debug "determining missing cache hits"
@@ -493,160 +495,6 @@ proc ciUpdate*(rest: seq[string]) =
     )
 
 
-# struct FlakeInputSource {
-#     owner: Option<String>,
-#     repo: Option<String>,
-#     #serde(rename = "type")]
-#     source_type: Option<String>,
-#     rev: Option<String>,
-#     #serde(rename = "narHash")]
-#     nar_hash: Option<String>,
-#     #serde(rename = "ref")]
-#     reference: Option<String>,
-#     #[serde(rename = "lastModified")]
-#     last_modified: Option<i64>,
-# }
-#
-# enum InputReferences {
-#     Single(String),
-#     List(Vec<String>),
-# }
-#
-# pub struct FlakeInput {
-#     inputs: Option<HashMap<String, InputReferences>>,
-#     // inputs: Option<HashMap<String, serde_json::Value>>,
-#     locked: Option<FlakeInputSource>,
-#     original: Option<FlakeInputSource>,
-# }
-#
-# impl FlakeInput {
-#     fn has_input(&self, name: &str) -> bool {
-#         if let Some(inputs) = &self.inputs {
-#             for (_, input) in inputs {
-#                 match input {
-#                     InputReferences::Single(input_name) => {
-#                         if input_name == name {
-#                             return true;
-#                         }
-#                     }
-#                     InputReferences::List(input_names) => {
-#                         if input_names.iter().any(|n| n == name) {
-#                             return true;
-#                         }
-#                     }
-#                 }
-#             }
-#         }
-#         false
-#     }
-#
-#     // TODO: more idiomatic code?
-#     fn has_null_input(&self, null: &str) -> Option<InputReferences> {
-#         self.inputs
-#             .as_ref()
-#             .map(|inputs| inputs.get(null).map(|n| n.clone()))
-#             .flatten()
-#
-#         // if let Some(inputs) = &self.inputs {
-#         //     return inputs.get(null).map(|n| n.clone())
-#         //     // for (n, input) in inputs {
-#         //     //     if n == null {
-#         //     //         return Some(input.clone());
-#         //     //     }
-#         //     // }
-#         // }
-#         // None
-#     }
-# }
-#
-# pub struct FlakeLock {
-#     nodes: HashMap<String, FlakeInput>,
-#     root: String,
-#     version: i32,
-# }
-#
-# impl FlakeLock {
-#     fn from(s: &str) -> Result<Self> {
-#         Ok(serde_json::from_str(s)?)
-#     }
-#
-#     pub fn from_file(p: PathBuf) -> Result<Self> {
-#         Self::from(&std::fs::read_to_string(p)?)
-#     }
-#
-#     /// matches should return the flake inputs where inputs contains the input
-#     fn matches(&self, name: &str) -> HashMap<String, FlakeInput> {
-#         self.nodes
-#             .iter()
-#             .filter(|(_, v)| v.has_input(name))
-#             .map(|(k, v)| (k.clone(), v.clone()))
-#             .collect()
-#     }
-#
-#     pub fn duplicates(&self) -> HashMap<String, HashMap<String, FlakeInput>> {
-#         self.nodes
-#             .keys()
-#             .filter(|n| n.contains("_"))
-#             .map(|n| (n.to_string(), self.matches(&n)))
-#             .collect()
-#     }
-#
-#     pub fn check_null(&self, null: Vec<String>) -> HashMap<String, Vec<String>> {
-#         let mut map: HashMap<String, Vec<String>> = HashMap::new();
-#         for null_input in &null {
-#             for (name, input) in self.nodes.iter() {
-#                 if name == "root" {
-#                     continue;
-#                 }
-#                 // an input represented as InputReferences::List is in fact null
-#                 if let Some(InputReferences::Single(_)) = input.has_null_input(&null_input) {
-#                     map.entry(null_input.clone())
-#                         .or_insert_with(Vec::new)
-#                         .push(name.clone());
-#                 }
-#             }
-#         }
-#         map
-#     }
-# }
-#
-# ]#
-
-
-# struct FlakeInputSource {
-#     owner: Option<String>,
-#     repo: Option<String>,
-#     #serde(rename = "type")]
-#     source_type: Option<String>,
-#     rev: Option<String>,
-#     #serde(rename = "narHash")]
-#     nar_hash: Option<String>,
-#     #serde(rename = "ref")]
-#     reference: Option<String>,
-#     #[serde(rename = "lastModified")]
-#     last_modified: Option<i64>,
-# }
-#
-# enum InputReferences {
-#     Single(String),
-#     List(Vec<String>),
-# }
-#
-# pub struct FlakeInput {
-#     inputs: Option<HashMap<String, InputReferences>>,
-#     // inputs: Option<HashMap<String, serde_json::Value>>,
-#     locked: Option<FlakeInputSource>,
-#     original: Option<FlakeInputSource>,
-# }
-#
-# pub struct FlakeLock {
-#     nodes: HashMap<String, FlakeInput>,
-#     root: String,
-#     version: i32,
-#
-
-import std/options
-
 type
   InputReferencesKind = enum
     Single, List
@@ -714,8 +562,6 @@ proc hasInputs(lock: FlakeLock, inputs: seq[string]): Table[string, seq[string]]
         if i in input:
           if result.hasKeyOrPut(i, @[name]):
             result[i].add name
-
-
 
 proc bbKv(key: string, val: string, indent = "  "): BbString =
   let key = bbfmt"{indent}[bold]{key}[/]: "
