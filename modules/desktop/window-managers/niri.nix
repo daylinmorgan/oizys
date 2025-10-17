@@ -23,21 +23,21 @@ let
       after = [ "graphical-session.target" ];
       requisite = [ "graphical-session.target" ];
     };
-  inherit (flake.pkgs "nixpkgs-wayland") eww mako;
+  # inherit (flake.pkgs "nixpkgs-wayland") eww mako;
 in
 
 mkOizysModule config "niri" {
 
   programs.niri = enabled;
 
-  nixpkgs.overlays = [
-    inputs.nixpkgs-wayland.overlay
-  ];
+  # nixpkgs.overlays = [
+  #   inputs.nixpkgs-wayland.overlay
+  # ];
 
   systemd.user.services = {
     mako = niriService {
       serviceConfig = {
-        ExecStart = ''${mako}/bin/mako'';
+        ExecStart = ''${pkgs.mako}/bin/mako'';
         Restart = "on-failure";
       };
     };
