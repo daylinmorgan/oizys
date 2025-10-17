@@ -246,7 +246,7 @@ layout {
 // Note that running niri as a session supports xdg-desktop-autostart,
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
-spawn-at-startup "niriman" "listen"
+spawn-at-startup "niriman" "eww"
 
 // this should be integated as of 25.08
 // spawn-at-startup "xwayland-satellite"
