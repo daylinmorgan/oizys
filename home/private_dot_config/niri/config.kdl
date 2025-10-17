@@ -367,8 +367,11 @@ binds {
 
     // Rofi
     Mod+P { spawn "rofi" "-show" "drun" "-theme" "launcher"; }
-    Mod+W { spawn "rofi" "-show" "windows" "-theme" "windows";}
+    Mod+W { spawn "rofi" "-show" "windows" "-theme" "windows"; }
     Mod+Ctrl+P { spawn "~/.config/rofi/bin/powermenu.sh"; }
+
+    Mod+D { spawn "makoctl" "dismiss"; }
+    Mod+Shift+D { spawn "makoctl" "dismiss" "--all"; }
 
     // You can also use a shell. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument in the end.
