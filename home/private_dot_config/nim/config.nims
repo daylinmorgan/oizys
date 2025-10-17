@@ -128,23 +128,40 @@ task b, fmt"build binary, default: {name}":
   buildProject()
 
 task run, fmt"run binary, default: {name}":
-  exec "nim b"
-  try: exec fmt"{projectDir()}/bin/{name}"
-  except: discard
+  exec "nim b" # pre-compile
+  var params = commandLineParams()[1..^1]
+  echo params
+  if params.len != 0:
+    let sep = params.find "--"
+    if sep != -1:
+      params = params[sep..^1]
+  let cmd = fmt"{projectDir()}/bin/{name} " & params.join(" ")
+  echo fmt"exec: {cmd}"
+  # task has to quit when params > 0 for some reason
+  try: exec(cmd)
+  except: quit 1
+  quit 0
 
-
+proc pickNimbleFile(params: seq[string]): string =
+  result =
+    if params.len == 1: params[0]
+    else: projectDir().lastPathPart & ".nimble"
+  if not fileExists result:
+    quit "expected to find: " & result
 
 task updateLock, "workaround for nimble lock probs":
   let params = forwardArgs("updateLock")
-  let nimbleFile =
-    if params.len == 1: params[0]
-    else: projectDir().lastPathPart & ".nimble"
-  if not fileExists nimbleFile:
-    quit "expected to find: " & nimbleFile
+  let nimbleFile = pickNimbleFile(params)
+
   rmDir projectDir() / "nimbledeps"
-  rmFile projectDir() / "nimble.lock"
+  # rmFile projectDir() / "nimble.lock"
   rmFile projectDir() / "nimble.paths"
-  exec "nimble lock -l"
+
+  let nimbleDir = gorgeEx("mktemp -d nimble.XXXX").output
+  echo "using: ", nimbleDir
+  defer: rmDir(nimbleDir)
+
+  exec "nimble lock -l" & " --nimbleDir:" & nimbleDir
   exec "nimble setup -l"
 
 task chk, fmt"run nim check, default: {name}":
