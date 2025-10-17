@@ -415,7 +415,8 @@ proc prettyDerivation*(path: string): BbString =
 
 proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: int, dry: bool, packages: seq[string]) =
   ## build individual derivations not cached and push to cache
-  warn "packages is currently ignored"
+  if packages.len > 0:
+    warn "packages is currently ignored"
 
   let cache = toCache(service, name)
   debug "determining missing cache hits"
