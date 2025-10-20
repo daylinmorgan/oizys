@@ -1,5 +1,12 @@
+bin/
+oizys.out
+
+# nimble
 nimbledeps
 nimble.paths
 nimble.develop
-bin/
-oizys.out
+
+# atlas
+deps/
+nim.cfg
+

@@ -1,7 +1,7 @@
 {
   lib,
   openssl,
-  buildNimblePackage,
+  buildAtlasPackage,
 
   substituters ? [ ],
   trusted-public-keys ? [ ],
@@ -13,12 +13,12 @@ let
   trustedPubKeys = toString trusted-public-keys;
 in
 
-buildNimblePackage {
+buildAtlasPackage {
   name = "oizys";
   version = "unstable";
   src = lib.cleanSource ./.;
   nativeBuildInputs = [ openssl ];
-  nimbleDepsHash = "sha256-M9BG5Vh4mcMRLUlv/kPIyuPl52henVXsx7gPlCrR7O8=";
+  atlasDepsHash = "sha256-xzG3IgZT+4LVIwKTL+kZ7RtK7ZxaeGmqmJ1fEizFHr8=";
   nimFlags = [
     "-d:substituters:\"${subFlag}\""
     "-d:trustedPublicKeys:'${trustedPubKeys}'"

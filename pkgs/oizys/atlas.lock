@@ -1,0 +1,66 @@
+{
+  "items": {
+    "jsony": {
+      "dir": "$deps/jsony",
+      "url": "https://github.com/treeform/jsony",
+      "commit": "ea811bec7fa50f5abd3088ba94cda74285e93f18",
+      "version": ""
+    },
+    "zippy": {
+      "dir": "$deps/zippy",
+      "url": "https://github.com/guzba/zippy",
+      "commit": "a99f6a7d8a8e3e0213b3cad0daf0ea974bf58e3f",
+      "version": ""
+    },
+    "hwylterm.daylinmorgan.github.com": {
+      "dir": "$deps/hwylterm.daylinmorgan.github.com",
+      "url": "https://github.com/daylinmorgan/hwylterm",
+      "commit": "062e30cb4d6d195d19b3850c3ee2a10fa00bac9c",
+      "version": ""
+    },
+    "resultz.daylinmorgan.github.com": {
+      "dir": "$deps/resultz.daylinmorgan.github.com",
+      "url": "https://github.com/daylinmorgan/resultz",
+      "commit": "0be681c97c703a602e80d203ba2698c29e212e4c",
+      "version": ""
+    }
+  },
+  "nimcfg": [
+    "############# begin Atlas config section ##########",
+    "--noNimblePath",
+    "--path:\"deps/jsony/src\"",
+    "--path:\"deps/zippy/src\"",
+    "--path:\"deps/hwylterm.daylinmorgan.github.com/src\"",
+    "--path:\"deps/resultz.daylinmorgan.github.com/src\"",
+    "############# end Atlas config section   ##########",
+    ""
+  ],
+  "nimbleFile": {
+    "filename": "oizys.nimble",
+    "content": [
+      "# Package",
+      "",
+      "version       = \"0.1.0\"",
+      "author        = \"Daylin Morgan\"",
+      "description   = \"nix begat oizys\"",
+      "license       = \"MIT\"",
+      "srcDir        = \"src\"",
+      "bin           = @[\"oizys\"]",
+      "",
+      "",
+      "# Dependencies",
+      "",
+      "requires \"nim >= 2.0.8\"",
+      "requires \"jsony\"",
+      "requires \"zippy\"",
+      "requires \"https://github.com/daylinmorgan/hwylterm#HEAD\"",
+      "requires \"https://github.com/daylinmorgan/resultz#HEAD\"",
+      ""
+    ]
+  },
+  "hostOS": "linux",
+  "hostCPU": "amd64",
+  "nimVersion": "2.2.4",
+  "gccVersion": "14.3.0",
+  "clangVersion": ""
+}
