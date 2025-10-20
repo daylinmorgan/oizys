@@ -21,9 +21,9 @@ proc prepGhaInputs(inputs: seq[KVString]): StringTableRef =
 
 hwylCli:
   name "oizys"
-  settings ShowHelp
+  settings ShowHelp, InferEnv
   help:
-    styles: builtinStyles[AllSettings]
+    styles: fromBuiltinHelpStyles(AllSettings)
   flags:
     [global]
     flake(string, "path/to/flake")

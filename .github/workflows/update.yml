@@ -29,7 +29,7 @@ env:
   hosts: ${{ github.event_name == 'schedule' && 'othalan,algiz' || github.event.inputs.hosts }}
   flake-inputs: ${{ github.event_name == 'schedule' && '' || github.event.inputs.flake-inputs }}
   nix-flags: ${{ github.event_name == 'schedule' && '' || github.event.inputs.nix-flags }}
-  OIZYS_DIR: ${{ github.workspace }}
+  OIZYS_FLAKE: ${{ github.workspace }}
 
 permissions:
   contents: write

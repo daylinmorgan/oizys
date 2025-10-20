@@ -79,9 +79,6 @@ proc updateContext*(
     let localDir = getHomeDir() / "oizys"
     if localDir.dirExists:
       oc.flake = localDir
-    let envVar = getEnv("OIZYS_DIR")
-    if envVar != "":
-      oc.flake = envVar
 
   if (not bootstrap) and (not isLocal()):
     warn "not using local directory for flake"
