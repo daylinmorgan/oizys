@@ -12,6 +12,7 @@ in
   nimlangserver = pkgs.callPackage ./nim/nimlangserver { };
   procs = pkgs.callPackage ./nim/procs { };
   nimble = pkgs.callPackage ./nim/nimble { };
+  nim-atlas = pkgs.callPackage ./nim/atlas {};
   lix = flake.pkg "lix-module";
   inherit (flake.pkgs "lix-module") nix-eval-jobs;
 }

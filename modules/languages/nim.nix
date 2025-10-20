@@ -14,6 +14,7 @@ in
       nim
       nph
 
+      nim-atlas
       nimble
       nimlangserver
     ];
