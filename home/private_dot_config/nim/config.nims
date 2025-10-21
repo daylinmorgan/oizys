@@ -149,6 +149,13 @@ proc pickNimbleFile(params: seq[string]): string =
   if not fileExists result:
     quit "expected to find: " & result
 
+task updateAtlas, "update atlas deps and re-lock":
+  echo gorgeOkCd("atlas update")
+  echo gorgeOkCd("atlas install")
+  echo gorgeOkCd("atlas pin")
+
+
+
 task updateLock, "workaround for nimble lock probs":
   let params = forwardArgs("updateLock")
   let nimbleFile = pickNimbleFile(params)
@@ -157,7 +164,7 @@ task updateLock, "workaround for nimble lock probs":
   # rmFile projectDir() / "nimble.lock"
   rmFile projectDir() / "nimble.paths"
 
-  let nimbleDir = gorgeEx("mktemp -d nimble.XXXX").output
+  let nimbleDir = gorgeOkCd("mktemp -d nimble.XXXX")
   echo "using: ", nimbleDir
   defer: rmDir(nimbleDir)
 
