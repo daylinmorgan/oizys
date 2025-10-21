@@ -629,11 +629,11 @@
       },
       "locked": {
         "dir": "nix",
-        "lastModified": 1760118421,
-        "narHash": "sha256-5OGSNQagM+iyOi0wD94nwz3CSBYfSiVLBUIgAQXDQ9c=",
+        "lastModified": 1761064927,
+        "narHash": "sha256-3o15BylV1da7XlDpF7uVKaG7VRe71gkaIkiBBsZpQEs=",
         "owner": "daylinmorgan",
         "repo": "tsm",
-        "rev": "b66e8bf7e0d007e931025acf72da1bbab3ed389d",
+        "rev": "5deea234c20ef2ba228c64cc35bbd148e20ea0e7",
         "type": "github"
       },
       "original": {
