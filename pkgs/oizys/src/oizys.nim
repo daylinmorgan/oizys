@@ -19,13 +19,13 @@ proc prepGhaInputs(inputs: seq[KVString]): StringTableRef =
         hwylCliError("expected file at: " & fname)
       result[k] = readFile(fname)
 
-proc `$`(_: typedesc[seq[KVString]]): string =
-  "seq[key:val]"
-
+proc `$`(_: typedesc[string]): string = "str"
+proc `$`[T](_: typedesc[seq[T]]): string = $T & "..."
+proc `$`(_: typedesc[seq[KVString]]): string = "(key:val)..."
 
 hwylCli:
   name "oizys"
-  settings ShowHelp, InferEnv
+  settings ShowHelp, InferEnv, LongHelp
   help:
     styles: fromBuiltinHelpStyles(AllSettings)
   flags:
