@@ -8,9 +8,9 @@ is-tty || alias eza="${aliases[eza]:-eza} --icons"
 
 alias ls='eza'
 alias la='eza -la'
-alias l='eza -lb --git'
+alias l='eza -lb'
 # alias llm='eza -lbGd --git --sort=modified'
-alias lx='eza -lbhHigUmuSa --time-style=long-iso --git --color-scale'
+alias lx='eza --long --binary --header --links --group --created --modified --accessed --blocksize --all --time-style=long-iso --git --color-scale'
 
 alias lS='eza -1'
 alias lt='eza --tree --level=2'
