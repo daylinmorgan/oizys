@@ -109,7 +109,7 @@ proc `%`*(table: StringTableRef): JsonNode =
   result = newJObject()
   for k, v in table: result[k] = %v
 
-proc createDispatch*(workflowFileName: string, `ref`: string, inputs: StringTableRef) =
+proc createDispatch*(workflowFileName: string, `ref`: string, inputs: StringTableRef, open = false) =
   ## https://docs.github.com/en/rest/actions/workflows?apiVersion=2022-11-28#create-a-workflow-dispatch-event
   let workflow =
     if workflowFileName.endsWith(".yml") or workflowFileName.endsWith(".yaml"): workflowFileName
@@ -124,6 +124,8 @@ proc createDispatch*(workflowFileName: string, `ref`: string, inputs: StringTabl
   case getInProgressRun(workflow)
   of Some(run):
     info "view workflow run at: " & run.html_url
+    if open:
+      newCommand("xdg-open").withArgs(run.html_url).run()
   of None:
     warn "couldn't determine workflow url"
 
