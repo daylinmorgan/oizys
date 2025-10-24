@@ -11,6 +11,7 @@ let
     readFile
     pathExists
     length
+    mapAttrs
     foldl'
     ;
   inherit (final)
@@ -186,12 +187,7 @@ let
         }
       );
     in
-    packageNames
-    |> map (name: {
-      inherit name;
-      value = nixpkgs.${name};
-    })
-    |> listToAttrs;
+    packageNames |> mapAttrs (name: _: nixpkgs.${name});
 
   pkgsFromNixpkgsWithArgs =
     {
