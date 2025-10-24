@@ -68,6 +68,7 @@ proc newNixCommand*(subcmd: string, noNom: bool = false): Command =
     result.addArgs "--log-format", "multiline"
   if isBootstrap():
     result.addArgs subFlags
+    result.addArgs "--extra-experimental-features", "nix-command flakes pipe-operator"
 
 proc nixosAttr(host: string, attr: string = "build.toplevel"): string =
   getFlake() & "#nixosConfigurations." & host & ".config.system." & attr
