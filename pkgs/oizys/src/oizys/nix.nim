@@ -52,14 +52,13 @@ func makeSubFlags(): seq[string] =
 const subFlags = makeSubFlags()
 
 proc newNixCommand*(subcmd: string, noNom: bool = false): Command =
+  result.exe = "nix"
   if not noNom:
     if findExe("nom") == "":
       warn "nom not found, falling back to nix"
-      result.exe = "nix"
     else:
-      result.exe = "nom"
-  else:
-    result.exe = "nix"
+      if subcmd != "eval":
+        result.exe = "nom"
 
   result.addArgs subcmd
   if isResetCache():

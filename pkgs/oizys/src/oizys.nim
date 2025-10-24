@@ -222,8 +222,12 @@ hwylCli:
 
     [pr]
     ... """check merge status of nixpkgs PR"""
-    positionals:
-      number int
+    flags:
+      n|numbers(seq[int], "prs to check")
+      ignore("don't check lib/data.nix")
     run:
-      hecho bb(getNixpkgsPrStatus(number))
+      if not ignore:
+        getNixpkgsPrStatusFromOizys()
+      for n in numbers:
+        hecho bb(getNixpkgsPrStatus(n))
 

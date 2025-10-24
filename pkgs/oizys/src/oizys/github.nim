@@ -1,6 +1,6 @@
 import std/[httpclient,logging, os, strformat, strutils, json, tables, tempfiles, times, strtabs]
 import jsony, hwylterm, hwylterm/logging, zippy/ziparchives, resultz
-import ./[exec, context]
+import ./[exec, context, nix]
 
 
 template withTmpDir(body: untyped): untyped =
@@ -309,6 +309,24 @@ type
     nixosUnstableSmall: bool
     nixosUnstable: bool
 
+
+proc getNixpkgsOverlays(): Table[string, Table[string, int]] =
+  if not isLocal():
+    fatalQuit "need local copy of oizys to get overlays"
+  let path = getFlake() / "lib/data.nix"
+  let cmd = newNixCommand("eval")
+    .withArgs(
+    "-f", path, "--apply", """builtins.getAttr "nixpkgs-overlays"""", "--json"
+  )
+  let (output, err, code) = cmd.runCapt()
+  if code != 0:
+    # duplicated from runCaptSpin -- replace with something like runCapt( check = true) and move check to runCapt
+    stderr.write($formatStdoutStderr(output, err) & "\n")
+    error fmt"{cmd} had non zero exit"
+    quit code
+
+  fromJson(output, typeof(result))
+
 proc getNixpkgsPrStatus*(number: int): NixpkgsPrStatus =
   const
     owner = "nixos"
@@ -344,4 +362,13 @@ proc bb*(status: NixpkgsPrStatus): BbString =
     s.add fmt"╰─ " & mark(status.nixosUnstable) & " nixos-unstable"
 
   bb(s)
+
+proc getNixpkgsPrStatusFromOizys*() =
+  let overlays = getNixpkgsOverlays()
+  for branch, pkgs in overlays:
+    hecho bbfmt"[b]branch[/]: {branch}"
+    for pkg, pr in pkgs:
+      let status = getNixpkgsPrStatus(pr)
+      hecho bbfmt"[b]{pkg}[/] needs [b]PR[/]: #{pr}"
+      hecho bb(status)
 

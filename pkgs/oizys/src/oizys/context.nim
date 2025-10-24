@@ -65,20 +65,20 @@ proc updateContext*(
     consoleLogger.levelThreshold = lvlAll
   oc.resetCache = resetCache
 
+  oc.flake = "github:daylinmorgan/oizys"
+
   if flake != "":
     if flake.isGitFlakeUrl():
       oc.flake = flake
     else:
       oc.flake = checkPath(flake.normalizedPath().absolutePath())
   else:
-    oc.flake = "github:daylinmorgan/oizys"
-
-  if bootstrap:
-    debug bb("[yellow]bootstrap mode![/]")
-  else:
     let localDir = getHomeDir() / "oizys"
     if localDir.dirExists:
       oc.flake = localDir
+
+  if bootstrap:
+    debug bb("[yellow]bootstrap mode![/]")
 
   if (not bootstrap) and (not isLocal()):
     warn "not using local directory for flake"
