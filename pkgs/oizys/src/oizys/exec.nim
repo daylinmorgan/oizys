@@ -40,6 +40,9 @@ proc run*(c: Command): int {.discardable.} =
   debug "running cmd: " & $c
   execCmd toShell(c)
 
+proc runOk*(c: Command): bool =
+  c.run() == 0
+
 proc runQuit*(cmd: Command) =
   quit cmd.run()
 

@@ -178,13 +178,15 @@ hwylCli:
     positionals:
       installable string
     flags:
-      show "write to stdout"
+      `no-copy` "don't copy to clipboard"
     run:
       let hash = getBuildHash(installable)
-      if not show:
-        runQuit newCommand("wl-copy").withArgs(hash)
-      else:
-        stdout.write hash
+      stdout.write hash
+      if not `no-copy`:
+        if newCommand("wl-copy").withArgs(hash).runOk():
+          hecho "copied to clipboard!"
+        else:
+          hecho bb"[red]error[/]: failed to copy to clipboard with wl-copy"
 
     [narinfo]
     ... """
