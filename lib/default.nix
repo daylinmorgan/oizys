@@ -62,7 +62,7 @@ let
         packages = with pkgs; [
           openssl
           nim
-          nimble
+          nim-atlas
         ];
       };
       oizys-rs = (crane.mkLib pkgs).devShell {

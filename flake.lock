@@ -276,11 +276,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1761056944,
-        "narHash": "sha256-8xVU2n5HY15ow/2xHa1exzidKXpDaHVh4sn2fLJNDA0=",
+        "lastModified": 1761581412,
+        "narHash": "sha256-C+I+yCzPCqJkvpedaiKjL3ywoe4ztI+9rmlgRTkOFTk=",
         "owner": "daylinmorgan",
         "repo": "nim2nix",
-        "rev": "0aff4df9944aea727f179303a3019b9b5fef338a",
+        "rev": "2fec7463e7ece5bbf792a44ff93d3d88594cb665",
         "type": "github"
       },
       "original": {
