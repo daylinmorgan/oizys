@@ -207,9 +207,6 @@ hwylCli:
     [lock]
     ... """
     check lock file for duplicates and inputs which should be null
-
-
-    currently just runs `jq < flake.lock '.nodes | keys[] | select(contains("_"))' -r`
     """
     flags:
       null:
