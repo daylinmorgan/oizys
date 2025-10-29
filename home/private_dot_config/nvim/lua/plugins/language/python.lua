@@ -8,9 +8,7 @@ return {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
-        pyright = { enabled = true, mason = false },
         ruff = {
-          enabled = true,
           cmd_env = { RUFF_TRACE = "messages" },
           init_options = {
             settings = {
@@ -25,13 +23,22 @@ return {
             },
           },
         },
+        ruff_lsp = {
+          keys = {
+            {
+              "<leader>co",
+              LazyVim.lsp.action["source.organizeImports"],
+              desc = "Organize Imports",
+            },
+          },
+        },
       },
       setup = {
         [ruff] = function()
-          LazyVim.lsp.on_attach(function(client, _)
+          Snacks.util.lsp.on({ name = ruff }, function(_, client)
             -- Disable hover in favor of Pyright
             client.server_capabilities.hoverProvider = false
-          end, ruff)
+          end)
         end,
       },
     },
