@@ -1,8 +1,24 @@
+# NOTE: could ratelimt rather than block?
+(no-ai) {
+  defender block {
+		ranges aliyun vpn aws deepseek githubcopilot gcloud oci azurepubliccloud openai mistral vultr cloudflare digitalocean linode
+    }
+}
+
+(logging) {
+	log {
+		output file /var/log/caddy/access-{args[0]}.log
+		format json
+	}
+}
+
 wiki.dayl.in {
 	reverse_proxy http://localhost:8721
 }
 
 git.dayl.in {
+  import logging git
+  import no-ai
 	reverse_proxy http://localhost:3000
 }
 

@@ -13,6 +13,10 @@ in
 {
 
   services.caddy = enabled // {
+    package = pkgs.caddy.withPlugins {
+      plugins = [ "pkg.jsn.cam/caddy-defender@v0.9.0" ];
+      hash = "sha256-qH/VRc3ElxLuTHzzad1rMasHzn+UfIFhQRdSuVtxC5c=";
+    };
     logFormat = ''
       output file /var/log/caddy/access.log
     '';
@@ -20,7 +24,6 @@ in
     extraConfig = builtins.readFile ./Caddyfile;
 
     virtualHosts = {
-
       "dayl.in".extraConfig = ''
 
         handle /* {
