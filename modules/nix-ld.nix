@@ -109,7 +109,6 @@ in
     in
     mkIf cfg.enable {
       programs.nix-ld = enabled // {
-        package = pkgs.nix-ld-rs;
         libraries = libs;
       };
     };
