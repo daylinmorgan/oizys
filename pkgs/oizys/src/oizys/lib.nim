@@ -3,7 +3,7 @@ import std/[
   strformat, strutils, sugar, sets, os,
   httpclient, terminal, wordwrap
 ]
-import hwylterm, resultz
+import hwylterm, resultz, hwylterm/tables
 import ./[nix, exec, logging, context]
 
 # TODO: refactor runCmdCaptWithSpinner so it works in getBuildHash
@@ -174,33 +174,27 @@ func status(p: OizysPackage): HashSet[NarStatus] =
   for s in p.outputs.values():
     result = result + s
 
-proc statusTable(pkgs: OizysPackages, hide = false): Bbstring =
+proc statusTable(pkgs: OizysPackages, hide = false): BbString =
   const width = 30
-  let pkgs = pkgs.sorted(cmp)
-  result.add "name".alignLeft(width).bb("bold")
-  result.add " "
-  result.add "status".bb("bold")
+  var t = hwylTableBlock:
+    ("name", "status")
 
   for pkg in pkgs:
     if hide and pkg.ignored: continue
-
     let name =
       if pkg.name.len > width:
         pkg.name[0..width-4] & "..."
       else:
         pkg.name.alignLeft(width)
-
-    result.add "\n"
-
     let style =
       if pkg.ignored: "faint"
       elif pkg.status.len == 0: "bold yellow"
       elif Local in pkg.status: ""
       elif Cached in pkg.status: ""
       else: ""
-    result.add name.bb(style)
-    result.add " "
-    result.add pkg.status.toSeq().join(";")
+    t.addRow(toRow(name.bb(style), pkg.status.toSeq().join(";")))
+
+  t.render()
 
 
 iterator toCheck(pkgs: var OizysPackages): var OizysPackage =
@@ -236,7 +230,6 @@ proc oizysStatus*(all = false, checkCache = false, hide = false) =
       echo "nothing to build/push :)"
     else:
       echo toBuild.mapIt(it.name).join("\n")
-
 
 proc toOizysPackage(x: NixEvalOutput): OizysPackage =
   result.name = x.name
