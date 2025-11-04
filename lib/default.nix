@@ -15,18 +15,17 @@ let
 
   #supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
   supportedSystems = [ "x86_64-linux" ];
+  pkgsForSystem =
+    system:
+    (import nixpkgs {
+      inherit system;
+      overlays = (import ../overlays { inherit inputs lib; });
+    });
+  # pkgsForSystem = system: (import nixpkgs {inherit system;});
+  forSystem = f: system: f system (pkgsForSystem system);
 
-  forAllSystems =
-    fn:
-    genAttrs supportedSystems (
-      system:
-      fn (
-        import nixpkgs {
-          inherit system;
-          overlays = (import ../overlays { inherit inputs lib; });
-        }
-      )
-    );
+  ## usage forAllSystems (system: pkgs: {...});
+  forAllSystems = f: genAttrs supportedSystems (forSystem f);
 
   evalTreeFmt = import ./treefmt.nix treefmt-nix;
 
@@ -41,7 +40,7 @@ let
     nixosModules = listToAttrs (findModulesList ../modules);
     nixosConfigurations = mapAttrs (name: _: mkSystem name) (readDir ../hosts);
     packages = forAllSystems (
-      pkgs:
+      system: pkgs:
       rec {
         default = oizys-nim;
         oizys = oizys-nim;
@@ -54,32 +53,43 @@ let
         };
         iso-x86_64-linux = (mkIso "x86_64-linux").config.system.build.isoImage;
       }
-      // (import ../pkgs { inherit pkgs lib inputs; })
+      // (import ../pkgs {
+        inherit
+          system
+          pkgs
+          lib
+          inputs
+          ;
+      })
     );
 
-    devShells = forAllSystems (pkgs: {
-      oizys = pkgs.mkShell {
-        packages = with pkgs; [
-          openssl
-          nim
-          nim-atlas
-        ];
-      };
-      oizys-rs = (crane.mkLib pkgs).devShell {
-        inputsFrom = [
-          self.packages.${pkgs.system}.oizys
-        ];
-        packages = with pkgs; [
-          rust-analyzer
-        ];
-      };
-    });
+    devShells = forAllSystems (
+      system: pkgs: {
+        oizys = pkgs.mkShell {
+          packages = with pkgs; [
+            openssl
+            nim
+            nim-atlas
+          ];
+        };
+        oizys-rs = (crane.mkLib pkgs).devShell {
+          inputsFrom = [
+            self.packages.${system}.oizys
+          ];
+          packages = with pkgs; [
+            rust-analyzer
+          ];
+        };
+      }
+    );
 
-    checks = forAllSystems (pkgs: {
-      formatter = (evalTreeFmt pkgs).config.build.check self;
-    });
+    checks = forAllSystems (
+      _: pkgs: {
+        formatter = (evalTreeFmt pkgs).config.build.check self;
+      }
+    );
 
-    formatter = forAllSystems (pkgs: (evalTreeFmt pkgs).config.build.wrapper);
+    formatter = forAllSystems (_: pkgs: (evalTreeFmt pkgs).config.build.wrapper);
   };
 in
 {

@@ -1,11 +1,12 @@
 {
+  system,
   pkgs,
   lib,
   ...
 }:
 let
   inherit (lib) flakeFromSystem;
-  flake = flakeFromSystem pkgs.system;
+  flake = flakeFromSystem system;
 in
 {
   inherit (flake.pkgs "lix-module") nix-eval-jobs;

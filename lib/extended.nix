@@ -253,7 +253,7 @@ let
     {
       hostName,
       pkgs,
-      flake ? flakeFromSystem pkgs.system,
+      flake ? flakeFromSystem pkgs.stdenv.hostPlatform.system,
     }:
     hostName
     |> pathFromHostName
