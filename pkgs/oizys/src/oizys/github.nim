@@ -35,7 +35,7 @@ type
     total_count: int
     workflow_runs: seq[GhWorkflowRun]
 
-var ghToken = getEnv "GITHUB_TOKEN"
+let ghToken = getEnv "GITHUB_TOKEN"
 
 proc checkToken() {.inline.} =
   if ghToken == "": fatalQuit "GITHUB_TOKEN not set"
@@ -98,7 +98,9 @@ proc getInProgressRun(
     while (now() - start) < timeoutDuration:
       let response = getGhApi(fmt"https://api.github.com/repos/daylinmorgan/oizys/actions/workflows/{workflow}/runs")
       let runs = fromJson(response.body,  ListGhWorkflowResponse).workflow_runs
-      if runs[0].status in ["in_progress", "queued"]:
+      let isRunning = runs[0].status in ["in_progress", "queued"]
+      let isRecent = runs[0].created_at.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", utc()) > start
+      if isRunning and isRecent:
         return ok runs[0]
       sleep 500
 

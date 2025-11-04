@@ -2,7 +2,7 @@
 
 ## oizys
 
-- [ ] `oizys gha <workflow>` should keep checking for something greater than the current time
+- [x] `oizys gha <workflow>` should keep checking for something greater than the current time
 
 ## software
 
