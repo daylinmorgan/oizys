@@ -62,7 +62,7 @@ aliases = "!git config -l | grep alias | cut -c 7-"
 gl = config --global -l
 rb5 = rebase -i HEAD~5
 frbi = "!f() { git rebase -i $(git log --pretty=oneline --color=always --abbrev-commit | fzf --ansi | cut -d ' ' -f1)^ ; }; f"
-
+tasks = "!python3 -c \"import sys,subprocess as s,pathlib as p;t=p.Path(r:=s.check_output([\"git\",\"rev-parse\",\"--show-toplevel\"],text=True).strip())/\"tasks.py\";sys.exit(s.run([t]+sys.argv[1:],cwd=r).returncode if t.is_file() else print(\"no tasks.py\")|1)\""
 
 [filter "lfs"]
 clean = git-lfs clean -- %f
