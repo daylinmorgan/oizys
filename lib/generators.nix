@@ -41,7 +41,7 @@ let
       modules = [
         { nixpkgs.hostPlatform = system; }
       ]
-      ++ (selfModules "essentials|iso");
+      ++ (selfModules "essentials|iso|lix");
       specialArgs = commonSpecialArgs;
     };
 
@@ -57,7 +57,8 @@ let
       ]
       ++ (selfModules ''oizys'')
       ++ (nixosModules ''sops-nix'')
-      ++ (hostFiles hostName);
+      ++ (hostFiles hostName)
+      ++ (if lib.data.lixModule then (nixosModules ''lix-module'') else (selfModules "lix"));
 
       specialArgs = commonSpecialArgs // {
         inherit
