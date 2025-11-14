@@ -6,6 +6,7 @@ import std/[
 ]
 export tables
 import hwylterm, hwylterm/logging, jsony
+import hwylterm/tables
 
 import ./[context, exec]
 
@@ -413,6 +414,23 @@ proc prettyDerivation*(path: string): BbString =
 
 # integrate OizysPackage concept and make use of the provided `packages`
 
+proc prettyDrvTable(missing: HashSet[NixEvalOutput]): HwylTable =
+  const maxLen = 40
+  result.addRow "name", "hash"
+  var drvs: seq[DrvPath]
+  for missingDrv in missing:
+    if "out" in missingDrv.outputs:
+      drvs.add missingDrv.outputs["out"].toDerivation()
+    else:
+      error $missingDrv.name, "does not have an 'out' attribute?\n" & "derivation: " & $missingDrv
+  drvs.sort do (x, y: DrvPath) -> int:
+    result = cmp(x.name, y.name)
+    if result == 0:
+      result = cmp(x.hash, y.hash)
+  for drv in drvs:
+    result.addRow toRow(drv.name.trunc(maxLen), drv.hash.bb("faint"))
+
+
 proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: int, dry: bool, packages: seq[string]) =
   ## build individual derivations not cached and push to cache
   if packages.len > 0:
@@ -427,14 +445,7 @@ proc nixBuildWithCache*(name: string, rest: seq[string], service: string, jobs: 
   if missing.len == 0:
     quit "exiting...", QuitSuccess
 
-  var prettyDrvList: seq[BbString]
-  for drv in missing:
-    if "out" in drv.outputs:
-      prettyDrvList.add prettyDerivation(drv.outputs["out"])
-    else:
-      error $drv.name, "does not have an 'out' attribute?\n" & "derivation: " & $drv
-
-  info "derivations:\n" & prettyDrvList.join("\n")
+  hecho $prettyDrvTable(missing).render()
 
   if dry:
     quit "exiting...", QuitSuccess

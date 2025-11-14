@@ -17,8 +17,9 @@ nixos-wsl-welcome-message
 nixos-wsl-welcome
 restic-gdrive
 code
-direnv
-nix-index-with-full-db
+#direnv
+#nix-index-with-full-db
+#comma-with-db
 python
 net.conf
 rofi
