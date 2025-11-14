@@ -151,7 +151,7 @@ let
     packages
     |> map (name: {
       inherit name;
-      value = inputs.self.packages.${final.system}.${name};
+      value = inputs.self.packages.${final.stdenv.hostPlatform.system}.${name};
     })
     |> listToAttrs;
 
