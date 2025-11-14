@@ -175,12 +175,11 @@ func status(p: OizysPackage): HashSet[NarStatus] =
     result = result + s
 
 proc statusTable(pkgs: OizysPackages, hide = false): BbString =
-  const width = 30
   var t = hwylTableBlock:
     ("name", "status")
-
-  for pkg in pkgs:
-    if hide and pkg.ignored: continue
+  let pkgsToShow = pkgs.filterIt(not (hide and it.ignored)).sorted(cmp)
+  let width = min(45, max(pkgsToShow.mapIt(it.name.len)))
+  for pkg in pkgsToShow:
     let name =
       if pkg.name.len > width:
         pkg.name[0..width-4] & "..."
