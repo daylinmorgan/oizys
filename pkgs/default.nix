@@ -9,9 +9,6 @@ let
   flake = flakeFromSystem system;
 in
 {
-  inherit (flake.pkgs "lix-module") nix-eval-jobs;
-  lix = flake.pkg "lix-module";
-
   distrobox = pkgs.callPackage ./distrobox { };
   nimlangserver = pkgs.callPackage ./nim/nimlangserver { };
   procs = pkgs.callPackage ./nim/procs { };
@@ -19,6 +16,7 @@ in
   # nim-atlas = pkgs.callPackage ./nim/atlas {};
   nim-atlas = (flake.pkgs "nim2nix").atlas;
 }
+// (import ./lix.nix { inherit flake lib pkgs; })
 // (flake.toPackageAttrs [
   "multiviewer"
   "tsm"

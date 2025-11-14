@@ -1,5 +1,6 @@
 {
   lixVersion = "git";
+  lixModule = false;
   substituters = {
     substituters = [
       "https://cache.nixos.org"

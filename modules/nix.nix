@@ -2,15 +2,14 @@
   inputs,
   lib,
   pkgs,
+  flake,
   ...
 }:
 let
-  inherit (lib.data) substituters lixVersion;
+  inherit (lib.data) substituters;
 in
-{
-  # imports = [ (flake.module "lix-module") ];
-  nix.package = pkgs.lixPackageSets.${lixVersion}.lix;
-
+(import ./lix.nix {inherit lib pkgs flake;})
+// {
   nixpkgs.config.allowUnfree = true;
   nix = {
     optimise.automatic = true;
