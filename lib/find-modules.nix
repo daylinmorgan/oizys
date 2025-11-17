@@ -33,5 +33,5 @@ rec {
       findModulesList (dir + "/${name}");
 
   findModulesList =
-    dir: lib.traceValSeq (dir |> readDir |> mapAttrs (handleModule dir) |> attrValues |> concatLists);
+    dir: (dir |> readDir |> mapAttrs (handleModule dir) |> attrValues |> concatLists);
 }
