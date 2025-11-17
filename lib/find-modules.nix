@@ -7,31 +7,22 @@ let
     readDir
     ;
   inherit (lib) hasSuffix removeSuffix;
-  fileToModule = dir: name: [
-    {
-      name = removeSuffix ".nix" name;
-      value = dir + "/${name}";
-    }
-  ];
-
-  fileToModuleIfNix = dir: name: if hasSuffix ".nix" name then fileToModule dir name else [ ];
-  dirToModule = dir: name: [
-    {
-      inherit name;
-      value = dir + "/${name}";
-    }
-  ];
+  mkModuleAttr = name: value: [ { inherit name value; } ];
 in
 rec {
   handleModule =
     dir: name: type:
-    if type == "regular" then
-      fileToModuleIfNix dir name
-    else if (readDir (dir + "/${name}")) ? "default.nix" then
-      dirToModule dir name
+    let
+      path = dir + "/${name}";
+    in
+    if type == "regular" && hasSuffix ".nix" name then
+      mkModuleAttr (removeSuffix ".nix" name) path
+    else if type == "directory" && (readDir path) ? "default.nix" then
+      mkModuleAttr name path
+    else if type == "directory" then
+      findModulesList path
     else
-      findModulesList (dir + "/${name}");
+      [ ];
 
-  findModulesList =
-    dir: (dir |> readDir |> mapAttrs (handleModule dir) |> attrValues |> concatLists);
+  findModulesList = dir: dir |> readDir |> mapAttrs (handleModule dir) |> attrValues |> concatLists;
 }
