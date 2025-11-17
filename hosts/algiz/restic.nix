@@ -8,7 +8,6 @@ let
   homePaths = ''
     git
     gotosocial
-    caddy
     wedding-website
     bsky-pds
     wiki
