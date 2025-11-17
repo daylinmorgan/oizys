@@ -10,10 +10,15 @@ let
   '';
 in
 {
+  # these aren't really service specific?
   environment.systemPackages = [
     pkgs.attic-client
     check-attic
   ];
+
+  environment.etc."containers/systemd/linkding.container" = {
+    source = ./linkding/linkding.container;
+  };
 
   security.polkit = enabled; # attic was looking for this...
 

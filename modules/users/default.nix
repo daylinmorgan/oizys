@@ -14,6 +14,7 @@ let
   cfg = config.users.defaultUser;
   isDocker = config.oizys.docker.enable;
   isDesktop = config.oizys.desktop.enable;
+  isPodman = config.oizys.podman.enable;
 in
 {
   options.users.defaultUser = mkOption {
@@ -29,7 +30,7 @@ in
       isNormalUser = true;
 
       shell = pkgs.zsh;
-      extraGroups = [ "wheel" ] ++ optional isDesktop "audio" ++ optional isDocker "docker";
+      extraGroups = [ "wheel" ] ++ optional isDesktop "audio" ++ optional isDocker "docker" ++ optional isPodman "podman";
 
       initialHashedPassword = "$2b$05$mGMrDFzf2cXLaoOlVQbGvOBV7UZlDt9dLg9Xqxutb/uHpjF5VrTBO";
       openssh.authorizedKeys.keys = [

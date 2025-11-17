@@ -17,4 +17,4 @@
 
   # git user handles the forgjo ssh authentication
   users.users.git.isNormalUser = true;
-}
+ }

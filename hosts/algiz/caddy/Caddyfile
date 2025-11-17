@@ -34,6 +34,11 @@ gts.dayl.in {
 	}
 }
 
+links.dayl.in {
+  reverse_proxy http://localhost:9090
+}
+
+
 daylin.bsky.dayl.in, bsky.dayl.in {
 	reverse_proxy http://localhost:6555
 }
