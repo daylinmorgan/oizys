@@ -2,6 +2,7 @@ inputs: final: prev:
 let
   inherit (builtins)
     listToAttrs
+    attrValues
     substring
     replaceStrings
     map
@@ -29,7 +30,7 @@ let
     trim
     ;
   inherit (final.filesystem) listFilesRecursive;
-  inherit (import ./find-modules.nix) findModulesList;
+  inherit (import ./find-modules.nix final) findModulesList;
 in
 let
   data = (import ./data.nix);
@@ -209,7 +210,7 @@ let
     f: f |> readFile |> splitString "\n" |> filter (line: !(hasPrefix "#" line) && line != "");
 
   pathFromHostName = host: ../. + "/hosts/${host}";
-  hostFiles = host: host |> pathFromHostName |> (p: [ p ] ++ (p|> listNixFilesRecursive));
+  hostFiles = host: host |> pathFromHostName |> findModulesList |> listToAttrs |> attrValues;
   hostSystem =
     host:
     let
