@@ -1,8 +1,22 @@
-{ enabled, ... }:
 {
+  enabled,
+  pkgs,
+  ...
+}:
+{
+  oizys = {
+    rune.motd = enabled;
+  };
 
-  # # added to make using `pip install` work in docker build
-  # networking.nameservers = [ "8.8.8.8"];
+  environment.systemPackages = with pkgs; [
+    (writeShellScriptBin "gitea" ''
+      ssh -p 2222 -o StrictHostKeyChecking=no git@127.0.0.1 "SSH_ORIGINAL_COMMAND=\"$SSH_ORIGINAL_COMMAND\" $0 $@"
+    '')
+  ];
+
+  # git user handles the forgjo ssh authentication
+  users.users.git.isNormalUser = true;
+
 
   networking.extraHosts = ''
     127.0.0.1 nix-cache.dayl.in
