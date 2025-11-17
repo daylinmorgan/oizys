@@ -4,6 +4,9 @@
   ...
 }:
 {
+  imports = [
+    ./services
+  ];
 
   oizys = {
     rune.motd = enabled;

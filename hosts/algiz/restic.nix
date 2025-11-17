@@ -13,7 +13,10 @@ let
     wiki
     continuwuity
   '';
-  optPaths = "linkding/data";
+  optPaths = ''
+    linkding
+    otterwiki
+  '';
 in
 {
 

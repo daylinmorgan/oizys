@@ -209,7 +209,7 @@ let
     f: f |> readFile |> splitString "\n" |> filter (line: !(hasPrefix "#" line) && line != "");
 
   pathFromHostName = host: ../. + "/hosts/${host}";
-  hostFiles = host: host |> pathFromHostName |> listFilesRecursive |> filter isNixFile;
+  hostFiles = host: host |> pathFromHostName |> (p: [ p ] ++ (p|> listNixFilesRecursive));
   hostSystem =
     host:
     let

@@ -1,0 +1,13 @@
+/*
+ * This is an example custom.css that uses the serif font
+ * Baskervville for the content rendered in the page.
+
+@import url('https://fonts.googleapis.com/css2?family=Baskervville');
+
+.content > .page {
+    font-family: 'Baskervville', serif;
+    font-weight: 400;
+}
+
+Looks like it should be possible to customize color using css variables
+*/

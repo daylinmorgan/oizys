@@ -4,12 +4,12 @@
   flake,
   ...
 }:
-let
-  static-nix-cache = pkgs.runCommandLocal "static-files-nix-cache" { } ''
-    mkdir $out
-    cp -r ${./nix-cache}/* $out
-  '';
-in
+# let
+  # static-nix-cache = pkgs.runCommandLocal "static-files-nix-cache" { } ''
+  #   mkdir $out
+  #   cp -r ${../nix-cache/site}/* $out
+  # '';
+# in
 {
 
   services.caddy = enabled // {
@@ -57,7 +57,7 @@ in
         }
 
         handle @frontend {
-          root * ${static-nix-cache}
+          root * ${../nix-cache/site}
           file_server
         }
 
