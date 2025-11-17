@@ -6,9 +6,10 @@
 
   imports = [
     ./caddy
-    ./otterwiki
-    ./linkding
     ./nix-cache
+    ./continuwuity
+    ./linkding
+    ./otterwiki
   ];
 
   services = {
