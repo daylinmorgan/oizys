@@ -1,0 +1,20 @@
+[Unit]
+Description=soft-serve
+
+[Container]
+Image=charmcli/soft-serve:v0.10.0
+# make sure git zombie processes don't bog us down
+Init=true
+Volume=/opt/soft/data:/soft-serve
+PublishPort=23231:23231
+PublishPort=23232:23232
+PublishPort=23233:23233
+PublishPort=9418:9418
+
+
+[Service]
+# Restart service when sleep finishes
+Restart=unless-stopped
+
+[Install]
+WantedBy=multi-user.target

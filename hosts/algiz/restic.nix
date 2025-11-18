@@ -16,6 +16,7 @@ let
     linkding
     otterwiki
     continuwuity
+    soft
   '';
   paths = (homePaths |> prefixPaths "/home/daylin/services") ++ (optPaths |> prefixPaths "/opt");
 in

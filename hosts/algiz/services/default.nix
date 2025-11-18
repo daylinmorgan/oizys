@@ -10,6 +10,7 @@
     ./continuwuity
     ./linkding
     ./otterwiki
+    ./soft-serve
   ];
 
   services = {
