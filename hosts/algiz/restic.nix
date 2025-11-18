@@ -17,6 +17,7 @@ let
     otterwiki
     continuwuity
     soft
+    forgejo
   '';
   paths = (homePaths |> prefixPaths "/home/daylin/services") ++ (optPaths |> prefixPaths "/opt");
 in

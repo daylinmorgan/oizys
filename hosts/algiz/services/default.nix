@@ -11,6 +11,7 @@
     ./linkding
     ./otterwiki
     ./soft-serve
+    ./forgejo
   ];
 
   services = {
