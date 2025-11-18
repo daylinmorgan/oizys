@@ -1,12 +1,27 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   gitUid = toString config.users.users.git.uid;
   gitGid = toString config.users.groups.users.gid;
+  secretsNames = [
+    "security-internal-token"
+    "server-lfs-jwt-secret"
+    "oauth2-jwt-secret"
+  ];
+  secretsVolumes =
+    secretsNames
+    |> map (name: ''Volume=${config.sops.secrets."forgejo-${name}".path}:/etc/forgejo/secrets/${name}'')
+    |> lib.concatStringsSep "\n";
+  sshPort = toString 2222;
 in
 {
   environment.systemPackages = with pkgs; [
     (writeShellScriptBin "gitea" ''
-      ssh -p 2222 -o StrictHostKeyChecking=no git@127.0.0.1 "SSH_ORIGINAL_COMMAND=\"$SSH_ORIGINAL_COMMAND\" $0 $@"
+      ssh -p ${sshPort} -o StrictHostKeyChecking=no git@127.0.0.1 "SSH_ORIGINAL_COMMAND=\"$SSH_ORIGINAL_COMMAND\" $0 $@"
     '')
   ];
 
@@ -16,12 +31,19 @@ in
     uid = 1001;
   };
 
-  sops.secrets.forgejo-app-ini = {
-    owner = config.users.users.git.name;
-    group = config.users.users.git.group;
-  };
+  # TODO: put secrets in their own secrets.yaml?
+  sops.secrets =
+    secretsNames
+    |> map (name: {
+      name = "forgejo-${name}";
+      value = {
+        sopsFile = ./secrets.yaml;
+        owner = config.users.users.git.name;
+        group = config.users.users.git.group;
+      };
+    })
+    |> lib.listToAttrs;
 
-  # TODO: use environment file for the secrets so app.ini doesn't need to be one
   environment.etc."containers/systemd/forgejo.container".text = ''
     [Unit]
     Description=forgejo
@@ -32,14 +54,17 @@ in
     Environment=USER_UID=${gitUid}
     Environment=USER_GID=${gitGid}
     Environment=FORGEJO_CUSTOM=/etc/forgejo/custom
-    Volume=${config.sops.secrets.forgejo-app-ini.path}:/etc/forgejo/custom/conf/app.ini:Z
+
+    ${secretsVolumes}
+    Volume=${./app.ini}:/etc/forgejo/custom/conf/app.ini:Z
     Volume=${./public}:/etc/forgejo/custom/public
     Volume=/opt/forgejo/data:/data:Z
     Volume=/home/git/.ssh:/data/git/.ssh:rw,z
     Volume=/etc/timezone:/etc/timezone:ro
     Volume=/etc/localtime:/etc/localtime:ro
+
     PublishPort=3000:3000
-    PublishPort=2222:22
+    PublishPort=${sshPort}:22
 
     [Service]
     # Restart service when sleep finishes
