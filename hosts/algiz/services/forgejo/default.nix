@@ -21,6 +21,7 @@ in
     group = config.users.users.git.group;
   };
 
+  # TODO: use environment file for the secrets so app.ini doesn't need to be one
   environment.etc."containers/systemd/forgejo.container".text = ''
     [Unit]
     Description=forgejo
