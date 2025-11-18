@@ -12,6 +12,7 @@
     ./otterwiki
     ./soft-serve
     ./forgejo
+    ./dayl.in
   ];
 
   services = {

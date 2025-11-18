@@ -55,4 +55,22 @@
       };
     };
   };
+
+  services.caddy.virtualHosts."nix-cache.dayl.in".extraConfig = ''
+    redir /oizys /
+
+    @frontend {
+      path /
+      path /daylin-nix-cache-logo.svg
+    }
+
+    handle @frontend {
+      root * ${./site}
+      file_server
+    }
+
+    handle /* {
+      reverse_proxy http://localhost:5656
+    }
+  '';
 }
