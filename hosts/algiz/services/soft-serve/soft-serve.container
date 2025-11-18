@@ -4,7 +4,7 @@ Description=soft-serve
 [Container]
 Image=charmcli/soft-serve:v0.10.0
 # make sure git zombie processes don't bog us down
-Init=true
+RunInit=true
 Volume=/opt/soft/data:/soft-serve
 PublishPort=23231:23231
 PublishPort=23232:23232
