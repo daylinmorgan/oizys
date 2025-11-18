@@ -6,18 +6,16 @@
 let
   prefixPaths = prefix: paths: paths |> lib.listify |> map (p: "${prefix}/${p}");
   homePaths = ''
-    git
     gotosocial
     wedding-website
     bsky-pds
-    wiki
   '';
   optPaths = ''
+    continuwuity
+    forgejo
     linkding
     otterwiki
-    continuwuity
     soft
-    forgejo
   '';
   paths = (homePaths |> prefixPaths "/home/daylin/services") ++ (optPaths |> prefixPaths "/opt");
 in
