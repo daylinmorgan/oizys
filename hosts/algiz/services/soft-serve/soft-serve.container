@@ -14,7 +14,7 @@ PublishPort=9418:9418
 
 [Service]
 # Restart service when sleep finishes
-Restart=unless-stopped
+Restart=always
 
 [Install]
 WantedBy=multi-user.target

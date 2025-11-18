@@ -12,7 +12,7 @@
 
     [Service]
     # Restart service when sleep finishes
-    Restart=unless-stopped
+    Restart=always
 
     [Install]
     WantedBy=multi-user.target
