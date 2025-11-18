@@ -13,7 +13,6 @@
     secrets.restic-algiz = { };
     secrets.atticd-env = { };
   #  secrets.harmonia-key = { };
-    secrets.continuwuity-env = { };
   };
 
   networking.extraHosts = ''
