@@ -39,3 +39,19 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile", }, {
     end
   end,
 })
+
+-- Define the group for our autocmds set the filetype to 'systemd'
+-- for common Quadlet file extensions
+vim.api.nvim_create_augroup("FileTypeQuadlet", { clear = true })
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
+  pattern = {
+    "*.container",
+    "*.pod",
+    "*.volume",
+    "*.network",
+    "*.build",
+    "*.kube"
+  },
+  command = "set filetype=systemd",
+  group = "FileTypeQuadlet",
+})
