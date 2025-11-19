@@ -1,25 +1,32 @@
-{ config, ... }:
+{ config, lib, ... }:
+let
+  users = [ "daylin" ];
+in
 {
   sops.secrets.pds-env = {
     sopsFile = ./secrets.yaml;
   };
 
-  services.caddy.virtualHosts."bsky.dayl.in" = {
-    serverAliases = [ "daylin.bsky.dayl.in" ];
-    extraConfig = ''
-      reverse_proxy http://localhost:6555
-    '';
-  };
-  # services.caddy.virtualHosts."matrix.dayl.in".extraConfig = ''
-  #   reverse_proxy http://localhost:8448
-  # '';
+  services.caddy.virtualHosts =
+    [
+      "bsky.dayl.in"
+    ]
+    |> map (name: {
+      inherit name;
+      value = {
+        serverAliases = users |> map (u: "${u}.bsky.dayl.in");
+        extraConfig = "reverse_proxy http://localhost:6555";
+      };
+    })
+    |> lib.listToAttrs;
+
   environment.etc."containers/systemd/pds.container".text = ''
     [Unit]
     Description=pds
 
     [Container]
     Image=ghcr.io/bluesky-social/pds:0.4.182
-    Volume=/var/lib/pds/pds:/pds
+    Volume=/var/lib/pds/pds:/pds:Z,U
     EnvironmentFile=${./env}
     EnvironmentFile=${config.sops.secrets.pds-env.path}
     PublishPort=6555:3000
