@@ -40,6 +40,9 @@ hwylCli:
     m|minimal "get [i]minimal[/] package set"
     lix "get lix and lix dependents"
 
+    [build]
+    `no-nom` "don't use nom"
+
     # ["_misc"]
     # y|yes "skip all confirmation prompts"
   preSub:
@@ -62,7 +65,7 @@ hwylCli:
       args seq[string]
     flags:
       ^minimal
-      `no-nom` "don't use nom"
+      ^[build]
     run:
       nixBuild(minimal, `no-nom`, args)
 
@@ -126,9 +129,21 @@ hwylCli:
       args seq[string]
     flags:
       r|remote "host is remote"
+      `no-pre-build` "don't interject with oizys build"
+      ^[build]
     run:
-      let code = nixosRebuild(subcmd, args, remote)
-      if code != 0:
+      if not `no-pre-build` and subcmd in {switch} and not `no-nom`:
+        for part in ["path", "build.toplevel"]:
+          let attrs = nixosAttrs(part)
+          debug fmt"building: {attrs}"
+          let cmd =
+            newNixCommand("build", `no-nom`)
+              .withArgs(attrs)
+              .withArgs("--no-link")
+              .withArgs(args)
+          if not cmd.runOk:
+            fatalQuit fmt"pre nixos-rebuild build failed for attr: {attrs}"
+      if nixosRebuild(subcmd, args, remote) != 0:
         fatalQuit fmt"nixos-rebuild {subcmd} failed"
       if subcmd in {switch, boot}:
         quit chezmoiStatus()
