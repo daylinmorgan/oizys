@@ -22,6 +22,10 @@
       80
       443
     ];
+
+    # the rootful podman bsky couldn't access the network
+    # this solution was found on reddit, unclear why it's even necessary though
+    interfaces."podman[0-9]".allowedUDPPorts = [ 53 ];
   };
 
   # Use the GRUB 2 boot loader.
