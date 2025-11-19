@@ -4,9 +4,25 @@
     sopsFile = ./secrets.yaml;
   };
 
+  # add brand-specific landing page
   services.caddy.virtualHosts."matrix.dayl.in".extraConfig = ''
-    reverse_proxy http://localhost:8448
+
+    @frontend {
+      path /
+      path /daylin-matrix-logo.svg
+    }
+
+    handle @frontend {
+      root * ${./site}
+      file_server
+    }
+
+    handle /* {
+      reverse_proxy http://localhost:8448
+    }
+
   '';
+
   environment.etc."containers/systemd/continuwuity.container".text = ''
     [Unit]
     Description=continuwuity
