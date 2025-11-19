@@ -17,8 +17,25 @@ let
     |> map (name: ''Volume=${config.sops.secrets."forgejo-${name}".path}:/etc/forgejo/secrets/${name}'')
     |> lib.concatStringsSep "\n";
   sshPort = toString 2222;
+
+  catppuccin-assets = pkgs.stdenvNoCC.mkDerivation (finalAttrs: {
+    pname = "catppuccin-assets";
+    version = "1.0.2";
+    src = pkgs.fetchzip {
+      url = "https://github.com/catppuccin/gitea/releases/download/v${finalAttrs.version}/catppuccin-gitea.tar.gz";
+      sha256 = "sha256-rZHLORwLUfIFcB6K9yhrzr+UwdPNQVSadsw6rg8Q7gs=";
+      stripRoot = false;
+    };
+
+    dontBuild = true;
+    installPhase = ''
+      mkdir -p $out/css
+      cp -r $src/* $out/css/
+    '';
+  });
 in
 {
+
   environment.systemPackages = with pkgs; [
     (writeShellScriptBin "gitea" ''
       ssh -p ${sshPort} -o StrictHostKeyChecking=no git@127.0.0.1 "SSH_ORIGINAL_COMMAND=\"$SSH_ORIGINAL_COMMAND\" $0 $@"
@@ -31,7 +48,6 @@ in
     uid = 1001;
   };
 
-  # TODO: put secrets in their own secrets.yaml?
   sops.secrets =
     secretsNames
     |> map (name: {
@@ -62,7 +78,8 @@ in
 
     ${secretsVolumes}
     Volume=${./app.ini}:/etc/forgejo/custom/conf/app.ini:Z
-    Volume=${./public}:/etc/forgejo/custom/public
+    Volume=${catppuccin-assets}/css:/etc/forgejo/custom/public/assets/css
+    Volume=${./public/assets/img}:/etc/forgejo/custom/public/assets/img
     Volume=/var/lib/forgejo/data:/data:Z
     Volume=/home/git/.ssh:/data/git/.ssh:rw,z
     Volume=/etc/timezone:/etc/timezone:ro
