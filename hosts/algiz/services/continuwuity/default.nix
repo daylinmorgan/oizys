@@ -13,7 +13,7 @@
 
     [Container]
     Image=forgejo.ellis.link/continuwuation/continuwuity:v0.5.0-rc.8.1
-    Volume=/opt/continuwuity/data/:/var/lib/continuwuity:Z,U
+    Volume=/var/lib/continuwuity/data/:/var/lib/continuwuity:Z,U
     EnvironmentFile=${./env}
     EnvironmentFile=${config.sops.secrets.continuwuity-env.path}
     PublishPort=8448:6167

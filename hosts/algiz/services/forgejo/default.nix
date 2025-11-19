@@ -63,7 +63,7 @@ in
     ${secretsVolumes}
     Volume=${./app.ini}:/etc/forgejo/custom/conf/app.ini:Z
     Volume=${./public}:/etc/forgejo/custom/public
-    Volume=/opt/forgejo/data:/data:Z
+    Volume=/var/lib/forgejo/data:/data:Z
     Volume=/home/git/.ssh:/data/git/.ssh:rw,z
     Volume=/etc/timezone:/etc/timezone:ro
     Volume=/etc/localtime:/etc/localtime:ro
