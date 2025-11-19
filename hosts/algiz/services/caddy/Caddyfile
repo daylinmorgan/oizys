@@ -12,21 +12,15 @@
 	}
 }
 
-
-daylin.bsky.dayl.in, bsky.dayl.in {
-	reverse_proxy http://localhost:6555
-}
-
-elizabeth-and-daylin.com {
-	reverse_proxy http://localhost:4321
-}
-
-elizabeth.dayl.in, www.elizabeth-and-daylin.com {
-	redir https://elizabeth-and-daylin.com{uri} permanent
-}
+# elizabeth-and-daylin.com {
+# 	reverse_proxy http://localhost:4321
+# }
+#
+# elizabeth.dayl.in, www.elizabeth-and-daylin.com {
+# 	redir https://elizabeth-and-daylin.com{uri} permanent
+# }
 
 https://cloud.dayl.in {
-	# reverse_proxy localhost:11000
 	respond "No service active"
 }
 

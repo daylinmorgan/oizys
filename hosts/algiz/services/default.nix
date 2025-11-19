@@ -14,6 +14,7 @@
     ./forgejo
     ./dayl.in
     ./gotosocial
+    ./pds
   ];
 
   services = {
