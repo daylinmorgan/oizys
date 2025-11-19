@@ -61,7 +61,9 @@ in
       description = "main user account";
     };
     desktop.enable = mkEnableOption "is desktop";
+    server.enable = mkEnableOption "is server";
     docker.enable = mkEnableOption "enable docker support";
+
     packages = mkOption {
       type = lib.types.attrsOf lib.types.package;
       description = "attr set of all packages, for use with nix-eval-jobs by `oizys cache`";

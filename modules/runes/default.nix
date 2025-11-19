@@ -12,7 +12,6 @@ let
     mkMerge
     mkOption
     mkIf
-    mkEnableOption
     ;
   runes = {
     othalan = import ./othalan.nix;
@@ -29,6 +28,7 @@ let
     "[1;3${number}m\n" + runes.${name}.${kind} + "\n[0m";
 
   cfg = config.oizys.rune;
+  isServer = config.oizys.server.enable;
 
   # TODO: include time? things would be simpler with epoch and printf/date
   dateFromFlake =
@@ -52,17 +52,21 @@ in
 {
   options.oizys = {
     rune = {
-      enable = mkOption {
+      issue.enable = mkOption {
         type = types.bool;
         default = true;
       };
-      motd.enable = mkEnableOption "set rune for MOTD";
+      motd.enable = mkOption {
+        type = types.bool;
+        default = if isServer then true else false; # use mkDefault?
+      };
       name = mkOption {
         default = config.networking.hostName;
         type = types.either (types.enum (builtins.attrNames runes)) types.str;
         description = "Name of rune (probabaly matches hostname)";
       };
       kind = mkOption {
+        description = "rune type used for generating issue";
         type =
           with types;
           either (enum [
@@ -75,7 +79,7 @@ in
   };
 
   config = mkMerge [
-    (mkIf cfg.enable {
+    (mkIf cfg.issue.enable {
       environment.etc.issue = {
         source = pkgs.writeText "issue" (
           {

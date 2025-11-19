@@ -3,9 +3,7 @@
   ...
 }:
 {
-  oizys = {
-    rune.motd = enabled;
-  };
+  oizys.server = enabled;
 
   sops = {
     age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];

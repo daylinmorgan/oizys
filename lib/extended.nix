@@ -263,7 +263,6 @@ let
     |> map (
       line: if hasPrefix "flake:" line then (line |> removePrefix "flake:" |> flake.pkg) else pkgs.${line}
     );
-
 in
 {
   inherit
