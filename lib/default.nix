@@ -51,7 +51,7 @@ let
           inherit substituters;
           inherit (inputs) crane;
         };
-        iso-x86_64-linux = (mkIso "x86_64-linux").config.system.build.isoImage;
+        iso = (mkIso system).config.system.build.isoImage;
       }
       // (import ../pkgs {
         inherit
