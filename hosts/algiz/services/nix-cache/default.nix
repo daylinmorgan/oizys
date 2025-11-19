@@ -12,6 +12,8 @@
 
   security.polkit = enabled; # attic was looking for this...
 
+  sops.secrets.atticd-env = { };
+
   services = {
     atticd = enabled // {
 

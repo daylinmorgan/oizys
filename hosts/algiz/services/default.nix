@@ -13,6 +13,7 @@
     ./soft-serve
     ./forgejo
     ./dayl.in
+    ./gotosocial
   ];
 
   services = {

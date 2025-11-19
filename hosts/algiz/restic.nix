@@ -16,11 +16,13 @@ let
     linkding
     otterwiki
     soft
+    gotosocial
   '';
   paths = (homePaths |> prefixPaths "/home/daylin/services") ++ (optPaths |> prefixPaths "/opt");
 in
 {
 
+  sops.secrets.restic-algiz = { };
   services.restic.backups.gdrive = {
     # in practice I don't know that it would ever be possible to restore these directories
     # but it's better than nothing
