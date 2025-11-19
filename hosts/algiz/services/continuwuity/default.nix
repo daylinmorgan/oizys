@@ -3,6 +3,10 @@
   sops.secrets.continuwuity-env = {
     sopsFile = ./secrets.yaml;
   };
+
+  services.caddy.virtualHosts."matrix.dayl.in".extraConfig = ''
+    reverse_proxy http://localhost:8448
+  '';
   environment.etc."containers/systemd/continuwuity.container".text = ''
     [Unit]
     Description=continuwuity

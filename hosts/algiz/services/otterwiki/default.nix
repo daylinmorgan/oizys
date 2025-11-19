@@ -1,5 +1,10 @@
 { ... }:
 {
+
+  services.caddy.virtualHosts."wiki.dayl.in".extraConfig = ''
+    reverse_proxy http://localhost:8721
+  '';
+
   # I don't actually use the "custom" files right now so this could exist as a standalone .container file
   environment.etc."containers/systemd/otterwiki.container".text = ''
     [Unit]

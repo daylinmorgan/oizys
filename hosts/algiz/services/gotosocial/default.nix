@@ -1,5 +1,16 @@
 { ... }:
 {
+
+  services.caddy.virtualHosts."gts.dayl.in".extraConfig = ''
+    # Optional, but recommended, compress the traffic using proper protocols
+    encode zstd gzip
+
+    reverse_proxy * http://localhost:3758 {
+      # Flush immediatly, to prevent buffered response to the client
+      flush_interval -1
+    }
+  '';
+
   environment.etc."containers/systemd/gotosocial.container" = {
     text = ''
       [Unit]
