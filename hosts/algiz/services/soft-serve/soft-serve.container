@@ -5,7 +5,7 @@ Description=soft-serve
 Image=docker.io/charmcli/soft-serve:v0.11.1
 # make sure git zombie processes don't bog us down
 RunInit=true
-Volume=/var/lib/soft/data:/soft-serve
+Volume=/var/lib/soft-serve/data:/soft-serve
 PublishPort=23231:23231
 PublishPort=23232:23232
 PublishPort=23233:23233
