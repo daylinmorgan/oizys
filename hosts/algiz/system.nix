@@ -6,7 +6,7 @@
   oizys = {
     rune.motd = enabled;
   };
- 
+
   sops = {
     age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
     defaultSopsFile = ./secrets.yaml;
@@ -32,4 +32,3 @@
   # don't delete this you foo bar
   system.stateVersion = "23.11"; # Did you read the comment?
 }
-

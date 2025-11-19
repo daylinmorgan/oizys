@@ -45,8 +45,8 @@ in
     |> lib.listToAttrs;
 
   services.caddy.virtualHosts."git.dayl.in".extraConfig = ''
-      import no-ai
-      reverse_proxy http://localhost:3000
+    import no-ai
+    reverse_proxy http://localhost:3000
   '';
 
   environment.etc."containers/systemd/forgejo.container".text = ''

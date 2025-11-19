@@ -30,7 +30,12 @@ in
       isNormalUser = true;
 
       shell = pkgs.zsh;
-      extraGroups = [ "wheel" ] ++ optional isDesktop "audio" ++ optional isDocker "docker" ++ optional isPodman "podman";
+      extraGroups = [
+        "wheel"
+      ]
+      ++ optional isDesktop "audio"
+      ++ optional isDocker "docker"
+      ++ optional isPodman "podman";
 
       initialHashedPassword = "$2b$05$mGMrDFzf2cXLaoOlVQbGvOBV7UZlDt9dLg9Xqxutb/uHpjF5VrTBO";
       openssh.authorizedKeys.keys = [

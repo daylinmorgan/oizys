@@ -15,5 +15,5 @@
     '';
 
     extraConfig = builtins.readFile ./Caddyfile;
- };
+  };
 }

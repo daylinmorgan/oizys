@@ -191,13 +191,13 @@
 .emoji[aria-label="ON! arrow"],
 .emoji[aria-label="SOON arrow"],
 .emoji[aria-label="heavy dollar sign"],
-.emoji[aria-label=copyright],
-.emoji[aria-label=registered],
+.emoji[aria-label="copyright"],
+.emoji[aria-label="registered"],
 .emoji[aria-label="trade mark"],
-.emoji[aria-label=multiply],
-.emoji[aria-label=plus],
-.emoji[aria-label=minus],
-.emoji[aria-label=divide],
+.emoji[aria-label="multiply"],
+.emoji[aria-label="plus"],
+.emoji[aria-label="minus"],
+.emoji[aria-label="divide"],
 .emoji[aria-label="curly loop"],
 .emoji[aria-label="double curly loop"],
 .emoji[aria-label="wavy dash"],
@@ -207,14 +207,20 @@
   filter: invert(100%) hue-rotate(180deg);
 }
 
-.ui.ui.ui.button:not(.inverted, .basic).primary, .ui.ui.ui.button:not(.inverted, .basic).green, .ui.ui.ui.button:not(.inverted, .basic).red, .ui.ui.ui.button:not(.inverted, .basic).teal,
+.ui.ui.ui.button:not(.inverted, .basic).primary,
+.ui.ui.ui.button:not(.inverted, .basic).green,
+.ui.ui.ui.button:not(.inverted, .basic).red,
+.ui.ui.ui.button:not(.inverted, .basic).teal,
 .ui.ui.ui.label:not(.inverted, .basic).primary,
 .ui.ui.ui.label:not(.inverted, .basic).green,
 .ui.ui.ui.label:not(.inverted, .basic).red,
 .ui.ui.ui.label:not(.inverted, .basic).teal {
   color: #11111b;
 }
-.ui.ui.ui.button:not(.inverted, .basic).primary:hover, .ui.ui.ui.button:not(.inverted, .basic).green:hover, .ui.ui.ui.button:not(.inverted, .basic).red:hover, .ui.ui.ui.button:not(.inverted, .basic).teal:hover,
+.ui.ui.ui.button:not(.inverted, .basic).primary:hover,
+.ui.ui.ui.button:not(.inverted, .basic).green:hover,
+.ui.ui.ui.button:not(.inverted, .basic).red:hover,
+.ui.ui.ui.button:not(.inverted, .basic).teal:hover,
 .ui.ui.ui.label:not(.inverted, .basic).primary:hover,
 .ui.ui.ui.label:not(.inverted, .basic).green:hover,
 .ui.ui.ui.label:not(.inverted, .basic).red:hover,
