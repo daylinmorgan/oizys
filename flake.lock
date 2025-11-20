@@ -21,51 +21,29 @@
         "type": "github"
       }
     },
-    "blueprint": {
+    "bun2nix": {
       "inputs": {
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "import-tree": "import-tree",
         "nixpkgs": [
           "daylin-website",
-          "bun2nix",
           "nixpkgs"
         ],
         "systems": [
-          "daylin-website",
-          "bun2nix",
           "systems"
+        ],
+        "treefmt-nix": [
+          "treefmt-nix"
         ]
       },
       "locked": {
-        "lastModified": 1744632722,
-        "narHash": "sha256-0chvqUV1Kzf8BMQ7MsH3CeicJEb2HeCpwliS77FGyfc=",
-        "owner": "numtide",
-        "repo": "blueprint",
-        "rev": "49bbd5d072b577072f4a1d07d4b0621ecce768af",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "blueprint",
-        "type": "github"
-      }
-    },
-    "bun2nix": {
-      "inputs": {
-        "blueprint": "blueprint",
-        "nixpkgs": [
-          "daylin-website",
-          "nixpkgs"
-        ],
-        "systems": [
-          "systems"
-        ],
-        "treefmt-nix": []
-      },
-      "locked": {
-        "lastModified": 1758556306,
-        "narHash": "sha256-oFQgK86g3brHjFHV2nPaM1whYl3UcnCMJQ2XiNL84jM=",
+        "lastModified": 1763665238,
+        "narHash": "sha256-aJ4fhiNjt1daPjreZkKhkzmp/OSbUHFBiOP5HVfsuWE=",
         "owner": "baileyluTCD",
         "repo": "bun2nix",
-        "rev": "5c301e55a19c7ef3126c20bd927f12e11bb70755",
+        "rev": "12e3e87ebafa2fd1140f23a24ed5c94bf0f169d0",
         "type": "github"
       },
       "original": {
@@ -98,11 +76,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1762275535,
-        "narHash": "sha256-A7R7EG3lkypfHyOjlVfWMIGjXMSf2ykfqBy3sYWPJVw=",
-        "rev": "db413a141867a0659f67b4d2b977209aed061fc2",
+        "lastModified": 1763667738,
+        "narHash": "sha256-KBWMIvHSexLMivim/9lhU+n0OvartXyIvtzWnu9CnjI=",
+        "rev": "3033069871e5f8d0facef963457bc2d02dafad30",
         "type": "tarball",
-        "url": "https://git.dayl.in/api/v1/repos/daylin/dayl.in/archive/db413a141867a0659f67b4d2b977209aed061fc2.tar.gz?rev=db413a141867a0659f67b4d2b977209aed061fc2"
+        "url": "https://git.dayl.in/api/v1/repos/daylin/dayl.in/archive/3033069871e5f8d0facef963457bc2d02dafad30.tar.gz?rev=3033069871e5f8d0facef963457bc2d02dafad30"
       },
       "original": {
         "type": "tarball",
@@ -161,6 +139,21 @@
       "original": {
         "owner": "lf-",
         "repo": "flakey-profile",
+        "type": "github"
+      }
+    },
+    "import-tree": {
+      "locked": {
+        "lastModified": 1762327901,
+        "narHash": "sha256-AJ96FNj50DU0bTyIzAPkPOjCZTHqjURVjok8qoXvmqM=",
+        "owner": "vic",
+        "repo": "import-tree",
+        "rev": "90fa129798be99cde036b78658e89475710966a1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vic",
+        "repo": "import-tree",
         "type": "github"
       }
     },

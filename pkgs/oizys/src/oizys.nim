@@ -227,7 +227,7 @@ hwylCli:
       null:
         ? "inputs that should always be null"
         T seq[string]
-        * @["flake-compat", "treefmt-nix"]
+        * @["flake-compat"]
     run:
       if not isLocal():
         quit "`oizys lock` should be run with a local flake"
