@@ -18,9 +18,9 @@ let
 in
 {
   imports = with self.nixosModules; [
-    users
-    runes
     essentials
+    users
+    motd
 
     nix-improved
     cli
@@ -75,8 +75,7 @@ in
     time.timeZone = "US/Central";
     nixpkgs.overlays = import ../overlays { inherit inputs lib; };
     oizys = oizysSettings hostName // {
-      packages =
-        config.environment.systemPackages
+      packages = config.environment.systemPackages
         |> map (drv: {
           name = drv.name;
           value = drv;
