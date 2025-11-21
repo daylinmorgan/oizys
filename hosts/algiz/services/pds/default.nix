@@ -11,14 +11,10 @@ in
     [
       "bsky.dayl.in"
     ]
-    |> map (name: {
-      inherit name;
-      value = {
-        serverAliases = users |> map (u: "${u}.bsky.dayl.in");
-        extraConfig = "reverse_proxy http://localhost:6555";
-      };
-    })
-    |> lib.listToAttrs;
+    |> lib.mapToNamedAttrs (name: {
+      serverAliases = users |> map (u: "${u}.bsky.dayl.in");
+      extraConfig = "reverse_proxy http://localhost:6555";
+    });
 
   environment.etc."containers/systemd/pds.container".text = ''
     [Unit]

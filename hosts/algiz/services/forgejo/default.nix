@@ -50,15 +50,14 @@ in
 
   sops.secrets =
     secretsNames
-    |> map (name: {
+    |> lib.mapToAttrs (name: {
       name = "forgejo-${name}";
       value = {
         sopsFile = ./secrets.yaml;
         owner = config.users.users.git.name;
         group = config.users.users.git.group;
       };
-    })
-    |> lib.listToAttrs;
+    });
 
   services.caddy.virtualHosts."git.dayl.in".extraConfig = ''
     import no-ai

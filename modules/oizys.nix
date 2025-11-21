@@ -13,7 +13,7 @@ let
     mkOption
     oizysSettings
     tryPkgsFromFile
-    listToAttrs
+    mapToAttrs
     ;
 in
 {
@@ -74,12 +74,12 @@ in
     time.timeZone = "US/Central";
     nixpkgs.overlays = import ../overlays { inherit inputs lib; };
     oizys = oizysSettings hostName // {
-      packages = config.environment.systemPackages
-        |> map (drv: {
+      packages =
+        config.environment.systemPackages
+        |> mapToAttrs (drv: {
           name = drv.name;
           value = drv;
-        })
-        |> listToAttrs;
+        });
     };
     environment.systemPackages = tryPkgsFromFile { inherit hostName pkgs; };
   };

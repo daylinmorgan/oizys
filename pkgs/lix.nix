@@ -14,13 +14,9 @@ if lixModule then
   }
 else
   (
-    [
-      "lix"
-      "nix-eval-jobs"
-    ]
-    |> map (name: {
-      inherit name;
-      value = pkgs.lixPackageSets.${lixVersion}.${name};
-    })
-    |> builtins.listToAttrs
+    ''
+      lix
+      nix-eval-jobs
+    ''
+    |> lib.listifyMapToNamedAttrs (name: pkgs.lixPackageSets.${lixVersion}.${name})
   )

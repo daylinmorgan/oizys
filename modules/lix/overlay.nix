@@ -28,10 +28,7 @@ else
       "nixos-rebuild-ng"
       "comma"
     ]
-    |> map (name: {
-      inherit name;
+    |> lib.mapToNamedAttrs (name: {
       inherit (overrideNix name) value;
     })
-    |> lib.listToAttrs
-
   )

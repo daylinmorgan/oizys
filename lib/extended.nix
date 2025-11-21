@@ -28,6 +28,7 @@ let
     removePrefix
     mapAttrsToList
     trim
+    nameValuePair
     ;
   inherit (final.filesystem) listFilesRecursive;
   inherit (import ./find-modules.nix final) findModulesList;
@@ -55,25 +56,16 @@ let
     |> filter (s': s' != "")
     |> map (s': trim s');
 
+  mapToAttrs = f: l: l |> map (x: f x) |> listToAttrs;
+  mapToNamedAttrs = f: l: l |> mapToAttrs (x: nameValuePair x (f x));
+  listifyMapToAttrs = f: s: s |> listify |> mapToAttrs f;
+  listifyMapToNamedAttrs = f: s: s |> listify |> mapToNamedAttrs f;
+
   # ["a" "b"] -> {a.enable = true; b.enable = true;}
-  enableAttrs =
-    attrs:
-    attrs
-    |> map (attr: {
-      name = attr;
-      value = enabled;
-    })
-    |> listToAttrs;
+  enableAttrs = attrs: attrs |> mapToNamedAttrs (_: enabled);
 
   # ["a" "b"] -> {a.enable = false; b.enable = false;}
-  disableAttrs =
-    attrs:
-    attrs
-    |> map (attr: {
-      name = attr;
-      value = disabled;
-    })
-    |> listToAttrs;
+  disableAttrs = attrs: attrs |> mapToNamedAttrs (_: disabled);
 
   mkIfIn = name: list: prev.mkIf (builtins.elem name list);
 
@@ -111,17 +103,7 @@ let
   listNixFilesRecursive = dir: dir |> listFilesRecursive |> filterNotDefaultNixFile;
 
   ## convert a list of flakes to { name = packageAttr; }
-  flakesToPackagesAttrs =
-    system: flakes:
-    listToAttrs (
-      map (name: {
-        inherit name;
-        value = pkgFromSystem system name;
-      }) flakes
-    );
-
-  # defaultLinuxPackage = flake: flake.packages.x86_64-linux.default;
-  # defaultPackageGeneric = system: flake: "${flake}.packages.${system}.default";
+  flakesToPackagesAttrs = system: flakes: flakes |> mapToNamedAttrs (name: pkgFromSystem system name);
   pkgsFromSystem = system: flake: inputs."${flake}".packages."${system}";
   pkgFromSystem = system: flake: (pkgsFromSystem system flake).default;
   overlayFrom = flake: inputs."${flake}".overlays.default;
@@ -150,11 +132,7 @@ let
   selfPkgOverlaysWithArgs =
     { final, packages }:
     packages
-    |> map (name: {
-      inherit name;
-      value = inputs.self.packages.${final.stdenv.hostPlatform.system}.${name};
-    })
-    |> listToAttrs;
+    |> mapToNamedAttrs (name: inputs.self.packages.${final.stdenv.hostPlatform.system}.${name});
 
   selfPkgOverlays =
     final:
@@ -283,7 +261,11 @@ in
     overlayFrom
     selfPkgOverlays
     flakeFromSystem
+    mapToAttrs
+    mapToNamedAttrs
     listify
+    listifyMapToAttrs
+    listifyMapToNamedAttrs
     loadOverlays
     loadNixpkgOverlays
     hostFiles

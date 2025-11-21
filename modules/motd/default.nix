@@ -29,13 +29,13 @@ let
   oizysDate = dateFromFlake self;
 
   mkText =
-    img:
-    color:
+    img: color:
     (
       "[1;36m"
       + (readFile img)
       + (readFile figName)
-      + "[0m" + ''
+      + "[0m"
+      + ''
         nixpkgs:
           last modified: ${nixpkgsDate}
           rev: ${inputs.nixpkgs.rev}
