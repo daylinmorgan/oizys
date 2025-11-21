@@ -8,18 +8,15 @@
 buildNimPackage (
   final: prev: {
     pname = "atlas";
-    version = "unstable-2025-10-17";
+    version = "unstable-2025-11-06";
     src = fetchFromGitHub {
       owner = "nim-lang";
       repo = "atlas";
-      rev = "3e33c732546760359b58a81df2269edd1d0c5f4d";
-      hash = "sha256-3hv5fEmoPR/Jt/x8Kpv41yVx3zbC0YK62I7a+20HFcM=";
+      rev = "5ffc041c1c529d7d4083e2694bd093f80d03d901";
+      hash = "sha256-sngWtS3ZDJzBtQaWma1ro3hRbmGZFyzHGRkvoGNaiKU=";
     };
     lockFile = ./lock.json;
     buildInputs = [ openssl ];
-    # prePatch = ''
-    #   rm config.nims
-    # ''; # never trust a .nims file
     doCheck = false; # tests will clone repos
     meta = final.src.meta // {
       description = "Nim package cloner";

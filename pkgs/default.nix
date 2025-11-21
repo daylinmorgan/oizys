@@ -13,8 +13,7 @@ in
   nimlangserver = pkgs.callPackage ./nim/nimlangserver { };
   procs = pkgs.callPackage ./nim/procs { };
   nimble = pkgs.callPackage ./nim/nimble { };
-  # nim-atlas = pkgs.callPackage ./nim/atlas {};
-  nim-atlas = (flake.pkgs "nim2nix").atlas;
+  nim-atlas = pkgs.callPackage ./nim/atlas {};
 }
 // (import ./lix.nix { inherit flake lib pkgs; })
 // (flake.toPackageAttrs [
