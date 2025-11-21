@@ -25,7 +25,6 @@
     niri.url = "github:YaLTeR/niri";
     nix-index-database.url = "github:nix-community/nix-index-database";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
-    nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     NixVirt.url = "github:AshleyYakeley/NixVirt/v0.6.0";
     sops-nix.url = "github:Mic92/sops-nix";
     treefmt-nix.url = "github:numtide/treefmt-nix";
@@ -50,7 +49,6 @@
     niriman.inputs.nixpkgs.follows = "nixpkgs";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
-    nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     niri.inputs.nixpkgs.follows = "nixpkgs";
     NixVirt.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
@@ -70,7 +68,6 @@
     lib-aggregate.inputs.flake-utils.follows = "flake-utils";
 
     lib-aggregate.url = "github:nix-community/lib-aggregate";
-    nixpkgs-wayland.inputs.lib-aggregate.follows = "lib-aggregate";
 
     nixpkgs-lib.url = "github:nix-community/nixpkgs.lib";
     lib-aggregate.inputs.nixpkgs-lib.follows = "nixpkgs-lib";
@@ -89,6 +86,5 @@
 
     ## nil inputs, I don't want *ALL* your flake inputs...
     nixos-wsl.inputs.flake-compat.follows = "";
-    nixpkgs-wayland.inputs.flake-compat.follows = "";
   };
 }
