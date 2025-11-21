@@ -30,7 +30,6 @@ in
 
     lock
     qtile
-    hyprland
     plasma
     niri
 
