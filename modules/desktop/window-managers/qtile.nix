@@ -33,7 +33,6 @@ in
       rofi
 
       flameshot
-      catppuccin-cursors.mochaDark
       pavucontrol
     ];
   };

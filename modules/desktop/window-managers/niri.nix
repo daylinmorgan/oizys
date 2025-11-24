@@ -92,7 +92,6 @@ mkOizysModule config "niri" {
     wl-clipboard
     rofi
     pwvucontrol
-    catppuccin-cursors.mochaDark
     swaylock
     eww
     swww

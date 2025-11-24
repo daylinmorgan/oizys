@@ -20,16 +20,6 @@ in
     environment.pathsToLink = [ "/share/Kvantum" ];
 
     environment.systemPackages = with pkgs; [
-      (catppuccin-gtk.override {
-        accents = [ "pink" ];
-        variant = "mocha";
-      })
-
-      (catppuccin-kvantum.override {
-        variant = "mocha";
-        accent = "pink";
-      })
-
       libsForQt5.qtstyleplugin-kvantum
       libsForQt5.qt5ct
       kdePackages.okular
