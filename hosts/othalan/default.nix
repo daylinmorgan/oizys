@@ -27,6 +27,14 @@
       owner = config.users.users.daylin.name;
       group = config.users.users.daylin.group;
     };
+    secrets.wg-conf = {
+      sopsFile = ../../secrets/secrets.yaml;
+    };
+  };
+
+  networking.wg-quick.interfaces = {
+    # AirVPN - North America
+    air-na.configFile = config.sops.secrets.wg-conf.path;
   };
 
   services.restic.backups.gdrive = {
