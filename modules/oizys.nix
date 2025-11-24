@@ -32,6 +32,7 @@ in
     qtile
     plasma
     niri
+    catppuccin
 
     virtualbox
     docker
