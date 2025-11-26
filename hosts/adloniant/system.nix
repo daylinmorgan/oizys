@@ -1,4 +1,5 @@
 {
+  config,
   enabled,
   ...
 }:
@@ -13,6 +14,18 @@
       "compress=zstd"
       "noatime"
     ];
+  };
+  sops = {
+    # This will automatically import SSH keys as age keys
+    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+    secrets.wg-conf = {
+      sopsFile = ../../secrets/secrets.yaml;
+    };
+  };
+
+  networking.wg-quick.interfaces = {
+    # AirVPN - North America
+    air-na.configFile = config.sops.secrets.wg-conf.path;
   };
 
   services.openssh = enabled // {
