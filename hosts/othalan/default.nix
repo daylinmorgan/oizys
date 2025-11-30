@@ -34,7 +34,11 @@
 
   networking.wg-quick.interfaces = {
     # AirVPN - North America
-    air-na.configFile = config.sops.secrets.wg-conf.path;
+    air-na = {
+      configFile = config.sops.secrets.wg-conf.path;
+      autostart = false;
+    };
+
   };
 
   services.restic.backups.gdrive = {
