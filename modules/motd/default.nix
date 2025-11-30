@@ -29,9 +29,13 @@ let
   oizysDate = dateFromFlake self;
 
   mkText =
-    img: color:
+    {
+      img,
+      color,
+      figName,
+    }:
     (
-      "[1;36m"
+      "[1;${toString color}m"
       + (readFile img)
       + (readFile figName)
       + "[0m"
@@ -44,30 +48,56 @@ let
           rev: ${self.rev or "dirty"}
       ''
     );
-  mkMotdText = color: mkText motdPath color;
-  mkIssueText = color: mkText issuePath color;
-
+  mkMotdText =
+    { color, figName }:
+    mkText {
+      img = motdPath;
+      inherit color figName;
+    };
+  mkIssueText =
+    { color, figName }:
+    mkText {
+      img = issuePath;
+      inherit color figName;
+    }
+    # prevent agetty from messing up the name
+    |> lib.stringAsChars (x: if x == "\\" then "\\\\" else x);
+  cfg = config.oizys.motd;
 in
 {
   options.oizys = {
     motd = {
       color = mkOption {
         type = types.int;
-        default = 6;
+        default = 36;
+      };
+      font = mkOption {
+        type = types.str;
+        default = "larry3d";
       };
     };
   };
 
-  config = mkMerge [
-    (mkIf (pathExists issuePath) {
-      # oizys.rune.issue.enable = false;
-      environment.etc.issue = {
-        text = mkIssueText config.oizys.motd.color;
-      };
-    })
-    (mkIf (pathExists motdPath) {
-      # oizys.rune.motd.enable = false;
-      users.motd = mkMotdText config.oizys.motd.color;
-    })
-  ];
+  config =
+    let
+      figName = pkgs.runCommandLocal "figlet-${config.networking.hostName}-${cfg.font}" { } ''
+        ${pkgs.figlet}/bin/figlet ${config.networking.hostName} -f ${cfg.font} > $out
+      '';
+    in
+    mkMerge [
+      (mkIf (pathExists issuePath) {
+        environment.etc.issue = {
+          text = mkIssueText {
+            inherit (cfg) color;
+            inherit figName;
+          };
+        };
+      })
+      (mkIf (pathExists motdPath) {
+        users.motd = mkMotdText {
+          inherit (cfg) color;
+          inherit figName;
+        };
+      })
+    ];
 }
