@@ -3,17 +3,8 @@ final: prev:
 if lib.data.lixModule then
   { }
 else
-  let
-    inherit (lib.data) lixVersion;
-    lixPackageSets = final.lixPackageSets.${lixVersion};
-    overrideNix = name: {
-      value = prev.${name}.override {
-        nix = lixPackageSets.lix;
-      };
-    };
-  in
   {
-    inherit (lixPackageSets)
+    inherit (final.lixPackageSets.${lib.data.lixVersion})
       nixpkgs-review
       nix-eval-jobs
       nix-index
@@ -22,13 +13,3 @@ else
       # nix-direnv I think using programs.nix-direnv already overrides the nix version
       ;
   }
-  // (
-    # these are not already included in lixPackageSets
-    [
-      "nixos-rebuild-ng"
-      "comma"
-    ]
-    |> lib.mapToNamedAttrs (name: {
-      inherit (overrideNix name) value;
-    })
-  )
