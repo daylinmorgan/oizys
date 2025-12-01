@@ -6,7 +6,7 @@ on:
       hosts:
         description: "list of hosts to build"
         required: true
-        default: "othalan,algiz"
+        default: "othalan,algiz,adloniant"
         type: string
       flake-inputs:
         description: "list of nix flake inputs"
