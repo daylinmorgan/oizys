@@ -26,6 +26,12 @@
     }
   ];
 
+  services.btrfs.autoScrub = enabled // {
+    # do I need also need to add /mnt/hdd seperately,
+    # since it's and independent disk?
+    fileSystems = [ "/" ];
+  };
+
   systemd.tmpfiles.rules = [
     "d /data 0755 root root - -"
     "L /data/media - - - - /mnt/hdd/media"
