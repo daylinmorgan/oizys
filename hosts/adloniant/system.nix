@@ -14,7 +14,22 @@
       "compress=zstd"
       "noatime"
     ];
+    "/mnt/hdd" = {
+      device = "/dev/disk/by-label/WD-1TB";
+      fsType = "btrfs";
+      options = [
+        "subvol=@data"
+        "noatime"
+      ];
+    };
   };
+
+  systemd.tmpfiles.rules = [
+    "d /data 0755 root root - -"
+    "L /data/media - - - - /mnt/hdd/media"
+    "L /data/torrents - - - - /mnt/hdd/torrents"
+  ];
+
   sops = {
     # This will automatically import SSH keys as age keys
     age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
