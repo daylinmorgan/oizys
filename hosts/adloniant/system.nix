@@ -14,15 +14,17 @@
       "compress=zstd"
       "noatime"
     ];
-    "/mnt/hdd" = {
-      device = "/dev/disk/by-label/WD-1TB";
-      fsType = "btrfs";
-      options = [
-        "subvol=@data"
-        "noatime"
-      ];
-    };
+    "/mnt/hdd".options = [ "noatime" ];
+    "/swap".options = [ "noatime" ];
+
   };
+
+  swapDevices = [
+    {
+      device = "/swap/swapfile";
+      size = 8 * 1024; # Creates an 8GB swap file
+    }
+  ];
 
   systemd.tmpfiles.rules = [
     "d /data 0755 root root - -"

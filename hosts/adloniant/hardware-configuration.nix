@@ -18,8 +18,7 @@
     "xhci_pci"
     "ahci"
     "nvme"
-    "usbhid"
-    "usb_storage"
+    "uas"
     "sd_mod"
   ];
   boot.initrd.kernelModules = [ ];
@@ -32,16 +31,16 @@
     options = [ "subvol=root" ];
   };
 
-  fileSystems."/home" = {
-    device = "/dev/disk/by-uuid/900667a9-ce49-49c9-b231-b85176ff90b2";
-    fsType = "btrfs";
-    options = [ "subvol=home" ];
-  };
-
   fileSystems."/nix" = {
     device = "/dev/disk/by-uuid/900667a9-ce49-49c9-b231-b85176ff90b2";
     fsType = "btrfs";
     options = [ "subvol=nix" ];
+  };
+
+  fileSystems."/home" = {
+    device = "/dev/disk/by-uuid/900667a9-ce49-49c9-b231-b85176ff90b2";
+    fsType = "btrfs";
+    options = [ "subvol=home" ];
   };
 
   fileSystems."/boot" = {
@@ -51,6 +50,18 @@
       "fmask=0022"
       "dmask=0022"
     ];
+  };
+
+  fileSystems."/mnt/hdd" = {
+    device = "/dev/disk/by-uuid/554c3e49-27aa-4924-9b67-ca2c7ee85c88";
+    fsType = "btrfs";
+    options = [ "subvol=@data" ];
+  };
+
+  fileSystems."/swap" = {
+    device = "/dev/disk/by-uuid/900667a9-ce49-49c9-b231-b85176ff90b2";
+    fsType = "btrfs";
+    options = [ "subvol=swap" ];
   };
 
   swapDevices = [ ];
