@@ -13,14 +13,16 @@ let
     prowlarr = 9696;
     qbittorrent = 8080;
   };
+  openPorts = false;
+  torrentingPort = 38878;
 in
 {
   services = {
     fwupd = enabled;
     flaresolverr = enabled;
     qbittorrent = enabled // {
-      torrentingPort = 38878;
-      openFirewall = true;
+      inherit torrentingPort;
+      openFirewall = openPorts;
     };
   }
   // (
@@ -30,7 +32,7 @@ in
       radarr
       prowlarr
     ''
-    |> lib.listifyMapToNamedAttrs (_: enabled // { openFirewall = true; })
+    |> lib.listifyMapToNamedAttrs (_: enabled // { openFirewall = openPorts; })
   )
   // {
     dnsmasq = {
@@ -75,18 +77,13 @@ in
   networking.firewall = enabled // {
 
     # Port 53 must be opened for DNS queries.
-    # Critical: DNS primarily uses UDP.
     allowedUDPPorts = [ 53 ];
 
-    # Recommended: Also allow TCP for DNS (used for large queries/zone transfers)
     allowedTCPPorts = [
-      53
+      53 # Also allow TCP for DNS (used for large queries/zone transfers)
       80
-      443
+      torrentingPort
+      # 443 no https :(
     ];
-
-    # Optional: Limit access to your local subnet (more secure)
-    # should I switch to these?
-    # allowedTCPPortRanges =
   };
 }
