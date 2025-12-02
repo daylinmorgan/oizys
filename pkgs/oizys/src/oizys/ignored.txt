@@ -6,7 +6,6 @@ nixos-help
 nixos-install
 nixos-version
 nixos-manual-html
-nixos-rebuild
 nixos-configuration-reference-manpage
 nixos-generate-config
 nixos-enter
