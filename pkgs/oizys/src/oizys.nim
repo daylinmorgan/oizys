@@ -171,8 +171,8 @@ hwylCli:
       let (output, code) = newNixCommand("build", `no-nom`)
         .withArgs(nixosAttrs())
         .withArgs("--print-out-paths", "--no-link")
-        .runCaptStdout()
         .withArgs(args)
+        .runCaptStdout()
       if code != 0:
         fatalQuit "failed to build system: " & output
 
