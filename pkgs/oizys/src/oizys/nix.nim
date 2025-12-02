@@ -93,7 +93,7 @@ proc newRebuildCommand(subcmd: NixosRebuildSubcmd, args: openArray[string], remo
     let host = getHosts()[0]
     if host == currentHost:
       fatalQuit "did you mean to specify a remote host?"
-    result.addArgs "--target-host", host, "--sudo"
+    result.addArgs "--target-host", host, "--sudo", "--ask-sudo-password"
   result.addArgs args
 
 

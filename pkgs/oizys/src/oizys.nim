@@ -25,7 +25,7 @@ proc `$`(_: typedesc[seq[KVString]]): string = "(key:val)..."
 
 hwylCli:
   name "oizys"
-  settings ShowHelp, InferEnv, LongHelp
+  settings InferEnv, LongHelp
   help:
     styles: fromBuiltinHelpStyles(AllSettings)
   flags:
@@ -144,25 +144,42 @@ hwylCli:
       args seq[string]
     flags:
       r|remote "host is remote"
-      `no-pre-build` "don't interject with oizys build"
       ^[build]
     run:
-      if not `no-pre-build` and subcmd in {switch} and not `no-nom`:
-        for part in ["path", "build.toplevel"]:
-          let attrs = nixosAttrs(part)
-          debug fmt"building: {attrs}"
-          let cmd =
-            newNixCommand("build", `no-nom`)
-              .withArgs(attrs)
-              .withArgs("--no-link")
-              .withArgs(args)
-          if not cmd.runOk:
-            fatalQuit fmt"pre nixos-rebuild build failed for attr: {attrs}"
       if nixosRebuild(subcmd, args, remote) != 0:
         fatalQuit fmt"nixos-rebuild {subcmd} failed"
       if subcmd in {switch, boot}:
         quit chezmoiStatus()
 
+    [switch]
+    ... "switch to new nixos configuration"
+    positionals:
+      args seq[string]
+    flags:
+      ^[build]
+    run:
+      if not `no-nom`:
+        let attrs = nixosAttrs("path")
+        debug fmt"pre-building {attrs}"
+        let cmd =
+          newNixCommand("build", `no-nom`)
+            .withArgs(attrs)
+            .withArgs("--no-link")
+            .withArgs(args)
+        if not cmd.runOk:
+          fatalQuit fmt"pre nixos build failed for attr: {attrs}"
+      let (output, code) = newNixCommand("build", `no-nom`)
+        .withArgs(nixosAttrs())
+        .withArgs("--print-out-paths", "--no-link")
+        .runCaptStdout()
+        .withArgs(args)
+      if code != 0:
+        fatalQuit "failed to build system: " & output
+
+      newCommand("sudo")
+        .withArgs(output.strip() / "bin" / "switch-to-configuration")
+        .withArgs("switch")
+        .runQuit()
 
     [output]
     ... "nixos config attr"

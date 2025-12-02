@@ -112,7 +112,7 @@ proc runCapt*(cmd: Command): tuple[stdout, stderr: string, exitCode: int] =
 
     # Avoid tight loops
     if not dataRead:
-      sleep(10)
+      sleep(5)
 
   # Process has ended, read any remaining data
   if p.outputHandle.hasData():
@@ -128,6 +128,54 @@ proc runCapt*(cmd: Command): tuple[stdout, stderr: string, exitCode: int] =
   result.exitCode = p.peekExitCode
   result.stdout = stdoutData
   result.stderr = stderrData
+  close(p)
+
+proc runCaptStdout*(cmd: Command): tuple[stdout: string, exitCode: int] =
+  ## like runCapt except stderr is passed through
+  debug fmt"running cmd: {cmd}"
+  let p = startProcess(cmd.exe, args = cmd.args, options = {poUsePath})
+
+  var stdoutData: string
+
+  # Get raw file descriptors
+  let stdoutFd = p.outputHandle.int.cint
+  let stderrFd = p.errorHandle.int.cint
+
+  # Main reading loop
+  while p.running():
+    var dataRead = false
+
+    # Check if stdout has data
+    if p.outputHandle.hasData():
+      let data = readAvailable(stdoutFd)
+      if data.len > 0:
+        dataRead = true
+        stdoutData.add(data)
+
+    # Check if stderr has data
+    if p.errorHandle.hasData():
+      let data = readAvailable(stderrFd)
+      if data.len > 0:
+        dataRead = true
+        stderr.write(data)
+
+    # Avoid tight loops
+    if not dataRead:
+      sleep(5)
+
+  # Process has ended, read any remaining data
+  if p.outputHandle.hasData():
+    let data = readAvailable(stdoutFd)
+    if data.len > 0:
+      stdoutData.add(data)
+
+  if p.errorHandle.hasData():
+    let data = readAvailable(stderrFd)
+    if data.len > 0:
+      stderr.write(data)
+
+  result.stdout = stdoutData
+  result.exitCode = p.peekExitCode
   close(p)
 
 proc formatSubprocessError*(s: string): BbString =
