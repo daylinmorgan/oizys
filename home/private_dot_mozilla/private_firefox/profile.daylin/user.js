@@ -265,3 +265,20 @@ user_pref("mousewheel.default.delta_multiplier_y", 275); // 250-400; adjust this
 /****************************************************************************
  * END: BETTERFOX                                                           *
  ****************************************************************************/
+
+
+
+
+/* no ai in firefox is a good amount of ai in firefox */
+user_pref("browser.ml.enable", false);
+user_pref("browser.ml.chat.enabled", false);
+user_pref("browser.ml.chat.sidebar", false);
+user_pref("browser.ml.chat.menu", false);
+user_pref("browser.ml.chat.page", false);
+user_pref("extensions.ml.enabled", false);
+user_pref("browser.ml.linkPreview.enabled", false);
+user_pref("browser.tabs.groups.smart.enabled", false);
+user_pref("browser.tabs.groups.smart.userEnabled", false);
+user_pref("pdfjs.enableAltTextModelDownload", false);
+user_pref("pdfjs.enableGuessAltText", false);
+
