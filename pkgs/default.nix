@@ -14,6 +14,7 @@ in
   procs = pkgs.callPackage ./nim/procs { };
   nimble = pkgs.callPackage ./nim/nimble { };
   nim-atlas = pkgs.callPackage ./nim/atlas { };
+  caddy-with-plugins = pkgs.callPackage ./caddy-with-plugins { };
 }
 // (import ./lix.nix { inherit flake lib pkgs; })
 // (flake.toPackageAttrs [
