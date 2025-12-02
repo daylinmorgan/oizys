@@ -294,19 +294,20 @@ proc getLixAndCo*(): seq[string] =
     if isLix(drv) or isLixDependent(drv):
       result.add drvName
 
-proc nixBuild*(minimal: bool, noNom: bool, rest: seq[string]) =
+proc getMinimalDrvs*(): seq[string] =
+  let drvs = missingDrvNixEvalJobs()
+  if drvs.len == 0:
+    info "--minimal added no derivations"
+    quit "exiting...", QuitSuccess
+  result.add drvs.fmtDrvsForNix()
+
+proc nixBuild*(noNom: bool, rest: seq[string]) =
   var cmd = newNixCommand("build", noNom)
-  if minimal:
-    debug "populating args with derivations not built/cached"
-    let drvs = missingDrvNixEvalJobs()
-    if drvs.len == 0:
-      info "nothing to build"
-      quit "exiting...", QuitSuccess
-    cmd.addArgs drvs.fmtDrvsForNix()
-    cmd.addArgs "--no-link"
+  cmd.addArgs "--no-link"
   cmd.addArgs rest
   cmd.runQuit()
 
+# TODO: do I actually use this?
 proc nixBuildHostDry*(minimal: bool, rest: seq[string]) =
   var cmd = newNixCommand("build", noNom = true)
   if minimal:

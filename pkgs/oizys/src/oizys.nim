@@ -38,6 +38,7 @@ hwylCli:
 
     [output]
     m|minimal "get [i]minimal[/] package set"
+    s|system "show system path"
     lix "get lix and lix dependents"
 
     [build]
@@ -60,14 +61,28 @@ hwylCli:
       oizysStatus(all, `check-cache`, hide)
 
     [build]
-    ... "nix build"
+    ... """
+    nix build
+
+    output flags will inject additional positional args
+    """
+    alias b
     positionals:
       args seq[string]
     flags:
-      ^minimal
+      ^[output]
       ^[build]
     run:
-      nixBuild(minimal, `no-nom`, args)
+      if minimal:
+        debug "populating args with derivations not built/cached"
+        args.add getMinimalDrvs()
+      if system:
+        debug "populating args nixos system.path"
+        args.add nixosAttrs("path")
+      if lix:
+        debug "populating args with lix and lix-dependents"
+        args.add getLixandCo().fmtDrvsForNix()
+      nixBuild(`no-nom`, args)
 
     [ci]
     ... "builtin ci"
@@ -151,9 +166,9 @@ hwylCli:
 
     [output]
     ... "nixos config attr"
+    alias o
     flags:
       ^[output]
-      s|system "show system path"
     run:
       if count([minimal, system, lix], true) > 1:
         hecho "--minimal, --system and --lix are mutually exclusive"
