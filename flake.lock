@@ -28,7 +28,6 @@
         ],
         "import-tree": "import-tree",
         "nixpkgs": [
-          "daylin-website",
           "nixpkgs"
         ],
         "systems": [
@@ -39,15 +38,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1763665238,
-        "narHash": "sha256-aJ4fhiNjt1daPjreZkKhkzmp/OSbUHFBiOP5HVfsuWE=",
-        "owner": "baileyluTCD",
+        "lastModified": 1764582711,
+        "narHash": "sha256-CaMQqIsKFGdZbJBDuJem6S68dsjSlFqtLsR6/P8y/uE=",
+        "owner": "nix-community",
         "repo": "bun2nix",
-        "rev": "12e3e87ebafa2fd1140f23a24ed5c94bf0f169d0",
+        "rev": "f791ae9e28d4ef499f4473339a06be7f31778a4c",
         "type": "github"
       },
       "original": {
-        "owner": "baileyluTCD",
+        "owner": "nix-community",
         "repo": "bun2nix",
         "type": "github"
       }
@@ -70,7 +69,9 @@
     },
     "daylin-website": {
       "inputs": {
-        "bun2nix": "bun2nix",
+        "bun2nix": [
+          "bun2nix"
+        ],
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -144,11 +145,11 @@
     },
     "import-tree": {
       "locked": {
-        "lastModified": 1762327901,
-        "narHash": "sha256-AJ96FNj50DU0bTyIzAPkPOjCZTHqjURVjok8qoXvmqM=",
+        "lastModified": 1763762820,
+        "narHash": "sha256-ZvYKbFib3AEwiNMLsejb/CWs/OL/srFQ8AogkebEPF0=",
         "owner": "vic",
         "repo": "import-tree",
-        "rev": "90fa129798be99cde036b78658e89475710966a1",
+        "rev": "3c23749d8013ec6daa1d7255057590e9ca726646",
         "type": "github"
       },
       "original": {
@@ -485,6 +486,7 @@
     "root": {
       "inputs": {
         "NixVirt": "NixVirt",
+        "bun2nix": "bun2nix",
         "crane": "crane",
         "daylin-website": "daylin-website",
         "flake-parts": "flake-parts",

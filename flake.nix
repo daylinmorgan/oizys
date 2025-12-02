@@ -79,10 +79,15 @@
 
     flake-parts.url = "github:hercules-ci/flake-parts";
 
-    daylin-website.inputs.bun2nix.inputs = {
-      treefmt-nix.follows = "treefmt-nix";
+    bun2nix.url = "github:nix-community/bun2nix";
+    bun2nix.inputs = {
+      nixpkgs.follows = "nixpkgs";
+      systems.follows = "systems";
       flake-parts.follows = "flake-parts";
+      treefmt-nix.follows = "treefmt-nix";
     };
+
+    daylin-website.inputs.bun2nix.follows = "bun2nix";
 
     ## nil inputs, I don't want *ALL* your flake inputs...
     nixos-wsl.inputs.flake-compat.follows = "";
