@@ -9,7 +9,6 @@ let
 
   inherit (builtins) mapAttrs readDir listToAttrs;
   inherit (lib) genAttrs findModulesList;
-  inherit (lib.data) substituters;
   inherit (import ./generators.nix { inherit lib self inputs; }) mkIso mkSystem;
 
   #supportedSystems = ["x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
@@ -39,13 +38,8 @@ let
     nixosModules = listToAttrs (findModulesList ../modules);
     nixosConfigurations = mapAttrs (name: _: mkSystem name) (readDir ../hosts);
     packages = forAllSystems (
-      system: pkgs:
-      rec {
-        default = oizys-nim;
-        oizys = oizys-nim;
-        oizys-nim = pkgs.callPackage ../pkgs/oizys {
-          inherit (substituters) substituters trusted-public-keys;
-        };
+      system: pkgs: {
+        default = self.packages.${system}.oizys;
        iso = (mkIso system).config.system.build.isoImage;
       }
       // (import ../pkgs {

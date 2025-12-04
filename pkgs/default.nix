@@ -9,6 +9,10 @@ let
   flake = flakeFromSystem system;
 in
 {
+  oizys = pkgs.callPackage ../pkgs/oizys {
+    inherit (lib.data.substituters) substituters trusted-public-keys;
+  };
+
   distrobox = pkgs.callPackage ./distrobox { };
   nimlangserver = pkgs.callPackage ./nim/nimlangserver { };
   procs = pkgs.callPackage ./nim/procs { };
