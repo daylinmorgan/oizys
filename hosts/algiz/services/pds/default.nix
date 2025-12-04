@@ -21,7 +21,7 @@ in
     Description=pds
 
     [Container]
-    Image=ghcr.io/bluesky-social/pds:0.4.182
+    Image=ghcr.io/bluesky-social/pds:0.4.193
     Volume=/var/lib/pds/pds:/pds:Z,U
     EnvironmentFile=${./env}
     EnvironmentFile=${config.sops.secrets.pds-env.path}
