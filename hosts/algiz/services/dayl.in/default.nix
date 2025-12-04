@@ -6,7 +6,7 @@
   services.caddy.virtualHosts = {
     "dayl.in".extraConfig = ''
       handle /* {
-        root * ${flake.pkg "daylin-website"}
+        root * ${flake.pkg "daylin-website"}/dist
         encode zstd gzip
         file_server
       }
