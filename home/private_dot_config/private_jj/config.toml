@@ -35,7 +35,7 @@ tug = ["bookmark", "move", "--from", "closest_bookmark(@-)", "--to", "@-"]
 [revsets]
 # log = '@ | ancestors(trunk()..(visible_heads() & mine()), 2) | trunk()'
 # don't show old branches by default
-log = '@ | ancestors(trunk()..(heads(all()) & author_date(after:"1 week ago")),3) | trunk()'
+log = '@ | ancestors(trunk()..(heads(all()) & author_date(after:"1 week ago")),6) | trunk()'
 # default
 # log = "present(@) | ancestors(immutable_heads().., 2) | present(trunk())"
 
