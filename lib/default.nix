@@ -1,7 +1,6 @@
 inputs@{
   nixpkgs,
   treefmt-nix,
-  crane,
   self,
   ...
 }:
@@ -47,11 +46,7 @@ let
         oizys-nim = pkgs.callPackage ../pkgs/oizys {
           inherit (substituters) substituters trusted-public-keys;
         };
-        oizys-rs = pkgs.callPackage ../pkgs/oizys-rs {
-          inherit substituters;
-          inherit (inputs) crane;
-        };
-        iso = (mkIso system).config.system.build.isoImage;
+       iso = (mkIso system).config.system.build.isoImage;
       }
       // (import ../pkgs {
         inherit
@@ -70,14 +65,6 @@ let
             openssl
             nim
             nim-atlas
-          ];
-        };
-        oizys-rs = (crane.mkLib pkgs).devShell {
-          inputsFrom = [
-            self.packages.${system}.oizys
-          ];
-          packages = with pkgs; [
-            rust-analyzer
           ];
         };
       }

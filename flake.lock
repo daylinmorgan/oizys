@@ -51,22 +51,6 @@
         "type": "github"
       }
     },
-    "crane": {
-      "locked": {
-        "lastModified": 1758758545,
-        "narHash": "sha256-NU5WaEdfwF6i8faJ2Yh+jcK9vVFrofLcwlD/mP65JrI=",
-        "owner": "ipetkov",
-        "repo": "crane",
-        "rev": "95d528a5f54eaba0d12102249ce42f4d01f4e364",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ipetkov",
-        "ref": "v0.21.1",
-        "repo": "crane",
-        "type": "github"
-      }
-    },
     "daylin-website": {
       "inputs": {
         "bun2nix": [
@@ -487,7 +471,6 @@
       "inputs": {
         "NixVirt": "NixVirt",
         "bun2nix": "bun2nix",
-        "crane": "crane",
         "daylin-website": "daylin-website",
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",

@@ -19,7 +19,6 @@
     lix-module.inputs.flake-utils.follows = "flake-utils";
     lix-module.inputs.lix.follows = "lix";
 
-    crane.url = "github:ipetkov/crane/v0.21.1";
     llm-nix.url = "github:daylinmorgan/llm-nix";
     multiviewer.url = "github:daylinmorgan/multiviewer-flake";
     niri.url = "github:YaLTeR/niri";
