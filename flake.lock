@@ -316,11 +316,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1763135129,
-        "narHash": "sha256-+dXj5ISLBGmD7jQe1rSZp5keUfz/WWyG0D0s9RVH678=",
+        "lastModified": 1764859991,
+        "narHash": "sha256-Tb2qCTvSTG/dcSQj/IJgZOFMQrLTOyoRuCgLD/faiw4=",
         "ref": "refs/heads/main",
-        "rev": "90140c75678a86cfdb5d97f2a9f2f065fae84bd5",
-        "revCount": 30,
+        "rev": "893ae51b7ea0f253aeaece0c8bb9ed71235ba1e8",
+        "revCount": 32,
         "type": "git",
         "url": "https://git.dayl.in/daylin/niriman.git"
       },
