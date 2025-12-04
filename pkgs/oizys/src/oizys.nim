@@ -175,6 +175,10 @@ hwylCli:
         .runCaptStdout()
       if code != 0:
         fatalQuit "failed to build system: " & output
+      # https://github.com/NixOS/nixpkgs/issues/82851
+      # why fix something or do it right when you can just build new features instead
+      if not Command.new("sudo", "nix-env", "-p", "/nix/var/nix/profiles/system", "--set", output.strip()).runOk:
+        fatalQuit "failed to set nix system profile"
 
       newCommand("sudo")
         .withArgs(output.strip() / "bin" / "switch-to-configuration")

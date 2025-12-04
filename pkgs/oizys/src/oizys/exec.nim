@@ -18,6 +18,9 @@ type Command* = object
   exe*: string
   args*: seq[string]
 
+func new*(T: typedesc[Command], s: string, args: varargs[string]): T =
+  T(exe: s, args: @args)
+
 func newCommand*(s: string, args: varargs[string]): Command =
   result.exe = s
   result.args = @args
