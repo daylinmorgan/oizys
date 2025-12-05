@@ -37,7 +37,7 @@ in
       ++ optional isDocker "docker"
       ++ optional isPodman "podman";
 
-      initialHashedPassword = "$2b$05$mGMrDFzf2cXLaoOlVQbGvOBV7UZlDt9dLg9Xqxutb/uHpjF5VrTBO";
+      initialHashedPassword = "$y$j9T$hRKQ4.yLNoMDV8m9A4sAy1$veJMlHOaxZQjvnrRdqZNfK61ZkQr2tdMuzXanau2Wg7";
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKkezPIhB+QW37G15ZV3bewydpyEcNlYxfHLlzuk3PH9"
       ];
