@@ -256,7 +256,7 @@ proc oizysSwitch*(noNom: bool, args: seq[string]) =
         .withArgs("--no-link")
         .withArgs(args)
     if not cmd.runOk:
-      fatalQuit fmt"pre nixos build failed for attr: {attrs}"
+      fatalQuit fmt"pre nixos build failed for attr: {attr}"
 
   if not newNixCommand("build", noNom)
     .withArgs(nixosAttrs())
