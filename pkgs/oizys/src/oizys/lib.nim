@@ -241,3 +241,39 @@ proc toOizysPackage(x: NixEvalOutput): OizysPackage =
     if x.isCached:
       for v in result.outputs.mvalues:
         v.incl Cached
+
+proc oizysSwitch*(noNom: bool, args: seq[string]) =
+  let hosts = getHosts()
+  if hosts.len > 1: fatalQuit "operation only supports one host"
+  if hosts[0] != currentHost:
+    warn bbfmt"current host is: [b]{currentHost}[/] but oizys is using host: [b]{hosts[0]}[/]"
+  if not noNom:
+    let attr = nixosAttrs("path")[0]
+    debug fmt"pre-building system-path: {attr}"
+    let cmd =
+      newNixCommand("build", noNom)
+        .withArgs(attr)
+        .withArgs("--no-link")
+        .withArgs(args)
+    if not cmd.runOk:
+      fatalQuit fmt"pre nixos build failed for attr: {attrs}"
+
+  if not newNixCommand("build", noNom)
+    .withArgs(nixosAttrs())
+    .withArgs("--no-link")
+    .withArgs(args)
+    .runOk:
+    fatalQuit "failed to build system: " & nixosAttrs()
+
+  let (output, _) = newNixCommand("build").withArgs(nixosAttrs()).withArgs("--no-link", "--print-out-paths").runCaptSpin("getting outPath")
+
+  # https://github.com/NixOS/nixpkgs/issues/82851
+  # why fix something or do it right when you can just build new features instead
+  if not Command.new("sudo", "nix-env", "-p", "/nix/var/nix/profiles/system", "--set", output.strip()).runOk:
+    fatalQuit "failed to set nix system profile"
+
+  newCommand("sudo")
+    .withArgs(output.strip() / "bin" / "switch-to-configuration")
+    .withArgs("switch")
+    .runQuit()
+
