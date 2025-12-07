@@ -11,13 +11,21 @@ creation_rules:
   - path_regex: secrets/.*\.(yaml|json|env|ini)$
     key_groups:
       - age: [*admin_daylin, *host_othalan, *host_algiz, *host_adloniant]
+
   - path_regex: hosts/othalan/.*\.(yaml|json|env|ini)$
     key_groups:
       - age:
           - *admin_daylin
           - *host_othalan
+
   - path_regex: hosts/algiz/.*\.(yaml|json|env|ini)$
     key_groups:
       - age:
           - *host_algiz
+          - *admin_daylin
+
+  - path_regex: hosts/adloniant/.*\.(yaml|json|env|ini)$
+    key_groups:
+      - age:
+          - *host_adloniant
           - *admin_daylin
