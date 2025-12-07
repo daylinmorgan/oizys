@@ -1,6 +1,7 @@
 {
   lib,
   enabled,
+  config,
   ...
 }:
 
@@ -67,6 +68,9 @@ in
           }
         );
     };
+    tailscale = enabled // {
+      authKeyFile = config.sops.secrets.tailscale-key.path;
+    };
   };
 
   networking.nameservers = [
@@ -86,4 +90,5 @@ in
       # 443 no https :(
     ];
   };
+
 }

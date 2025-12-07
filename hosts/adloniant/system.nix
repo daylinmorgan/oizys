@@ -40,10 +40,12 @@
 
   sops = {
     # This will automatically import SSH keys as age keys
+    defaultSopsFile = ./secrets.yaml;
     age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
     secrets.wg-conf = {
       sopsFile = ../../secrets/secrets.yaml;
     };
+    secrets.tailscale-key = { };
   };
 
   networking.wg-quick.interfaces = {
