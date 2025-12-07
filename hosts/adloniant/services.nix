@@ -45,6 +45,7 @@ in
         address = servicesPorts |> attrNames |> map (name: "/${name}.home.dayl.in/192.168.50.17");
         no-resolv = true;
         server = [
+          "/ts.net/100.100.100.100" # forward tailscale traffic to tailscale
           "8.8.8.8"
           "8.8.4.4"
         ];
@@ -69,7 +70,14 @@ in
         );
     };
     tailscale = enabled // {
+      openFirewall = true;
       authKeyFile = config.sops.secrets.tailscale-key.path;
+
+      extraUpFlags = [
+        # "--accept-dns=false"
+        # "--exit-node-allow-lan-access"
+      ];
+
     };
   };
 
@@ -80,14 +88,17 @@ in
 
   networking.firewall = enabled // {
 
+    # why is this needed for tailscale?
+    checkReversePath = "loose";
+
     # Port 53 must be opened for DNS queries.
     allowedUDPPorts = [ 53 ];
 
     allowedTCPPorts = [
       53 # Also allow TCP for DNS (used for large queries/zone transfers)
       80
+      443
       torrentingPort
-      # 443 no https :(
     ];
   };
 
