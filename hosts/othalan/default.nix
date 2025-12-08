@@ -40,7 +40,8 @@
     };
 
   };
-  services.tailscale = enabled;
+
+  # services.tailscale = enabled;
 
   services.restic.backups.gdrive = {
     user = "daylin";
