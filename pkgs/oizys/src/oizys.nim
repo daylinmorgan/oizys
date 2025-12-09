@@ -148,7 +148,7 @@ hwylCli:
     run:
       if nixosRebuild(subcmd, args, remote) != 0:
         fatalQuit fmt"nixos-rebuild {subcmd} failed"
-      if subcmd in {switch, boot}:
+      if subcmd in {switch, boot} and not remote:
         quit chezmoiStatus()
 
     [switch]
