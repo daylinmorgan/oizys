@@ -69,19 +69,20 @@
     # zls.inputs.zig-overlay.follows = "zig-overlay";
 
     # indirect deps
-    rust-overlay.url = "github:oxalica/rust-overlay";
-    bun2nix.url = "github:nix-community/bun2nix";
-    systems.url = "github:nix-systems/x86_64-linux";
     flake-parts.url = "github:hercules-ci/flake-parts";
-    lib-aggregate.url = "github:nix-community/lib-aggregate";
-    nixpkgs-lib.url = "github:nix-community/nixpkgs.lib";
+    flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs-lib";
     flake-utils.url = "github:numtide/flake-utils";
     flake-utils.inputs.systems.follows = "systems";
-    flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs-lib";
+    lib-aggregate.url = "github:nix-community/lib-aggregate";
     lib-aggregate.inputs.flake-utils.follows = "flake-utils";
     lib-aggregate.inputs.nixpkgs-lib.follows = "nixpkgs-lib";
     niri.inputs.rust-overlay.follows = "rust-overlay";
+    nixpkgs-lib.url = "github:nix-community/nixpkgs.lib";
+    rust-overlay.url = "github:oxalica/rust-overlay";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    systems.url = "github:nix-systems/x86_64-linux";
+
+    bun2nix.url = "github:nix-community/bun2nix";
     bun2nix.inputs = {
       nixpkgs.follows = "nixpkgs";
       systems.follows = "systems";
