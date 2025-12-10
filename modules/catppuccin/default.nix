@@ -29,7 +29,7 @@ in
         "vt.default_blu=46,168,161,175,250,231,213,222,112,168,161,175,250,231,213,200"
       ];
     })
-    (mkIf config.oizys.desktop.enable {
+    (mkIf (config.oizys.desktop.enable && cfg.enable) {
       environment.systemPackages = with pkgs; [
         (catppuccin-gtk.override {
           accents = [ "pink" ];
