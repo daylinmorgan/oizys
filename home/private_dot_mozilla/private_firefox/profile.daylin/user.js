@@ -47,8 +47,9 @@ user_pref("pdfjs.enableAltTextModelDownload", false);
 user_pref("pdfjs.enableGuessAltText", false);
 
 
-// https://github.com/SakuraMeadows/Sakuras-Simple-Sidebar
-user_pref("sidebar.revamp", false):
+user_pref("sidebar.revamp", false);
 user_pref("sidebar.old-sidebar.has-used", true);
-//user_pref("svg.context-properties.content.enabled", true);
 user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
+
+
+
