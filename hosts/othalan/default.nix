@@ -1,14 +1,13 @@
 {
   config,
-  enabled,
   lib,
   ...
 }:
 {
   oizys = {
-    nix-ld = enabled // {
-      overkill = enabled;
-    };
+    # nix-ld = enabled // {
+    #   overkill = enabled;
+    # };
   };
 
   sops = {
