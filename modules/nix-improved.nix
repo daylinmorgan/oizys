@@ -15,7 +15,7 @@
 
   environment.systemPackages = with pkgs; [
     nixd
-    nixfmt-rfc-style
+    nixfmt
     nix-output-monitor
     nix-eval-jobs
   ];
