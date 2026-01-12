@@ -1698,7 +1698,7 @@
     _p9k_upglob '.jj' && return
 
     local template='concat(separate(" ",
-      format_short_change_id_with_hidden_and_divergent_info(self),
+      format_commit_labels(self),
       bookmarks, tags,
       if(conflict, label("conflict", "conflict")),
       if(empty, label("empty", "(E)")),
