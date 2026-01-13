@@ -24,3 +24,10 @@ gen rye self completion -s zsh
 gen gh completion -s zsh
 gen pixi completion -s zsh
 gen rclone completion zsh -
+
+# jj is "special"
+
+if is-exe "jj"; then
+  COMPLETE=zsh jj > _jj
+fi
+
