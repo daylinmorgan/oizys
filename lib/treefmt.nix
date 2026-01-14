@@ -7,7 +7,9 @@ treefmt-nix: pkgs:
     settings.excludes = [
       # likely to be nnl lockfiles
       "pkgs/**/lock.json"
+
       "hosts/**/secrets.yaml"
+      "secrets/**"
     ];
     settings.on-unmatched = "debug";
     programs.prettier.enable = true;
