@@ -46,10 +46,6 @@ user_pref("browser.tabs.groups.smart.userEnabled", false);
 user_pref("pdfjs.enableAltTextModelDownload", false);
 user_pref("pdfjs.enableGuessAltText", false);
 
-
 user_pref("sidebar.revamp", false);
 user_pref("sidebar.old-sidebar.has-used", true);
 user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
-
-
-
