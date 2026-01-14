@@ -19,6 +19,7 @@ in
   nimble = pkgs.callPackage ./nim/nimble { };
   nim-atlas = pkgs.callPackage ./nim/atlas { };
   caddy-with-plugins = pkgs.callPackage ./caddy-with-plugins { };
+  firefox = pkgs.callPackage ./firefox { };
 }
 // (import ./lix.nix { inherit flake lib pkgs; })
 // (flake.toPackageAttrs [
