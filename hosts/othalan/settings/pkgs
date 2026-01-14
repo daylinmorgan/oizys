@@ -3,7 +3,6 @@ flake:multiviewer
 ghostty
 sops
 distrobox
-firefox
 zk
 graphviz
 charm-freeze
@@ -11,3 +10,4 @@ trashy
 # quarto
 calibre
 attic-client
+self:firefox

@@ -217,6 +217,7 @@ let
   # convert the following:
   # ```txt
   # flake:utils
+  # self:firefox
   # sops
   # graphviz
   # ```
@@ -224,6 +225,7 @@ let
   # ```nix
   # [
   #   (flake.pkg "utils")
+  #   (flake.pkgs "self").firefox
   #   pkgs.sops
   #   pkgs.graphviz
   # ]
@@ -239,7 +241,13 @@ let
     |> (p: "${p}/settings/pkgs")
     |> tryReadLinesNoComment
     |> map (
-      line: if hasPrefix "flake:" line then (line |> removePrefix "flake:" |> flake.pkg) else pkgs.${line}
+      line:
+      if hasPrefix "flake:" line then
+        (line |> removePrefix "flake:" |> flake.pkg)
+      else if hasPrefix "self:" line then
+        (line |> removePrefix "self:" |> (n: (flake.pkgs "self").${n}))
+      else
+        pkgs.${line}
     );
 in
 {
