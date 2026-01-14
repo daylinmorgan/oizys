@@ -12,4 +12,3 @@ pkgs.caddy.withPlugins {
   hash = "<hash>";
 }
 ```
-

@@ -30,21 +30,21 @@ mkOizysModule config "niri" {
   systemd.user.services = {
     mako = niriService {
       serviceConfig = {
-        ExecStart = ''${pkgs.mako}/bin/mako'';
+        ExecStart = "${pkgs.mako}/bin/mako";
         Restart = "on-failure";
       };
     };
 
     udiskie = niriService {
       serviceConfig = {
-        ExecStart = ''${pkgs.udiskie}/bin/udiskie'';
+        ExecStart = "${pkgs.udiskie}/bin/udiskie";
         Restart = "on-failure";
       };
     };
 
     kanshi = niriService {
       serviceConfig = {
-        ExecStart = ''${pkgs.kanshi}/bin/kanshi'';
+        ExecStart = "${pkgs.kanshi}/bin/kanshi";
         Restart = "on-failure";
       };
     };

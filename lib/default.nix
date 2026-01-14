@@ -38,9 +38,10 @@ let
     nixosModules = listToAttrs (findModulesList ../modules);
     nixosConfigurations = mapAttrs (name: _: mkSystem name) (readDir ../hosts);
     packages = forAllSystems (
-      system: pkgs: {
+      system: pkgs:
+      {
         default = self.packages.${system}.oizys;
-       iso = (mkIso system).config.system.build.isoImage;
+        iso = (mkIso system).config.system.build.isoImage;
       }
       // (import ../pkgs {
         inherit

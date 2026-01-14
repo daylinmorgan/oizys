@@ -14,7 +14,7 @@ let
   ];
   secretsVolumes =
     secretsNames
-    |> map (name: ''Volume=${config.sops.secrets."forgejo-${name}".path}:/etc/forgejo/secrets/${name}'')
+    |> map (name: "Volume=${config.sops.secrets."forgejo-${name}".path}:/etc/forgejo/secrets/${name}")
     |> lib.concatStringsSep "\n";
   sshPort = toString 2222;
 

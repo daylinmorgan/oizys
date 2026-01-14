@@ -55,10 +55,10 @@ let
       modules = [
         { nixpkgs.hostPlatform = system; }
       ]
-      ++ (selfModules ''oizys'')
-      ++ (nixosModules ''sops-nix'')
+      ++ (selfModules "oizys")
+      ++ (nixosModules "sops-nix")
       ++ (hostFiles hostName)
-      ++ (if lib.data.lixModule then (nixosModules ''lix-module'') else (selfModules "lix"));
+      ++ (if lib.data.lixModule then (nixosModules "lix-module") else (selfModules "lix"));
 
       specialArgs = commonSpecialArgs // {
         inherit
