@@ -1,11 +1,12 @@
 {
-  config,
   lib,
+  config,
+  enabled,
   ...
 }:
 {
   oizys = {
-    # nix-ld = enabled // {
+    nix-ld = enabled; #// {
     #   overkill = enabled;
     # };
   };
