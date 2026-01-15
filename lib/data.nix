@@ -12,5 +12,8 @@
     ];
   };
   nixpkgs-overlays = { };
-  self-overlays = [ "nim-atlas" ];
+  self-overlays = [
+    "nim-atlas"
+    "firefox"
+  ];
 }
