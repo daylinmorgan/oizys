@@ -2,11 +2,11 @@
   "depends": [
     {
       "method": "fetchzip",
-      "path": "/nix/store/h8p644n9ypf964mx6g66lwpyqr7idxis-source",
-      "rev": "6cd8c0cbc4ed46ddd43d3e00f0f1d465351f043e",
-      "sha256": "1zv1i4wn61bbd5yq0gs4cim9v8i0nd3mgbzakpsb6ip0sx568i4a",
+      "path": "/nix/store/gblhq5xz45fsk6pcg1d9d5d52r2m879h-source",
+      "rev": "f344ca2dc852f62c812e6c203f85cdc14c768561",
+      "sha256": "1f6xwkld08mvhsdbnck1af03jq40nnw41m4lzwcpbfv6lkg2y2c0",
       "srcDir": "src",
-      "url": "https://github.com/nim-lang/sat/archive/6cd8c0cbc4ed46ddd43d3e00f0f1d465351f043e.tar.gz",
+      "url": "https://github.com/nim-lang/sat/archive/f344ca2dc852f62c812e6c203f85cdc14c768561.tar.gz",
       "subDir": "",
       "packages": [
         "sat"
