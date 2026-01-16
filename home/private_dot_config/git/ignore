@@ -3,6 +3,8 @@ tmp/
 _TODO.md
 .todo.md
 
+dmscratch.*
+
 # LibreOffice locks
 .~lock.*#
 
