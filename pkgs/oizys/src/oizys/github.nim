@@ -111,7 +111,7 @@ proc `%`*(table: StringTableRef): JsonNode =
   result = newJObject()
   for k, v in table: result[k] = %v
 
-proc createDispatch*(workflowFileName: string, `ref`: string, inputs: StringTableRef, open = false) =
+proc createDispatch*(workflowFileName: string, `ref`: string, inputs: StringTableRef, open = false, timeout: int) =
   ## https://docs.github.com/en/rest/actions/workflows?apiVersion=2022-11-28#create-a-workflow-dispatch-event
   let workflow =
     if workflowFileName.endsWith(".yml") or workflowFileName.endsWith(".yaml"): workflowFileName
@@ -123,7 +123,7 @@ proc createDispatch*(workflowFileName: string, `ref`: string, inputs: StringTabl
    fmt"https://api.github.com/repos/daylinmorgan/oizys/actions/workflows/{workflow}/dispatches",
    body
   )
-  case getInProgressRun(workflow)
+  case getInProgressRun(workflow, timeout * 1000)
   of Some(run):
     info "view workflow run at: " & run.html_url
     if open:

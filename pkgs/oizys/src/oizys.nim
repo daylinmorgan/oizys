@@ -124,9 +124,10 @@ hwylCli:
       inputs(seq[KVString], "inputs for dispatch")
       `ref`("main", string, "git ref/branch/tag to trigger workflow on")
       `open`("open successfully dispatched workflow")
+      timeout(10, int, "duration to check for active workflow")
     run:
       let inputs = prepGhaInputs(inputs)
-      createDispatch(workflow, `ref`, inputs, open)
+      createDispatch(workflow, `ref`, inputs, open, timeout)
 
     [dry]
     ... "dry run build"
