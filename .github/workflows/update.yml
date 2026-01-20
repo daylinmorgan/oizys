@@ -67,6 +67,11 @@ jobs:
           nix build '.#oizys'
           attic push oizys ./result
 
+      - name: Pre-build lix-and-co
+        run: |
+          nix build . -- "$(nix run . -- --lix)" -o lix
+          attic push ./lix-*
+
       - name: Build
         run: >
           nix run '.#oizys'
