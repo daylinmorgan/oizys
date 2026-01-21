@@ -15,6 +15,7 @@
     ./dayl.in
     ./gotosocial
     ./pds
+    ./yamtrack
   ];
 
   services = {

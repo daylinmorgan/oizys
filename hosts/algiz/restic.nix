@@ -16,6 +16,7 @@ let
     soft-serve
     gotosocial
     pds
+    yamtrack
   '';
   paths = (varLibPaths |> prefixPaths "/var/lib");
 in
