@@ -1,12 +1,9 @@
-# podman run -d --name linkding -p 9090:9090 -v ./data:/etc/linkding/data sissbruecker/linkding:latest
-# quadlet to replicate above settings
-
 [Unit]
 Description=Linkding
 
 [Container]
 # Image=sissbruecker/linkding:1.44.1-plus-alpine
-Image=sissbruecker/linkding@sha256:6f2b14b6198b55682d5ef52ca1fb63493f99ef8b0c63cc1dd73595dbf1a07c6c
+Image=ghcr.io/sissbruecker/linkding@sha256:6f2b14b6198b55682d5ef52ca1fb63493f99ef8b0c63cc1dd73595dbf1a07c6c
 Volume=/var/lib/linkding/data/:/etc/linkding/data
 PublishPort=9090:9090
 

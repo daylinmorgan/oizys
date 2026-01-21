@@ -11,7 +11,7 @@
     Description=otterwiki
 
     [Container]
-    Image=redimp/otterwiki:2-slim
+    Image=docker.io/redimp/otterwiki:2-slim
     Volume=/var/lib/otterwiki/app-data/:/app-data:Z,U
     Volume=${./custom}:/app/otterwiki/static/custom:ro
     PublishPort=8721:8080
