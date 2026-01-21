@@ -8,7 +8,7 @@
     ./caddy
     ./nix-cache
     ./continuwuity
-    ./linkding
+    # ./linkding
     ./otterwiki
     ./soft-serve
     ./forgejo
