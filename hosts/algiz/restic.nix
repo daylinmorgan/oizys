@@ -13,7 +13,7 @@ let
     forgejo
     linkding
     otterwiki
-    soft
+    soft-serve
     gotosocial
     pds
   '';
