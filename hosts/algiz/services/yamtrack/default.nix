@@ -19,7 +19,7 @@
       [Container]
       ContainerName=yamtrack-redis
       Image=docker.io/library/redis:8-alpine
-      Volume=/var/lib/yamtrack/redis:/data:Z
+      Volume=/var/lib/yamtrack/redis:/data:Z,U
       Network=yamtrack.network
 
       [Service]
@@ -43,7 +43,7 @@
       Environment=REDIS_URL=redis://yamtrack-redis:6379
       Environment=URLS=https://yamtrack.dayl.in
       PublishPort=8565:8000
-      Volume=/var/lib/yamtrack/db:/yamtrack/db:Z
+      Volume=/var/lib/yamtrack/db:/yamtrack/db:Z,U
       Network=yamtrack.network
 
       [Service]
