@@ -28,7 +28,7 @@
     Description=continuwuity
 
     [Container]
-    Image=forgejo.ellis.link/continuwuation/continuwuity:v0.5.3
+    Image=forgejo.ellis.link/continuwuation/continuwuity:v0.5.4
     Volume=/var/lib/continuwuity/data/:/var/lib/continuwuity:Z,U
     EnvironmentFile=${./env}
     EnvironmentFile=${config.sops.secrets.continuwuity-env.path}
