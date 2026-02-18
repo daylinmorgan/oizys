@@ -57,6 +57,7 @@
   # Ensure the host directory for the bind mount exists
   systemd.tmpfiles.rules = [
     "d /var/lib/yamtrack/db 0750 root root -"
-    "d /var/lib/yamtrack/redis 0750 root root -"
+    # Redis default UID should be 999
+    "d /var/lib/yamtrack/redis 0750 999 999 -"
   ];
 }
