@@ -43,7 +43,7 @@ require("lazy").setup({
     import_if_exe("cargo", "plugins.language.rust" ),
     import_if_exe("typst", "plugins.language.typst" ),
     import_if_exe("roc", "plugins.language.roc" ),
-    -- import_if_exe("zig", "plugins.language.zig" ),
+    import_if_exe("zig", "plugins.language.zig" ),
     --
   },
   rocks = {
