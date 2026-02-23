@@ -6,7 +6,7 @@
 }:
 {
   oizys = {
-    nix-ld = enabled; #// {
+    nix-ld = enabled; # // {
     #   overkill = enabled;
     # };
   };
