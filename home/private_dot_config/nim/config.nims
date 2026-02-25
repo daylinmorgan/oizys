@@ -178,7 +178,7 @@ task chk, fmt"run nim check, default: {name}":
   else:
     setCommand "check",""
 
-task test, "run tests/tester.nim":
+task tester, "run tests/tester.nim":
   const tester = projectDir() / "tests" / "tester.nim"
   if fileExists tester:
     setCommand "r",  tester
