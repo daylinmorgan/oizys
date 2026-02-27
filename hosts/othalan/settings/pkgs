@@ -8,6 +8,6 @@ graphviz
 charm-freeze
 trashy
 # quarto
-calibre
+# calibre # waiting for 493988 to be merged
 attic-client
 firefox
