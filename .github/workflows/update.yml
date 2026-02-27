@@ -70,7 +70,7 @@ jobs:
       - name: Pre-build lix-and-co
         run: |
           DRVS="$(nix run . -- output --lix --host,="${{ env.hosts }}")"
-          nix build --out-link 'lix' -- $DRVS
+          nix build --out-link 'lix' --print-build-logs -- $DRVS
           attic push oizys ./lix*
           rm -rf ./lix*
 
