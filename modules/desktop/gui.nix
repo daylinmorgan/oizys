@@ -35,7 +35,7 @@ in
 
       zotero
 
-      libreoffice-qt
+      libreoffice-qt-fresh
       hunspell # spell check for libreoffice
 
       feh

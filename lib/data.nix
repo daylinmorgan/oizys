@@ -14,7 +14,7 @@
   ## nixpkgs-unstable = { pkg = PR-num };
   nixpkgs-overlays = {
     nixpkgs-unstable = {
-      libreoffice = 494721;
+      libreoffice-qt-fresh = 494721;
     };
   };
   self-overlays = [
