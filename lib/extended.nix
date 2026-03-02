@@ -144,7 +144,8 @@ let
   loadNixpkgOverlay = final: name: {
     inherit name;
     value = import inputs."${name}" {
-      inherit (final) system config;
+      inherit (final) config;
+      localSystem = final.stdenv.hostPlatform.system;
     };
   };
 
@@ -162,7 +163,8 @@ let
     let
       nixpkgs = (
         import inputs.${nixpkgsInput} {
-          inherit (final) system config;
+          inherit (final) config;
+          localSystem = final.stdenv.hostPlatform.system;
         }
       );
     in
