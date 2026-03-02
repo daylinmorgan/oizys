@@ -283,8 +283,6 @@ proc ghRepoCompare(owner: string, repo: string, base: string, head: string): GhC
     ).body,
     typeof(result)
   )
-  
-  # "status": "behind",
 
 proc prInBranch(owner: string, repo: string, branch: GhBranch,  pr: GhPullResponse): bool =
   if not pr.merged:
