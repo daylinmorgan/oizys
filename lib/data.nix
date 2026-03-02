@@ -11,7 +11,8 @@
       "oizys:2Sdu3lyOnNLeEYF2A3Hu3S5uqFQRe66DNwuFDneQs4M="
     ];
   };
-  nixpkgs-overlays = { };
+  ## nixpkgs-unstable = [ "pkg" #PR ];
+  nixpkgs-overlays = {};
   self-overlays = [
     "nim-atlas"
     "firefox"
