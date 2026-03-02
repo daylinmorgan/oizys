@@ -11,8 +11,12 @@
       "oizys:2Sdu3lyOnNLeEYF2A3Hu3S5uqFQRe66DNwuFDneQs4M="
     ];
   };
-  ## nixpkgs-unstable = [ "pkg" #PR ];
-  nixpkgs-overlays = {};
+  ## nixpkgs-unstable = { pkg = PR-num };
+  nixpkgs-overlays = {
+    nixpkgs-unstable = {
+      libreoffice = 494721;
+    };
+  };
   self-overlays = [
     "nim-atlas"
     "firefox"
