@@ -84,12 +84,21 @@ proc postGhApi(url: string, body: JsonNode) =
   if response.code != Http204:
     errorQuit "failed to post github api request"
 
+proc isRecent(run:  GhWorkflowRun, start: Datetime): bool =
+  let start = start.utc()
+  if run.created_at.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", utc()) >= start:
+    return true
+  if run.updated_at.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", utc()) >= start:
+    return true
+
+func isRunning(run: GhWorkflowRun): bool =
+  run.status in ["in_progress", "queued", "pending"]
 
 proc getInProgressRun(
   workflow: string,
   timeout: int = 10000
 ): Opt[GhWorkflowRun] =
-  ## wait up to 10 seconds to try to fetch ongoing run url
+  ## wait until timeout in milliseconds to try to fetch ongoing run url
   let
     start = now()
     timeoutDuration = initDuration(milliseconds = timeout)
@@ -98,10 +107,9 @@ proc getInProgressRun(
     while (now() - start) < timeoutDuration:
       let response = getGhApi(fmt"https://api.github.com/repos/daylinmorgan/oizys/actions/workflows/{workflow}/runs")
       let runs = fromJson(response.body,  ListGhWorkflowResponse).workflow_runs
-      let isRunning = runs[0].status in ["in_progress", "queued"]
-      let isRecent = runs[0].created_at.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", utc()) > start
-      if isRunning and isRecent:
-        return ok runs[0]
+      let run = runs[0]
+      if run.isRunning and run.isRecent(start):
+        return ok run
       sleep 500
 
   warn "timeout reached waiting for workflow to start"
