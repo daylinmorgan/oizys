@@ -12,11 +12,7 @@
     ];
   };
   ## nixpkgs-unstable = { pkg = PR-num };
-  nixpkgs-overlays = {
-    nixpkgs-unstable = {
-      libreoffice-qt-fresh = 494721;
-    };
-  };
+  nixpkgs-overlays = {};
   self-overlays = [
     "nim-atlas"
     "firefox"
