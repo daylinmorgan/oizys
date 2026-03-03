@@ -28,6 +28,16 @@ proc getBuildHash*(installable: string): string =
     stderr.write formatStdoutStderr(output, err) & "\n"
     fatalQuit "failed to find update hash from above output"
 
+proc setHashInFile*(hash, file, attr: string) =
+  info fmt"setting {attr} in {file}"
+  let content = readFile(file)
+  if attr notin content:
+    fatalQuit bbfmt"unable to find [b]'{attr}'[/] in [b]{file}[/]"
+  let newContent = content.replace(fmt("{attr} = \"\";"), fmt"""{attr} = "{hash}";""")
+  if content == newContent:
+    fatalQuit bbfmt"failed to replace attr: [b]{attr}[/]"
+  writeFile(file, newContent)
+
 proc getCaches(): seq[string] =
   ## use nix to get the current cache urls
   debug "determing caches to check"

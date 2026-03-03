@@ -206,14 +206,21 @@ hwylCli:
       installable string
     flags:
       `no-copy` "don't copy to clipboard"
+      file(string, "path/to/file")
+      attr(string, "attribute name to replace")
     run:
+      if [file != "", attr != ""].filterIt(it).len == 1:
+        hwylCliError("[b]file[/] and [b]attr[/] flags must both be specificed")
       let hash = getBuildHash(installable)
-      stdout.write hash
-      if not `no-copy`:
-        if newCommand("wl-copy").withArgs(hash).runOk():
-          hecho "copied to clipboard!"
-        else:
-          hecho bb"[red]error[/]: failed to copy to clipboard with wl-copy"
+      if file != "":
+        setHashInFile(hash, file, attr)
+      else:
+        stdout.write hash
+        if not `no-copy`:
+          if newCommand("wl-copy").withArgs(hash).runOk():
+            hecho "copied to clipboard!"
+          else:
+            hecho bb"[red]error[/]: failed to copy to clipboard with wl-copy"
 
     [narinfo]
     ... """
