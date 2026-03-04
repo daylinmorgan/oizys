@@ -3,7 +3,7 @@ nim
 node
 nushell
 python
-tex
+# tex
 typst
 rust
 # roc
