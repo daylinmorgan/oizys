@@ -4,8 +4,8 @@
 caddy.overrideAttrs (
   finalAttrs: prevAttrs: {
     name = "caddy-with-plugins";
-    version = "2.10.2";
+    version = "2.11.2";
     src = ./.;
-    vendorHash = "sha256-fArwOEan5FtuIXdEDn/QVduKKFQBmREWECl2iHrkukE=";
+    vendorHash = "sha256-XzxMVlxOPRqyjXz4lI6Pw+th78OOCpmYSvbO83gyu9E=";
   }
 )
