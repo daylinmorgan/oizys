@@ -62,12 +62,6 @@
     utils.inputs.nixpkgs.follows = "nixpkgs";
     utils.inputs.nim2nix.follows = "nim2nix";
 
-    # zig-overlay.url = "github:mitchellh/zig-overlay";
-    # zig-overlay.inputs.nixpkgs.follows = "nixpkgs";
-    # zls.url = "github:zigtools/zls";
-    # zls.inputs.nixpkgs.follows = "nixpkgs";
-    # zls.inputs.zig-overlay.follows = "zig-overlay";
-
     # indirect deps
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs-lib";
