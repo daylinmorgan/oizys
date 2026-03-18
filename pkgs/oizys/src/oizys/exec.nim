@@ -1,4 +1,4 @@
-import std/[osproc, strformat, os, strutils, streams, logging, selectors, posix]
+import std/[os, osproc, strformat, strutils, logging, selectors, posix]
 
 import hwylterm
 
@@ -49,137 +49,71 @@ proc runOk*(c: Command): bool =
 proc runQuit*(cmd: Command) =
   quit cmd.run()
 
-#[
-  hasData, readAvailable, runCapt
-  partially generated with the help of claude ¯\_(ツ)_/¯
-]#
-
-proc hasData(handle: FileHandle, timeoutMs: int = 10): bool =
-  var selector = newSelector[int]()
-  selector.registerHandle(handle.int.FileHandle, {Event.Read}, 0)
-  result = selector.select(timeoutMs).len > 0
-  selector.close()
-
 proc readAvailable(fd: cint): string =
-  # Get current flags
   let oldFlags = fcntl(fd, F_GETFL, 0)
-
-  # Set non-blocking
   discard fcntl(fd, F_SETFL, oldFlags or O_NONBLOCK)
-
-  var
-    buffer = newString(4096)
-    bytesRead: int
-
-  # Read in chunks until no more data
+  var buffer = newString(4096)
   while true:
-    bytesRead = read(fd, addr buffer[0], buffer.len)
-
+    let bytesRead = read(fd, addr buffer[0], buffer.len)
     if bytesRead > 0:
       result.add(buffer[0 ..< bytesRead])
+    elif bytesRead == 0:
+      break
     else:
-      break # No more data or error
-
-  # Restore flags
+      if errno == EAGAIN or errno == EWOULDBLOCK:
+        break
+      else:
+        break
   discard fcntl(fd, F_SETFL, oldFlags)
 
-  return result
+type StderrMode = enum smCapture, smPassthrough
 
-proc runCapt*(cmd: Command): tuple[stdout, stderr: string, exitCode: int] =
+proc runCaptImpl(
+    cmd: Command, stderrMode: StderrMode
+): tuple[stdout, stderr: string, exitCode: int] =
   debug fmt"running cmd: {cmd}"
   let p = startProcess(cmd.exe, args = cmd.args, options = {poUsePath})
 
-  var stdoutData, stderrData: string
-
-  # Get raw file descriptors
   let stdoutFd = p.outputHandle.int.cint
   let stderrFd = p.errorHandle.int.cint
 
-  # Main reading loop
+  var selector = newSelector[int]()
+  selector.registerHandle(p.outputHandle.int.FileHandle, {Event.Read}, 0)
+  selector.registerHandle(p.errorHandle.int.FileHandle, {Event.Read}, 1)
+
   while p.running():
-    var dataRead = false
-
-    # Check if stdout has data
-    if p.outputHandle.hasData():
-      let data = readAvailable(stdoutFd)
+    for ev in selector.select(10):
+      let isStdout = ev.fd == stdoutFd.int
+      let data = readAvailable(if isStdout: stdoutFd else: stderrFd)
       if data.len > 0:
-        stdoutData.add(data)
-        dataRead = true
+        if isStdout:
+          result.stdout.add data
+        else:
+          case stderrMode
+          of smCapture: result.stderr.add data
+          of smPassthrough: stderr.write data
 
-    # Check if stderr has data
-    if p.errorHandle.hasData():
-      let data = readAvailable(stderrFd)
-      if data.len > 0:
-        stderrData.add(data)
-        dataRead = true
+  # drain any remaining data after process exits
+  let outRem = readAvailable(stdoutFd)
+  if outRem.len > 0:
+    result.stdout.add outRem
+  let errRem = readAvailable(stderrFd)
+  if errRem.len > 0:
+    case stderrMode
+    of smCapture: result.stderr.add errRem
+    of smPassthrough: stderr.write errRem
 
-    # Avoid tight loops
-    if not dataRead:
-      sleep(5)
+  selector.close()
+  result.exitCode = p.waitForExit()
+  p.close()
 
-  # Process has ended, read any remaining data
-  if p.outputHandle.hasData():
-    let data = readAvailable(stdoutFd)
-    if data.len > 0:
-      stdoutData.add(data)
-
-  if p.errorHandle.hasData():
-    let data = readAvailable(stderrFd)
-    if data.len > 0:
-      stderrData.add(data)
-
-  result.exitCode = p.peekExitCode
-  result.stdout = stdoutData
-  result.stderr = stderrData
-  close(p)
+proc runCapt*(cmd: Command): tuple[stdout, stderr: string, exitCode: int] =
+  runCaptImpl(cmd, smCapture)
 
 proc runCaptStdout*(cmd: Command): tuple[stdout: string, exitCode: int] =
   ## like runCapt except stderr is passed through
-  debug fmt"running cmd: {cmd}"
-  let p = startProcess(cmd.exe, args = cmd.args, options = {poUsePath})
-
-  var stdoutData: string
-
-  # Get raw file descriptors
-  let stdoutFd = p.outputHandle.int.cint
-  let stderrFd = p.errorHandle.int.cint
-
-  # Main reading loop
-  while p.running():
-    var dataRead = false
-
-    # Check if stdout has data
-    if p.outputHandle.hasData():
-      let data = readAvailable(stdoutFd)
-      if data.len > 0:
-        dataRead = true
-        stdoutData.add(data)
-
-    # Check if stderr has data
-    if p.errorHandle.hasData():
-      let data = readAvailable(stderrFd)
-      if data.len > 0:
-        dataRead = true
-        stderr.write(data)
-
-    # Avoid tight loops
-    if not dataRead:
-      sleep(5)
-
-  # Process has ended, read any remaining data
-  if p.outputHandle.hasData():
-    let data = readAvailable(stdoutFd)
-    if data.len > 0:
-      stdoutData.add(data)
-
-  if p.errorHandle.hasData():
-    let data = readAvailable(stderrFd)
-    if data.len > 0:
-      stderr.write(data)
-
-  result.stdout = stdoutData
-  result.exitCode = p.peekExitCode
-  close(p)
+  let r = runCaptImpl(cmd, smPassthrough)
+  (r.stdout, r.exitCode)
 
 proc formatSubprocessError*(s: string): BbString =
   for line in s.strip().splitLines():
