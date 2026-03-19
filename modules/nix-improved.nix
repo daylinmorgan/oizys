@@ -33,7 +33,7 @@
   # not setup to use lix... (could switch back to nvd)
   system.activationScripts.diff = ''
     if [[ -e /run/current-system ]]; then
-      ${pkgs.dix}/bin/dix /run/current-system "$systemConfig"
+      ${pkgs.dix}/bin/dix --color always /run/current-system "$systemConfig"
     fi
   '';
 
