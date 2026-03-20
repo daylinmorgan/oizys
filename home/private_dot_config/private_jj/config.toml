@@ -54,9 +54,17 @@ concat(
 '''
 
 [template-aliases]
+'format_diff_stat(commit)' = '''
+"(" ++
+separate(" ",
+  commit.diff().stat().files().len(),
+  label("lines_added", "+" ++ commit.diff().stat().total_added()),
+  label("lines_removed", "-" ++ commit.diff().stat().total_removed())
+) ++ ")"
+'''
+
 # adapted from builtin_log_oneline
 # https://github.com/jj-vcs/jj/blob/41b8d432e770f0ba2e5c75078dad956521cfd0a3/cli/src/config/templates.toml#L160-L189
-# log_oneline = '''
 log_oneline = 'log_oneline(self)'
 'log_oneline(commit)' = '''
 if(commit.root(),
@@ -78,7 +86,7 @@ if(commit.root(),
       commit.bookmarks(),
       commit.tags(),
       commit.working_copies(),
-      if(commit.empty(), empty_commit_marker)
+      if(commit.empty(), empty_commit_marker,format_diff_stat(commit))
     ) ++ "\n",
   )
 )
@@ -93,3 +101,7 @@ if(commit.root(),
 [experimental-advance-branches]
 enabled-branches = ["glob:*"]
 disabled-branches = ["main", "trunk"]
+
+[colors]
+lines_added = "green"
+lines_removed = "red"
