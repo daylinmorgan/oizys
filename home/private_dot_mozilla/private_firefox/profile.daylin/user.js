@@ -49,3 +49,7 @@ user_pref("pdfjs.enableGuessAltText", false);
 user_pref("sidebar.revamp", false);
 user_pref("sidebar.old-sidebar.has-used", true);
 user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
+
+// fennec
+// user_pref("fennec.urlbar.float", true);
+user_pref("ui.prefersReducedMotion", 1); // sidebar animation was slow and choppy

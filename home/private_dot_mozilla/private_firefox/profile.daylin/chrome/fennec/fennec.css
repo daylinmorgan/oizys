@@ -92,7 +92,7 @@ gap: space between components, like padding/margin
 - sidebar must be enabled (not toggled off)
 - auto-collapses the drawer when the mouse leaves
 - hovering the left edge reveals it again
-- enable: uncomment @import url("autohide.css") in userChrome.css and restart Firefox
+- enable: set fennec.autohide to true in about:config and restart Firefox
 
 /* #endregion fennec-ui */
 
@@ -116,15 +116,16 @@ gap: space between components, like padding/margin
   
   /* header buttons */
   /* - nav btns need extra margin because settings btn is not in container */
-  /* - each nav-btn is typically 32px, then 2px of padding */
+  /* - each nav-btn is typically btn-size, then 2px of padding */
   /* - but panelui padding/margin will not impat, not in container */
   /* - so we mock a btn, and use panelui-gap for whatever padding is */
+  --fen-btn-size: 32px;
   --fen-panelui-gap: 4px;
-  --fen-nav-btn-width: 31px;
+  --fen-nav-btn-width: calc(var(--fen-btn-size) - 1px);
   --fen-nav-btn-gap: calc(var(--fen-gap-x) + var(--fen-nav-btn-width) + var(--fen-panelui-gap));
-  
-  /* header height - currently a partial function of drawer gap */
-  --fen-header-height: calc(32px + 2*var(--fen-gap-y));  
+
+  /* header height - derived from button size + vertical gap */
+  --fen-header-height: calc(var(--fen-btn-size) + 2*var(--fen-gap-y));  
   --fen-header-bg-color: var(--fen-color);
   /* - dim header buttons a bit */
   --fen-header-btn-dim: .8;
@@ -145,13 +146,17 @@ gap: space between components, like padding/margin
     var(--fen-urlbar-position-y) + var(--fen-gap-y) + 1px
   );
   /* - urlbar bg size and style */
-  --fen-urlbar-bg-height: 38px;
+  --fen-urlbar-bg-height: calc(var(--fen-btn-size) + 6px);
   /* Use Firefox theme variable for urlbar background */
   --fen-urlbar-bg-color: var(--toolbar-field-background-color);
   --fen-urlbar-border-radius: 4px;
   
   /* minimize media query sprawl for resizing urlbar */
   --fen-max-width: 600px;
+
+  /* transition speed — set to 0s by reduced motion */
+  --fen-ts-2: 0.2s;
+  --fen-ts-3: 0.3s;
 }
 
 /* if a theme is present (like Firefox Color), respect it fully */
@@ -162,12 +167,41 @@ gap: space between components, like padding/margin
   --fen-header-btn-dim: 1;
 }
 
+/* UI density — adjust button/urlbar sizing to match Firefox density setting */
+:root[uidensity="compact"] {
+  --fen-btn-size: 28px;
+}
+:root[uidensity="touch"] {
+  --fen-btn-size: 34px;
+}
+
+/* platform fonts — use native system font for each OS */
+@media (-moz-platform: windows) {
+  :root, panel, menupopup {
+    font-family: "Segoe UI Variable", system-ui, sans-serif !important;
+  }
+}
+@media (-moz-platform: macos) {
+  :root, panel, menupopup {
+    font-family: "SF Pro", system-ui, sans-serif !important;
+    letter-spacing: -0.15px;
+  }
+}
+
+/* accessibility: disable all animations when OS "reduce motion" is on */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --fen-ts-2: 0s;
+    --fen-ts-3: 0s;
+  }
+}
+
 /* #endregion css variables and theme handling */
 
 
-/* #region dynamic sidebar toggle 
+/* #region dynamic sidebar toggle
  *
- * note that autohide.css has hardcoded mirror
+ * note that #region autohide has hardcoded mirror
  * transitions that correspond to the properties below
  * it is advised to keep the configuration in sync
  *
@@ -185,7 +219,7 @@ gap: space between components, like padding/margin
   overflow: hidden !important;
   padding: 0 !important;
   opacity: 0 !important;
-  transition: width 0.3s ease, padding 0.3s step-end, opacity 0.2s ease !important;
+  transition: width var(--fen-ts-3) ease, padding var(--fen-ts-3) step-end, opacity var(--fen-ts-2) ease !important;
 }
 
 /* toggle the entire ui by toggling the sidebar */
@@ -194,7 +228,7 @@ body:has(#sidebar-box[hidden]:not(:hover)) #navigator-toolbox {
   overflow: hidden !important;
   pointer-events: none;
   opacity: 0 !important;
-  transition: width 0.3s ease, opacity 0.2s ease !important;
+  transition: width var(--fen-ts-3) ease, opacity var(--fen-ts-2) ease !important;
 }
 
 body:has(#sidebar-box[hidden]:not(:hover)) toolbaritem#urlbar-container {
@@ -209,10 +243,74 @@ body:has(#sidebar-box[hidden]) #identity-icon-box {
 
 body:has(#sidebar-box[hidden]) #urlbar {
   opacity: 0 !important;
-  transition: opacity 0.2s ease !important;
+  transition: opacity var(--fen-ts-2) ease !important;
 }
 
 /* #endregion dynamic sidebar toggle */
+
+
+/* #region autohide (about:config: fennec.autohide)
+ *
+ * When active, the drawer auto-collapses when the mouse leaves and
+ * reappears on hover over the left edge of the window.
+ * Sidebar must be enabled (not toggled off).
+ *
+ * mirrors the transitions in #region dynamic sidebar toggle, but
+ * collapses to 20px (detection zone) instead of 0px, using negative
+ * margin to hide the overflow.
+ */
+
+@media -moz-pref("fennec.autohide") {
+  body:not(:has(#sidebar-box:hover)):not(:has(#navigator-toolbox:hover)):not(:has(#sidebar-splitter:hover))
+    #sidebar-box:not([hidden]) {
+    display: flex !important;
+    width: 20px !important;
+    min-width: 20px !important;
+    max-width: 20px !important;
+    margin-right: -20px !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    opacity: 0 !important;
+    pointer-events: auto !important;
+    z-index: 10 !important;
+    transition: width var(--fen-ts-3) ease, max-width var(--fen-ts-3) ease, margin-right var(--fen-ts-3) ease, padding var(--fen-ts-3) step-end, opacity var(--fen-ts-2) ease !important;
+  }
+
+  body:not(:has(#sidebar-box:hover)):not(:has(#navigator-toolbox:hover)):not(:has(#sidebar-splitter:hover))
+    #navigator-toolbox {
+    width: 0px !important;
+    overflow: hidden !important;
+    pointer-events: none;
+    opacity: 0 !important;
+    transition: width var(--fen-ts-3) ease, opacity var(--fen-ts-2) ease !important;
+  }
+
+  body:not(:has(#sidebar-box:hover)):not(:has(#navigator-toolbox:hover)):not(:has(#sidebar-splitter:hover))
+    toolbaritem#urlbar-container {
+    width: 0px !important;
+    max-width: 0px !important;
+    pointer-events: none;
+  }
+
+  body:not(:has(#sidebar-box:hover)):not(:has(#navigator-toolbox:hover)):not(:has(#sidebar-splitter:hover))
+    #urlbar {
+    opacity: 0 !important;
+    transition: opacity var(--fen-ts-2) ease !important;
+  }
+
+  body:not(:has(#sidebar-box:hover)):not(:has(#navigator-toolbox:hover)):not(:has(#sidebar-splitter:hover))
+    #identity-icon-box {
+    background-color: transparent !important;
+  }
+
+  body:not(:has(#sidebar-box:hover)):not(:has(#navigator-toolbox:hover)):not(:has(#sidebar-splitter:hover))
+    #sidebar-splitter {
+    display: none !important;
+  }
+}
+
+/* #endregion autohide */
+
 
 /* #region header */
 
@@ -226,7 +324,7 @@ body:has(#sidebar-box[hidden]) #urlbar {
   padding-top: var(--fen-gap-y) !important;
 /*   background-color: var(--fen-color) !important; */
   background-color: var(--fen-header-bg-color) !important;
-  transition: width 0.3s ease, opacity 0.3s ease 0.2s !important;
+  transition: width var(--fen-ts-3) ease, opacity var(--fen-ts-3) ease var(--fen-ts-2) !important;
 }
 
 /* the thing that comes up when you hold alt, there's already settings menu */
@@ -368,7 +466,7 @@ panel#appMenu-popup {
 }
 
 #urlbar {
-  transition: opacity 0.3s ease 0.2s !important;
+  transition: opacity var(--fen-ts-3) ease var(--fen-ts-2) !important;
 }
 /* moz setting: "Show sidebar" active */
 body:not(:has(#sidebar-main[hidden])) #urlbar-container {
@@ -451,6 +549,49 @@ body:has(#browser > #sidebar-box[style*="; width: 6"]) #urlbar-container { width
   width: var(--fen-max-width) !important;
 }
 
+/* #region floating urlbar (about:config: fennec.urlbar.float)
+ *
+ * When active, the urlbar detaches from the sidebar and floats
+ * centered on the viewport when focused. Provides a full search
+ * experience without being constrained by sidebar width.
+ */
+
+@media -moz-pref("fennec.urlbar.float") {
+  #urlbar:is([focused][breakout-extend]) {
+    position: fixed !important;
+    left: calc(50% - min(80vw, 720px) / 2) !important;
+    top: 25% !important;
+    width: 80vw !important;
+    max-width: 720px !important;
+    z-index: 10 !important;
+    transition: none !important;
+  }
+
+  #urlbar:is([focused][breakout-extend]) #urlbar-input {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+  }
+
+  #urlbar:is([focused][breakout-extend]) .urlbar-background {
+    border-radius: 12px !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.075), 0 24px 48px rgba(0, 0, 0, 0.175) !important;
+  }
+
+  /* placeholder text in sidebar while urlbar is floating */
+  body:has(#urlbar:is([focused][breakout-extend])) #urlbar-container::after {
+    content: "Searching\2026";
+    display: flex;
+    align-items: center;
+    padding-left: 12px;
+    height: var(--fen-urlbar-bg-height);
+    margin-top: -2px;
+    opacity: 0.4;
+    font-size: 14px;
+  }
+}
+
+/* #endregion floating urlbar */
+
 /* remove google icon crowding search bar */
 #urlbar-searchmode-switcher {
   display: none;
@@ -469,7 +610,7 @@ body:has(#browser > #sidebar-box[style*="; width: 6"]) #urlbar-container { width
 
 #urlbar:is([breakout-extend]) #tracking-protection-icon-container,
 #tracking-protection-icon-container:has([open]) {
-  transition: opacity 0.2s ease;
+  transition: opacity var(--fen-ts-2) ease;
   position: relative !important;
   left: 0px;
   top: 50%;
@@ -484,7 +625,7 @@ body:has(#browser > #sidebar-box[style*="; width: 6"]) #urlbar-container { width
 }
 #urlbar:is([breakout-extend]) #identity-permission-box,
 #identity-permission-box:has([open]) {
-  transition: opacity 0.2s ease;
+  transition: opacity var(--fen-ts-2) ease;
   position: relative !important;
   left: 0px;
   top: 50%;
@@ -590,6 +731,67 @@ body:has(#sidebar-box[hidden]):has(#identity-box.notSecure)::before {
 
 /* #endregion urlbar */
 
+/* #region findbar */
+
+.browserContainer > findbar {
+  position: absolute;
+  bottom: 8px;
+  right: 16px;
+  width: 320px;
+  padding: 4px 8px !important;
+  background: var(--fen-color) !important;
+  border: 1px solid color-mix(in srgb, currentColor, transparent 87%) !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+  animation: findbar-show var(--fen-ts-2);
+}
+
+.browserContainer > findbar[hidden] {
+  display: flex !important;
+  bottom: -100px;
+  transition: bottom var(--fen-ts-2) !important;
+}
+
+.browserContainer > findbar .findbar-textbox {
+  background: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.browserContainer > findbar .findbar-closebutton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 12px;
+  margin: 0 !important;
+  padding: 4px !important;
+}
+
+@keyframes findbar-show {
+  0% { bottom: -100px; }
+  100% { bottom: 8px; }
+}
+
+/* #endregion findbar */
+
+/* #region context menu */
+
+@media not (-moz-platform: macos) {
+  menupopup {
+    --panel-padding: 5px 4px !important;
+  }
+  menu, menuitem, menucaption {
+    --menuitem-border-radius: 5px !important;
+    --menuitem-margin: 1px 1px;
+  }
+  menuseparator {
+    padding-inline: 10px !important;
+  }
+}
+
+/* #endregion context menu */
+
 /* #region sidebar */
 
 /* smallest width seems to be 224px */
@@ -598,7 +800,7 @@ body:has(#sidebar-box[hidden]):has(#identity-box.notSecure)::before {
   min-width: 0px !important;
   padding-left: var(--fen-gap-x);
   background-color: var(--fen-color) !important;
-  transition: width 0.3s ease, max-width 0.3s ease, margin-right 0.3s ease, padding 0.3s step-start, opacity 0.3s ease 0.2s !important;
+  transition: width var(--fen-ts-3) ease, max-width var(--fen-ts-3) ease, margin-right var(--fen-ts-3) ease, padding var(--fen-ts-3) step-start, opacity var(--fen-ts-3) ease var(--fen-ts-2) !important;
 }
 
 /* Remove the "Sideberry", "History", etc. sidepanel header  */
