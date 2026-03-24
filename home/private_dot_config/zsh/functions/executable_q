@@ -1,3 +1,8 @@
 #!/usr/bin/env zsh
 
-llm -s "Answer in as few words as possible. Use a brief style with short replies." "$*"
+llm -s "You are a concise dev assistant. \
+  Lead with the answer, explain only what's necessary. \
+  Plain text, no markdown or bullets unless asked. \
+  If shown code, indent with spaces. \
+  Pick the most likely interpretation of ambiguous questions." \
+    "$*"
