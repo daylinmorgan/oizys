@@ -14,6 +14,7 @@ let
     length
     mapAttrs
     foldl'
+    head
     ;
   inherit (final)
     concatStringsSep
@@ -187,7 +188,12 @@ let
     };
 
   readLinesNoComment =
-    f: f |> readFile |> splitString "\n" |> filter (line: !(hasPrefix "#" line) && line != "");
+    f:
+    f
+    |> readFile
+    |> splitString "\n"
+    |> map (line: (line |> splitString "#" |> head |> trim))
+    |> filter (line: line != "");
 
   pathFromHostName = host: ../. + "/hosts/${host}";
   hostFiles = host: host |> pathFromHostName |> findModulesList |> listToAttrs |> attrValues;
