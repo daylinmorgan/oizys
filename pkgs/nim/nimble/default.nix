@@ -11,13 +11,14 @@
 buildNimPackage (finalAttrs: {
 
   pname = "nimble";
-  version = "0.20.0";
+  version = "0.22.2-unstable";
 
   src = fetchFromGitHub {
     owner = "nim-lang";
     repo = "nimble";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-XcXdhEtwnsHZGBTt1xU7HaJK2qyJ0s2xxk2O3XkbTXQ=";
+    # rev = "v${finalAttrs.version}";
+    rev = "a21c96f7c4612332d8688bf95a8a23b011d52bef";
+    hash = "sha256-6edakeWjYzgebQLnSyZ6e04dFxg5eJ9XfhXHb/NQQ3w=";
     fetchSubmodules = true;
   };
 
@@ -30,7 +31,9 @@ buildNimPackage (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/nimble \
-      --suffix PATH : ${lib.makeBinPath [ nim ]}
+      --suffix PATH : ${lib.makeBinPath [ nim ]} \
+      --add-flag "--nim:${nim}/bin/nim" \
+      --add-flag '--useSystemNim'
   '';
 
   meta = {

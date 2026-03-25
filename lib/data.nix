@@ -16,5 +16,6 @@
   self-overlays = [
     "nim-atlas"
     "firefox"
+    "nimble"
   ];
 }
