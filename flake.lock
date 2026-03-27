@@ -267,29 +267,6 @@
         "type": "github"
       }
     },
-    "niri": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "rust-overlay": [
-          "rust-overlay"
-        ]
-      },
-      "locked": {
-        "lastModified": 1773130184,
-        "narHash": "sha256-3bwx4WqCB06yfQIGB+OgIckOkEDyKxiTD5pOo4Xz2rI=",
-        "owner": "YaLTeR",
-        "repo": "niri",
-        "rev": "b07bde3ee82dd73115e6b949e4f3f63695da35ea",
-        "type": "github"
-      },
-      "original": {
-        "owner": "YaLTeR",
-        "repo": "niri",
-        "type": "github"
-      }
-    },
     "niriman": {
       "inputs": {
         "nim2nix": [
@@ -448,7 +425,6 @@
         "llm-nix": "llm-nix",
         "multiviewer": "multiviewer",
         "nim2nix": "nim2nix",
-        "niri": "niri",
         "niriman": "niriman",
         "nix-index-database": "nix-index-database",
         "nixos-wsl": "nixos-wsl",

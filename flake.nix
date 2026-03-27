@@ -22,9 +22,6 @@
     llm-nix.url = "github:daylinmorgan/llm-nix";
     llm-nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    niri.url = "github:YaLTeR/niri";
-    niri.inputs.nixpkgs.follows = "nixpkgs";
-
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -70,7 +67,6 @@
     lib-aggregate.url = "github:nix-community/lib-aggregate";
     lib-aggregate.inputs.flake-utils.follows = "flake-utils";
     lib-aggregate.inputs.nixpkgs-lib.follows = "nixpkgs-lib";
-    niri.inputs.rust-overlay.follows = "rust-overlay";
     nixpkgs-lib.url = "github:nix-community/nixpkgs.lib";
     rust-overlay.url = "github:oxalica/rust-overlay";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
