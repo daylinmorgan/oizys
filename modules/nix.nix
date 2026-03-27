@@ -33,7 +33,7 @@ in
       use-xdg-base-directories = true;
       trusted-users = [ "@wheel" ];
       accept-flake-config = false;
-
+      log-format = "multiline-with-logs";
     }
     // substituters;
   };
