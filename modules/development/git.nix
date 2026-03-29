@@ -7,6 +7,7 @@
     gh
     lazygit
     delta
+    difftastic
 
     jujutsu
   ];
