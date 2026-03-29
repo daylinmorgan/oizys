@@ -16,7 +16,8 @@ write-change-id-header = true
 default-command = "l"
 pager = "delta"
 diff-editor = ":builtin"
-diff-formatter = ":git"
+# diff-formatter = ":git"
+diff-formatter = ["difft", "--color=always", "$left", "$right"]
 
 [aliases]
 wip = ["ci", "-m", "wip"]
