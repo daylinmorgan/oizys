@@ -20,6 +20,7 @@ in
   nim-atlas = pkgs.callPackage ./nim/atlas { };
   caddy-with-plugins = pkgs.callPackage ./caddy-with-plugins { };
   firefox = pkgs.callPackage ./firefox { };
+  inherit (pkgs) difftastic;
 }
 // (import ./lix.nix { inherit flake lib pkgs; })
 // (flake.toPackageAttrs [

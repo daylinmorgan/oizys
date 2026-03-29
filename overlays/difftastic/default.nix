@@ -6,7 +6,7 @@ inputs: final: prev:
       src = final.fetchFromGitHub {
         owner = "daylinmorgan";
         repo = "difftastic";
-        rev = finalAttrs.version;
+        rev = "0.68.0-nim"; # finalAttrs.version;
         hash = "sha256-v5VE8Hl1FS6ynOrmqUjezII9CB8acKDyGNDfOh1E06Q=";
       };
       cargoDeps = final.rustPlatform.importCargoLock {
