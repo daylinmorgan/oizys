@@ -7,6 +7,9 @@
   openssl,
   nim,
   makeWrapper,
+
+  # options
+  useSystemNim ? true,
 }:
 buildNimPackage (finalAttrs: {
 
@@ -29,12 +32,17 @@ buildNimPackage (finalAttrs: {
 
   doCheck = false; # it works on their machine
 
-  postInstall = ''
-    wrapProgram $out/bin/nimble \
-      --suffix PATH : ${lib.makeBinPath [ nim ]} \
-      --add-flag "--nim:${nim}/bin/nim" \
-      --add-flag '--useSystemNim'
-  '';
+  postInstall =
+    let
+      wrapperFlags = lib.concatStringsSep " " (
+        [ "--suffix PATH : ${lib.makeBinPath [ nim ]}" ]
+        ++ lib.optionals useSystemNim [
+          "--add-flag \"--nim:${nim}/bin/nim\""
+          "--add-flag '--useSystemNim'"
+        ]
+      );
+    in
+    "wrapProgram $out/bin/nimble ${wrapperFlags}";
 
   meta = {
     description = "Package manager for the Nim programming language";
