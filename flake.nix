@@ -47,6 +47,9 @@
     nim2nix.url = "github:daylinmorgan/nim2nix";
     nim2nix.inputs.nixpkgs.follows = "nixpkgs";
 
+    pi.url = "git+https://git.dayl.in/daylin/pi.git";
+    pi.inputs.nixpkgs.follows = "nixpkgs";
+
     niriman.url = "git+https://git.dayl.in/daylin/niriman.git";
     niriman.inputs.nixpkgs.follows = "nixpkgs";
     niriman.inputs.nim2nix.follows = "nim2nix";

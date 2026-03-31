@@ -362,6 +362,26 @@
         "type": "github"
       }
     },
+    "pi": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1775153363,
+        "narHash": "sha256-UEhmIwEx7CykumShvl9VCmbTqkfN0ST8yfv0q7W/zjc=",
+        "ref": "refs/heads/main",
+        "rev": "498c3367fa0e4c2f1338e2f1c78bded30e83f9b4",
+        "revCount": 4,
+        "type": "git",
+        "url": "https://git.dayl.in/daylin/pi.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://git.dayl.in/daylin/pi.git"
+      }
+    },
     "pyproject-build-systems": {
       "inputs": {
         "nixpkgs": [
@@ -433,6 +453,7 @@
         ],
         "nixpkgs-lib": "nixpkgs-lib",
         "nixpkgs-nixos-unstable": "nixpkgs-nixos-unstable",
+        "pi": "pi",
         "rust-overlay": "rust-overlay",
         "sops-nix": "sops-nix",
         "systems": "systems",
