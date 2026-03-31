@@ -255,10 +255,13 @@ hwylCli:
 
     [pr]
     ... """check merge status of nixpkgs PR"""
+    positionals:
+      numbers seq[int]
     flags:
-      n|numbers(seq[int], "prs to check")
       ignore("don't check lib/data.nix")
     run:
+      if numbers.len == 0 and ignore:
+        info "nothing to do"; quit 0
       if not ignore:
         getNixpkgsPrStatusFromOizys()
       for n in numbers:
