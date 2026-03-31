@@ -18,7 +18,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 })
 
 -- if cspell config found then disable buitlin spell check
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile", }, {
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = "*",
   callback = function()
     -- this isn't exhuastive and won't work if config is contained in a package.json
@@ -50,7 +50,7 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
     "*.volume",
     "*.network",
     "*.build",
-    "*.kube"
+    "*.kube",
   },
   command = "set filetype=systemd",
   group = "FileTypeQuadlet",

@@ -35,15 +35,16 @@ require("lazy").setup({
     { import = "plugins.language.shell" },
     { import = "plugins.language.python" },
     { import = "plugins.language.tex" },
+    { import = "plugins.language.usu" },
 
-    import_if_exe("go", "plugins.language.go" ),
+    import_if_exe("go", "plugins.language.go"),
     import_if_exe("nim", "plugins.language.nim"),
-    import_if_exe("nix" , "plugins.language.nix" ),
+    import_if_exe("nix", "plugins.language.nix"),
     -- import_if_exe("nu", "plugins.language.nu" ),
-    import_if_exe("cargo", "plugins.language.rust" ),
-    import_if_exe("typst", "plugins.language.typst" ),
-    import_if_exe("roc", "plugins.language.roc" ),
-    import_if_exe("zig", "plugins.language.zig" ),
+    import_if_exe("cargo", "plugins.language.rust"),
+    import_if_exe("typst", "plugins.language.typst"),
+    import_if_exe("roc", "plugins.language.roc"),
+    import_if_exe("zig", "plugins.language.zig"),
     --
   },
   rocks = {
