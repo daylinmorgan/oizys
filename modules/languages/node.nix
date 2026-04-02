@@ -12,7 +12,7 @@ in
   config = mkIfIn "node" cfg {
     environment.systemPackages = with pkgs; [
       nodejs
-      nodePackages.pnpm
+      pnpm
     ];
   };
 }
