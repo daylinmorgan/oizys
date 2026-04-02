@@ -55,12 +55,12 @@ concat(
 '''
 
 [template-aliases]
-'format_diff_stat(commit)' = '''
+'format_diff_stat(stat)' = '''
 "(" ++
 separate(" ",
-  commit.diff().stat().files().len(),
-  label("lines_added", "+" ++ commit.diff().stat().total_added()),
-  label("lines_removed", "-" ++ commit.diff().stat().total_removed())
+  stat.files().len(),
+  label("lines_added", "+" ++ stat.total_added()),
+  label("lines_removed", "-" ++ stat.total_removed())
 ) ++ ")"
 '''
 'show_desc(desc)' = '''
@@ -94,7 +94,7 @@ if(commit.root(),
       commit.bookmarks(),
       commit.tags(),
       commit.working_copies(),
-      if(commit.empty(), empty_commit_marker,format_diff_stat(commit)),
+      if(commit.empty(), empty_commit_marker,format_diff_stat(commit.diff().stat())),
       show_desc(commit.description())
     ) ++ "\n",
   )
