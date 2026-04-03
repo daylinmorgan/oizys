@@ -1,0 +1,11 @@
+{
+  continuwuity = "forgejo.ellis.link/continuwuation/continuwuity:v0.5.6";
+  forgejo = "codeberg.org/forgejo/forgejo:14.0.0";
+  gotosocial = "docker.io/superseriousbusiness/gotosocial:0.21.1";
+  linkding = "sissbruecker/linkding:1.44.1-plus-alpine";
+  otterwiki = "docker.io/redimp/otterwiki:2-slim";
+  pds = "ghcr.io/bluesky-social/pds:0.4.193";
+  soft-serve = "docker.io/charmcli/soft-serve:v0.11.1";
+  yamtrack = "ghcr.io/fuzzygrim/yamtrack@v0.24.11";
+  yamtrack-redis = "docker.io/library/redis:8-alpine";
+}

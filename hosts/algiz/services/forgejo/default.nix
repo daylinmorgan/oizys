@@ -5,6 +5,7 @@
   ...
 }:
 let
+  inherit (import ./images) forgejo;
   gitUid = toString config.users.users.git.uid;
   gitGid = toString config.users.groups.users.gid;
   secretsNames = [
@@ -69,7 +70,7 @@ in
     Description=forgejo
 
     [Container]
-    Image=codeberg.org/forgejo/forgejo:14.0.0
+    Image=${forgejo}
     # git user ids
     Environment=USER_UID=${gitUid}
     Environment=USER_GID=${gitGid}

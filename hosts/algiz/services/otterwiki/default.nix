@@ -1,4 +1,7 @@
 { ... }:
+let
+  inherit (./images) otterwiki;
+in
 {
 
   services.caddy.virtualHosts."wiki.dayl.in".extraConfig = ''
@@ -11,7 +14,7 @@
     Description=otterwiki
 
     [Container]
-    Image=docker.io/redimp/otterwiki:2-slim
+    Image=${otterwiki}
     Volume=/var/lib/otterwiki/app-data/:/app-data:Z,U
     Volume=${./custom}:/app/otterwiki/static/custom:ro
     PublishPort=8721:8080

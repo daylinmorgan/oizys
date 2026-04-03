@@ -1,4 +1,7 @@
 { config, ... }:
+let
+  inherit (import ./images) continuwuity;
+in
 {
   sops.secrets.continuwuity-env = {
     sopsFile = ./secrets.yaml;
@@ -28,7 +31,7 @@
     Description=continuwuity
 
     [Container]
-    Image=forgejo.ellis.link/continuwuation/continuwuity:v0.5.6
+    Image=${continuwuity}
     Volume=/var/lib/continuwuity/data/:/var/lib/continuwuity:Z,U
     EnvironmentFile=${./env}
     EnvironmentFile=${config.sops.secrets.continuwuity-env.path}

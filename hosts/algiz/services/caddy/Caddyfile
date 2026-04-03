@@ -24,3 +24,7 @@ https://cloud.dayl.in {
 	respond "No service active"
 }
 
+https://links.dayl.in {
+	respond "No service active"
+}
+

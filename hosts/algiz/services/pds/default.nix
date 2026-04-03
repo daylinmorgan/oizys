@@ -1,5 +1,6 @@
 { config, lib, ... }:
 let
+  inherit (import ./images) pds;
   users = [ "daylin" ];
 in
 {
@@ -21,7 +22,7 @@ in
     Description=pds
 
     [Container]
-    Image=ghcr.io/bluesky-social/pds:0.4.193
+    Image=${pds}
     Volume=/var/lib/pds/pds:/pds:Z,U
     EnvironmentFile=${./env}
     EnvironmentFile=${config.sops.secrets.pds-env.path}

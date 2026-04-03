@@ -1,4 +1,6 @@
 { ... }:
+let inherit (./images) gotosocial;
+in
 {
 
   services.caddy.virtualHosts."gts.dayl.in".extraConfig = ''
@@ -17,7 +19,7 @@
       Description=gotosocial
 
       [Container]
-      Image=docker.io/superseriousbusiness/gotosocial:0.21.1
+      Image=${gotosocial}
       Volume=/var/lib/gotosocial/fonts:/gotosocial/web/assets/myfonts/:Z,U
       Volume=/var/lib/gotosocial/data:/gotosocial/storage:Z,U
       PublishPort=3758:3758

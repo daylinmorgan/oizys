@@ -1,4 +1,7 @@
 { ... }:
+let
+  inherit (import ./image.nix) yamtrack yamtrack-redis;
+in
 {
 
   services.caddy.virtualHosts."yamtrack.dayl.in".extraConfig = ''
@@ -18,7 +21,7 @@
 
       [Container]
       ContainerName=yamtrack-redis
-      Image=docker.io/library/redis:8-alpine
+      Image=${yamtrack-redis}
       Volume=/var/lib/yamtrack/redis:/data:Z,U
       Network=yamtrack.network
 
@@ -37,8 +40,7 @@
 
       [Container]
       ContainerName=yamtrack
-      # v0.24.11
-      Image=ghcr.io/fuzzygrim/yamtrack@sha256:0cf6cfbaf160248636e5116cbdd587dd8060d91c976dbf44e8d0b565456ad8ff
+      Image=${yamtrack};
       Environment=TZ=America/New_York
       Environment=REDIS_URL=redis://yamtrack-redis:6379
       Environment=URLS=https://yamtrack.dayl.in
