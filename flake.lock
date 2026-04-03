@@ -369,11 +369,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1775154894,
-        "narHash": "sha256-ZKdXa5t28B/TSJ0cO6k/K3UdrSjO5dQm7KtvfkxfqIA=",
+        "lastModified": 1775231607,
+        "narHash": "sha256-F6eWV18GlEA5drV0A32M/tcKX1WM5oXfQ7IuykjsibU=",
         "ref": "refs/heads/main",
-        "rev": "32864aef85020232e7d276089202b81842c6ce00",
-        "revCount": 7,
+        "rev": "79534bd08a675605b68e874ebe9abec51b16dcdf",
+        "revCount": 9,
         "type": "git",
         "url": "https://git.dayl.in/daylin/pi.git"
       },
