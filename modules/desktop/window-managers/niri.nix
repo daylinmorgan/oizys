@@ -49,7 +49,7 @@ mkOizysModule config "niri" {
       };
     };
 
-    # TODO: intregrate elsewhere or just go back to using swww?
+    # TODO: intregrate elsewhere or just go back to using awww?
     swaybg = niriService {
       description = "swaybg!";
       serviceConfig = {
@@ -94,7 +94,7 @@ mkOizysModule config "niri" {
     pwvucontrol
     swaylock
     eww
-    swww
+    awww
   ]);
 
   services.getty = {

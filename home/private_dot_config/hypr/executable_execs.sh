@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # exec-once = hyprctl setcursor catppuccin-mocha-dark-cursors 24
-# exec-once = swww-daemon
+# exec-once = awww-daemon
 # exec-once = mako
 # exec-once = udiskie
 # exec-once = xprop -root -f _XWAYLAND_GLOBAL_OUTPUT_SCALE 32c -set _XWAYLAND_GLOBAL_OUTPUT_SCALE 2
