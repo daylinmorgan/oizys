@@ -1,6 +1,6 @@
 { ... }:
 let
-  inherit (./images) otterwiki;
+  inherit (import ../images.nix  ) otterwiki;
 in
 {
 

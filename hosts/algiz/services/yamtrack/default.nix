@@ -1,6 +1,6 @@
 { ... }:
 let
-  inherit (import ./image.nix) yamtrack yamtrack-redis;
+  inherit (import ../images.nix) yamtrack yamtrack-redis;
 in
 {
 
