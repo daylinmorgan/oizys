@@ -152,11 +152,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1774789463,
-        "narHash": "sha256-MFraiT8o6manIcEloazGYafji1ua3HJ7Re/A/uauqYA=",
+        "lastModified": 1775394381,
+        "narHash": "sha256-KVw9Hwt6J/DeGWD1pwGKAidjp6LmK0NV033wC6ZyWxg=",
         "owner": "nix-community",
         "repo": "lib-aggregate",
-        "rev": "dc3bd444a2ea0834374b7d759c532f232e144128",
+        "rev": "c0b19a4473a92f40a6ad118557e18c0d732453b9",
         "type": "github"
       },
       "original": {
@@ -297,11 +297,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1774762074,
-        "narHash": "sha256-89Mh4Eb/5stVJX6kGagVMijcU2FmfeD8Qv7UXc5d92o=",
+        "lastModified": 1775365369,
+        "narHash": "sha256-DgH5mveLoau20CuTnaU5RXZWgFQWn56onQ4Du2CqYoI=",
         "owner": "nix-community",
         "repo": "nix-index-database",
-        "rev": "bc13aeaed568be76eab84df88ff39261bb52ff70",
+        "rev": "cef5cf82671e749ac87d69aadecbb75967e6f6c3",
         "type": "github"
       },
       "original": {
@@ -333,11 +333,11 @@
     },
     "nixpkgs-lib": {
       "locked": {
-        "lastModified": 1774748309,
-        "narHash": "sha256-+U7gF3qxzwD5TZuANzZPeJTZRHS29OFQgkQ2kiTJBIQ=",
+        "lastModified": 1775353191,
+        "narHash": "sha256-bK65+s0Xbt0fq5K/i9Ez02AbDv7HBSXEfdDhUlYphDg=",
         "owner": "nix-community",
         "repo": "nixpkgs.lib",
-        "rev": "333c4e0545a6da976206c74db8773a1645b5870a",
+        "rev": "2890b0f0d5edd3b5bf795294a04f9879d9d50fef",
         "type": "github"
       },
       "original": {
@@ -369,11 +369,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1775231607,
-        "narHash": "sha256-F6eWV18GlEA5drV0A32M/tcKX1WM5oXfQ7IuykjsibU=",
+        "lastModified": 1775395679,
+        "narHash": "sha256-+S6lafBeLjkk7Q/iK5FQ6e9nEGhXCvfjxxhyfNboj60=",
         "ref": "refs/heads/main",
-        "rev": "79534bd08a675605b68e874ebe9abec51b16dcdf",
-        "revCount": 9,
+        "rev": "bda6176240da5967953b2577737bb1fd511331e0",
+        "revCount": 11,
         "type": "git",
         "url": "https://git.dayl.in/daylin/pi.git"
       },
@@ -469,11 +469,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1775099554,
-        "narHash": "sha256-3xBsGnGDLOFtnPZ1D3j2LU19wpAlYefRKTlkv648rU0=",
+        "lastModified": 1775358767,
+        "narHash": "sha256-f2eC+WIfhjevCPQILuV08i/kmKZzYZpUvkom/33VxCA=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "8d6387ed6d8e6e6672fd3ed4b61b59d44b124d99",
+        "rev": "20fd44bc663daa53a2575e01293e24e681d62244",
         "type": "github"
       },
       "original": {
@@ -489,11 +489,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1774910634,
-        "narHash": "sha256-B+rZDPyktGEjOMt8PcHKYmgmKoF+GaNAFJhguktXAo0=",
+        "lastModified": 1775365543,
+        "narHash": "sha256-f50qrK0WwZ9z5EdaMGWOTtALgSF7yb7XwuE7LjCuDmw=",
         "owner": "Mic92",
         "repo": "sops-nix",
-        "rev": "19bf3d8678fbbfbc173beaa0b5b37d37938db301",
+        "rev": "a4ee2de76efb759fe8d4868c33dec9937897916f",
         "type": "github"
       },
       "original": {
