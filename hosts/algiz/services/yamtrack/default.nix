@@ -40,7 +40,7 @@ in
 
       [Container]
       ContainerName=yamtrack
-      Image=${yamtrack};
+      Image=${yamtrack}
       Environment=TZ=America/New_York
       Environment=REDIS_URL=redis://yamtrack-redis:6379
       Environment=URLS=https://yamtrack.dayl.in
