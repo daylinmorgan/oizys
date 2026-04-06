@@ -18,24 +18,35 @@ proc checkBuild(installable: string): tuple[stdout: string, stderr: string] =
     fatalQuit fmt"{cmd} had zero exit"
   result = (output, err)
 
-proc getBuildHash*(installable: string): string =
+type
+  Hashes = object
+    specified*, got*: string
+
+proc getBuildHash*(installable: string): Hashes =
   let (output, err) = checkBuild(installable)
   for line in err.splitLines():
     if line.strip().startsWith("got: "):
       let s = line.split("got:")
-      result = s[1].strip()
-  if result == "":
+      result.got = s[1].strip()
+    if line.strip().startsWith("specified: "):
+      let s = line.split("specified:")
+      result.specified = s[1].strip()
+  if result.got == "":
     stderr.write formatStdoutStderr(output, err) & "\n"
     fatalQuit "failed to find update hash from above output"
+  debug "hashes: " & $result
 
-proc setHashInFile*(hash, file, attr: string) =
-  info fmt"setting {attr} in {file}"
+proc setHashInFile*(hashes: Hashes, file: string) =
+  info fmt"setting build hash in {file}"
+  let needle = "\"\"; # hash"
   let content = readFile(file)
-  if attr notin content:
-    fatalQuit bbfmt"unable to find [b]'{attr}'[/] in [b]{file}[/]"
-  let newContent = content.replace(fmt("{attr} = \"\";"), fmt"""{attr} = "{hash}";""")
-  if content == newContent:
-    fatalQuit bbfmt"failed to replace attr: [b]{attr}[/]"
+  var newContent: string
+  if hashes.specified in content:
+    newContent = content.replace(hashes.specified, hashes.got)
+  elif needle in content: # added manually :)
+    newContent = content.replace(needle, "\"" & hashes.got & "\";")
+  if newContent.len == 0:
+    fatalQuit "failed to replace build hash, did you add `\"\"; # hash`"
   writeFile(file, newContent)
 
 proc getCaches(): seq[string] =
