@@ -100,8 +100,8 @@ if(commit.root(),
       commit.tags(),
       commit.working_copies(),
       if(commit.empty(), empty_commit_marker,format_diff_stat(commit.diff().stat())),
-      show_desc(commit.description())
-    ) ++ "\n",
+      commit_timestamp(commit).ago(),
+    ) ++ show_desc(commit.description()) ++ "\n"
   )
 )
 '''
