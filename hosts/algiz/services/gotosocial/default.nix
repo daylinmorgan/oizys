@@ -1,5 +1,6 @@
 { ... }:
-let inherit (import ../images.nix  ) gotosocial;
+let
+  inherit (import ../images.nix) gotosocial;
 in
 {
 

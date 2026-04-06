@@ -30,12 +30,7 @@ let
       color,
       figName,
     }:
-    (
-      "[1;${toString color}m"
-      + (readFile img)
-      + (readFile figName)
-      + "[0m"
-    );
+    ("[1;${toString color}m" + (readFile img) + (readFile figName) + "[0m");
   mkMotdText =
     { color, figName }:
     mkText {

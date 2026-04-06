@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  inherit (import ../images.nix  ) continuwuity;
+  inherit (import ../images.nix) continuwuity;
 in
 {
   sops.secrets.continuwuity-env = {

@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (import ../images.nix  ) forgejo;
+  inherit (import ../images.nix) forgejo;
   gitUid = toString config.users.users.git.uid;
   gitGid = toString config.users.groups.users.gid;
   secretsNames = [

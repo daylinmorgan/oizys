@@ -1,6 +1,6 @@
 { config, lib, ... }:
 let
-  inherit (import ../images.nix  ) pds;
+  inherit (import ../images.nix) pds;
   users = [ "daylin" ];
 in
 {

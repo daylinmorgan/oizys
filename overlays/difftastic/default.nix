@@ -1,5 +1,4 @@
-inputs: final: prev:
-{
+inputs: final: prev: {
   difftastic = prev.difftastic.overrideAttrs (
     finalAttrs: _: {
       version = "0.69.0"; # 0.68.0-nim, really

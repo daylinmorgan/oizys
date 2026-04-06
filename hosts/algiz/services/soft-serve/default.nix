@@ -1,7 +1,7 @@
 { ... }:
 let
 
-  inherit (import ../images.nix  ) soft-serve;
+  inherit (import ../images.nix) soft-serve;
 in
 {
   environment.etc."containers/systemd/soft-serve.container".text = ''
