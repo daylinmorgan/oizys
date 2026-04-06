@@ -30,6 +30,11 @@ bsm = [
 ]
 dl = ["desc", "-r", "last"]
 tug = ["bookmark", "move", "--from", "closest_bookmark(@-)", "--to", "@-"]
+tasks = ["util", "exec", "--", "python3", "-c",'''
+import sys,subprocess as s,pathlib as p
+t=p.Path(r:=s.check_output(["git","rev-parse","--show-toplevel"],text=True).strip())/"tasks.py"
+sys.exit(s.run([t]+sys.argv[1:],cwd=r).returncode if t.is_file() else"no tasks.py")''']
+t = ["tasks"]
 
 
 
