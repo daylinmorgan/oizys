@@ -16,6 +16,8 @@ node_modules
 
 **/.claude/settings.local.json
 
+**/.pi/
+
 ## sandbox-runtime "dangerous files"
 ## these files might be mounted in my current
 ## directory by @sysid/pi-sandbox so we should ignore them
