@@ -72,7 +72,7 @@ in
 
   config = {
     networking.hostName = hostName;
-    time.timeZone = "US/Central";
+    time.timeZone = "America/New_York";
     nixpkgs.overlays = import ../overlays { inherit inputs lib; };
     oizys = oizysSettings hostName // {
       packages =
