@@ -51,7 +51,7 @@ mkOizysModule config "niri" {
 
     # TODO: intregrate elsewhere or just go back to using awww?
     swaybg = niriService {
-      description = "swaybg!";
+      description = "swaybg";
       serviceConfig = {
         # current is a symlink
         ExecStart = ''${pkgs.swaybg}/bin/swaybg -m fill -i "%h/stuff/wallpapers/current"'';
@@ -94,7 +94,7 @@ mkOizysModule config "niri" {
     pwvucontrol
     swaylock
     eww
-    awww
+    # awww
   ]);
 
   services.getty = {
