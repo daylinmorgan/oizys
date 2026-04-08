@@ -1,9 +1,8 @@
 import std/[logging, os, strformat, strutils]
-from std/nativesockets import getHostname
-
-import hwylterm, hwylterm/logging
+import hwylterm
+import hwylterm/logging
 from hwylterm/hwylcli import Count
-
+from std/nativesockets import getHostname
 import ./logging
 
 type

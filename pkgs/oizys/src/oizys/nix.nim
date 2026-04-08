@@ -1,13 +1,9 @@
 import std/[
-  algorithm, enumerate,
-  os, sequtils, strformat, strutils,
-  sugar, logging, tables, times, sets,
-  wordwrap, terminal, options
+  algorithm, enumerate, logging, options, os, sequtils, sets,
+  strformat, strutils, sugar, tables, terminal, times, wordwrap
 ]
-export tables
-import hwylterm, hwylterm/logging, jsony
-import hwylterm/tables
-
+import hwylterm, jsony
+import hwylterm/[logging, tables]
 import ./[context, exec]
 
 type

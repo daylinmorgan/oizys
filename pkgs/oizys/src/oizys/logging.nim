@@ -1,6 +1,7 @@
 ## nix begat oizys
 import std/[logging, os]
-import hwylterm, hwylterm/logging
+import hwylterm
+import hwylterm/logging
 export logging
 
 

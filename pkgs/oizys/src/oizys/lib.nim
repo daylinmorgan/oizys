@@ -1,9 +1,9 @@
 import std/[
-  sequtils, algorithm,
-  strformat, strutils, sugar, sets, os,
-  httpclient, terminal, wordwrap
+  algorithm, httpclient, os, sequtils, sets, strformat,
+  strutils, sugar, tables, terminal, wordwrap
 ]
-import hwylterm, resultz, hwylterm/tables
+import hwylterm, resultz
+import hwylterm/tables
 import ./[nix, exec, logging, context]
 
 # TODO: refactor runCmdCaptWithSpinner so it works in getBuildHash

@@ -1,7 +1,8 @@
 ## nix begat oizys
-import std/[os, osproc, sequtils, strutils, strtabs, strformat]
-import hwylterm, hwylterm/[hwylcli]
-import oizys/[context, github, nix, logging, lib, exec]
+import std/[os, osproc, sequtils, strformat, strtabs, strutils]
+import hwylterm
+import hwylterm/hwylcli
+import oizys/[context, exec, github, lib, logging, nix]
 
 setHwylConsoleFile(stderr)
 

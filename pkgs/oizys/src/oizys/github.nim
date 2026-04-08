@@ -1,5 +1,10 @@
-import std/[httpclient,logging, os, strformat, strutils, json, tables, tempfiles, times, strtabs]
-import jsony, hwylterm, hwylterm/logging, zippy/ziparchives, resultz
+import std/[
+  httpclient, json, logging, os, strformat,
+  strtabs, strutils, tables, tempfiles, times
+]
+import hwylterm, jsony, resultz
+import hwylterm/logging
+import zippy/ziparchives
 import ./[exec, context, nix]
 
 

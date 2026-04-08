@@ -1,5 +1,4 @@
-import std/[os, osproc, strformat, strutils, logging, selectors, posix]
-
+import std/[logging, os, osproc, posix, selectors, strformat, strutils]
 import hwylterm
 
 iterator splitLinesFinal(s: string): tuple[line: string, final: bool] =
