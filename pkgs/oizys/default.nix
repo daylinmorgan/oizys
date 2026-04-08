@@ -8,7 +8,6 @@
 }:
 
 let
-  inherit (builtins) toString;
   subFlag = toString substituters;
   trustedPubKeys = toString trusted-public-keys;
 in

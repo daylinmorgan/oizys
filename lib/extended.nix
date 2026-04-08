@@ -5,7 +5,6 @@ let
     attrValues
     substring
     replaceStrings
-    map
     filter
     attrNames
     readDir
