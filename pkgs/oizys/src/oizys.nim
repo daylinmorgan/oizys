@@ -2,7 +2,7 @@
 import std/[os, osproc, sequtils, strformat, strtabs, strutils]
 import hwylterm
 import hwylterm/hwylcli
-import oizys/[context, exec, github, lib, logging, nix]
+import ./oizys/[context, exec, github, lib, logging, nix]
 
 setHwylConsoleFile(stderr)
 
