@@ -61,6 +61,25 @@ hwylCli:
     run:
       oizysStatus(all, `check-cache`, hide)
 
+    [attr]
+    ... "nixos config attr"
+    alias a
+    flags:
+      ^[output]
+    run:
+      if count([minimal, system, lix], true) > 1:
+        hecho "--minimal, --system and --lix are mutually exclusive"
+
+      if lix:
+        echo getLixandCo().fmtDrvsForNix().join("\n")
+      elif minimal:
+        echo missingDrvNixEvalJobs().fmtDrvsForNix().join("\n")
+      else:
+        echo nixosAttrs(
+          if system: "path"
+          else: "build.toplevel"
+        ).join("\n")
+
     [build]
     ... """
     nix build
@@ -109,7 +128,6 @@ hwylCli:
         if findExe("nix-eval-jobs") == "":
           fatalQuit bb"[b]oizys cache[/] requires [b]nix-eval-jobs[/]"
         nixBuildWithCache(name, args, service, jobs, `dry-run`, packages)
-
 
 
     [gha]
@@ -161,45 +179,6 @@ hwylCli:
       ^[build]
     run:
       oizysSwitch(`no-nom`, args)
-
-    [output]
-    ... "nixos config attr"
-    alias o
-    flags:
-      ^[output]
-    run:
-      if count([minimal, system, lix], true) > 1:
-        hecho "--minimal, --system and --lix are mutually exclusive"
-
-      if lix:
-        echo getLixandCo().fmtDrvsForNix().join("\n")
-      elif minimal:
-        echo missingDrvNixEvalJobs().fmtDrvsForNix().join("\n")
-      else:
-        echo nixosAttrs(
-          if system: "path"
-          else: "build.toplevel"
-        ).join("\n")
-
-#[
-   [update]
-    ... "update and run nixos-rebuild"
-    flags:
-      ^yes
-      p|preview "show preview and exit"
-    run:
-      let hosts = getHosts()
-      if hosts.len > 1: fatalQuit "operation only supports one host"
-      let run = getLastUpdateRun()
-      echo fmt"run created at: {run.created_at}"
-      echo "nvd diff:\n", getUpdateSummary(run.id, hosts[0])
-      if preview: quit 0
-      if not isLocal(): fatalQuit bb"[b]oizys update[/] only supported for local oizys flakes"
-      if dirExists(getFlake() / ".jj"): fatalQuit bb"[b]oizys update[/] does not support jujustu repos yet"
-      if yes or confirm("Proceed with system update?"):
-        updateRepo()
-        nixosRebuild(NixosRebuildSubcmd.switch)
-]#
 
     [hash]
     ... "collect build hash from failure"
