@@ -185,6 +185,17 @@ task tester, "run tests/tester.nim":
   else:
     quit "expected file at: " & tester
 
+task sort, "run nimporter -s BalancedWrap":
+  var args = @["--settings=BalancedWrap"]
+  if commandLineParams().len > 1:
+    args.add commandLineParams()[1..^1]
+  else:
+    args.add @[projectDir() / "src", "--write"]
+  let cmd = "nimporter " & args.join(" ")
+  echo cmd
+  exec cmd
+
+
 # line delemiter for `nim help`
 task _,"_______________":
   discard
