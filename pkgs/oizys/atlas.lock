@@ -15,7 +15,7 @@
     "hwylterm": {
       "dir": "$deps/hwylterm",
       "url": "https://github.com/daylinmorgan/hwylterm",
-      "commit": "3e22ad168ecc75e645dc05c3b05629570e54510e",
+      "commit": "043b4b756a9fea667c165a5b59f6899048359ef2",
       "version": ""
     },
     "resultz.daylinmorgan.github.com": {
