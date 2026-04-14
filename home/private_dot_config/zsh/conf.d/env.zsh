@@ -19,3 +19,5 @@ export LESSUTFCHARDEF='23fb-23fe:w,2665:w,2b58:w,e000-e00a:w,e0a0-e0a3:p,e0b0-e0
 export FENFMT_PY_FORMATTER="ruff format"
 export FENFMT_PYTHON_FORMATTER="ruff format"
 
+
+export PI_TELEMETRY=0
