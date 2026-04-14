@@ -32,6 +32,8 @@ in
       shell = pkgs.zsh;
       extraGroups = [
         "wheel"
+        # https://github.com/crosspoint-reader/xteink-flasher/issues/4#issuecomment-4171184494
+        # "dialout" # For browser based xteink flasher
       ]
       ++ optional isDesktop "audio"
       ++ optional isDocker "docker"
