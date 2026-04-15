@@ -24,3 +24,5 @@ vim.api.nvim_create_user_command("Bootstrap", function()
   vim.cmd [[sleep 20]]
   vim.cmd [[q]]
 end, {})
+
+vim.g.lazyvim_picker = "snacks"
