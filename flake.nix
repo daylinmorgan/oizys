@@ -41,8 +41,8 @@
     daylin-website.inputs.nixpkgs.follows = "nixpkgs";
     daylin-website.inputs.bun2nix.follows = "bun2nix";
 
-    multiviewer.url = "github:daylinmorgan/multiviewer-flake";
-    multiviewer.inputs.nixpkgs.follows = "nixpkgs";
+    # multiviewer.url = "github:daylinmorgan/multiviewer-flake";
+    # multiviewer.inputs.nixpkgs.follows = "nixpkgs";
 
     nim2nix.url = "github:daylinmorgan/nim2nix";
     nim2nix.inputs.nixpkgs.follows = "nixpkgs";

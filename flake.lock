@@ -227,26 +227,6 @@
         "type": "github"
       }
     },
-    "multiviewer": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1763136155,
-        "narHash": "sha256-9HD0T6VoUHM+ZqOA9M+2WPzld7hGfvZgjsIb6XH+LrU=",
-        "owner": "daylinmorgan",
-        "repo": "multiviewer-flake",
-        "rev": "02d0640b6f597fd3d91a24cdab775eb2700d005e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "daylinmorgan",
-        "repo": "multiviewer-flake",
-        "type": "github"
-      }
-    },
     "nim2nix": {
       "inputs": {
         "nixpkgs": [
@@ -443,7 +423,6 @@
         "lix": "lix",
         "lix-module": "lix-module",
         "llm-nix": "llm-nix",
-        "multiviewer": "multiviewer",
         "nim2nix": "nim2nix",
         "niriman": "niriman",
         "nix-index-database": "nix-index-database",
