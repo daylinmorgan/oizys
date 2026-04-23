@@ -41,7 +41,11 @@
 
   };
 
-  # services.tailscale = enabled;
+  services.tailscale = enabled // {
+    extraUpFlags = [
+      "--accept-routes"
+    ];
+  };
 
   services.restic.backups.gdrive = {
     user = "daylin";
