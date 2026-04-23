@@ -24,9 +24,12 @@ proc `$`(_: typedesc[string]): string = "str"
 proc `$`[T](_: typedesc[seq[T]]): string = $T & "..."
 proc `$`(_: typedesc[seq[KVString]]): string = "(key:val)..."
 
+const version = inferVersionFromNimble()
+
 hwylCli:
   name "oizys"
   settings InferEnv, LongHelp
+  version version
   help:
     styles: fromBuiltinHelpStyles(AllSettings)
   flags:
@@ -52,6 +55,7 @@ hwylCli:
     updateContext(host, flake, verbose, `reset-cache`, bootstrap)
 
   subcommands:
+    [help]
     [status]
     ... "check oizys package status"
     flags:
