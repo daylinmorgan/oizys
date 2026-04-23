@@ -2,11 +2,12 @@
   lib,
   enabled,
   config,
+  flake,
   ...
 }:
 
 let
-  inherit (builtins) attrNames;
+  inherit (builtins) attrNames concatMap;
   servicesPorts = {
     jellyfin = 8096;
     sonarr = 8989;
@@ -18,6 +19,7 @@ let
   torrentingPort = 38878;
 in
 {
+
   services = {
     fwupd = enabled;
     flaresolverr = enabled;
@@ -69,16 +71,26 @@ in
           }
         );
     };
+
     tailscale = enabled // {
       openFirewall = true;
       authKeyFile = config.sops.secrets.tailscale-key.path;
 
       extraUpFlags = [
-        # "--accept-dns=false"
-        # "--exit-node-allow-lan-access"
+        "--accept-dns=true"
+        "--advertise-routes=192.168.50.0/24"
       ];
 
     };
+  };
+
+  # let caddy talk to tailscale so certs work
+  users.users.caddy.extraGroups = [ "tailscale" ];
+
+  # Required for Tailscale subnet routing
+  boot.kernel.sysctl = {
+    "net.ipv4.ip_forward" = 1;
+    "net.ipv6.conf.all.forwarding" = 1;
   };
 
   networking.nameservers = [
