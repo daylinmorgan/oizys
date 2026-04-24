@@ -1,13 +1,13 @@
 {
   lib,
+  pkgs,
   enabled,
   config,
-  flake,
   ...
 }:
 
 let
-  inherit (builtins) attrNames concatMap;
+  inherit (builtins) attrNames concatStringsSep;
   servicesPorts = {
     jellyfin = 8096;
     sonarr = 8989;
@@ -17,6 +17,25 @@ let
   };
   openPorts = false;
   torrentingPort = 38878;
+  makeLandingPage =
+    subdomains:
+    let
+      links =
+        subdomains
+        |> map (name: ''<li><a href="http://${name}.home.dayl.in" rel="noreferrer">${name}</a></li>'')
+        |> concatStringsSep "\n";
+    in
+    ''
+      <!DOCTYPE html>
+      <html>
+      <head><title>home.dayl.in</title></head>
+      <body>
+      <h1>home.dayl.in</h1>
+      <ul>${links}</ul>
+      </body>
+      </html>
+    '';
+  landingPage = pkgs.writeTextDir "index.html" (makeLandingPage (servicesPorts |> attrNames));
 in
 {
 
@@ -41,10 +60,12 @@ in
     dnsmasq = {
       enable = true;
       settings = {
-
         domain = "home.dayl.in";
         local = "/home.dayl.in/";
-        address = servicesPorts |> attrNames |> map (name: "/${name}.home.dayl.in/192.168.50.17");
+        address = [
+          "/home.dayl.in/192.168.50.17"
+        ]
+        ++ (servicesPorts |> attrNames |> map (name: "/${name}.home.dayl.in/192.168.50.17"));
         no-resolv = true;
         server = [
           "/ts.net/100.100.100.100" # forward tailscale traffic to tailscale
@@ -58,7 +79,13 @@ in
         output file /var/log/caddy/access.log
       '';
 
-      virtualHosts =
+      virtualHosts = {
+        "http://home.dayl.in".extraConfig = ''
+          root * ${landingPage}
+          file_server
+        '';
+      }
+      // (
         servicesPorts
         |> lib.mapAttrs' (
           name: port: {
@@ -69,7 +96,8 @@ in
               '';
             };
           }
-        );
+        )
+      );
     };
 
     tailscale = enabled // {
