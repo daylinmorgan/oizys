@@ -164,8 +164,12 @@ hwylCli:
     [os]
     ... "nixos-rebuild [italic]subcmd[/]"
     positionals:
-      subcmd NixosRebuildSubcmd
-      args seq[string]
+      subcmd:
+        ? "nixos-rebuild subcommand"
+        T NixosRebuildSubcmd
+      args:
+        ? "args/flags forwared to nixos-rebuild"
+        T seq[string]
     flags:
       r|remote "host is remote"
       ^[build]
