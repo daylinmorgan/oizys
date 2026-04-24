@@ -9,6 +9,7 @@ import ./logging
 import std/[macros, sequtils]
 
 macro makeHostsEnum(): untyped =
+  ## generate a Host enum based on existing oizys machines
   let root = (getProjectPath().parentDir().parentDir().parentDir())
   let hosts = (root/"hosts").walkDir().toSeq().mapIt(it.path.splitPath.tail)
   var hostEnumType = nnkEnumTy.newTree(newEmptyNode())
@@ -35,11 +36,15 @@ type
     resetCache: bool
     bootstrap: bool
 
-let currentHost* = parseEnum[Host](getHostName())
+var currentHost*: Host
 
 proc initContext*(): OizysContext =
-  result.hosts = @[currentHost]
-  #
+  try:
+    currentHost = parseEnum[Host](getHostName())
+    result.hosts = @[currentHost]
+  except:
+    warn bb"failed to set current host use [b]--host[/] flag"
+
   # result.flake = "github:daylinmorgan/oizys"
   # # this logic alongside the `isBootstrap` should happen in updateContext
   # let localDir = getHomeDir() / "oizys"
