@@ -25,6 +25,9 @@ proc `$`[T](_: typedesc[seq[T]]): string = $T & "..."
 proc `$`(_: typedesc[seq[KVString]]): string = "(key:val)..."
 
 const version = inferVersionFromNimble()
+const hostHelp = """
+host(s) to build
+choices: """ & enumNames(Host).mapIt(it.bbMarkup("bold")).join(",")
 
 hwylCli:
   name "oizys"
@@ -35,7 +38,7 @@ hwylCli:
   flags:
     [global]
     flake(string, "path/to/flake")
-    host(seq[string], "host(s) to build")
+    host(seq[Host], hostHelp)
     v|verbose(Count(val:0), Count, "increase verbosity (up to 2)")
     `reset-cache`("set cache timeout to 0")
     b|bootstrap("enable bootstrap mode")

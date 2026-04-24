@@ -5,17 +5,37 @@ from hwylterm/hwylcli import Count
 from std/nativesockets import getHostname
 import ./logging
 
+
+import std/[macros, sequtils]
+
+macro makeHostsEnum(): untyped =
+  let root = (getProjectPath().parentDir().parentDir().parentDir())
+  let hosts = (root/"hosts").walkDir().toSeq().mapIt(it.path.splitPath.tail)
+  var hostEnumType = nnkEnumTy.newTree(newEmptyNode())
+  for h in hosts:
+    hostEnumType.add ident(h)
+  result = newStmtList()
+  result.add nnkTypeSection.newTree(
+    nnkTypeDef.newTree(
+      nnkPostfix.newTree(newIdentNode("*"), newIdentNode("Host")),
+      newEmptyNode(),
+      hostEnumType
+    )
+  )
+
+makeHostsEnum()
+
 type
   OizysContext* = object
     flake: string
-    hosts: seq[string]
+    hosts: seq[Host]
     debug: bool
     ci: bool
     verbose: Count
     resetCache: bool
     bootstrap: bool
 
-let currentHost* = getHostName()
+let currentHost* = parseEnum[Host](getHostName())
 
 proc initContext*(): OizysContext =
   result.hosts = @[currentHost]
@@ -33,7 +53,7 @@ proc initContext*(): OizysContext =
 var oc = initContext()
 
 proc getVerbosity*(): int     = return oc.verbose.val
-proc getHosts*(): seq[string] = return oc.hosts
+proc getHosts*(): seq[Host]   = return oc.hosts
 proc getFlake*(): string      = return oc.flake
 proc isResetCache*(): bool    = return oc.resetCache
 proc isCi*(): bool            = return oc.ci
@@ -51,7 +71,7 @@ func isGitFlakeUrl(flake: string): bool =
       return true
 
 proc updateContext*(
-  host: seq[string],
+  host: seq[Host],
   flake: string = "",
   verbose: Count = Count(val: 0),
   resetCache: bool = false,

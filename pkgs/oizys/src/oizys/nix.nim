@@ -66,8 +66,8 @@ proc newNixCommand*(subcmd: string, noNom: bool = false): Command =
     result.addArgs subFlags
     result.addArgs "--extra-experimental-features", "nix-command flakes pipe-operator"
 
-proc nixosAttr(host: string, attr: string = "build.toplevel"): string =
-  getFlake() & "#nixosConfigurations." & host & ".config.system." & attr
+proc nixosAttr(host: Host, attr: string = "build.toplevel"): string =
+  getFlake() & "#nixosConfigurations." & $host & ".config.system." & attr
 
 proc nixosAttrs*(
   attr: string = "build.toplevel"
@@ -89,7 +89,7 @@ proc newRebuildCommand(subcmd: NixosRebuildSubcmd, args: openArray[string], remo
     let host = getHosts()[0]
     if host == currentHost:
       fatalQuit "did you mean to specify a remote host?"
-    result.addArgs "--target-host", host, "--sudo", "--ask-sudo-password"
+    result.addArgs "--target-host", $host, "--sudo", "--ask-sudo-password"
   result.addArgs args
 
 
@@ -224,10 +224,10 @@ proc missingDrvNixEvalJobs*(): HashSet[NixEvalOutput] =
   var output: string
 
   for host in getHosts():
-    let flakeUrl = getFlake() & "#nixosConfigurations." & host & ".config.oizys.packages"
+    let flakeUrl = getFlake() & "#nixosConfigurations." & $host & ".config.oizys.packages"
     let (o, _) = cmd
       .withArgs(flakeUrl)
-      .runCaptSpin(bb"running [b]nix-eval-jobs[/] for " & host.bb("bold"))
+      .runCaptSpin(bb"running [b]nix-eval-jobs[/] for " & ($host).bb("bold"))
     output.add o
 
   var cached: HashSet[NixEvalOutput]
@@ -477,7 +477,7 @@ proc getUpdatedLockFile() =
   writeFile("updated.lock", res.stdout)
 
 # probably duplicating logic above ¯\_(ツ)_/¯
-proc buildSystem(host: string, rest: seq[string]) =
+proc buildSystem(host: Host, rest: seq[string]) =
   let cmd = newNixCommand("build")
     .withArgs(nixosAttr(host))
     .withArgs(rest)
@@ -488,19 +488,19 @@ proc buildSystem(host: string, rest: seq[string]) =
 # This is really a lib.nim style proc
 proc ciUpdate*(rest: seq[string]) =
   for host in getHosts():
-    info "building " & host.bb("bold")
+    info "building " & ($host).bb("bold")
     buildSystem(
       host,
-      @["--out-link", host & "-current", "--quiet"] & rest
+      @["--out-link", $host & "-current", "--quiet"] & rest
     )
 
   getUpdatedLockFile()
 
   for host in getHosts():
-    info "building updated " & host.bb("bold")
+    info "building updated " & ($host).bb("bold")
     buildSystem(
       host,
-      @["--out-link", host & "-updated", "--quiet", "--reference-lock-file", "updated.lock"] & rest
+      @["--out-link", $host & "-updated", "--quiet", "--reference-lock-file", "updated.lock"] & rest
     )
 
 
