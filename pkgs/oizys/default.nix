@@ -8,28 +8,23 @@
 }:
 
 let
+  inherit (builtins) concatStringsSep readDir attrNames;
   subFlag = toString substituters;
   trustedPubKeys = toString trusted-public-keys;
+  hosts = ../../hosts |> readDir |> attrNames |> concatStringsSep ",";
 in
 
 buildAtlasPackage {
   name = "oizys";
   version = "unstable";
 
-  # this is necessary to allow the hosts to be discovered at compile time
-  src = lib.fileset.toSource {
-    root = ../..;
-    fileset = lib.fileset.unions [
-      (lib.fileset.fromSource (lib.cleanSource ./.))
-      ../../hosts
-    ];
-  };
-  sourceRoot = "source/pkgs/oizys";
+  src = lib.cleanSource ./.;
   nativeBuildInputs = [ openssl ];
   atlasDepsHash = "sha256-rk/m87uar0Aa7HxhpQu7rNFlaOMqp4ITtPSI3wU92TY=";
   nimFlags = [
     "-d:substituters:\"${subFlag}\""
     "-d:trustedPublicKeys:'${trustedPubKeys}'"
+    "-d:hosts:${hosts}"
   ];
   meta = {
     description = "nix begat oizys";

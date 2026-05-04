@@ -8,12 +8,12 @@ import ./logging
 
 import std/[macros, sequtils]
 
+const hosts {.strdefine.} = "othalan"
+
 macro makeHostsEnum(): untyped =
   ## generate a Host enum based on existing oizys machines
-  let root = (getProjectPath().parentDir().parentDir().parentDir())
-  let hosts = (root/"hosts").walkDir().toSeq().mapIt(it.path.splitPath.tail)
   var hostEnumType = nnkEnumTy.newTree(newEmptyNode())
-  for h in hosts:
+  for h in hosts.split(","):
     hostEnumType.add ident(h)
   result = newStmtList()
   result.add nnkTypeSection.newTree(
