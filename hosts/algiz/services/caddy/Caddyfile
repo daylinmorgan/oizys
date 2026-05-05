@@ -20,6 +20,11 @@
 # 	redir https://elizabeth-and-daylin.com{uri} permanent
 # }
 
+https://games.dayl.in {
+  root * /var/games-www
+  file_server
+}
+
 https://cloud.dayl.in {
 	respond "No service active"
 }

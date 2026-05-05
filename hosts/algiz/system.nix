@@ -14,6 +14,10 @@
     127.0.0.1 nix-cache.dayl.in
   '';
 
+  systemd.tmpfiles.rules = [
+    "d /var/games-www 0755 root root - -"
+  ];
+
   # allow tcp connections for reverse proxy
   networking.firewall = enabled // {
     allowedTCPPorts = [
