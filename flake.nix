@@ -19,10 +19,7 @@
     lix-module.inputs.flake-utils.follows = "flake-utils";
     lix-module.inputs.lix.follows = "lix";
 
-    llm-nix.url = "github:daylinmorgan/llm-nix";
-    llm-nix.inputs.nixpkgs.follows = "nixpkgs";
-
-    nix-index-database.url = "github:nix-community/nix-index-database";
+     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
@@ -36,6 +33,13 @@
 
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    celler.url = "github:blitz/celler";
+    celler.inputs.nixpkgs.follows = "nixpkgs";
+    celler.inputs.flake-parts.follows = "flake-parts";
+
+    llm-nix.url = "github:daylinmorgan/llm-nix";
+    llm-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     daylin-website.url = "https://git.dayl.in/daylin/dayl.in/archive/main.tar.gz";
     daylin-website.inputs.nixpkgs.follows = "nixpkgs";
@@ -84,5 +88,6 @@
     };
     ## nil inputs, I don't want *ALL* your flake inputs...
     nixos-wsl.inputs.flake-compat.follows = "";
+    celler.inputs.flake-compat.follows = "";
   };
 }

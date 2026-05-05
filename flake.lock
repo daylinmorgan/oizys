@@ -51,6 +51,47 @@
         "type": "github"
       }
     },
+    "celler": {
+      "inputs": {
+        "crane": "crane",
+        "flake-compat": [],
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "nixpkgs-stable": "nixpkgs-stable"
+      },
+      "locked": {
+        "lastModified": 1777973125,
+        "narHash": "sha256-z60UrdFedc1FIBqQHFrFqaSG8v9YJTbm1LqOS2O0tqY=",
+        "owner": "blitz",
+        "repo": "celler",
+        "rev": "44042e52e89c5792c7526111cde9e86cf395f794",
+        "type": "github"
+      },
+      "original": {
+        "owner": "blitz",
+        "repo": "celler",
+        "type": "github"
+      }
+    },
+    "crane": {
+      "locked": {
+        "lastModified": 1775839657,
+        "narHash": "sha256-SPm9ck7jh3Un9nwPuMGbRU04UroFmOHjLP56T10MOeM=",
+        "owner": "ipetkov",
+        "repo": "crane",
+        "rev": "7cf72d978629469c4bd4206b95c402514c1f6000",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ipetkov",
+        "repo": "crane",
+        "type": "github"
+      }
+    },
     "daylin-website": {
       "inputs": {
         "bun2nix": [
@@ -342,6 +383,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-stable": {
+      "locked": {
+        "lastModified": 1776067740,
+        "narHash": "sha256-B35lpsqnSZwn1Lmz06BpwF7atPgFmUgw1l8KAV3zpVQ=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "7e495b747b51f95ae15e74377c5ce1fe69c1765f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-25.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "pi": {
       "inputs": {
         "nixpkgs": [
@@ -416,6 +473,7 @@
       "inputs": {
         "NixVirt": "NixVirt",
         "bun2nix": "bun2nix",
+        "celler": "celler",
         "daylin-website": "daylin-website",
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",

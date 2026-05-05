@@ -2,23 +2,27 @@
   config,
   pkgs,
   enabled,
+  flake,
   ...
 }:
+let
+  inherit (flake.pkgs "celler") celler;
+in
 {
   environment.systemPackages = [
-    pkgs.attic-client
-    (pkgs.writeShellScriptBin "check-attic" "sudo du -sh /var/lib/atticd/")
+    celler
+    (pkgs.writeShellScriptBin "check-cache-size" "sudo du -sh /var/lib/cellerd/")
   ];
 
-  security.polkit = enabled; # attic was looking for this...
+  security.polkit = enabled; # attic was looking for this...I assume celler needs it too
 
-  sops.secrets.atticd-env = { };
+  sops.secrets.celler-env = { };
 
   services = {
-    atticd = enabled // {
+    cellerd = enabled // {
 
       # Replace with absolute path to your credentials file
-      environmentFile = config.sops.secrets."atticd-env".path;
+      environmentFile = config.sops.secrets."celler-env".path;
 
       # https://github.com/zhaofengli/attic/blob/main/server/src/config.rs
       # best of luck to you converting this to nix, which is written by nix as toml to be read by attic

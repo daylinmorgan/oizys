@@ -358,7 +358,7 @@ proc toCache(service: string, name: string): NixCache =
   of "store", "harmonia", "nix-serve-ng":
     info bbfmt"building and pushing to /nix/store/ host: [b]{name}"
     result = NixCache(kind: Store, host: name)
-  of "attic", "cachix":
+  of "celler", "attic", "cachix":
     info bbfmt"building and pushing to {service} cache: [b]{name}"
     if findExe(service) == "":
       fatalQuit fmt"is {service} installed?"

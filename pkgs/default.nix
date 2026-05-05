@@ -24,9 +24,10 @@ in
 }
 // (import ./lix.nix { inherit flake lib pkgs; })
 // (flake.toPackageAttrs [
-  "multiviewer"
+  # "multiviewer"
   "tsm"
   "llm-nix"
   "niriman"
   "daylin-website"
+  "celler"
 ])

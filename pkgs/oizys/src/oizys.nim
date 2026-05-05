@@ -127,7 +127,7 @@ hwylCli:
         args seq[string]
       flags:
         name("oizys", string, "name/host of binary cache")
-        service("attic", string, "name of cache service")
+        service("celler", string, "name of cache service")
         j|jobs(countProcessors(),int, "jobs when pushing paths")
         n|`dry-run` "don't actually build derivations"
         packages(seq[string], "packages to ensure built/cached")

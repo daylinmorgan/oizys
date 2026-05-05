@@ -8,10 +8,10 @@ inputs:
       extra-experimental-features = nix-command flakes pipe-operator
       build-dir = /nix/var
       extra-substituters = https://nix-cache.dayl.in/oizys
-      extra-trusted-public-keys = oizys:2Sdu3lyOnNLeEYF2A3Hu3S5uqFQRe66DNwuFDneQs4M=
+      extra-trusted-public-keys = oizys:OcgNR7G1/au+NnIh12LzW27EXOfHGZalJNgSJSYJFQQ=
       stalled-download-timeout = 0
       download-attempts = 10
-  attic_token:
+  celler_token:
     description: token to access attic cache
   hatchet-protocol:
     description: level passed on the nothing-but-nix
@@ -43,8 +43,8 @@ runs:
     - name: Install and login to attic cache
       shell: bash
       run: |
-        nix profile install "nixpkgs#attic-client"
-        attic login oizys https://nix-cache.dayl.in "${{ inputs.attic_token}}"
+        nix profile install "github:daylinmorgan/oizys#celler"
+        celler login oizys https://nix-cache.dayl.in "${{ inputs.celler_token}}"
 
     - name: "Show Nix Info"
       shell: bash
