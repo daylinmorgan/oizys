@@ -27,18 +27,20 @@ runs:
         witness-carnage: true
         hatchet-protocol: ${{ inputs.hatchet-protocol }}
 
-      # below step had an error. probably related to using a different build directory
-    - name: "workaround for lix-quick-install-action..."
-      shell: bash
-      run: sudo chmod -R a+w /nix
+    #   # below step had an error. probably related to using a different build directory
+    # - name: "workaround for lix-quick-install-action..."
+    #   shell: bash
+    #   run: sudo chmod -R a+w /nix
+    #
 
     - name: Install Lix
-      # uses: samueldr/lix-gha-installer-action@latest
-      # with:
-      #   extra_nix_config: ${{ inputs.nix_conf }}
-      uses: daylinmorgan/lix-quick-install-action@main
+      uses: samueldr/lix-gha-installer-action@latest
       with:
-        lix_conf: ${{ inputs.nix_conf }}
+        extra_nix_config: ${{ inputs.nix_conf }}
+
+      # uses: daylinmorgan/lix-quick-install-action@main
+      # with:
+      #   lix_conf: ${{ inputs.nix_conf }}
 
     - name: Install and login to attic cache
       shell: bash
