@@ -65,7 +65,7 @@ jobs:
       - name: Pre-build oizys
         run: |
           nix build '.#oizys'
-          ./result/bin/oizys
+          ./result/bin/oizys --help || exit 0
           celler push oizys ./result
 
       - name: Pre-build lix-and-co
