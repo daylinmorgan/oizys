@@ -10,7 +10,7 @@ charm-freeze
 trashy
 # quarto
 calibre
-attic-client
 firefox
 vlc
 godot
+flake:celler
