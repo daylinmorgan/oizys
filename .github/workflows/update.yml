@@ -48,7 +48,7 @@ jobs:
       - uses: daylin-bot/actions/setup@main
       - uses: ./.github/actions/nix
         with:
-          attic_token: ${{ secrets.ATTIC_TOKEN }}
+          celler_token: ${{ secrets.CELLER_TOKEN }}
 
       - name: install nix-eval-jobs
         run: nix profile install '.#nix-eval-jobs'
@@ -65,13 +65,13 @@ jobs:
       - name: Pre-build oizys
         run: |
           nix build '.#oizys'
-          attic push oizys ./result
+          celler push oizys ./result
 
       - name: Pre-build lix-and-co
         run: |
           DRVS="$(nix run . -- attr --lix --host,="${{ env.hosts }}")"
           nix build --out-link 'lix' --print-build-logs -- $DRVS
-          attic push oizys ./lix*
+          celler push oizys ./lix*
           rm -rf ./lix*
 
       - name: Build
@@ -103,7 +103,7 @@ jobs:
       - uses: daylin-bot/actions/setup@main
       - uses: ./.github/actions/nix
         with:
-          attic_token: ${{ secrets.ATTIC_TOKEN }}
+          celler_token: ${{ secrets.CELLER_TOKEN }}
 
       - name: Pre-build oizys
         run: nix build '.#oizys'
