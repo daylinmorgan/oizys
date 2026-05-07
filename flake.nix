@@ -19,7 +19,7 @@
     lix-module.inputs.flake-utils.follows = "flake-utils";
     lix-module.inputs.lix.follows = "lix";
 
-     nix-index-database.url = "github:nix-community/nix-index-database";
+    nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
