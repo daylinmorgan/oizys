@@ -15,10 +15,10 @@
     "hwylterm": {
       "dir": "$deps/hwylterm",
       "url": "https://github.com/daylinmorgan/hwylterm",
-      "commit": "267714a10ce3041fa7327da92f291f90ccc95dca",
+      "commit": "f623a34394cd84338c7bb1808bd27f6f2575f171",
       "version": ""
     },
-    "resultz.daylinmorgan.github.com": {
+    "resultz": {
       "dir": "$deps/resultz",
       "url": "https://github.com/daylinmorgan/resultz",
       "commit": "0be681c97c703a602e80d203ba2698c29e212e4c",
@@ -28,10 +28,10 @@
   "nimcfg": [
     "############# begin Atlas config section ##########",
     "--noNimblePath",
-    "--path:\"deps/jsony/src\"",
-    "--path:\"deps/zippy/src\"",
     "--path:\"deps/hwylterm/src\"",
+    "--path:\"deps/jsony/src\"",
     "--path:\"deps/resultz/src\"",
+    "--path:\"deps/zippy/src\"",
     "############# end Atlas config section   ##########",
     ""
   ],

@@ -20,7 +20,7 @@ buildAtlasPackage {
 
   src = lib.cleanSource ./.;
   nativeBuildInputs = [ openssl ];
-  atlasDepsHash = "sha256-rk/m87uar0Aa7HxhpQu7rNFlaOMqp4ITtPSI3wU92TY=";
+  atlasDepsHash = "sha256-/+NM8h6vY1+Kd0kDQZvkzdF3D59P5o6CBiDysKI26zI=";
   nimFlags = [
     "-d:substituters:\"${subFlag}\""
     "-d:trustedPublicKeys:'${trustedPubKeys}'"
