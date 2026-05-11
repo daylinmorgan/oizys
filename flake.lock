@@ -21,35 +21,6 @@
         "type": "github"
       }
     },
-    "bun2nix": {
-      "inputs": {
-        "flake-parts": [
-          "flake-parts"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "systems": [
-          "systems"
-        ],
-        "treefmt-nix": [
-          "treefmt-nix"
-        ]
-      },
-      "locked": {
-        "lastModified": 1778446047,
-        "narHash": "sha256-oQvcadh2BCkrog+SGrG6YffKJrveYpjj3TdQJWaKhaM=",
-        "owner": "nix-community",
-        "repo": "bun2nix",
-        "rev": "f2bc12af1a6369648aac41041ceeaa0b866599c6",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "bun2nix",
-        "type": "github"
-      }
-    },
     "celler": {
       "inputs": {
         "crane": "crane",
@@ -93,19 +64,16 @@
     },
     "daylin-website": {
       "inputs": {
-        "bun2nix": [
-          "bun2nix"
-        ],
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1774712993,
-        "narHash": "sha256-2K18vHUxrM+mJvUC5mfUZ0zxmlrE6yAhZJgSPLpe3hM=",
-        "rev": "8bcb1b9b90ab6d3a736dd104c872e3cf4d7773ad",
+        "lastModified": 1778526893,
+        "narHash": "sha256-cfLn7pM9uvkC0lF/Hz6V3C57vANV5pDqxjihoShX+3I=",
+        "rev": "28501c105171dc7aaff00fc07fb76ac5d32bb278",
         "type": "tarball",
-        "url": "https://git.dayl.in/api/v1/repos/daylin/dayl.in/archive/8bcb1b9b90ab6d3a736dd104c872e3cf4d7773ad.tar.gz?rev=8bcb1b9b90ab6d3a736dd104c872e3cf4d7773ad"
+        "url": "https://git.dayl.in/api/v1/repos/daylin/dayl.in/archive/28501c105171dc7aaff00fc07fb76ac5d32bb278.tar.gz?rev=28501c105171dc7aaff00fc07fb76ac5d32bb278"
       },
       "original": {
         "type": "tarball",
@@ -456,7 +424,6 @@
     "root": {
       "inputs": {
         "NixVirt": "NixVirt",
-        "bun2nix": "bun2nix",
         "celler": "celler",
         "daylin-website": "daylin-website",
         "flake-parts": "flake-parts",

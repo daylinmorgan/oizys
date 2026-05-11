@@ -43,7 +43,6 @@
 
     daylin-website.url = "https://git.dayl.in/daylin/dayl.in/archive/main.tar.gz";
     daylin-website.inputs.nixpkgs.follows = "nixpkgs";
-    daylin-website.inputs.bun2nix.follows = "bun2nix";
 
     # multiviewer.url = "github:daylinmorgan/multiviewer-flake";
     # multiviewer.inputs.nixpkgs.follows = "nixpkgs";
@@ -79,13 +78,6 @@
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     systems.url = "github:nix-systems/x86_64-linux";
 
-    bun2nix.url = "github:nix-community/bun2nix";
-    bun2nix.inputs = {
-      nixpkgs.follows = "nixpkgs";
-      systems.follows = "systems";
-      flake-parts.follows = "flake-parts";
-      treefmt-nix.follows = "treefmt-nix";
-    };
     ## nil inputs, I don't want *ALL* your flake inputs...
     nixos-wsl.inputs.flake-compat.follows = "";
     celler.inputs.flake-compat.follows = "";
