@@ -1,5 +1,5 @@
 {
-  continuwuity = "forgejo.ellis.link/continuwuation/continuwuity:v0.5.6";
+  continuwuity = "forgejo.ellis.link/continuwuation/continuwuity:v0.5.9";
   forgejo = "codeberg.org/forgejo/forgejo:15.0.0";
   gotosocial = "docker.io/superseriousbusiness/gotosocial:0.21.1";
   linkding = "sissbruecker/linkding:1.44.1-plus-alpine";
