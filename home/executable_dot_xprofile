@@ -8,7 +8,7 @@
 # xss-lock -- ~/bin/lock &
 
 # set a new random color
-~/.config/qtile/colors.py &
+# ~/.config/qtile/colors.py &
 
 SKIP_WM_RESET=1 autorandr -c --default default &
 
