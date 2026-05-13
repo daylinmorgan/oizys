@@ -1,4 +1,8 @@
-{ fetchFromGitHub, buildNimPackage }:
+{
+  fetchFromGitHub,
+  buildNimPackage,
+  nim-nnl-update-script,
+}:
 buildNimPackage (finalAttrs: {
   pname = "procs";
   version = "0.7.3";
@@ -11,4 +15,8 @@ buildNimPackage (finalAttrs: {
 
   doCheck = false;
   lockFile = ./lock.json;
+
+  passthru.updateScript = nim-nnl-update-script {
+    inherit (finalAttrs) pname version src;
+  };
 })
