@@ -32,7 +32,6 @@ runs:
     #   shell: bash
     #   run: sudo chmod -R a+w /nix
     #
-
     - name: Install Lix
       uses: samueldr/lix-gha-installer-action@latest
       with:
