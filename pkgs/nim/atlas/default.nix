@@ -18,9 +18,7 @@ buildNimPackage (finalAttrs: {
   lockFile = ./lock.json;
   buildInputs = [ openssl ];
   doCheck = false; # tests will clone repos
-  passthru.updateScript = nim-nnl-update-script {
-    inherit (finalAttrs) pname version src;
-  };
+  passthru.updateScript = nim-nnl-update-script { };
   meta = finalAttrs.src.meta // {
     description = "Nim package cloner";
     mainProgram = "atlas";

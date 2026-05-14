@@ -19,8 +19,7 @@ buildNimPackage (finalAttrs: {
   lockFile = ./lock.json;
 
   # they have a tag (v.1.10.0) that breaks this
-  # passthru.updateScript = nim-nnl-update-script {
-  #   inherit (finalAttrs) pname version src;
-  #   extraFlags = "--git,=bearssl,zlib";
-  # };
+  passthru.updateScript = nim-nnl-update-script {
+    extraFlags = "--git,=bearssl,zlib";
+  };
 })
