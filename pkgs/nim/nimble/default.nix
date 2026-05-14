@@ -9,6 +9,7 @@
   makeWrapper,
 
   # options
+  nix-update-script,
   useSystemNim ? true,
 }:
 buildNimPackage (finalAttrs: {
@@ -43,6 +44,8 @@ buildNimPackage (finalAttrs: {
       );
     in
     "wrapProgram $out/bin/nimble ${wrapperFlags}";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Package manager for the Nim programming language";

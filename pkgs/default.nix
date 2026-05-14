@@ -17,7 +17,7 @@ in
 
   nimlangserver = callNimPackage ./nim/nimlangserver;
   procs = callNimPackage ./nim/procs;
-  nimble = callNimPackage ./nim/nimble;
+  nimble = pkgs.callPackage ./nim/nimble { };
   nim-atlas = callNimPackage ./nim/atlas;
   caddy-with-plugins = pkgs.callPackage ./caddy-with-plugins { };
   firefox = pkgs.callPackage ./firefox { };
