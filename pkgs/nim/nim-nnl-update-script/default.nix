@@ -1,8 +1,7 @@
 {
+  flake,
   writeShellApplication,
-  nix-update,
   git,
-  nix,
 }:
 {
   extraFlags ? "",
@@ -12,9 +11,8 @@ let
   script = writeShellApplication {
     inherit name;
     runtimeInputs = [
-      nix-update
+      (flake.pkgs "self").nix-update
       git
-      nix
     ];
     text = ''
       set -euo pipefail

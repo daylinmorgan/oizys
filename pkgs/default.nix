@@ -7,7 +7,7 @@
 let
   inherit (lib) flakeFromSystem;
   flake = flakeFromSystem system;
-  nim-nnl-update-script = pkgs.callPackage ./nim/nim-nnl-update-script { };
+  nim-nnl-update-script = pkgs.callPackage ./nim/nim-nnl-update-script { inherit flake;};
   callNimPackage = p: pkgs.callPackage p { inherit nim-nnl-update-script; };
 in
 {
