@@ -41,7 +41,7 @@ in
 
   services = {
     fwupd = enabled;
-    flaresolverr = enabled;
+    # flaresolverr = enabled;
     qbittorrent = enabled // {
       inherit torrentingPort;
       openFirewall = openPorts;
