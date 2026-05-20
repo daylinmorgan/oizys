@@ -5,7 +5,10 @@
 }:
 {
 
-  oizys.server = enabled;
+  oizys = {
+    server = enabled;
+    podman = enabled;
+  };
 
   fileSystems = {
     "/".options = [ "compress=zstd" ];
@@ -52,6 +55,12 @@
     # AirVPN - North America
     air-na.configFile = config.sops.secrets.wg-conf.path;
   };
+
+  # Fix the port 53 conflict between dnsmasq and Podman's aardvark-dns
+  virtualisation.containers.containersConf.settings = {
+    network.dns_bind_port = 1153;
+  };
+
 
   services.openssh = enabled // {
     settings = {

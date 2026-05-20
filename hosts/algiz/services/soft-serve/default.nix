@@ -1,6 +1,5 @@
 { ... }:
 let
-
   inherit (import ../images.nix) soft-serve;
 in
 {

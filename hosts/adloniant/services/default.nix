@@ -14,6 +14,7 @@ let
     radarr = 7878;
     prowlarr = 9696;
     qbittorrent = 8080;
+    prismarr = 7070;
   };
   openPorts = false;
   torrentingPort = 38878;
@@ -38,6 +39,7 @@ let
   landingPage = pkgs.writeTextDir "index.html" (makeLandingPage (servicesPorts |> attrNames));
 in
 {
+  imports = [ ./prismarr ];
 
   services = {
     fwupd = enabled;
