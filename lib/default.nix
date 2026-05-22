@@ -59,7 +59,7 @@ let
           packages = with pkgs; [
             openssl
             nim
-            nim-atlas
+            self.packages.${system}.nim-atlas
           ];
         };
       }

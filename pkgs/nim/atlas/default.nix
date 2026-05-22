@@ -8,12 +8,12 @@
 
 buildNimPackage (finalAttrs: {
   pname = "atlas";
-  version = "0.12.5";
+  version = "0.14.2";
   src = fetchFromGitHub {
     owner = "nim-lang";
     repo = "atlas";
     rev = finalAttrs.version;
-    hash = "sha256-5ffpUVb7crbZUkHY17tY99qATGATNr8VNz5AhIyJ8Xc=";
+    hash = "sha256-flQo4PeIcWEZn2uBJ6b3Uol0nvTXNU39bK5KsK6KwfU=";
   };
   lockFile = ./lock.json;
   buildInputs = [ openssl ];
