@@ -1,12 +1,9 @@
-import std/[logging, os, strformat, strutils]
+import std/[logging, macros, os, sequtils, strformat, strutils]
 import hwylterm
 import hwylterm/logging
 from hwylterm/hwylcli import Count
 from std/nativesockets import getHostname
 import ./logging
-
-
-import std/[macros, sequtils]
 
 const hosts {.strdefine.} = "othalan"
 

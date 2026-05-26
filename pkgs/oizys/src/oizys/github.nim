@@ -1,5 +1,5 @@
 import std/[
-  httpclient, json, logging, os, strformat,
+  httpclient, json, logging, math, os, strformat,
   strtabs, strutils, tables, tempfiles, times
 ]
 import hwylterm, jsony, resultz
@@ -99,6 +99,9 @@ proc isRecent(run:  GhWorkflowRun, start: Datetime): bool =
 func isRunning(run: GhWorkflowRun): bool =
   run.status in ["in_progress", "queued", "pending"]
 
+proc timeRemaining(timeout: int, elapsed: Duration): int =
+  ((timeout - elapsed.inMilliseconds()) / 1000).round().int
+
 proc getInProgressRun(
   workflow: string,
   timeout: int = 10000
@@ -107,15 +110,17 @@ proc getInProgressRun(
   let
     start = now()
     timeoutDuration = initDuration(milliseconds = timeout)
-
-  withSpinner(fmt"waiting for {workflow} workflow to start"):
-    while (now() - start) < timeoutDuration:
+  var elapsed = now() - start
+  withSpinner(fmt"waiting {timeRemaining(timeout, elapsed)}s for {workflow} workflow to start"):
+    while elapsed < timeoutDuration:
+      spinner.setText(fmt"waiting {timeRemaining(timeout, elapsed)}s for {workflow} workflow to start")
       let response = getGhApi(fmt"https://api.github.com/repos/daylinmorgan/oizys/actions/workflows/{workflow}/runs")
       let runs = fromJson(response.body,  ListGhWorkflowResponse).workflow_runs
       let run = runs[0]
       if run.isRunning and run.isRecent(start):
         return ok run
       sleep 500
+      elapsed = now() - start
 
   warn "timeout reached waiting for workflow to start"
 
