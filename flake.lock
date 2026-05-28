@@ -351,6 +351,26 @@
         "type": "github"
       }
     },
+    "nnl": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1762970811,
+        "narHash": "sha256-tpKbsLkNb273ixT1tOIdbXhzvkC9qlpWRg3jS+kL7Ug=",
+        "owner": "daylinmorgan",
+        "repo": "nnl",
+        "rev": "b14eaeeeba7caa1c98f02dcf76db1b6a19d52819",
+        "type": "github"
+      },
+      "original": {
+        "owner": "daylinmorgan",
+        "repo": "nnl",
+        "type": "github"
+      }
+    },
     "pi": {
       "inputs": {
         "nixpkgs": [
@@ -441,6 +461,7 @@
         ],
         "nixpkgs-lib": "nixpkgs-lib",
         "nixpkgs-nixos-unstable": "nixpkgs-nixos-unstable",
+        "nnl": "nnl",
         "pi": "pi",
         "rust-overlay": "rust-overlay",
         "sops-nix": "sops-nix",

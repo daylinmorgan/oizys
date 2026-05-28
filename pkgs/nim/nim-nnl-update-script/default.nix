@@ -12,6 +12,7 @@ let
     inherit name;
     runtimeInputs = [
       (flake.pkgs "self").nix-update
+      (flake.pkg "nnl")
       git
     ];
     text = ''
@@ -26,7 +27,7 @@ let
       trap 'rm -rf "$tmpdir"' EXIT
       git clone --depth 1 --branch "''${tagPrefix}$version" \
         "$homepage" "$tmpdir"
-      nix run "github:daylinmorgan/nnl" -- "$tmpdir" ${extraFlags}
+      nnl "$tmpdir" ${extraFlags}
     '';
   };
 in
