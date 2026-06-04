@@ -248,7 +248,8 @@ window-rule {
     // - host Firefox (app-id is "firefox")
     // - Flatpak Firefox (app-id is "org.mozilla.firefox")
     match app-id=r#"firefox$"#
-    // default-column-width { proportion 1.0; }
+    // using fixed to hopefully be full screen on a 1080p monitor and "most" on 1440 ultra
+    default-column-width { fixed 1920; }
 }
 
 // Example: block out two password managers from screen capture.
