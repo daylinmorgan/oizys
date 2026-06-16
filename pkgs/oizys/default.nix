@@ -11,7 +11,11 @@ let
   inherit (builtins) concatStringsSep readDir attrNames;
   subFlag = toString substituters;
   trustedPubKeys = toString trusted-public-keys;
-  hosts = ../../hosts |> readDir |> attrNames |> concatStringsSep ",";
+  hosts =
+    ../../hosts
+    |> readDir
+    |> attrNames
+    |> concatStringsSep ",";
 in
 
 buildAtlasPackage {

@@ -3,7 +3,7 @@ let
   image = "docker.io/shoshuo/prismarr:latest";
 in
 {
-    environment.etc."containers/systemd/prismarr.container".text = ''
+  environment.etc."containers/systemd/prismarr.container".text = ''
     [Unit]
     Description=Prismarr
     After=network-online.target

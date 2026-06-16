@@ -61,13 +61,11 @@
     efi.canTouchEfiVariables = true;
   };
 
-
   # ensure that text is readable in vte
   boot.kernelParams = [
     "video=DP-6:3440x1440@120"
     "video=eDP-1:1920x1200@60"
   ];
-
 
   # don't delete this you foo bar
   system.stateVersion = "23.11"; # Did you read the comment?

@@ -61,7 +61,6 @@
     network.dns_bind_port = 1153;
   };
 
-
   services.openssh = enabled // {
     settings = {
       PasswordAuthentication = false;

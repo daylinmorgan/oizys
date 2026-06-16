@@ -24,5 +24,11 @@ rec {
     else
       [ ];
 
-  findModulesList = dir: dir |> readDir |> mapAttrs (handleModule dir) |> attrValues |> concatLists;
+  findModulesList =
+    dir:
+    dir
+    |> readDir
+    |> mapAttrs (handleModule dir)
+    |> attrValues
+    |> concatLists;
 }

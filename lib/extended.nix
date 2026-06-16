@@ -193,11 +193,25 @@ let
     f
     |> readFile
     |> splitString "\n"
-    |> map (line: (line |> splitString "#" |> head |> trim))
+    |> map (
+      line:
+      (
+        line
+        |> splitString "#"
+        |> head
+        |> trim
+      )
+    )
     |> filter (line: line != "");
 
   pathFromHostName = host: ../. + "/hosts/${host}";
-  hostFiles = host: host |> pathFromHostName |> findModulesList |> listToAttrs |> attrValues;
+  hostFiles =
+    host:
+    host
+    |> pathFromHostName
+    |> findModulesList
+    |> listToAttrs
+    |> attrValues;
   hostSystem =
     host:
     let
