@@ -38,6 +38,9 @@
     celler.inputs.nixpkgs.follows = "nixpkgs";
     celler.inputs.flake-parts.follows = "flake-parts";
 
+    noctalia.url = "github:noctalia-dev/noctalia";
+    noctalia.inputs.nixpkgs.follows = "nixpkgs";
+
     llm-nix.url = "github:daylinmorgan/llm-nix";
     llm-nix.inputs.nixpkgs.follows = "nixpkgs";
 

@@ -31,4 +31,5 @@ in
   "niriman"
   "daylin-website"
   "celler"
+  "noctalia"
 ])

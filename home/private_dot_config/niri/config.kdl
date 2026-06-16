@@ -3,6 +3,7 @@
 
 include "binds.kdl"
 include "outputs.kdl"
+include "noctalia.kdl"
 
 // Input device configuration.
 // Find the full list of options on the wiki:
@@ -176,15 +177,7 @@ layout {
     }
 }
 
-// Add lines like this to spawn processes at startup.
-// Note that running niri as a session supports xdg-desktop-autostart,
-// which may be more convenient to use.
-// See the binds section below for more spawn examples.
-spawn-at-startup "niriman" "eww"
-
-// this should be integated as of 25.08
-// spawn-at-startup "xwayland-satellite"
-// environment { DISPLAY ":0"; }
+// spawn-at-startup "niriman" "eww"
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
 // If the client will specifically ask for CSD, the request will be honored.
@@ -197,24 +190,6 @@ prefer-no-csd
 // A ~ at the front will be expanded to the home directory.
 // The path is formatted with strftime(3) to give you the screenshot date and time.
 screenshot-path "~/stuff/screenshots/screenshot_from_%Y-%m-%d_%H-%M-%S.png"
-
-// You can also set this to null to disable saving screenshots to disk.
-// screenshot-path null
-
-// Animation settings.
-// The wiki explains how to configure individual animations:
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Animations
-animations {
-    // Uncomment to turn off all animations.
-    // off
-
-    // Slow down all animations by this factor. Values below 1 speed them up instead.
-    // slowdown 3.0
-}
-
-// Window rules let you adjust behavior for individual windows.
-// Find more information on the wiki:
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Window-Rules
 
 // keep if I ever switch back to wezterm
 // Work around WezTerm's initial configure bug
@@ -277,8 +252,6 @@ window-rule {
     geometry-corner-radius 12
     clip-to-geometry true
 }
-
-
 
 overview {
   backdrop-color "#1e1e2e"

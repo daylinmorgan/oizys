@@ -26,6 +26,12 @@ in
 
 mkOizysModule config "niri" {
 
+  networking.networkmanager = enabled;
+  hardware.bluetooth = enabled;
+  services.power-profiles-daemon = enabled;
+  # services.tuned = enabled;
+  services.upower = enabled;
+
   programs.niri = enabled;
   systemd.user.services = {
     mako = niriService {
@@ -71,9 +77,19 @@ mkOizysModule config "niri" {
       };
     };
 
+    noctalia =
+      let
+        noctalia = flake.pkg "noctalia";
+      in
+      niriService {
+        serviceConfig = {
+          ExecStart = "${noctalia}/bin/noctalia";
+        };
+      };
   };
 
   environment.systemPackages = [
+    (flake.pkg "noctalia")
     (flake.pkg "niriman")
   ]
   ++ (with pkgs; [
