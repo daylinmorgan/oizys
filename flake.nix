@@ -12,9 +12,9 @@
     nixpkgs.follows = "nixpkgs-nixos-unstable";
 
     # to switch to lix stable from nixpkgs set lib/data.lixModule to false;
-    lix.url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
+    lix.url = "https://git.lix.systems/lix-project/lix/archive/c019a776e9ea34682f9e785547f5267d35173522.tar.gz";
     lix.flake = false;
-    lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
+    lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/727d859b6f5f3289ce49fe26146b3f006387d457.tar.gz";
     lix-module.inputs.nixpkgs.follows = "nixpkgs";
     lix-module.inputs.flake-utils.follows = "flake-utils";
     lix-module.inputs.lix.follows = "lix";

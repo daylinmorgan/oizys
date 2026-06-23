@@ -169,7 +169,7 @@
       },
       "original": {
         "type": "tarball",
-        "url": "https://git.lix.systems/lix-project/lix/archive/main.tar.gz"
+        "url": "https://git.lix.systems/lix-project/lix/archive/c019a776e9ea34682f9e785547f5267d35173522.tar.gz"
       }
     },
     "lix-module": {
@@ -194,7 +194,7 @@
       },
       "original": {
         "type": "tarball",
-        "url": "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz"
+        "url": "https://git.lix.systems/lix-project/nixos-module/archive/727d859b6f5f3289ce49fe26146b3f006387d457.tar.gz"
       }
     },
     "llm-nix": {
