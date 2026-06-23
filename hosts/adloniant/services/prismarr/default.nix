@@ -1,6 +1,6 @@
 { ... }:
 let
-  image = "docker.io/shoshuo/prismarr:latest";
+  image = "docker.io/shoshuo/prismarr:1.1.1";
 in
 {
   environment.etc."containers/systemd/prismarr.container".text = ''
