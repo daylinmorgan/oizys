@@ -88,6 +88,11 @@ in
       Session\Port=${toString torrentingPort}
       Session\SSL\Port=58483
       Session\ShareLimitAction=Stop
+      Session\ExcludedFileNames=
+      Session\DHTEnabled=false
+      Session\LSDEnabled=false
+      Session\PeXEnabled=false
+      Session\ShareLimitAction=Stop
 
       [Preferences]
       WebUI\Address=${namespaceAddress}
