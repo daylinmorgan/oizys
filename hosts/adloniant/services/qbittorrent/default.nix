@@ -6,7 +6,7 @@
   ...
 }:
 let
-  # Must match the forwarded port configured in AirVPN's WireGuard config.
+  # forwarded port from vpn.
   torrentingPort = 38878;
   # vpn-confinement's default namespace address; qbittorrent's WebUI binds here
   # and Caddy reaches it via the portMapping below.
@@ -16,7 +16,6 @@ in
   imports = [ inputs.vpn-confinement.nixosModules.default ];
 
   # Only this namespace egresses through AirVPN. Reuses the same wg-quick config
-  # (wg-conf) that previously drove the host-wide wg-quick interface.
   # NOTE: namespace name is limited to 7 characters.
   vpnNamespaces.air-na = {
     enable = true;
@@ -69,15 +68,11 @@ in
     webuiPort = 8080;
     # serverConfig left at its default ({}) so the module installs nothing; the
     # full qBittorrent.conf is rendered at runtime by the sops template below,
-    # keeping the WebUI password hash out of git and the nix store.
   };
 
-  # WebUI Password_PBKDF2 hash (the @ByteArray(...) value).
   sops.secrets.qbittorrent-pass = { };
 
   # Render qBittorrent.conf at activation with the password substituted in.
-  # Output lives in /run (tmpfs), 0600, owned by qbittorrent -> never in
-  # git or the world-readable nix store. Nested `Key\Sub` mirrors the INI.
   sops.templates."qBittorrent.conf" = {
     owner = config.services.qbittorrent.user;
     mode = "0600";
