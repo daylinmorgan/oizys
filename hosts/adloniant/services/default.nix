@@ -17,7 +17,11 @@ let
     prismarr = 7070;
   };
   openPorts = false;
-  torrentingPort = 38878;
+  # Most services listen on the host loopback; qbittorrent runs inside the
+  # air-na VPN namespace and is reachable at the namespace bridge address.
+  serviceHosts = {
+    qbittorrent = "192.168.15.1";
+  };
   makeLandingPage =
     subdomains:
     let
@@ -39,15 +43,14 @@ let
   landingPage = pkgs.writeTextDir "index.html" (makeLandingPage (servicesPorts |> attrNames));
 in
 {
-  imports = [ ./prismarr ];
+  imports = [
+    ./prismarr
+    ./qbittorrent # qbittorrent is VPN-confined; see this module
+  ];
 
   services = {
     fwupd = enabled;
     # flaresolverr = enabled;
-    qbittorrent = enabled // {
-      inherit torrentingPort;
-      openFirewall = openPorts;
-    };
   }
   // (
     ''
@@ -94,7 +97,7 @@ in
             name = "http://${name}.home.dayl.in";
             value = {
               extraConfig = ''
-                reverse_proxy http://localhost:${toString port}
+                reverse_proxy http://${serviceHosts.${name} or "localhost"}:${toString port}
               '';
             };
           }
@@ -117,8 +120,9 @@ in
   # let caddy talk to tailscale so certs work
   users.users.caddy.extraGroups = [ "tailscale" ];
 
+  # also set by vpn-confinement?
   # Required for Tailscale subnet routing
-  boot.kernel.sysctl = {
+  boot.kernel.sysctl = lib.mkDefault {
     "net.ipv4.ip_forward" = 1;
     "net.ipv6.conf.all.forwarding" = 1;
   };
@@ -140,7 +144,7 @@ in
       53 # Also allow TCP for DNS (used for large queries/zone transfers)
       80
       443
-      torrentingPort
+      # torrent inbound is handled inside the air-na VPN namespace
     ];
   };
 

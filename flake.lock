@@ -489,7 +489,8 @@
         "systems": "systems",
         "treefmt-nix": "treefmt-nix",
         "tsm": "tsm",
-        "utils": "utils"
+        "utils": "utils",
+        "vpn-confinement": "vpn-confinement"
       }
     },
     "rust-overlay": {
@@ -637,6 +638,21 @@
       "original": {
         "owner": "pyproject-nix",
         "repo": "uv2nix",
+        "type": "github"
+      }
+    },
+    "vpn-confinement": {
+      "locked": {
+        "lastModified": 1778182451,
+        "narHash": "sha256-Bz3n2THDGf90Z9gMqhH/J492prYH8B6RFRlxv/fPBwc=",
+        "owner": "Maroka-chan",
+        "repo": "VPN-Confinement",
+        "rev": "cf5bfc4c3559f2e783698b1aa23c165072039a7d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Maroka-chan",
+        "repo": "VPN-Confinement",
         "type": "github"
       }
     }

@@ -51,10 +51,9 @@
     secrets.tailscale-key = { };
   };
 
-  networking.wg-quick.interfaces = {
-    # AirVPN - North America
-    air-na.configFile = config.sops.secrets.wg-conf.path;
-  };
+  # AirVPN is no longer brought up host-wide. The same wg-conf is now consumed
+  # by the `air-na` VPN namespace (see services/qbittorrent), so only
+  # qbittorrent egresses through the VPN.
 
   # Fix the port 53 conflict between dnsmasq and Podman's aardvark-dns
   virtualisation.containers.containersConf.settings = {
