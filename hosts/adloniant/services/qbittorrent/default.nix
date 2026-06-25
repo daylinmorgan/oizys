@@ -57,7 +57,9 @@ in
     # module's own serverConfig install, which is disabled now serverConfig={}).
     restartTriggers = [ config.sops.templates."qBittorrent.conf".content ];
     serviceConfig.ExecStartPre = [
-      "${pkgs.coreutils}/bin/install -Dm600 ${config.sops.templates."qBittorrent.conf".path} ${config.services.qbittorrent.profileDir}/qBittorrent/config/qBittorrent.conf"
+      "${pkgs.coreutils}/bin/install -Dm600 ${
+        config.sops.templates."qBittorrent.conf".path
+      } ${config.services.qbittorrent.profileDir}/qBittorrent/config/qBittorrent.conf"
     ];
   };
 
@@ -98,7 +100,13 @@ in
       WebUI\CSRFProtection=false
       WebUI\HostHeaderValidation=false
       WebUI\Password_PBKDF2=${config.sops.placeholder.qbittorrent-pass}
-      WebUI\RootFolder=${pkgs.vuetorrent}/share/vuetorrent
     '';
   };
+
+  # The session secret can be generated with openssl rand -hex 32
+  sops.secrets.qui-secret = { };
+  services.qui = enabled // {
+    secretFile = config.sops.secrets.qui-secret.path;
+  };
+
 }

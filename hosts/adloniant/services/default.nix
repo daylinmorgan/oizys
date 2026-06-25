@@ -9,6 +9,7 @@
 let
   inherit (builtins) attrNames concatStringsSep;
   servicesPorts = {
+    qui = 7476;
     jellyfin = 8096;
     sonarr = 8989;
     radarr = 7878;
