@@ -84,7 +84,7 @@ in
       Session\DisableAutoTMMTriggers\CategorySavePathChanged=false
       Session\DisableAutoTMMTriggers\DefaultSavePathChanged=false
       Session\TorrentContentLayout=Subfolder
-      Session\QueueingSystemEnabled=true
+      Session\QueueingSystemEnabled=false
       Session\Port=${toString torrentingPort}
       Session\SSL\Port=58483
       Session\ShareLimitAction=Stop
