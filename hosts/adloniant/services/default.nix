@@ -49,6 +49,8 @@ in
     ./qbittorrent # qbittorrent is VPN-confined; see this module
   ];
 
+  sops.secrets.radarr-api = { };
+  sops.secrets.sonarr-api = { };
   services = {
     fwupd = enabled;
     # flaresolverr = enabled;
@@ -79,6 +81,25 @@ in
           "8.8.4.4"
         ];
       };
+    };
+    recyclarr = enabled // {
+      configuration =
+        [
+          "sonarr"
+          "radarr"
+        ]
+        |> map (name: {
+          inherit name;
+          value = {
+            ${name} = {
+              api_key = {
+                _secret = config.sops.secrets."${name}-api".path;
+              };
+              base_url = "http://localhost:${toString servicesPorts.${name}}";
+            };
+          };
+        })
+        |> lib.listToAttrs;
     };
     caddy = enabled // {
       logFormat = ''
