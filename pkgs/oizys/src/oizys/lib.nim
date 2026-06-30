@@ -15,7 +15,14 @@ proc checkBuild(installable: string, args: openArray[string]): tuple[stdout: str
   withSpinner(bbfmt"attempt to build: [b]{installable}"):
     (output, err, code) = cmd.runCapt()
   if code == 0:
+    if "--rebuild" in args:
+      fatalQuit fmt"{cmd} had zero exit"
+    info "attempting second-pass with --rebuild"
+    withSpinner(bbfmt"second attempt to build: [b]{installable}"):
+      (output, err, code) = cmd.withArgs("--rebuild").runCapt()
+  if code == 0:
     fatalQuit fmt"{cmd} had zero exit"
+
   result = (output, err)
 
 type
