@@ -195,11 +195,14 @@ hwylCli:
     ... "collect build hash from failure"
     positionals:
       installable string
+      args:
+        T seq[string]
+        ? "arguments forwarded to nix-build"
     flags:
       `no-copy` "don't copy to clipboard"
       file(string, "path/to/file to edit in-place")
     run:
-      let hashes = getBuildHash(installable)
+      let hashes = getBuildHash(installable, args)
       if file != "":
         setHashInFile(hashes, file)
       else:

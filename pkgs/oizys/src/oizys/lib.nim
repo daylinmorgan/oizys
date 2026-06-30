@@ -7,11 +7,11 @@ import hwylterm/tables
 import ./[nix, exec, logging, context]
 
 # TODO: refactor runCmdCaptWithSpinner so it works in getBuildHash
-proc checkBuild(installable: string): tuple[stdout: string, stderr: string] =
+proc checkBuild(installable: string, args: openArray[string]): tuple[stdout: string, stderr: string] =
   var
     output, err: string
     code: int
-  let cmd = newNixCommand("build", noNom=true).withArgs(installable)
+  let cmd = newNixCommand("build", noNom=true).withArgs(installable).withArgs(args)
   withSpinner(bbfmt"attempt to build: [b]{installable}"):
     (output, err, code) = cmd.runCapt()
   if code == 0:
@@ -22,8 +22,8 @@ type
   Hashes = object
     specified*, got*: string
 
-proc getBuildHash*(installable: string): Hashes =
-  let (output, err) = checkBuild(installable)
+proc getBuildHash*(installable: string, args: openArray[string]): Hashes =
+  let (output, err) = checkBuild(installable, args)
   for line in err.splitLines():
     if line.strip().startsWith("got: "):
       let s = line.split("got:")
