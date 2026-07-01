@@ -54,6 +54,9 @@ let
       inherit system;
       modules = [
         { nixpkgs.hostPlatform = system; }
+        # record the flake revision that built this system so oizys can
+        # report it at runtime (via `nixos-version --configuration-revision`)
+        { system.configurationRevision = self.rev or self.dirtyRev or "dirty"; }
       ]
       ++ (selfModules "oizys")
       ++ (nixosModules "sops-nix")

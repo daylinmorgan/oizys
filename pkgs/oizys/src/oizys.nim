@@ -1,5 +1,5 @@
 ## nix begat oizys
-import std/[os, osproc, sequtils, strformat, strtabs, strutils]
+import std/[os, osproc, sequtils, strformat, strtabs, strutils, times]
 import hwylterm
 import hwylterm/hwylcli
 import ./oizys/[context, exec, github, lib, logging, nix]
@@ -25,6 +25,45 @@ proc `$`[T](_: typedesc[seq[T]]): string = $T & "..."
 proc `$`(_: typedesc[seq[KVString]]): string = "(key:val)..."
 
 const version = inferVersionFromNimble()
+
+proc nixosVersionField(flag: string = ""): string =
+  ## capture a field from `nixos-version`, empty string on failure
+  var cmd = newCommand("nixos-version")
+  if flag.len > 0: cmd.args.add flag
+  let (output, _, code) = cmd.runCapt()
+  if code == 0: output.strip() else: ""
+
+proc systemInstalledDate(): string =
+  ## mtime of the current system generation (when it was switched to)
+  try:
+    getFileInfo("/nix/var/nix/profiles/system", followSymlink = false)
+      .lastWriteTime.local.format("yyyy-MM-dd HH:mm")
+  except CatchableError:
+    ""
+
+proc getSystemVersion(): BBstring =
+  ## oizys version plus details about the running nixos system:
+  ## the flake revision that built it, the nixos/nixpkgs label, and
+  ## when the current generation was installed
+  var rows: seq[(string, string)]
+  result = bb"[b cyan]oizys[/]: " & version & "\n"
+  let
+    rev = nixosVersionField("--configuration-revision")
+    label = nixosVersionField()
+    installed = systemInstalledDate()
+  if rev != "":
+    rows.add ("flake rev", rev)
+  if label != "":
+    rows.add ("nixos", label)
+  if installed != "":
+    rows.add ("installed", installed)
+  let n = rows.mapIt(it[0].len).max
+  result.add rows.mapIt(
+    (it[0].bb("bold") & ": ").alignLeft(6) & it[1]
+  ).join("\n")
+  # for (k, v) in rows:
+  #   result.add k.bb("bold").alignLeft(6) & ":" & v
+
 const hostHelp = """
 host(s) to build
 choices: """ & enumNames(Host).mapIt(it.bbMarkup("bold")).join(",")
@@ -32,7 +71,7 @@ choices: """ & enumNames(Host).mapIt(it.bbMarkup("bold")).join(",")
 hwylCli:
   name "oizys"
   settings InferEnv, LongHelp
-  version version
+  version getSystemVersion()
   help:
     styles: fromBuiltinHelpStyles(AllSettings)
   flags:
