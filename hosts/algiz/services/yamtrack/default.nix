@@ -3,18 +3,19 @@ let
   inherit (import ../images.nix) yamtrack yamtrack-redis;
 in
 {
-
   services.caddy.virtualHosts."yamtrack.dayl.in".extraConfig = ''
     reverse_proxy http://localhost:8565
   '';
 
-  # do I need to bother with a separate network here?
   environment.etc = {
-    "containers/systemd/yamtrack.network".text = ''
-      [Network]
-      NetworkName=yamtrack
+    # 1. Define the Pod (Handles the shared network and ports)
+    "containers/systemd/yamtrack.pod".text = ''
+      [Pod]
+      PodName=yamtrack
+      PublishPort=8565:8000
     '';
 
+    # 2. Redis Container (Attached to Pod)
     "containers/systemd/yamtrack-redis.container".text = ''
       [Unit]
       Description=Redis for Yamtrack
@@ -22,8 +23,8 @@ in
       [Container]
       ContainerName=yamtrack-redis
       Image=${yamtrack-redis}
+      Pod=yamtrack.pod
       Volume=/var/lib/yamtrack/redis:/data:Z,U
-      Network=yamtrack.network
 
       [Service]
       Restart=always
@@ -32,6 +33,7 @@ in
       WantedBy=multi-user.target
     '';
 
+    # 3. App Container (Attached to Pod)
     "containers/systemd/yamtrack.container".text = ''
       [Unit]
       Description=Yamtrack
@@ -41,12 +43,12 @@ in
       [Container]
       ContainerName=yamtrack
       Image=${yamtrack}
+      Pod=yamtrack.pod
       Environment=TZ=America/New_York
-      Environment=REDIS_URL=redis://yamtrack-redis:6379
+      # Change connection to localhost since they share the Pod network namespace
+      Environment=REDIS_URL=redis://localhost:6379
       Environment=URLS=https://yamtrack.dayl.in
-      PublishPort=8565:8000
       Volume=/var/lib/yamtrack/db:/yamtrack/db:Z,U
-      Network=yamtrack.network
 
       [Service]
       Restart=always
