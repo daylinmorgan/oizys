@@ -11,7 +11,7 @@
       "oizys:OcgNR7G1/au+NnIh12LzW27EXOfHGZalJNgSJSYJFQQ="
     ];
   };
-  ## nixpkgs-unstable = { pkg = PR-num };
+  # nixpkgs-unstable = { pkg = PR-num };
   nixpkgs-overlays = { };
   self-overlays = [
     "nim-atlas"

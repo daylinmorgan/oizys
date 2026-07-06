@@ -5,11 +5,11 @@
 
   inputs = {
     nixpkgs-nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    # nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     # nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
     # nixpkgs-master.url = "github:nixos/nixpkgs/master";
     # my-nixpkgs.url = "github:daylinmorgan/nixpkgs/nixos-unstable";
-    nixpkgs.follows = "nixpkgs-nixos-unstable";
+    nixpkgs.follows = "nixpkgs-unstable";
 
     # to switch to lix stable from nixpkgs set lib/data.lixModule to false;
     # lix.url = "https://git.lix.systems/lix-project/lix/archive/c019a776e9ea34682f9e785547f5267d35173522.tar.gz";
