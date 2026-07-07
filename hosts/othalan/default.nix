@@ -51,12 +51,6 @@
     user = "daylin";
     repository = "rclone:g:archives/othalan";
     passwordFile = config.sops.secrets.restic-othalan.path;
-    paths =
-      ''
-        stuff
-        dev
-      ''
-      |> lib.listify
-      |> map (p: "/home/daylin/${p}");
+    paths = "stuff|dev" |> lib.listify |> map (p: "/home/daylin/${p}");
   };
 }
