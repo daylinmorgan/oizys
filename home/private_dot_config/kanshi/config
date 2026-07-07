@@ -3,6 +3,7 @@
 output "Ancor Communications Inc VN279 M4LMQS079020" alias $work-tall
 output "Ancor Communications Inc ASUS MX239 H4LMTJ010711" alias $work-middle
 output "Acer Technologies Acer H236HL LX1AA0044210" alias $home-monitor
+output "LG Electronics LG ULTRAWIDE 602INJL5S204" alias $home-ultrawide
 
 
 profile default {
@@ -10,8 +11,8 @@ profile default {
 }
 
 profile home {
-  output eDP-1         mode 1920x1200 position 1920,0
-  output $home-monitor mode 1920x1080 position 0,0
+  output eDP-1           scale 1.0 mode 1920x1200 position 3440,0
+  output $home-ultrawide mode 3440x1440 position 0,0 scale 1.0
 }
 
 # three monitors :)

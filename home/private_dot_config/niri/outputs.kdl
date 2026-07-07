@@ -1,5 +1,5 @@
 // The built-in laptop monitor is usually called "eDP-1".
-output "eDP-1" {}
+output "eDP-1" { }
 
 output "LG Electronics LG ULTRAWIDE 602INJL5S204" {
   layout {
