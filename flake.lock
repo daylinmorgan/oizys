@@ -493,7 +493,7 @@
         "nix-index-database": "nix-index-database",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": [
-          "nixpkgs-unstable"
+          "nixpkgs-nixos-unstable"
         ],
         "nixpkgs-lib": "nixpkgs-lib",
         "nixpkgs-nixos-unstable": "nixpkgs-nixos-unstable",

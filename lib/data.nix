@@ -12,7 +12,13 @@
     ];
   };
   # nixpkgs-unstable = { pkg = PR-num };
-  nixpkgs-overlays = { };
+  nixpkgs-overlays = {
+    nixpkgs-unstable = {
+      nim-unwrapped = 496960;
+      nim = 496960;
+      buildNimPackage = 496960;
+    };
+  };
   self-overlays = [
     "nim-atlas"
     "firefox"
