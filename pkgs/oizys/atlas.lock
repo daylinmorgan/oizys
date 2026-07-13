@@ -60,7 +60,7 @@
   },
   "hostOS": "linux",
   "hostCPU": "amd64",
-  "nimVersion": "2.2.4",
+  "nimVersion": "2.2.10",
   "gccVersion": "15.2.0",
   "clangVersion": ""
 }
