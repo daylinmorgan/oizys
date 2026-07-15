@@ -14,7 +14,7 @@ on:
         type: string
       nix-flags:
         description: "flags forwared to nix commands"
-        default: ""
+        default: "--print-build-logs"
         type: string
       full-build:
         description: "perform full system build for each host"
