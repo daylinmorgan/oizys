@@ -4,7 +4,7 @@ export EZA_COLORS="da=37"
 export EZA_MIN_LUMINANCE=50
 
 alias eza="eza --group-directories-first"
-is-tty || alias eza="${aliases[eza]:-eza} --icons"
+is-tty || alias eza="${aliases[eza]:-eza} --icons=always"
 
 alias ls='eza'
 alias la='eza -la'
