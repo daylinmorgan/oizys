@@ -1,0 +1,129 @@
+config_version = 2
+
+[bar]
+order = [ "default" ]
+
+    [bar.default]
+    background_opacity = 0.0
+    capsule = true
+    capsule_padding = 15.0
+    center = [ "workspaces" ]
+    end = [
+        "tray",
+        "notifications",
+        "network",
+        "bluetooth",
+        "volume",
+        "brightness",
+        "battery",
+        "control-center",
+        "session"
+    ]
+    margin_ends = 10
+    shadow = false
+    start = [ "clock", "launcher", "group:g1", "active_window" ]
+
+        [[bar.default.capsule_group]]
+        fill = "surface_variant"
+        id = "g1"
+        members = [ "cpu", "ram", "temp" ]
+        opacity = 1.0
+        padding = 15.0
+
+[[control_center.shortcuts]]
+type = "wifi"
+
+[[control_center.shortcuts]]
+type = "bluetooth"
+
+[[control_center.shortcuts]]
+type = "nightlight"
+
+[[control_center.shortcuts]]
+type = "power_profile"
+
+[[control_center.shortcuts]]
+type = "dark_mode"
+
+[[control_center.shortcuts]]
+type = "clipboard"
+
+[lockscreen_widgets]
+enabled = false
+schema_version = 2
+widget_order = [ "lockscreen-login-box@DP-7", "lockscreen-login-box@eDP-1", "lockscreen-login-box@DP-6" ]
+
+    [lockscreen_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@DP-6"]
+    box_height = 70.0
+    box_width = 400.0
+    cx = 1720.0
+    cy = 1317.0
+    output = "DP-6"
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@DP-6".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        input_opacity = 1.0
+        input_radius = 6.0
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_password_hint = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@DP-7"]
+    box_height = 70.0
+    box_width = 400.0
+    cx = 1720.0
+    cy = 1321.0
+    output = "DP-7"
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@DP-7".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        input_opacity = 1.0
+        input_radius = 6.0
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_password_hint = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
+    box_height = 70.0
+    box_width = 400.0
+    cx = 768.0
+    cy = 841.0
+    output = "eDP-1"
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        input_opacity = 1.0
+        input_radius = 6.0
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_password_hint = true
+
+[shell]
+settings_show_advanced = true
+time_format = "{:%-I:%M %p}"
+
+[theme]
+builtin = "Catppuccin"
+
+[widget.clock]
+format = "{:%-I:%M %p}"
