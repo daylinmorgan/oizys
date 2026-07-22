@@ -11,7 +11,6 @@
     # my-nixpkgs.url = "github:daylinmorgan/nixpkgs/nixos-unstable";
     nixpkgs.follows = "nixpkgs-nixos-unstable";
 
-
     # to switch to lix stable from nixpkgs set lib/data.lixModule to false;
     # lix.url = "https://git.lix.systems/lix-project/lix/archive/c019a776e9ea34682f9e785547f5267d35173522.tar.gz";
     lix.url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
