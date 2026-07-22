@@ -11,6 +11,13 @@
     # };
   };
 
+  users.users.daylin = {
+    extraGroups = [
+      # https://github.com/crosspoint-reader/xteink-flasher/issues/4#issuecomment-4171184494
+      "dialout" # For browser based xteink flasher
+    ];
+  };
+
   sops = {
     defaultSopsFile = ./secrets.yaml;
 
