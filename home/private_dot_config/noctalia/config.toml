@@ -1,4 +1,4 @@
-config_version = 2
+config_version = 8
 
 [bar]
 order = [ "default" ]
@@ -76,7 +76,6 @@ widget_order = [ "lockscreen-login-box@DP-7", "lockscreen-login-box@eDP-1", "loc
         show_caps_lock = true
         show_keyboard_layout = true
         show_login_button = true
-        show_password_hint = true
 
     [lockscreen_widgets.widget."lockscreen-login-box@DP-7"]
     box_height = 70.0
@@ -96,7 +95,6 @@ widget_order = [ "lockscreen-login-box@DP-7", "lockscreen-login-box@eDP-1", "loc
         show_caps_lock = true
         show_keyboard_layout = true
         show_login_button = true
-        show_password_hint = true
 
     [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
     box_height = 70.0
@@ -116,7 +114,6 @@ widget_order = [ "lockscreen-login-box@DP-7", "lockscreen-login-box@eDP-1", "loc
         show_caps_lock = true
         show_keyboard_layout = true
         show_login_button = true
-        show_password_hint = true
 
 [shell]
 settings_show_advanced = true
