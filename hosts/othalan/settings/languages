@@ -1,7 +1,8 @@
 misc
 nim
 node
-nushell
+# pending need or merge of #546343
+# nushell
 python
 # tex
 typst

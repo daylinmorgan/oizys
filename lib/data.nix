@@ -12,6 +12,11 @@
     ];
   };
   # nixpkgs-unstable = { pkg = PR-num };
+  nixpkgs-overlays = {
+    nixpkgs-unstable = {
+      niri = 546004;
+    };
+  };
   # nixpkgs-overlays = {
   #   nixpkgs-unstable = {
   #     nim-unwrapped = 496960;
