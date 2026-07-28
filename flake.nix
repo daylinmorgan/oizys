@@ -44,6 +44,13 @@
     noctalia.url = "github:noctalia-dev/noctalia";
     noctalia.inputs.nixpkgs.follows = "nixpkgs";
 
+    firefox-nightly.url = "github:nix-community/flake-firefox-nightly";
+    firefox-nightly.inputs = {
+      nixpkgs.follows = "nixpkgs";
+      flake-compat.follows = "";
+      lib-aggregate.follows = "lib-aggregate";
+    };
+
     llm-nix.url = "github:daylinmorgan/llm-nix";
     llm-nix.inputs.nixpkgs.follows = "nixpkgs";
 

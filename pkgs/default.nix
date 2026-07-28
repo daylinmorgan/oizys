@@ -20,7 +20,9 @@ in
   nimble = pkgs.callPackage ./nim/nimble { };
   nim-atlas = callNimPackage ./nim/atlas;
   caddy-with-plugins = pkgs.callPackage ./caddy-with-plugins { };
-  firefox = pkgs.callPackage ./firefox { };
+  firefox = pkgs.callPackage ./firefox {
+    firefox-unwrapped = (flake.pkgs "firefox-nightly").firefox-nightly-bin.unwrapped;
+  };
   inherit (pkgs) difftastic;
 }
 // (import ./lix.nix { inherit flake lib pkgs; })

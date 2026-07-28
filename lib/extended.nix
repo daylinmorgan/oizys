@@ -14,6 +14,7 @@ let
     mapAttrs
     foldl'
     head
+    elem
     ;
   inherit (final)
     concatStringsSep
@@ -35,6 +36,10 @@ let
 in
 let
   data = (import ./data.nix);
+
+  # shared by the flake's own pkgs (lib/default.nix) and host builds (modules/nix.nix)
+  allowUnfreePredicate = pkg: elem (final.getName pkg) (data.unfree-packages or [ ]);
+
   enabled = {
     enable = true;
   };
@@ -305,5 +310,6 @@ in
     tryPkgsFromFile
     data
     findModulesList
+    allowUnfreePredicate
     ;
 }

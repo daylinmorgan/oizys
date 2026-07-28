@@ -80,6 +80,30 @@
         "url": "https://git.dayl.in/daylin/dayl.in/archive/main.tar.gz"
       }
     },
+    "firefox-nightly": {
+      "inputs": {
+        "flake-compat": [],
+        "lib-aggregate": [
+          "lib-aggregate"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1785239796,
+        "narHash": "sha256-ZAvlZ/pXirB3pXc6+M/OiMrDbynsLK8+h39YZYYpUgQ=",
+        "owner": "nix-community",
+        "repo": "flake-firefox-nightly",
+        "rev": "bdd2b6a9e8f4b412e894e924a18f53500e309aca",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "flake-firefox-nightly",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -482,6 +506,7 @@
         "NixVirt": "NixVirt",
         "celler": "celler",
         "daylin-website": "daylin-website",
+        "firefox-nightly": "firefox-nightly",
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",
         "lib-aggregate": "lib-aggregate",

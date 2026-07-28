@@ -24,6 +24,19 @@
   #     buildNimPackage = 496960;
   #   };
   # };
+  # unfree packages permitted in both the flake's pkgs and host builds
+  unfree-packages = [
+    "firefox-nightly"
+    "hplip"
+    # vscode's wrapper and unwrapped derivation are named separately
+    "code"
+    "vscode"
+    "google-chrome"
+    # mannaz
+    "nvidia-x11"
+    "nvidia-settings"
+    "broadcom-sta"
+  ];
   self-overlays = [
     "nim-atlas"
     "firefox"

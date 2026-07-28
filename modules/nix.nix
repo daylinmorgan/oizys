@@ -7,7 +7,8 @@ let
   inherit (lib.data) substituters;
 in
 {
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnfreePredicate = lib.allowUnfreePredicate;
+
   nix = {
     optimise.automatic = true;
     gc = {

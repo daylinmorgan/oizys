@@ -18,7 +18,9 @@ let
     (import nixpkgs {
       inherit system;
       overlays = (import ../overlays { inherit inputs lib; });
+      config.allowUnfreePredicate = lib.allowUnfreePredicate;
     });
+
   # pkgsForSystem = system: (import nixpkgs {inherit system;});
   forSystem = f: system: f system (pkgsForSystem system);
 
