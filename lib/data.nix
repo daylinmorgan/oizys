@@ -13,17 +13,11 @@
   };
   # nixpkgs-unstable = { pkg = PR-num };
   nixpkgs-overlays = {
-    nixpkgs-unstable = {
-      niri = 546004;
-    };
+    # nixpkgs-unstable = {
+    #   niri = 546004;
+    #   nimble = 542689;
+    # };
   };
-  # nixpkgs-overlays = {
-  #   nixpkgs-unstable = {
-  #     nim-unwrapped = 496960;
-  #     nim = 496960;
-  #     buildNimPackage = 496960;
-  #   };
-  # };
   # unfree packages permitted in both the flake's pkgs and host builds
   unfree-packages = [
     "firefox-nightly"
@@ -40,6 +34,6 @@
   self-overlays = [
     "nim-atlas"
     "firefox"
-    "nimble"
+    # "nimble"
   ];
 }
