@@ -385,7 +385,7 @@ proc pushPathsToCache(cache: NixCache, paths: openArray[string], jobs: int) =
 
 proc build(drv: NixEvalOutput, rest: seq[string]): BuildResult =
   let startTime = now()
-  let cmd = newCommand("nix", "build")
+  let cmd = newNixCommand("build")
     .withArgs(drv.drvPath & "^*", "--no-link")
     .withArgs(rest)
 
