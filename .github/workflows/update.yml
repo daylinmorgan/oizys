@@ -81,6 +81,7 @@ jobs:
           ci
           cache
           --host,="${{ env.hosts }}"
+          --bootstrap
           -vv
           --
           ${{ env.nix-flags }}
@@ -114,6 +115,7 @@ jobs:
           --
           ci update
           --host,="${{ env.hosts }}"
+          --bootstrap
           -vv
           --
           ${{ env.nix-flags }}

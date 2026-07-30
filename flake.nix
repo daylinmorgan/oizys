@@ -41,8 +41,8 @@
     celler.inputs.nixpkgs.follows = "nixpkgs";
     celler.inputs.flake-parts.follows = "flake-parts";
 
-    noctalia.url = "github:noctalia-dev/noctalia";
-    noctalia.inputs.nixpkgs.follows = "nixpkgs";
+    noctalia.url = "github:noctalia-dev/noctalia/cachix";
+    # noctalia.inputs.nixpkgs.follows = "nixpkgs";
 
     firefox-nightly.url = "github:nix-community/flake-firefox-nightly";
     firefox-nightly.inputs = {
