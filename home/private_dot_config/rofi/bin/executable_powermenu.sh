@@ -27,7 +27,8 @@ msg() {
 chosen="$(echo -e "$options" | $rofi_command -p "󱎫  $uptime " -dmenu -selected-row 2)"
 case $chosen in
 $lock)
-  swaylock
+  # swaylock # race condition with noctalia?
+  loginctl lock-session ${XDG_SESSION_ID-}
 	;;
 $shutdown)
 	ans=$(confirm_exit &)

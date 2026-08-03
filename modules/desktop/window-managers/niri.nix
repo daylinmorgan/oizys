@@ -65,17 +65,17 @@ mkOizysModule config "niri" {
       };
     };
 
-    swayidle = niriService {
-      path = with pkgs; [
-        niri
-        swaylock
-        swayidle
-      ];
-      serviceConfig = {
-        ExecStart = ''${pkgs.bash}/bin/bash -c "swayidle -w"'';
-        Restart = "on-failure";
-      };
-    };
+    # swayidle = niriService {
+    #   path = with pkgs; [
+    #     niri
+    #     swaylock
+    #     swayidle
+    #   ];
+    #   serviceConfig = {
+    #     ExecStart = ''${pkgs.bash}/bin/bash -c "swayidle -w"'';
+    #     Restart = "on-failure";
+    #   };
+    # };
 
     noctalia =
       let
@@ -108,7 +108,7 @@ mkOizysModule config "niri" {
     wl-clipboard
     rofi
     pwvucontrol
-    swaylock
+    # swaylock
     eww
     # awww
   ]);
