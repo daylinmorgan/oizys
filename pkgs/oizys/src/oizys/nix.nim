@@ -221,6 +221,10 @@ proc getSystemPathInputDrvs*(): seq[string] =
 proc missingDrvNixEvalJobs*(): HashSet[NixEvalOutput] =
   ## get all derivations not cached using nix-eval-jobs
   var cmd = newCommand("nix-eval-jobs", "--flake", "--check-cache-status")
+  # without these the cache check only sees the substituters in nix.conf,
+  # so anything cached elsewhere (i.e. a flake input's own cache) looks missing
+  if isBootstrap():
+    cmd.addArgs subFlags
   var output: string
 
   for host in getHosts():
