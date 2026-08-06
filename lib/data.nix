@@ -13,12 +13,8 @@
       "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
     ];
   };
-  # nixpkgs-unstable = { pkg = PR-num };
   nixpkgs-overlays = {
-    # nixpkgs-unstable = {
-    #   niri = 546004;
-    #   nimble = 542689;
-    # };
+    # nixpkgs-unstable = { pkg = PR-num };
   };
   # unfree packages permitted in both the flake's pkgs and host builds
   unfree-packages = [

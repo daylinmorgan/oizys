@@ -150,11 +150,28 @@ let
 
   loadNixpkgOverlay = final: name: {
     inherit name;
-    value = import inputs."${name}" {
+    value = importNixpkgsInput final name;
+  };
+
+  # instantiate one of the nixpkgs inputs with the same config/system as `final`
+  importNixpkgsInput =
+    final: nixpkgsInput:
+    import inputs.${nixpkgsInput} {
       inherit (final) config;
       localSystem = final.stdenv.hostPlatform.system;
     };
-  };
+
+  # warn when a package pulled from a PR input is the same version as the one
+  # already in nixpkgs (i.e. the PR has landed and the override can be dropped)
+  checkVersion =
+    base: name: pr: p:
+    let
+      baseVer = base.${name}.version or "0";
+      eqVer = (p ? version) && final.versionAtLeast baseVer p.version;
+    in
+    final.warnIf eqVer
+      "nixpkgs-overlays: nixpkgs already has ${name} ${baseVer} (>= ${p.version or "?"} from PR #${toString pr}) -- drop the override"
+      p;
 
   loadNixpkgOverlays =
     final:
@@ -168,14 +185,10 @@ let
   overlayPkgsFromNixpkgsInput =
     final: nixpkgsInput: packageNames:
     let
-      nixpkgs = (
-        import inputs.${nixpkgsInput} {
-          inherit (final) config;
-          localSystem = final.stdenv.hostPlatform.system;
-        }
-      );
+      nixpkgs = importNixpkgsInput final nixpkgsInput;
+      base = importNixpkgsInput final "nixpkgs";
     in
-    packageNames |> mapAttrs (name: _: nixpkgs.${name});
+    packageNames |> mapAttrs (name: pr: nixpkgs.${name} |> checkVersion base name pr);
 
   pkgsFromNixpkgsWithArgs =
     {
