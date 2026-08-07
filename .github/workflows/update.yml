@@ -89,7 +89,7 @@ jobs:
       - name: Build + Push full systems
         run: |
           DRVS="$(nix run . -- attr --host,="${{ env.hosts }}")"
-          nix build --out-link 'systems' --print-build-logs -- $DRVS
+          nix build --out-link 'systems' --print-build-logs --bootstrap -- $DRVS
           celler push oizys ./systems*
 
       - name: Commit Updates
