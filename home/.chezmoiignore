@@ -43,4 +43,6 @@ bin/lock
 .config/ghostty
 
 .config/libvirt
+.config/noctalia
+.config/mimeapps.list
 {{- end }}
