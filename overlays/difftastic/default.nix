@@ -1,12 +1,16 @@
-inputs: final: prev: {
+inputs: final: prev:
+let
+  version = "0.70.0";
+in
+{
   difftastic = prev.difftastic.overrideAttrs (
     finalAttrs: _: {
-      version = "0.69.0"; # 0.69.0-nim, really
+      inherit version;
       src = final.fetchFromGitHub {
         owner = "daylinmorgan";
         repo = "difftastic";
-        rev = "0.69.0-nim"; # finalAttrs.version;
-        hash = "sha256-H7hmteydc7zlPjTXfH5mqEYZEfC0W4S7+unOi0a4kz8=";
+        rev = "${version}-nim"; # finalAttrs.version;
+        hash = "sha256-jRdzJhjouE7kjh4ieNOpR5+MulceSMnRtiVPVxF471U=";
       };
       cargoDeps = final.rustPlatform.importCargoLock {
         lockFile = "${finalAttrs.src}/Cargo.lock";
