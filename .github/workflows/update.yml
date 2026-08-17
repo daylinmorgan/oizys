@@ -86,12 +86,12 @@ jobs:
           --
           ${{ env.nix-flags }}
 
-      - name: Build + Push full systems
-        run: |
-          DRVS="$(nix run . -- attr --host,="${{ env.hosts }}")"
-          nix run . -- build -vv --bootstrap -- $DRVS --print-build-logs --out-link 'systems'
-          celler push oizys ./systems*
-          rm -rf ./systems*
+      # - name: Build + Push full systems
+      #   run: |
+      #     DRVS="$(nix run . -- attr --host,="${{ env.hosts }}")"
+      #     nix run . -- build -vv --bootstrap -- $DRVS --print-build-logs --out-link 'systems'
+      #     celler push oizys ./systems*
+      #     rm -rf ./systems*
 
       - name: Commit Updates
         uses: daylin-bot/actions/commit-and-push@main
