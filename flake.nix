@@ -4,11 +4,14 @@
   outputs = inputs: (import ./lib inputs).oizysFlake;
 
   inputs = {
-    nixpkgs-nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs-nixos-unstable.url = "channels.nixos.org/nixos-unstable";
+    # nixpkgs-nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-unstable.url = "channels.nixos.org/nixpkgs-unstable";
+    # nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     # nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
     # nixpkgs-master.url = "github:nixos/nixpkgs/master";
     # my-nixpkgs.url = "github:daylinmorgan/nixpkgs/nixos-unstable";
+
     nixpkgs.follows = "nixpkgs-nixos-unstable";
 
     # to switch to lix stable from nixpkgs set lib/data.lixModule to false;
