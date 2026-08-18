@@ -231,11 +231,11 @@
         "uv2nix": "uv2nix"
       },
       "locked": {
-        "lastModified": 1786738171,
-        "narHash": "sha256-NfAXRKK6/hKPHHgK54GPX6k4M7DkL3yNzuzK8HLzu3I=",
+        "lastModified": 1787079321,
+        "narHash": "sha256-oSxqxP01HnycM5qSpHLXBsbfTy4pAQ8QrQxS+et1Sao=",
         "owner": "daylinmorgan",
         "repo": "llm-nix",
-        "rev": "70b7713729132bf2336acfdb59397e6cb1d437df",
+        "rev": "747148a122a16e300ab971d850b4a85c1e9c71ea",
         "type": "github"
       },
       "original": {
@@ -473,11 +473,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1785730568,
-        "narHash": "sha256-NjSPsgjJ7MSpBtTkUcmNhRe6AFZ96+zsca2M8YuQi8Y=",
+        "lastModified": 1786936886,
+        "narHash": "sha256-8SFyOdmcG6Nsh/JzlH812lTI/v+ur06fpQhj/acNn8k=",
         "owner": "pyproject-nix",
         "repo": "build-system-pkgs",
-        "rev": "90fde00db3687922d39d95fc591475fd0bbbcd72",
+        "rev": "90ffdeee1a4929b231913df067448cd9803d3e07",
         "type": "github"
       },
       "original": {
