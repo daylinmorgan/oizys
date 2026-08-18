@@ -76,7 +76,8 @@ proc nixosAttrs*(
     result.add nixosAttr(host, attr)
 
 proc newRebuildCommand(subcmd: NixosRebuildSubcmd, args: openArray[string], remote: bool): Command =
-  if not remote:
+  # this might be not-inclusive enough but I mostly only use switch, build, boot
+  if not remote and subcmd in [boot, switch]:
     result.exe = "sudo"
     result.addArgs "nixos-rebuild"
   else:
