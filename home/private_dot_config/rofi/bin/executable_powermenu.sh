@@ -64,7 +64,8 @@ $suspend)
 $logout)
 	ans=$(confirm_exit &)
 	if [[ $ans == "yes" || $ans == "y" ]]; then
-		loginctl terminate-session ${XDG_SESSION_ID-}
+	#	loginctl terminate-session ${XDG_SESSION_ID-}
+    niri msg action quit --skip-confirmation
 	elif [[ $ans == "no" || $ans == "n" ]]; then
 		exit 0
 	else
