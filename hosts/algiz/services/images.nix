@@ -1,7 +1,7 @@
 {
   continuwuity = "forgejo.ellis.link/continuwuation/continuwuity:v26.8.1";
   forgejo = "codeberg.org/forgejo/forgejo:16.0.3";
-  gotosocial = "docker.io/superseriousbusiness/gotosocial:0.21.2";
+  gotosocial = "docker.io/superseriousbusiness/gotosocial:0.22.1";
   # linkding = "sissbruecker/linkding:1.44.1-plus-alpine";
   otterwiki = "docker.io/redimp/otterwiki:2.20.6-slim";
   pds = "ghcr.io/bluesky-social/pds:0.4.5001";
