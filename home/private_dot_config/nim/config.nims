@@ -199,3 +199,9 @@ task sort, "run nimporter -s BalancedWrap":
 # line delemiter for `nim help`
 task _,"_______________":
   discard
+
+
+when defined(dbg):
+  import std/os
+  --hint:"DuplicateModuleImport:off"
+  switch("include", currentSourcePath() /../ "dbg.nim")
