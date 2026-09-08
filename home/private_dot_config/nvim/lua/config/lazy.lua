@@ -36,6 +36,7 @@ require("lazy").setup({
     { import = "plugins.language.tex" },
     { import = "plugins.language.usu" },
 
+    import_if_exe("revo", "plugins.language.revo"),
     import_if_exe("go", "plugins.language.go"),
     import_if_exe("nim", "plugins.language.nim"),
     import_if_exe("nix", "plugins.language.nix"),
