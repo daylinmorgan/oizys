@@ -1,3 +1,5 @@
+nodiadau*
+
 .vscode/
 tmp/
 _TODO.md
@@ -19,6 +21,7 @@ node_modules
 **/.pi/
 
 **/.antigravitycli/
+**/.antigravitycli/*.json
 
 ## sandbox-runtime "dangerous files"
 ## these files might be mounted in my current

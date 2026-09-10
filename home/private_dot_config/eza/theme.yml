@@ -1,0 +1,20 @@
+filenames:
+  "nodiadau.md":
+    filename:
+      foreground: Magenta
+      is_bold: true
+      is_underline: true
+    icon:
+      glyph: "󰚄"
+      style:
+        foreground: Magenta
+  "nodiadau":
+    filename:
+      foreground: Magenta
+      is_bold: true
+      is_underline: true
+    icon:
+      glyph: "󰚄"
+      style:
+        foreground: Magenta
+
