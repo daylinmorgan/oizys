@@ -9,6 +9,7 @@
 let
   inherit (builtins) attrNames concatStringsSep;
   servicesPorts = {
+    miniflux = 8055;
     qui = 7476;
     jellyfin = 8096;
     sonarr = 8989;
@@ -45,6 +46,7 @@ let
 in
 {
   imports = [
+    ./miniflux
     ./prismarr
     ./qbittorrent # qbittorrent is VPN-confined; see this module
   ];
