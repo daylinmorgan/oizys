@@ -41,7 +41,7 @@
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    celler.url = "github:blitz/celler";
+    celler.url = "github:blitz/celler/02a61c88c89080a43ad8f186711a548fe394c4c2";
     celler.inputs.nixpkgs.follows = "nixpkgs";
     celler.inputs.flake-parts.follows = "flake-parts";
 
