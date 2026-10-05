@@ -33,7 +33,8 @@ in
 
       gimp
 
-      zotero
+      # broken because firefox? NixOS/nixpkgs #568692
+      # zotero
 
       libreoffice-qt-stable
       hunspell # spell check for libreoffice
