@@ -15,6 +15,9 @@ in
     inherit (lib.data.substituters) substituters trusted-public-keys;
   };
 
+  oizys-rs = pkgs.callPackage ../pkgs/oizys-rs {
+    inherit (lib.data.substituters) substituters trusted-public-keys;
+  };
   nimlangserver = callNimPackage ./nim/nimlangserver;
   procs = callNimPackage ./nim/procs;
   nimble = pkgs.callPackage ./nim/nimble { };

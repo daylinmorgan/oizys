@@ -64,6 +64,9 @@ let
             self.packages.${system}.nim-atlas
           ];
         };
+        oizys-rs = pkgs.mkShell {
+          packages = [ inputs.fenix.packages.${system}.default.toolchain ] ++ (with pkgs; [ rust-analyzer ]);
+        };
       }
     );
 

@@ -1,0 +1,1 @@
+# oizys, the rust edition

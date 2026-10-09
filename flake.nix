@@ -85,6 +85,10 @@
     utils.inputs.nixpkgs.follows = "nixpkgs";
     utils.inputs.nim2nix.follows = "nim2nix";
 
+    # temp
+    fenix.url = "github:nix-community/fenix";
+    fenix.inputs.nixpkgs.follows = "nixpkgs";
+
     # indirect deps
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs-lib";
