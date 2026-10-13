@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage (
       installShellCompletion --cmd oizys \
         --zsh <($out/bin/oizys completion zsh)
     '';
-    cargoHash = "sha256-Kk8km9MPS9hhvjtEOPGUac/N3DXga0DO7UYr0Pc8f8o=";
+    cargoHash = "sha256-EnhuhPYjU/ml1Had/TiYvBUq6ODIXxgQOka+014cyB8=";
   }
   // (lib.optionalAttrs (substituters != null) {
     postConfigure = "echo '${builtins.toJSON substituters}' >> src/substituters.json";
