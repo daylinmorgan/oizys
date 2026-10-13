@@ -1,7 +1,7 @@
 use crate::prelude::*;
 use crate::{process::LoggedCommand, ui};
 use clap::ValueEnum;
-use reqwest::{blocking::Client, StatusCode};
+use reqwest::{Client, StatusCode};
 use std::collections::{BTreeMap, HashSet};
 use tracing::{debug, info};
 
@@ -55,7 +55,7 @@ impl NixCommand {
         }
     }
     pub fn new(no_nom: bool, bootstrap: bool) -> Self {
-        let name = if no_nom { NixName::Nom } else { NixName::Nix };
+        let name = if no_nom { NixName::Nix } else { NixName::Nom };
         Self {
             bin: if !bootstrap {
                 name.choose()
@@ -165,6 +165,18 @@ impl NixCommand {
             .arg("updated.lock")
             .check_status()
     }
+
+    pub fn derivation_show(&self, attr: &str) -> Result<NixDerivationShowOutput> {
+        let span = bar_span!("running nix derivation show").entered();
+        let output = LoggedCommand::new("nix")
+            .arg("derivation")
+            .arg("show")
+            .arg("--recursive")
+            .arg(attr)
+            .stdout_ok()?;
+        span.exit();
+        Ok(serde_json::from_str(&output)?)
+    }
 }
 
 use serde::Deserialize;
@@ -232,14 +244,29 @@ pub struct Nixos {
     pub host: String,
 }
 
-impl Nixos {
-    pub fn new_multi(flake: &str, hosts: &Vec<String>) -> Vec<Self> {
-        hosts.iter().map(|h| Self::new(&flake, &h)).collect()
+fn check_host(host: &str) -> Result<()> {
+    let hosts_str = option_env!("OIZYS_HOSTS").unwrap_or("othalan");
+    let hosts: Vec<&str> = hosts_str.split(",").collect();
+    // let build_env = std::env::var("NIX_BUILD_TOP").unwrap_or("".to_string()) != "";
+    if let Some(_) = std::env::var_os("NIX_BUILD_TOP") {
+        info!("skipping host check in build environment")
+    } else if !hosts.contains(&host) {
+        bail!("unknown host {}", host);
     }
-    pub fn new(flake: &str, host: &str) -> Self {
+
+    Ok(())
+}
+
+impl Nixos {
+    pub fn new_multi(flake: &str, hosts: &Vec<String>) -> Result<Vec<Self>> {
+        let nixoses: Result<Vec<Self>> = hosts.iter().map(|h| Self::new(&flake, &h)).collect();
+        nixoses
+    }
+    pub fn new(flake: &str, host: &str) -> Result<Self> {
+        check_host(host)?;
         let host = host.to_string();
         let flake = flake.to_string();
-        Self { host, flake }
+        Ok(Self { host, flake })
     }
 
     pub fn attr(&self) -> String {
@@ -272,11 +299,18 @@ impl Nixos {
     pub fn rebuild(&self, subcmd: &str, extra_flags: Vec<String>) -> Result<()> {
         let attr = format!("{}#{}", self.flake, self.host);
 
-        // use nix/nom build if it's subcmd == switch?
-
-        LoggedCommand::new("sudo")
-            .arg("nixos-rebuild")
-            .arg(subcmd)
+        let mut cmd = match subcmd {
+            "switch" | "boot" => {
+                let mut cmd = LoggedCommand::new("sudo");
+                cmd.arg("nixos-rebuild");
+                cmd
+            }
+            _ => {
+                tracing::warn!("possibly unsupported subcmd \"{}\"", subcmd);
+                LoggedCommand::new("nixos-rebuild")
+            }
+        };
+        cmd.arg(subcmd)
             .arg("--flake")
             .arg(attr)
             .args(extra_flags)
@@ -316,6 +350,19 @@ impl Nixos {
             }
         }
         Ok(drvs)
+    }
+
+    pub fn lix_and_co(&self) -> Result<Vec<String>> {
+        let mut attrs = vec![];
+        for (name, drv) in NixCommand::default()
+            .derivation_show(&self.system_attr())
+            .wrap_err("nix derivation show is doing stuff if shouldn't")?
+        {
+            if drv.is_lix() || drv.is_lix_dependent()? {
+                attrs.push(name)
+            }
+        }
+        Ok(attrs)
     }
 }
 
@@ -465,28 +512,28 @@ impl NixCache {
         }
     }
 
-    pub fn search(&self, hash: &str) -> Result<Option<String>> {
+    pub async fn search(&self, client: &Client, hash: &str) -> Result<Option<String>> {
         let url = format!("{}/{}.narinfo", self.url, hash);
-        let client = Client::builder().user_agent(APP_USER_AGENT).build()?;
         debug!("GET: {}", url);
-        let resp = client.get(url).send()?;
+        let resp = client.get(url).send().await?;
         match resp.status() {
-            StatusCode::OK => return Ok(Some(resp.text()?)),
+            StatusCode::OK => return Ok(Some(resp.text().await?)),
             StatusCode::NOT_FOUND => return Ok(None),
             _ => bail!("unexpected failure, {:?}", resp),
         }
     }
 }
 
-pub trait Cache {
-    fn search(&self, hashes: Vec<String>, all: bool) -> Result<()>;
+trait Cache {
+    async fn search(&self, hashes: Vec<String>, all: bool) -> Result<()>;
 }
 
 impl Cache for HashSet<NixCache> {
-    fn search(&self, hashes: Vec<String>, all: bool) -> Result<()> {
+    async fn search(&self, hashes: Vec<String>, all: bool) -> Result<()> {
+        let client = Client::builder().user_agent(APP_USER_AGENT).build()?;
         for hash in &hashes {
             for cache in self {
-                if let Some(response) = cache.search(&hash)? {
+                if let Some(response) = cache.search(&client, &hash).await? {
                     ui::show_narinfo(&response);
                     if !all {
                         continue;
@@ -531,10 +578,55 @@ struct NixOutput {
 }
 
 #[derive(Deserialize, Debug)]
-#[allow(dead_code)]
-struct NixDerivation {
+#[allow(dead_code)] // validate by parsing
+struct NixInputDrv {
+    outputs: Vec<String>,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct NixDerivation {
     name: String,
     outputs: BTreeMap<String, NixOutput>,
+    #[serde(rename = "inputDrvs")]
+    input_drvs: BTreeMap<String, NixInputDrv>,
+}
+
+fn split_drv_name(s: &str) -> Result<(String, String)> {
+    color_eyre::eyre::ensure!(s.starts_with("/nix/store"), "is this a /nix/store path?");
+    color_eyre::eyre::ensure!(
+        s.starts_with("nix/store"),
+        format!("is this a /nix/store path: {path}", path = s)
+    );
+    let s = s
+        .split_once("-")
+        .ok_or(eyre!("failed to split drv name {}", s))?;
+    Ok((s.1.replace(".drv", ""), s.0.to_string()))
+}
+
+impl NixDerivation {
+    fn is_lix(&self) -> bool {
+        if self.name.starts_with("lix-") {
+            return !(self.name.ends_with("-debug") || self.name.ends_with("-dev"));
+        }
+        return false;
+    }
+
+    fn is_lix_dependent(&self) -> Result<bool> {
+        if self.name.starts_with("system-path")
+            || self.name.starts_with("lazy-options")
+            || self.name.starts_with("nixos-rebuild-ng")
+        {
+            return Ok(false);
+        }
+        for (drv_name, _) in &self.input_drvs {
+            let (name, _) =
+                split_drv_name(&drv_name).wrap_err("unexpected error handling drv names")?;
+            if name.starts_with("lix-") {
+                return Ok(true);
+            }
+        }
+        Ok(false)
+    }
 }
 
 type NixDerivationShowOutput = BTreeMap<String, NixDerivation>;
@@ -570,10 +662,10 @@ fn to_hashes(attrs: Vec<String>) -> Result<Vec<String>> {
     Ok(hashes)
 }
 
-pub fn narinfo(attrs: Vec<String>, all: bool) -> Result<()> {
+pub async fn narinfo(attrs: Vec<String>, all: bool) -> Result<()> {
     let hashes = to_hashes(attrs)?;
     let caches = get_substituters()?;
-    caches.search(hashes, all)?;
+    caches.search(hashes, all).await?;
     Ok(())
 }
 

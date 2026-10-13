@@ -27,7 +27,7 @@
 
     sops
 
-    (flake.pkg "self")
+    (flake.pkgs "self").oizys-rs
   ];
 
 }

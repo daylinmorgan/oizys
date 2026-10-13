@@ -1,5 +1,5 @@
 use crate::prelude::*;
-use color_eyre::{eyre::eyre, Section, SectionExt};
+use color_eyre::{Section, SectionExt, eyre::eyre};
 use std::{
     ffi::OsStr,
     os::unix::process::CommandExt,
@@ -12,6 +12,9 @@ pub struct LoggedCommand {
 }
 
 impl LoggedCommand {
+    pub fn unnest(&self) -> &Command {
+        &self.command
+    }
     pub fn new(program: &str) -> Self {
         Self {
             command: Command::new(program),

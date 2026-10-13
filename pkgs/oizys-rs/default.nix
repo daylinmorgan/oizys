@@ -11,7 +11,19 @@
 }:
 
 let
-  inherit (builtins) readFile fromTOML getAttr;
+  # TODO: get hosts also
+  inherit (builtins)
+    readFile
+    getAttr
+    concatStringsSep
+    readDir
+    attrNames
+    ;
+  hosts =
+    ../../hosts
+    |> readDir
+    |> attrNames
+    |> concatStringsSep ",";
   version =
     ./Cargo.toml
     |> readFile
@@ -24,14 +36,14 @@ rustPlatform.buildRustPackage (
   {
 
     pname = "oizys";
-    src =  lib.cleanSource ./.;
+    src = lib.cleanSource ./.;
     version = "${version}-unstable";
     nativeBuildInputs = [
       makeWrapper
       installShellFiles
     ];
     doCheck = false; # unit tests are for the weak
-
+    env.OIZYS_HOSTS = hosts;
     postInstall = ''
       wrapProgram $out/bin/oizys \
         --prefix PATH : ${
@@ -43,12 +55,11 @@ rustPlatform.buildRustPackage (
       installShellCompletion --cmd oizys \
         --zsh <($out/bin/oizys completion zsh)
     '';
-    cargoHash = "sha256-u+M8NqBfErwhRQfJjUOI/yh8MX6MUgSTUIwTv3UP5co=";
+    cargoHash = "sha256-Kk8km9MPS9hhvjtEOPGUac/N3DXga0DO7UYr0Pc8f8o=";
   }
   // (lib.optionalAttrs (substituters != null) {
     postConfigure = "echo '${builtins.toJSON substituters}' >> src/substituters.json";
-    # buildFeatures = [ "substituters" ];
-    cargoExtraArgs = "--features substituters";
+    buildFeatures = [ "substituters" ];
   })
 
 )

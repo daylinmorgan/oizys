@@ -1,5 +1,5 @@
-use clap::{Parser, Subcommand, Args};
-use clap_complete::aot::{generate, Generator, Shell};
+use clap::{Args, Parser, Subcommand};
+use clap_complete::aot::{Generator, Shell, generate};
 
 #[derive(Debug, Args)]
 #[command(next_help_heading = "Global options")]
@@ -27,7 +27,6 @@ pub struct GlobalOptions {
     #[arg(long,global = true, num_args=1.., value_delimiter = ',', default_values_t = [default_host()])]
     pub host: Vec<String>,
 }
-
 
 #[derive(Debug, Args)]
 #[command(next_help_heading = "Build options")]
@@ -66,6 +65,10 @@ pub enum Commands {
         /// show system attr
         #[arg(short, long)]
         system: bool,
+
+        /// get lix and lix dependents
+        #[arg(short, long)]
+        lix: bool,
     },
 
     /// nix build
@@ -76,9 +79,10 @@ pub enum Commands {
         args: Vec<String>,
 
         #[clap(flatten)]
-        build: BuildOptions
+        build: BuildOptions,
     },
 
+    // TODO: add support for --remote?
     /// nixos-rebuild subcmd
     Os {
         /// subcmd
@@ -147,7 +151,7 @@ pub enum Commands {
     /// I want to lock my flake not yours..
     Lock {
         /// inputs which should be null
-        #[arg(long,global = true, num_args=1.., value_delimiter = ',', default_values_t = ["flake-compat".to_string(), "treefmt-nix".to_string()])]
+        #[arg(long,global = true, num_args=1.., value_delimiter = ',', default_values_t = ["flake-compat".to_string()])]
         null: Vec<String>,
     },
 

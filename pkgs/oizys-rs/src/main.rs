@@ -19,7 +19,7 @@ async fn main() -> Result<()> {
 
     let flake = nix::set_flake(cli.global.flake)?;
     let hosts = cli.global.host;
-    let systems = Nixos::new_multi(&flake, &hosts);
+    let systems: Vec<Nixos> = Nixos::new_multi(&flake, &hosts)?;
 
     match cli.command {
         Commands::Current { args } => nix::run_current(&nix, &flake, args),
@@ -32,31 +32,34 @@ async fn main() -> Result<()> {
             let nix = NixCommand::new(build.no_nom, cli.global.bootstrap);
             nix.build(args)?;
         }
+        // WHY IS HOST IT"S OWN ARG HERE?
         Commands::Os { cmd, host, args } => {
-            Nixos::new(&flake, &host).rebuild(&cmd, args)?;
+            Nixos::new(&flake, &host)?.rebuild(&cmd, args)?;
         }
-        Commands::Attr { system } => {
+        Commands::Attr { system, lix } => {
+            let mut attrs = vec![];
             for host in hosts {
-                let nixos = Nixos::new(&flake, &host);
-                let attr = if system {
-                    nixos.system_attr()
-                } else {
-                    nixos.attr()
-                };
-                print!("{} ", attr);
+                let nixos = Nixos::new(&flake, &host)?;
+                if lix {
+                    let lix_attrs = nixos.lix_and_co()?;
+                    attrs.extend_from_slice(&lix_attrs);
+                }
+                if system {
+                    attrs.push(nixos.system_attr())
+                }
+                if !system && !lix {
+                    attrs.push(nixos.attr());
+                }
             }
-            print!("\n")
+            println!("{}", attrs.join("\n"));
         }
         Commands::Lock { null } => {
             oizys::check_lock_file(&flake, null)?;
         }
+
         // todo: account for packages that will be fetched too
         Commands::Dry {} => {
-            let attrs = hosts
-                .iter()
-                .map(|h| Nixos::new(&flake, &h).system_attr())
-                .collect();
-
+            let attrs = systems.into_iter().map(|s| s.system_attr()).collect();
             let drvs = nix.not_cached(&attrs)?;
             if drvs.is_empty() {
                 println!("nothing to build :)")
@@ -65,7 +68,7 @@ async fn main() -> Result<()> {
             }
         }
         Commands::Pr { number } => {
-            let status = github::get_nixpkgs_pr_status(number)?;
+            let status = github::get_nixpkgs_pr_status(number).await?;
             println!("PR {}", style(format!("{number}")).bold());
             println!("{}", status)
         }
@@ -76,7 +79,7 @@ async fn main() -> Result<()> {
             inputs,
             open,
         } => {
-            let run_id = github::oizys_gha_run(&workflow, &ref_name, inputs)?;
+            let run_id = github::oizys_gha_run(&workflow, &ref_name, inputs).await?;
             let url = format!(
                 "https://github.com/daylinmorgan/oizys/actions/runs/{}",
                 run_id
@@ -103,9 +106,13 @@ async fn main() -> Result<()> {
             }
         },
         Commands::Hash { args } => {
-            print!("{}", oizys::get_hash(args)?)
+            // TODO: add clipboard coping via wl-paste
+            let hash = oizys::get_hash(args)?;
+            oizys::copy_to_clipboard(hash.clone())?;
+            // LoggedCommand::new("wl-paste") // how to input?
+            print!("{}", hash);
         }
-        Commands::Narinfo { attrs, all } => oizys::nix::narinfo(attrs, all)?,
+        Commands::Narinfo { attrs, all } => oizys::nix::narinfo(attrs, all).await?,
     }
 
     Ok(())

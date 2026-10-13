@@ -9,7 +9,9 @@ pub mod ui;
 use indicatif::ProgressStyle;
 use prelude::*;
 use process::LoggedCommand;
+use std::io::Write;
 use std::path::PathBuf;
+use std::process::{Command, Stdio};
 
 // shouldn't this be an option?
 fn get_hash_from_output(output: &str) -> Option<String> {
@@ -38,6 +40,24 @@ pub fn indent(s: String) -> String {
     return indented;
 }
 
+pub fn copy_to_clipboard(data: String) -> Result<()> {
+    tracing::debug!("copying data to clipboard");
+    let mut cmd = Command::new("wl-copy")
+        .stdin(Stdio::piped())
+        .spawn()
+        .wrap_err("failed to start wl-copy")?;
+
+    if let Some(mut stdin) = cmd.stdin.take() {
+        stdin.write(&data.into_bytes())?;
+        drop(stdin);
+    }
+
+    cmd.wait()?;
+    eprintln!("data copied to clipboard!");
+
+    Ok(())
+}
+
 pub fn check_lock_file(flake: &str, null: Vec<String>) -> Result<()> {
     let flake_lock = lock::FlakeLock::from_file(PathBuf::from(flake).join("flake.lock"))?;
     let duplicates = flake_lock.duplicates();
@@ -64,7 +84,7 @@ fn default_progress_style() -> ProgressStyle {
 
 pub fn init_subscriber(verbose: u8) {
     use tracing_subscriber::prelude::*;
-    use tracing_subscriber::{fmt, EnvFilter};
+    use tracing_subscriber::{EnvFilter, fmt};
 
     let indicatif_layer =
         tracing_indicatif::IndicatifLayer::new().with_progress_style(default_progress_style());
@@ -109,7 +129,7 @@ pub mod prelude {
         concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
     pub use crate::ui;
     pub use bar_span;
-    pub use color_eyre::eyre::{bail, eyre, WrapErr};
     pub use color_eyre::Result;
+    pub use color_eyre::eyre::{WrapErr, bail, eyre};
     pub use console::style;
 }

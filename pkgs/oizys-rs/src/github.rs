@@ -1,14 +1,11 @@
 use crate::prelude::*;
 use chrono::{DateTime, Utc};
-use reqwest::{
-    blocking::{Client, Response},
-    header, StatusCode,
-};
+use reqwest::{Client, Response, StatusCode, header};
 use serde::Deserialize;
-use serde::{de::DeserializeOwned, Serialize};
+use serde::{Serialize, de::DeserializeOwned};
+use std::collections::HashMap;
 use std::time::{Duration, Instant};
-use std::{collections::HashMap, thread};
-use tracing::{debug, info};
+use tracing::{Instrument, debug, info};
 
 #[derive(Deserialize, Debug)]
 struct GithubCommit {
@@ -104,15 +101,15 @@ struct ListGithubWorflowRun {
     workflow_runs: Vec<GithubWorkflowRun>,
 }
 
-fn handle_response<T: DeserializeOwned>(resp: Response) -> Result<T> {
+async fn handle_response<T: DeserializeOwned>(resp: Response) -> Result<T> {
     match resp.status() {
         StatusCode::OK => {
-            let data: T = resp.json()?;
+            let data: T = resp.json().await?;
             return Ok(data);
         }
         s => bail!(
             "github api had an unexpected error: {s:?}, see below:\n{}",
-            resp.text()?
+            resp.text().await?
         ),
     };
 }
@@ -157,39 +154,44 @@ impl GitHubRepo {
         })
     }
 
-    fn get<T: DeserializeOwned>(&self, url: &str) -> Result<T> {
+    async fn get<T: DeserializeOwned>(&self, url: &str) -> Result<T> {
         debug!("GET: {}", url);
-        let resp = self.client.get(url).send()?;
-        handle_response(resp)
+        let resp = self.client.get(url).send().await?;
+        handle_response(resp).await
     }
 
-    fn get_branch(&self, branch: &str) -> Result<GithubBranch> {
+    async fn get_branch(&self, branch: &str) -> Result<GithubBranch> {
         self.get(&format!(
             "https://api.github.com/repos/{}/{}/branches/{}",
             self.owner, self.repo, branch
         ))
+        .await
     }
 
-    fn get_pr(&self, number: i64) -> Result<GithubPullRequest> {
+    async fn get_pr(&self, number: i64) -> Result<GithubPullRequest> {
         self.get(&format!(
             "https://api.github.com/repos/{}/{}/pulls/{}",
             self.owner, self.repo, number
         ))
+        .await
     }
 
-    fn compare_branch_to_pr(&self, base: &str, head: &str) -> Result<GithubCompare> {
+    async fn compare_branch_to_pr(&self, base: &str, head: &str) -> Result<GithubCompare> {
         self.get(&format!(
             "https://api.github.com/repos/{}/{}/compare/{}...{}",
             self.owner, self.repo, base, head
         ))
+        .await
     }
-    fn pr_in_branch(&self, branch: &str, pr: &GithubPullRequest) -> Result<bool> {
+    async fn pr_in_branch(&self, branch: &str, pr: &GithubPullRequest) -> Result<bool> {
         if !pr.merged {
             return Ok(false);
         }
 
-        let branch = self.get_branch(branch)?;
-        let compare = self.compare_branch_to_pr(&pr.merge_commit_sha, &branch.commit.sha)?;
+        let branch = self.get_branch(branch).await?;
+        let compare = self
+            .compare_branch_to_pr(&pr.merge_commit_sha, &branch.commit.sha)
+            .await?;
 
         match compare.status.as_str() {
             "behind" | "identical" => Ok(false),
@@ -199,7 +201,7 @@ impl GitHubRepo {
         }
     }
 
-    fn run_action(
+    async fn run_action(
         &self,
         workflow: &str,
         ref_name: &str,
@@ -211,7 +213,7 @@ impl GitHubRepo {
         );
         debug!("POST: {}", url);
         let body = GithubWorkflowDispatchBody::new(&ref_name, inputs)?;
-        let res = self.client.post(url).json(&body).send()?;
+        let res = self.client.post(url).json(&body).send().await?;
         match res.status() {
             StatusCode::NO_CONTENT => Ok(()),
             StatusCode::NOT_FOUND => {
@@ -232,38 +234,42 @@ impl GitHubRepo {
         }
     }
 
-    fn list_workflow_runs(&self, workflow: &str) -> Result<ListGithubWorflowRun> {
+    async fn list_workflow_runs(&self, workflow: &str) -> Result<ListGithubWorflowRun> {
         self.get(&format!(
             "https://api.github.com/repos/{}/{}/actions/workflows/{}/runs",
             self.owner, self.repo, workflow
         ))
+        .await
     }
 
     fn is_current_run(run: &GithubWorkflowRun, now: &DateTime<Utc>) -> bool {
         ["in_progress", "queued"].contains(&run.status.as_str()) && run.created_at > *now
     }
 
-    fn get_in_progress_run(
+    async fn get_in_progress_run(
         &self,
         workflow: &str,
         now: &DateTime<Utc>,
     ) -> Result<GithubWorkflowRun> {
         let start_time = Instant::now();
         let interval = Duration::from_millis(500);
-        let _span = bar_span!("waiting for workflow to start").entered();
-        while start_time.elapsed() < Duration::from_secs(10) {
-            let runs = self.list_workflow_runs(&workflow)?.workflow_runs;
-            let latest = &runs[0];
-            if Self::is_current_run(latest, &now) {
-                return Ok(runs[0].clone());
+        async {
+            while start_time.elapsed() < Duration::from_secs(10) {
+                let runs = self.list_workflow_runs(&workflow).await?.workflow_runs;
+                let latest = &runs[0];
+                if Self::is_current_run(latest, &now) {
+                    return Ok(runs[0].clone());
+                }
+                tokio::time::sleep(interval).await;
             }
-            thread::sleep(interval);
-        }
 
-        bail!(
-            "timeout while trying to get running action for {:}",
-            &workflow
-        )
+            bail!(
+                "timeout while trying to get running action for {:}",
+                &workflow
+            )
+        }
+        .instrument(bar_span!("waiting for workflow to start"))
+        .await
     }
 }
 
@@ -299,28 +305,36 @@ impl GithubWorkflowDispatchBody {
     }
 }
 
-pub fn get_nixpkgs_pr_status(pr_number: i64) -> Result<PrStatus> {
+pub async fn get_nixpkgs_pr_status(pr_number: i64) -> Result<PrStatus> {
     let repo = GitHubRepo::new("nixos", "nixpkgs")?;
-    let pr = repo.get_pr(pr_number)?;
+    let pr = repo.get_pr(pr_number).await?;
     let status = if !pr.merged {
         PrStatus::NotMerged
     } else {
         PrStatus::Merged {
-            nixpkgs_unstable: repo.pr_in_branch("nixos-unstable", &pr)?,
-            nixos_unstable_small: repo.pr_in_branch("nixos-unstable-small", &pr)?,
-            nixos_unstable: repo.pr_in_branch("nixos-unstable", &pr)?,
+            nixpkgs_unstable: repo.pr_in_branch("nixos-unstable", &pr).await?,
+            nixos_unstable_small: repo.pr_in_branch("nixos-unstable-small", &pr).await?,
+            nixos_unstable: repo.pr_in_branch("nixos-unstable", &pr).await?,
         }
     };
     Ok(status)
 }
 
-pub fn oizys_gha_run(workflow: &str, ref_name: &str, inputs: Vec<(String, String)>) -> Result<i64> {
-    let _span = bar_span!("dispatching github action").entered();
-    let repo = GitHubRepo::new("daylinmorgan", "oizys")?;
-    let workflow = GitHubRepo::normalize_workflow(&workflow);
-    let now: DateTime<Utc> = Utc::now();
-    repo.run_action(&workflow, &ref_name, inputs)
-        .wrap_err("failed to start action")?;
-    let run = repo.get_in_progress_run(&workflow, &now)?;
-    Ok(run.id)
+pub async fn oizys_gha_run(
+    workflow: &str,
+    ref_name: &str,
+    inputs: Vec<(String, String)>,
+) -> Result<i64> {
+    async {
+        let repo = GitHubRepo::new("daylinmorgan", "oizys")?;
+        let workflow = GitHubRepo::normalize_workflow(&workflow);
+        let now: DateTime<Utc> = Utc::now();
+        repo.run_action(&workflow, &ref_name, inputs)
+            .await
+            .wrap_err("failed to start action")?;
+        let run = repo.get_in_progress_run(&workflow, &now).await?;
+        Ok(run.id)
+    }
+    .instrument(bar_span!("dispatching github action"))
+    .await
 }

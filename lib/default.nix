@@ -42,7 +42,7 @@ let
     packages = forAllSystems (
       system: pkgs:
       {
-        default = self.packages.${system}.oizys;
+        default = self.packages.${system}.oizys-rs;
         iso = (mkIso system).config.system.build.isoImage;
       }
       // (import ../pkgs {
@@ -65,7 +65,7 @@ let
           ];
         };
         oizys-rs = pkgs.mkShell {
-          packages = [ inputs.fenix.packages.${system}.default.toolchain ] ++ (with pkgs; [ rust-analyzer ]);
+          packages = [ inputs.fenix.packages.${system}.stable.toolchain ] ++ (with pkgs; [ rust-analyzer ]);
         };
       }
     );
