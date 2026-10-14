@@ -299,17 +299,15 @@ impl Nixos {
     pub fn rebuild(&self, subcmd: &str, extra_flags: Vec<String>) -> Result<()> {
         let attr = format!("{}#{}", self.flake, self.host);
 
-        let mut cmd = match subcmd {
-            "switch" | "boot" => {
-                let mut cmd = LoggedCommand::new("sudo");
-                cmd.arg("nixos-rebuild");
-                cmd
-            }
-            _ => {
-                tracing::warn!("possibly unsupported subcmd \"{}\"", subcmd);
-                LoggedCommand::new("nixos-rebuild")
-            }
+        let remote_mode = extra_flags.iter().any(|s| s.starts_with("--target-host"));
+        let mut cmd = if !remote_mode && ["switch", "boot"].contains(&subcmd) {
+            let mut cmd = LoggedCommand::new("sudo");
+            cmd.arg("nixos-rebuild");
+            cmd
+        } else {
+            LoggedCommand::new("nixos-rebuild")
         };
+
         cmd.arg(subcmd)
             .arg("--flake")
             .arg(attr)
