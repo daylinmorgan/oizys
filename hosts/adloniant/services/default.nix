@@ -29,7 +29,7 @@ let
     let
       links =
         subdomains
-        |> map (name: ''<li><a href="http://${name}.home.dayl.in" rel="noreferrer">${name}</a></li>'')
+        |> map (name: ''<li><a href="https://${name}.home.dayl.in" rel="noreferrer">${name}</a></li>'')
         |> concatStringsSep "\n";
     in
     ''
@@ -53,6 +53,29 @@ in
 
   sops.secrets.radarr-api = { };
   sops.secrets.sonarr-api = { };
+  sops.secrets.namesilo = { };
+  sops.templates."acme-namesilo.env" = {
+    owner = "acme";
+    mode = "0400";
+    content = ''
+      NAMESILO_API_KEY=${config.sops.placeholder.namesilo}
+      NAMESILO_PROPAGATION_TIMEOUT=1800
+      NAMESILO_POLLING_INTERVAL=15
+    '';
+  };
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "me@dayl.in";
+    certs."home.dayl.in" = {
+      domain = "home.dayl.in";
+      extraDomainNames = ["*.home.dayl.in"]     ;
+      dnsProvider = "namesilo";
+      environmentFile = config.sops.templates."acme-namesilo.env".path;
+      dnsResolver = "ns1.dnsowl.com:53";
+    };
+  };
+
+
   services = {
     fwupd = enabled;
     # flaresolverr = enabled;
@@ -109,17 +132,22 @@ in
       '';
 
       virtualHosts = {
-        "http://home.dayl.in".extraConfig = ''
+        "home.dayl.in" = {
+          useACMEHost = "home.dayl.in";
+          extraConfig = ''
+
           root * ${landingPage}
           file_server
         '';
+      };
       }
       // (
         servicesPorts
         |> lib.mapAttrs' (
           name: port: {
-            name = "http://${name}.home.dayl.in";
+            name = "${name}.home.dayl.in";
             value = {
+              useACMEHost = "home.dayl.in";
               extraConfig = ''
                 reverse_proxy http://${serviceHosts.${name} or "localhost"}:${toString port}
               '';
