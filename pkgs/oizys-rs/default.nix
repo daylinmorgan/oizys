@@ -2,8 +2,6 @@
   lib,
   substituters ? null,
 
-  nix-eval-jobs,
-
   installShellFiles,
   makeWrapper,
   rustPlatform,
@@ -45,13 +43,6 @@ rustPlatform.buildRustPackage (
     doCheck = false; # unit tests are for the weak
     env.OIZYS_HOSTS = hosts;
     postInstall = ''
-      wrapProgram $out/bin/oizys \
-        --prefix PATH : ${
-          lib.makeBinPath [
-            nix-eval-jobs
-          ]
-        }
-
       installShellCompletion --cmd oizys \
         --zsh <($out/bin/oizys completion zsh)
     '';

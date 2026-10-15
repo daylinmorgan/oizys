@@ -191,18 +191,18 @@ pub struct NixEvalOutput {
     outputs: BTreeMap<String, String>,
 }
 
-pub struct AtticCache {
+pub struct CellerCache {
     name: String,
 }
 
-impl AtticCache {
+impl CellerCache {
     pub fn new(name: &str) -> Self {
         let name = name.to_string();
         Self { name }
     }
 
     pub fn push(&self, drvs: Vec<String>) -> Result<()> {
-        LoggedCommand::new("attic")
+        LoggedCommand::new("celler")
             .arg("push")
             .arg(&self.name)
             .args(drvs)

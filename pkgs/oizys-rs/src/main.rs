@@ -96,7 +96,7 @@ async fn main() -> Result<()> {
                 if !drvs.is_empty() {
                     let to_push = nix.build_drvs_multi(drvs).await?;
                     if !to_push.is_empty() {
-                        nix::AtticCache::new("oizys").push(to_push)?;
+                        nix::CellerCache::new("oizys").push(to_push)?;
                     } else {
                         eprintln!("nothing to push :)")
                     }
