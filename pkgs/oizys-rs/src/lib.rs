@@ -130,6 +130,6 @@ pub mod prelude {
     pub use crate::ui;
     pub use bar_span;
     pub use color_eyre::Result;
-    pub use color_eyre::eyre::{WrapErr, bail, eyre};
+    pub use color_eyre::eyre::{WrapErr, bail, eyre, ensure};
     pub use console::style;
 }

@@ -590,9 +590,8 @@ pub struct NixDerivation {
 }
 
 fn split_drv_name(s: &str) -> Result<(String, String)> {
-    color_eyre::eyre::ensure!(s.starts_with("/nix/store"), "is this a /nix/store path?");
-    color_eyre::eyre::ensure!(
-        s.starts_with("nix/store"),
+    ensure!(
+        s.starts_with("/nix/store"),
         format!("is this a /nix/store path: {path}", path = s)
     );
     let s = s
