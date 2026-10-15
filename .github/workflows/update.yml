@@ -64,7 +64,7 @@ jobs:
 
       - name: Pre-build oizys
         run: |
-          nix build '.#oizys'
+          nix build '.'
           celler push oizys ./result
 
       - name: Pre-build lix-and-co
@@ -76,7 +76,7 @@ jobs:
 
       - name: Build
         run: >
-          nix run '.#oizys'
+          nix run '.'
           --
           ci
           cache
@@ -114,11 +114,11 @@ jobs:
           celler_token: ${{ secrets.CELLER_TOKEN }}
 
       - name: Pre-build oizys
-        run: nix build '.#oizys'
+        run: nix build '.'
 
       - name: Build Current and Updated Systems
         run: >
-          nix run '.#oizys'
+          nix run '.'
           --
           ci update
           --host "${{ env.hosts }}"
