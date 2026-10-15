@@ -69,7 +69,7 @@ jobs:
 
       - name: Pre-build lix-and-co
         run: |
-          DRVS="$(nix run . -- attr --lix --host,="${{ env.hosts }}")"
+          DRVS="$(nix run . -- attr --lix --host "${{ env.hosts }}")"
           nix build --out-link 'lix' --print-build-logs -- $DRVS
           celler push oizys ./lix*
           rm -rf ./lix*
@@ -80,7 +80,7 @@ jobs:
           --
           ci
           cache
-          --host,="${{ env.hosts }}"
+          --host "${{ env.hosts }}"
           --bootstrap
           -vv
           --
@@ -121,7 +121,7 @@ jobs:
           nix run '.#oizys'
           --
           ci update
-          --host,="${{ env.hosts }}"
+          --host "${{ env.hosts }}"
           --bootstrap
           -vv
           --
