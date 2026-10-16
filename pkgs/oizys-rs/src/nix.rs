@@ -1,3 +1,4 @@
+use crate::cli::default_host;
 use crate::prelude::*;
 use crate::{process::LoggedCommand, ui};
 use clap::ValueEnum;
@@ -298,8 +299,12 @@ impl Nixos {
 
     pub fn rebuild(&self, subcmd: &str, extra_flags: Vec<String>) -> Result<()> {
         let attr = format!("{}#{}", self.flake, self.host);
-
-        let remote_mode = extra_flags.iter().any(|s| s.starts_with("--target-host"));
+        let has_target_host = extra_flags.iter().any(|s| s.starts_with("--target-host"));
+        let hosts_match = self.host == default_host();
+        let remote_mode = has_target_host || !hosts_match;
+        if remote_mode {
+            info!("building in remote mode!");
+        };
         let mut cmd = if !remote_mode && ["switch", "boot"].contains(&subcmd) {
             let mut cmd = LoggedCommand::new("sudo");
             cmd.arg("nixos-rebuild");
@@ -309,13 +314,19 @@ impl Nixos {
         };
 
         cmd.arg(subcmd)
+            .arg("--log-format=multiline")
             .arg("--flake")
             .arg(attr)
-            .args(extra_flags)
-            .check_status()
-            .wrap_err("nixos-rebuild failed")?;
+            .args(extra_flags);
+        if remote_mode {
+            cmd.arg("--sudo").arg("--ask-elevate-password");
+        }
+        if !hosts_match && !has_target_host {
+            cmd.arg("--target-host").arg(&self.host);
+        }
+        cmd.check_status().wrap_err("nixos-rebuild failed")?;
 
-        if subcmd == "switch" {
+        if subcmd == "switch" && !remote_mode {
             chezmoi_status()?;
         }
 

@@ -32,7 +32,6 @@ async fn main() -> Result<()> {
             let nix = NixCommand::new(build.no_nom, cli.global.bootstrap);
             nix.build(args)?;
         }
-        // WHY IS HOST IT"S OWN ARG HERE?
         Commands::Os { cmd, host, args } => {
             Nixos::new(&flake, &host)?.rebuild(&cmd, args)?;
         }
