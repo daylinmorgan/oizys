@@ -3,7 +3,7 @@ use crate::prelude::*;
 use crate::{process::LoggedCommand, ui};
 use clap::ValueEnum;
 use reqwest::{Client, StatusCode};
-use std::collections::{BTreeMap, HashSet};
+use std::collections::{BTreeMap, HashMap, HashSet};
 use tracing::{debug, info};
 
 #[derive(Debug, Clone, ValueEnum)]
@@ -113,55 +113,70 @@ impl NixCommand {
         Ok(drvs)
     }
 
-    pub async fn build_drvs_multi(
+    pub fn to_out_paths(&self, drvs: &Vec<String>) -> Result<HashMap<String, String>> {
+        let mut out_paths: HashMap<String, String> = HashMap::new();
+        let output = LoggedCommand::new("nix")
+            .arg("derivation")
+            .arg("show")
+            .args(drvs)
+            .stdout_ok()?;
+
+        let drv_show: NixDerivationShowOutput = serde_json::from_str(&output)?;
+        for (name, drv) in drv_show {
+            let p = &drv
+                .outputs
+                .get("out")
+                .ok_or(eyre!("unexpected lack of 'out' for drv {}", name))?
+                .path;
+            out_paths.insert(name, p.to_string());
+        }
+        Ok(out_paths)
+    }
+
+    // TODO: incorporate github step summary?
+    pub fn build_drvs_multi(
         &self,
         drvs: Vec<String>,
         args: Vec<String>,
-    ) -> Result<Vec<String>> {
+    ) -> Result<(Vec<String>, Vec<String>)> {
+        let out_paths = self.to_out_paths(&drvs)?;
+
         let drv_names = drvs
             .iter()
             .map(|d| d[11..d.len() - 4].to_string())
-            .collect::<Vec<_>>()
-            .join(", ");
-        debug!("building {} derivations: {:}", drvs.len(), drv_names);
-        let tasks: Vec<_> = drvs
-            .into_iter()
-            .map(|d| {
-                let args = args.clone();
-                debug!("building {}", &d);
-                tokio::spawn(async move {
-                    tokio::process::Command::new("nix")
-                        .arg("build")
-                        .arg(format!("{}^*", &d))
-                        .arg("--print-out-paths")
-                        .arg("--no-link")
-                        .args(args)
-                        .output()
-                        .await
-                })
-            })
-            .collect();
+            .collect::<Vec<_>>();
 
-        let results = futures::future::join_all(tasks).await;
-        let mut to_push = vec![];
-        for result in results {
-            let output = result.wrap_err("task failure")?.wrap_err("Command error")?;
-            if output.status.success() {
-                to_push.extend(
-                    String::from_utf8(output.stdout)?
-                        .trim()
-                        .lines()
-                        .map(String::from),
-                );
-            } else {
-                tracing::error!(
-                    "nix build failure:\n{}",
-                    String::from_utf8_lossy(&output.stderr)
-                );
-            }
+        debug!(
+            "building {} derivations: {:}",
+            drvs.len(),
+            drv_names.join(", ")
+        );
+
+        let status = self
+            .nix()
+            .arg("build")
+            .args(
+                drvs.iter().map(|d| format!("{d}^*")), // .collect::<Vec<_>>(),
+            )
+            .args(&args)
+            .args(["--keep-going", "--no-link"])
+            .check_status()
+            .wrap_err("at least one derivation failed to build");
+        if let Err(err) = status {
+            tracing::error!("{err:#}")
         }
 
-        Ok(to_push)
+        let mut exists = Vec::new();
+        let mut does_not_exist = Vec::new();
+        for (k, v) in out_paths {
+            if std::fs::exists(&v)? {
+                exists.push(v)
+            } else {
+                tracing::warn!("out path for {k} does not exist, see above");
+                does_not_exist.push(v)
+            }
+        }
+        Ok((exists, does_not_exist))
     }
 
     pub fn flake_update(&self) -> Result<()> {

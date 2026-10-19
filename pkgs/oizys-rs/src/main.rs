@@ -93,11 +93,15 @@ async fn main() -> Result<()> {
             CiCommands::Cache { args } => {
                 let drvs = systems.not_cached()?;
                 if !drvs.is_empty() {
-                    let to_push = nix.build_drvs_multi(drvs, args).await?;
+                    let (to_push, missing) = nix.build_drvs_multi(drvs, args)?;
+
                     if !to_push.is_empty() {
                         nix::CellerCache::new("oizys").push(to_push)?;
                     } else {
                         eprintln!("nothing to push :)")
+                    }
+                    if !missing.is_empty() {
+                        bail!("not all derivations built successfully")
                     }
                 } else {
                     eprintln!("no derivations to build :)")
