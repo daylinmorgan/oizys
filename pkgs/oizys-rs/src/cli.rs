@@ -169,6 +169,7 @@ pub enum Commands {
 pub enum CiCommands {
     /// two stage build of current and updated nixos configurations
     Update,
+
     /// build and push store paths
     Cache {
         /// nix-args

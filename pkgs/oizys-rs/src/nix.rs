@@ -91,7 +91,7 @@ impl NixCommand {
     }
 
     pub fn nix(&self) -> LoggedCommand {
-        Self::new(false, self.bootstrap).cmd()
+        Self::new(true, self.bootstrap).cmd()
     }
 
     pub fn build_dry_run(&self, installables: &Vec<String>) -> Result<String> {
@@ -153,7 +153,7 @@ impl NixCommand {
         );
 
         let status = self
-            .nix()
+            .cmd()
             .arg("build")
             .args(
                 drvs.iter().map(|d| format!("{d}^*")), // .collect::<Vec<_>>(),
