@@ -68,13 +68,12 @@ in
     defaults.email = "me@dayl.in";
     certs."home.dayl.in" = {
       domain = "home.dayl.in";
-      extraDomainNames = ["*.home.dayl.in"]     ;
+      extraDomainNames = [ "*.home.dayl.in" ];
       dnsProvider = "namesilo";
       environmentFile = config.sops.templates."acme-namesilo.env".path;
       dnsResolver = "ns1.dnsowl.com:53";
     };
   };
-
 
   services = {
     fwupd = enabled;
@@ -136,10 +135,10 @@ in
           useACMEHost = "home.dayl.in";
           extraConfig = ''
 
-          root * ${landingPage}
-          file_server
-        '';
-      };
+            root * ${landingPage}
+            file_server
+          '';
+        };
       }
       // (
         servicesPorts

@@ -30,7 +30,10 @@
   ];
 
   services.btrfs.autoScrub = enabled // {
-    fileSystems = [ "/" "/mnt/hdd" ];
+    fileSystems = [
+      "/"
+      "/mnt/hdd"
+    ];
   };
 
   systemd.tmpfiles.rules = [
