@@ -113,7 +113,11 @@ impl NixCommand {
         Ok(drvs)
     }
 
-    pub async fn build_drvs_multi(&self, drvs: Vec<String>, args: Vec<String>) -> Result<Vec<String>> {
+    pub async fn build_drvs_multi(
+        &self,
+        drvs: Vec<String>,
+        args: Vec<String>,
+    ) -> Result<Vec<String>> {
         let drv_names = drvs
             .iter()
             .map(|d| d[11..d.len() - 4].to_string())

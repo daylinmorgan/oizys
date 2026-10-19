@@ -170,7 +170,7 @@ pub enum CiCommands {
     /// two stage build of current and updated nixos configurations
     Update,
     /// build and push store paths
-    Cache  {
+    Cache {
         /// nix-args
         args: Vec<String>,
     },
