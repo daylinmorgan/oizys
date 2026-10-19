@@ -14,5 +14,6 @@ treefmt-nix: pkgs:
     settings.on-unmatched = "debug";
     programs.prettier.enable = true;
     programs.nixfmt.enable = true;
+    programs.rustfmt.enable = true;
   }
 ))
