@@ -90,10 +90,10 @@ async fn main() -> Result<()> {
         }
         Commands::Ci { command } => match command {
             CiCommands::Update => systems.build_update_build()?,
-            CiCommands::Cache => {
+            CiCommands::Cache {args }=> {
                 let drvs = systems.not_cached()?;
                 if !drvs.is_empty() {
-                    let to_push = nix.build_drvs_multi(drvs).await?;
+                    let to_push = nix.build_drvs_multi(drvs, args).await?;
                     if !to_push.is_empty() {
                         nix::CellerCache::new("oizys").push(to_push)?;
                     } else {

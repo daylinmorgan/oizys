@@ -113,7 +113,7 @@ impl NixCommand {
         Ok(drvs)
     }
 
-    pub async fn build_drvs_multi(&self, drvs: Vec<String>) -> Result<Vec<String>> {
+    pub async fn build_drvs_multi(&self, drvs: Vec<String>, args: Vec<String>) -> Result<Vec<String>> {
         let drv_names = drvs
             .iter()
             .map(|d| d[11..d.len() - 4].to_string())
@@ -123,6 +123,7 @@ impl NixCommand {
         let tasks: Vec<_> = drvs
             .into_iter()
             .map(|d| {
+                let args = args.clone();
                 debug!("building {}", &d);
                 tokio::spawn(async move {
                     tokio::process::Command::new("nix")
@@ -130,6 +131,7 @@ impl NixCommand {
                         .arg(format!("{}^*", &d))
                         .arg("--print-out-paths")
                         .arg("--no-link")
+                        .args(args)
                         .output()
                         .await
                 })
