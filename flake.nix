@@ -16,13 +16,8 @@
     nixpkgs.follows = "nixpkgs-nixos-unstable";
 
     # to switch to lix stable from nixpkgs set lib/data.lixModule to false;
-    # lix.url = "https://git.lix.systems/lix-project/lix/archive/c019a776e9ea34682f9e785547f5267d35173522.tar.gz";
     lix.url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
-    lix.flake = false;
-    lix-module.url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
-    lix-module.inputs.nixpkgs.follows = "nixpkgs";
-    lix-module.inputs.flake-utils.follows = "flake-utils";
-    lix-module.inputs.lix.follows = "lix";
+    lix.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
@@ -105,5 +100,6 @@
     ## nil inputs, I don't want *ALL* your flake inputs...
     nixos-wsl.inputs.flake-compat.follows = "";
     celler.inputs.flake-compat.follows = "";
+    lix.inputs.flake-compat.follows="";
   };
 }
