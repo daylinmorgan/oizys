@@ -62,7 +62,7 @@ let
       ++ (nixosModules "sops-nix")
       ++ [ (flake.modules "celler").cellerd ]
       ++ (hostFiles hostName)
-      ++ (if lib.data.lixModule then (nixosModules "lix-module") else (selfModules "lix"));
+      ++ (if lib.data.lixModule then (nixosModules "lix") else (selfModules "lix"));
 
       specialArgs = commonSpecialArgs // {
         inherit
