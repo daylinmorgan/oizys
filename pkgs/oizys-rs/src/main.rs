@@ -89,7 +89,7 @@ async fn main() -> Result<()> {
             }
         }
         Commands::Ci { command } => match command {
-            CiCommands::Update => systems.build_update_build()?,
+            CiCommands::Update { args } => systems.build_update_build(args)?,
             CiCommands::Cache { args } => {
                 let drvs = systems.not_cached()?;
                 if !drvs.is_empty() {

@@ -168,7 +168,10 @@ pub enum Commands {
 #[derive(Debug, Subcommand)]
 pub enum CiCommands {
     /// two stage build of current and updated nixos configurations
-    Update,
+    Update {
+        /// nix-args
+        args: Vec<String>,
+    },
 
     /// build and push store paths
     Cache {

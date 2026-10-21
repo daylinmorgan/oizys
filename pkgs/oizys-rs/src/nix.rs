@@ -305,19 +305,6 @@ impl Nixos {
         )
     }
 
-    pub fn build_with_args<I, S>(&self, args: I) -> Result<()>
-    where
-        I: IntoIterator<Item = S>,
-        S: AsRef<std::ffi::OsStr>,
-    {
-        NixCommand::default()
-            .cmd()
-            .arg("build")
-            .arg(self.attr())
-            .args(args)
-            .check_status()
-    }
-
     pub fn rebuild(&self, subcmd: &str, extra_flags: Vec<String>) -> Result<()> {
         let attr = format!("{}#{}", self.flake, self.host);
         let has_target_host = extra_flags.iter().any(|s| s.starts_with("--target-host"));
@@ -398,7 +385,7 @@ impl Nixos {
 
 pub trait NixosOps {
     fn not_cached(&self) -> Result<Vec<String>>;
-    fn build_update_build(&self) -> Result<()>;
+    fn build_update_build(&self, args: Vec<String>) -> Result<()>;
 }
 
 impl NixosOps for Vec<Nixos> {
@@ -432,23 +419,34 @@ impl NixosOps for Vec<Nixos> {
         Ok(to_build.iter().map(|d| d.drv_path.to_string()).collect())
     }
 
-    // should this be reduced to two nix build commands?
-    fn build_update_build(&self) -> Result<()> {
+    fn build_update_build(&self, args: Vec<String>) -> Result<()> {
         for system in self {
             info!("building current system {:?}", system);
-            system.build_with_args(["--out-link", &format!("{}-current", system.host)])?;
+            NixCommand::default()
+                .cmd()
+                .arg("build")
+                .arg(system.attr())
+                .args(&args)
+                .args(["--out-link", &format!("{}-current", system.host)])
+                .check_status()?;
         }
 
         NixCommand::default().flake_update()?;
 
         for system in self {
             info!("building updated system {:?}", system);
-            system.build_with_args([
-                "--out-link",
-                &format!("{}-updated", system.host),
-                "--reference-lock-file",
-                "updated.lock",
-            ])?;
+            NixCommand::default()
+                .cmd()
+                .arg("build")
+                .arg(system.attr())
+                .args(&args)
+                .args([
+                    "--out-link",
+                    &format!("{}-updated", system.host),
+                    "--reference-lock-file",
+                    "updated.lock",
+                ])
+                .check_status()?;
         }
         Ok(())
     }
