@@ -100,6 +100,6 @@
     ## nil inputs, I don't want *ALL* your flake inputs...
     nixos-wsl.inputs.flake-compat.follows = "";
     celler.inputs.flake-compat.follows = "";
-    lix.inputs.flake-compat.follows="";
+    lix.inputs.flake-compat.follows = "";
   };
 }
