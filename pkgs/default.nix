@@ -30,6 +30,7 @@ in
 }
 // (import ./lix.nix { inherit flake lib pkgs; })
 // (flake.toPackageAttrs [
+  "utils"
   # "multiviewer"
   "tsm"
   "llm-nix"

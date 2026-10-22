@@ -783,11 +783,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1785426472,
-        "narHash": "sha256-mKXWlJUhpBO4Y23UHNoWy5sN4ftPhSqeFn9pAbowlfM=",
+        "lastModified": 1792689815,
+        "narHash": "sha256-BLLQbc1sZeBi/1yapV2qXVod5a9DDNIOj9tIeW60aqs=",
         "ref": "refs/heads/main",
-        "rev": "c24c742156476067530347bd184500e7f27c1095",
-        "revCount": 43,
+        "rev": "bacb610f657ba29b653b0e7a268d056b4a560830",
+        "revCount": 44,
         "type": "git",
         "url": "https://git.dayl.in/daylin/utils.git"
       },
