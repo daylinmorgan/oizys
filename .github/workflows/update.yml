@@ -50,8 +50,11 @@ jobs:
         with:
           celler_token: ${{ secrets.CELLER_TOKEN }}
 
-      - name: install nix-eval-jobs
-        run: nix profile install '.#nix-eval-jobs'
+      - name: build/install/cache nix-eval-jobs
+        run: |
+          OUT_PATHS=$(nix build '.#nix-eval-jobs' --print-out-paths --no-link)
+          celler push oizys $OUT_PATHS
+          nix profile install '.#nix-eval-jobs'
 
       - run: git checkout -B flake-lock
 
