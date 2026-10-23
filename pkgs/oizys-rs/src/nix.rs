@@ -382,7 +382,6 @@ impl Nixos {
 
         let mut drvs = HashSet::new();
         for line in stdout.lines() {
-            debug!("{}", line);
             let drv: NixEvalOutput =
                 serde_json::from_str(line).wrap_err(format!("failed to parse line: {}", line))?;
             if !drv.is_cached {
