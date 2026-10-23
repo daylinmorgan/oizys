@@ -22,7 +22,7 @@ impl std::fmt::Display for NixName {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NixCommand {
     bin: String,
     bootstrap: bool,
@@ -76,12 +76,29 @@ impl NixCommand {
         cmd
     }
 
+    #[cfg(feature = "substituters")]
+    pub fn eval_jobs(&self) -> LoggedCommand {
+        let mut cmd = LoggedCommand::new("nix-eval-jobs");
+        if self.bootstrap {
+            crate::substituters::apply_subsituter_flags(&mut cmd);
+        }
+        cmd
+    }
+
     #[cfg(not(feature = "substituters"))]
     pub fn cmd(&self) -> LoggedCommand {
         if self.bootstrap {
             tracing::error!("build with nix (and 'substituters' feature) for bootstrap support");
         }
         LoggedCommand::new(&self.bin.clone())
+    }
+
+    #[cfg(not(feature = "substituters"))]
+    pub fn eval_jobs(&self) -> LoggedCommand {
+        if self.bootstrap {
+            tracing::error!("build with nix (and 'substituters' feature) for bootstrap support");
+        }
+        LoggedCommand::new("nix-eval-jobs")
     }
 
     pub fn build(&self, installables: Vec<String>) -> Result<()> {
@@ -262,6 +279,7 @@ pub fn extract_drvs(nix_output: &str) -> Result<Vec<String>> {
 
 #[derive(Debug)]
 pub struct Nixos {
+    nix: NixCommand,
     pub flake: String,
     pub host: String,
 }
@@ -280,15 +298,17 @@ fn check_host(host: &str) -> Result<()> {
 }
 
 impl Nixos {
-    pub fn new_multi(flake: &str, hosts: &Vec<String>) -> Result<Vec<Self>> {
-        let nixoses: Result<Vec<Self>> = hosts.iter().map(|h| Self::new(&flake, &h)).collect();
+    pub fn new_multi(nix: &NixCommand, flake: &str, hosts: &Vec<String>) -> Result<Vec<Self>> {
+        let nixoses: Result<Vec<Self>> =
+            hosts.iter().map(|h| Self::new(&nix, &flake, &h)).collect();
         nixoses
     }
-    pub fn new(flake: &str, host: &str) -> Result<Self> {
+    pub fn new(nix: &NixCommand, flake: &str, host: &str) -> Result<Self> {
         check_host(host)?;
         let host = host.to_string();
         let flake = flake.to_string();
-        Ok(Self { host, flake })
+        let nix = nix.clone();
+        Ok(Self { nix, host, flake })
     }
 
     pub fn attr(&self) -> String {
@@ -352,7 +372,9 @@ impl Nixos {
         let _span =
             tracing::info_span!(target: "oizys::bar", "running nix-eval-jobs", host = self.host)
                 .entered();
-        let stdout = LoggedCommand::new("nix-eval-jobs")
+        let stdout = self
+            .nix
+            .eval_jobs()
             .arg("--flake")
             .arg("--check-cache-status")
             .arg(self.oizys_packages_attr())
@@ -360,6 +382,7 @@ impl Nixos {
 
         let mut drvs = HashSet::new();
         for line in stdout.lines() {
+            debug!("{}", line);
             let drv: NixEvalOutput =
                 serde_json::from_str(line).wrap_err(format!("failed to parse line: {}", line))?;
             if !drv.is_cached {
@@ -474,7 +497,7 @@ pub fn set_flake(flake: Option<String>) -> Result<String> {
         // }
     }
 
-    if let Ok(path) = std::env::var("OIZYS_DIR") {
+    if let Ok(path) = std::env::var("OIZYS_FLAKE") {
         if path != "" {
             return Ok(path);
         }

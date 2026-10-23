@@ -19,7 +19,7 @@ async fn main() -> Result<()> {
 
     let flake = nix::set_flake(cli.global.flake)?;
     let hosts = cli.global.host;
-    let systems: Vec<Nixos> = Nixos::new_multi(&flake, &hosts)?;
+    let systems: Vec<Nixos> = Nixos::new_multi(&nix, &flake, &hosts)?;
 
     match cli.command {
         Commands::Current { args } => nix::run_current(&nix, &flake, args),
@@ -33,12 +33,13 @@ async fn main() -> Result<()> {
             nix.build(args)?;
         }
         Commands::Os { cmd, host, args } => {
-            Nixos::new(&flake, &host)?.rebuild(&cmd, args)?;
+            Nixos::new(&nix, &flake, &host)?.rebuild(&cmd, args)?;
         }
         Commands::Attr { system, lix } => {
             let mut attrs = vec![];
+            // TODO: reuse sytems above?
             for host in hosts {
-                let nixos = Nixos::new(&flake, &host)?;
+                let nixos = Nixos::new(&nix, &flake, &host)?;
                 if lix {
                     let lix_attrs = nixos.lix_and_co()?;
                     attrs.extend_from_slice(&lix_attrs);
