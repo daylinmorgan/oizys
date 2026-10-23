@@ -355,7 +355,7 @@ impl Nixos {
         let stdout = LoggedCommand::new("nix-eval-jobs")
             .arg("--flake")
             .arg("--check-cache-status")
-            .arg(self.oizys_packages_attr())
+            .arg(self.system_attr())
             .stdout_ok()?;
 
         let mut drvs = HashSet::new();
@@ -394,7 +394,6 @@ impl NixosOps for Vec<Nixos> {
         let mut drvs: HashSet<NixEvalOutput> = HashSet::new();
         for system in self {
             for d in system.not_cached_system_path()? {
-                debug!("{:?}", &d);
                 drvs.insert(d);
             }
             // why doesn't union work?
