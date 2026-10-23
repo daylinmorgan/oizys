@@ -394,6 +394,7 @@ impl NixosOps for Vec<Nixos> {
         let mut drvs: HashSet<NixEvalOutput> = HashSet::new();
         for system in self {
             for d in system.not_cached_system_path()? {
+                debug!("{:?}", &d);
                 drvs.insert(d);
             }
             // why doesn't union work?
