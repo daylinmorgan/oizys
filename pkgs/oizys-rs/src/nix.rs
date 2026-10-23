@@ -355,11 +355,12 @@ impl Nixos {
         let stdout = LoggedCommand::new("nix-eval-jobs")
             .arg("--flake")
             .arg("--check-cache-status")
-            .arg(self.system_attr())
+            .arg(self.oizys_packages_attr())
             .stdout_ok()?;
 
         let mut drvs = HashSet::new();
         for line in stdout.lines() {
+            debug!("{}", line);
             let drv: NixEvalOutput =
                 serde_json::from_str(line).wrap_err(format!("failed to parse line: {}", line))?;
             if !drv.is_cached {
