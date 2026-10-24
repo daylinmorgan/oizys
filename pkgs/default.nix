@@ -26,7 +26,7 @@ in
   firefox = pkgs.callPackage ./firefox {
     firefox-unwrapped = (flake.pkgs "firefox-nightly").firefox-nightly-bin.unwrapped;
   };
-  inherit (pkgs) difftastic;
+  inherit (pkgs) difftastic calibre;
 }
 // (import ./lix.nix { inherit flake lib pkgs; })
 // (flake.toPackageAttrs [

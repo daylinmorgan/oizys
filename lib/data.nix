@@ -15,6 +15,9 @@
   };
   nixpkgs-overlays = {
     # nixpkgs-unstable = { pkg = PR-num };
+    nixos-unstable-small = {
+      calibre = 577607;
+    };
   };
   # unfree packages permitted in both the flake's pkgs and host builds
   unfree-packages = [
