@@ -398,7 +398,8 @@ impl Nixos {
             .wrap_err("nix derivation show is doing stuff if shouldn't")?
         {
             if drv.is_lix() || drv.is_lix_dependent()? {
-                attrs.push(name)
+                // a bare .drv installable refers to the derivation file itself, not its outputs
+                attrs.push(format!("{name}^*"))
             }
         }
         Ok(attrs)
