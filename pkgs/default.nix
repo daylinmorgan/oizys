@@ -1,4 +1,5 @@
 {
+  inputs,
   system,
   pkgs,
   lib,
@@ -17,6 +18,7 @@ in
 
   oizys-rs = pkgs.callPackage ../pkgs/oizys-rs {
     inherit (lib.data) substituters;
+    inherit inputs;
   };
   nimlangserver = callNimPackage ./nim/nimlangserver;
   procs = callNimPackage ./nim/procs;

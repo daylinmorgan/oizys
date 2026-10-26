@@ -23,7 +23,9 @@
     },
     "celler": {
       "inputs": {
-        "crane": "crane",
+        "crane": [
+          "crane"
+        ],
         "flake-compat": [],
         "flake-parts": [
           "flake-parts"
@@ -50,11 +52,11 @@
     },
     "crane": {
       "locked": {
-        "lastModified": 1787326676,
-        "narHash": "sha256-lWhBbBvC05/xwivKBBiM2YNizpmgqCgyOIzomvRuwxs=",
+        "lastModified": 1792350552,
+        "narHash": "sha256-292lvpvxTGKryKxh3/3tcIVi85CwYGdl4oOi113Sob8=",
         "owner": "ipetkov",
         "repo": "crane",
-        "rev": "692f7e9ef2ece8125b466f66f2af532b3edaed0d",
+        "rev": "e675a36b7377bebe41d548388a2501cbb16d380d",
         "type": "github"
       },
       "original": {
@@ -639,6 +641,7 @@
       "inputs": {
         "NixVirt": "NixVirt",
         "celler": "celler",
+        "crane": "crane",
         "daylin-website": "daylin-website",
         "fenix": "fenix",
         "firefox-nightly": "firefox-nightly",
