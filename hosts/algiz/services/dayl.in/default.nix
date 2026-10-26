@@ -18,4 +18,12 @@
       }
     '';
   };
+  services.dayl-in-under-construction = enabled // {
+    domains = [
+      "cloud.dayl.in"
+      "links.dayl.in"
+      "games.dayl.in"
+      "blog.dayl.in"
+    ];
+  };
 }
