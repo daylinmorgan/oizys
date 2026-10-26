@@ -50,6 +50,6 @@ rustPlatform.buildRustPackage (
       installShellCompletion --cmd oizys \
         --zsh <($out/bin/oizys completion zsh)
     '';
-    cargoHash = "sha256-EnhuhPYjU/ml1Had/TiYvBUq6ODIXxgQOka+014cyB8=";
+    cargoHash = "sha256-Al3UEl4gHMVmg9j/JyXsS/cb08GKTVAZBfVgj3P+D5o=";
   }
 )
