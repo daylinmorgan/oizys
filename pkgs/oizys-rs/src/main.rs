@@ -68,6 +68,7 @@ async fn main() -> Result<()> {
             }
         }
         Commands::Pr { number } => {
+            // TODO: add support for reading from lib/data.nix
             let status = github::get_nixpkgs_pr_status(number).await?;
             println!("PR {}", style(format!("{number}")).bold());
             println!("{}", status)
