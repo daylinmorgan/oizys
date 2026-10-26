@@ -105,13 +105,13 @@ async fn handle_response<T: DeserializeOwned>(resp: Response) -> Result<T> {
     match resp.status() {
         StatusCode::OK => {
             let data: T = resp.json().await?;
-            return Ok(data);
+            Ok(data)
         }
         s => bail!(
             "github api had an unexpected error: {s:?}, see below:\n{}",
             resp.text().await?
         ),
-    };
+    }
 }
 
 struct GitHubRepo {
@@ -212,7 +212,7 @@ impl GitHubRepo {
             self.owner, self.repo, workflow
         );
         debug!("POST: {}", url);
-        let body = GithubWorkflowDispatchBody::new(&ref_name, inputs)?;
+        let body = GithubWorkflowDispatchBody::new(ref_name, inputs)?;
         let res = self.client.post(url).json(&body).send().await?;
         match res.status() {
             StatusCode::NO_CONTENT => Ok(()),
@@ -255,11 +255,11 @@ impl GitHubRepo {
         let interval = Duration::from_millis(500);
         async {
             while start_time.elapsed() < Duration::from_secs(10) {
-                let runs = self.list_workflow_runs(&workflow).await?.workflow_runs;
+                let runs = self.list_workflow_runs(workflow).await?.workflow_runs;
                 let latest = runs
                     .first()
                     .ok_or(eyre!("expected to find at least one worlflow run"))?;
-                if Self::is_current_run(latest, &now) {
+                if Self::is_current_run(latest, now) {
                     return Ok(runs[0].clone());
                 }
                 tokio::time::sleep(interval).await;
@@ -334,9 +334,9 @@ pub async fn oizys_gha_run(
 ) -> Result<i64> {
     async {
         let repo = GitHubRepo::new("daylinmorgan", "oizys")?;
-        let workflow = GitHubRepo::normalize_workflow(&workflow);
+        let workflow = GitHubRepo::normalize_workflow(workflow);
         let now: DateTime<Utc> = Utc::now();
-        repo.run_action(&workflow, &ref_name, inputs)
+        repo.run_action(&workflow, ref_name, inputs)
             .await
             .wrap_err("failed to start action")?;
         let run = repo.get_in_progress_run(&workflow, &now).await?;

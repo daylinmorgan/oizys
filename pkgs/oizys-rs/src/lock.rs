@@ -39,7 +39,7 @@ pub struct FlakeInput {
 impl FlakeInput {
     fn has_input(&self, name: &str) -> bool {
         if let Some(inputs) = &self.inputs {
-            for (_, input) in inputs {
+            for input in inputs.values() {
                 match input {
                     InputReferences::Single(input_name) => {
                         if input_name == name {
@@ -57,12 +57,10 @@ impl FlakeInput {
         false
     }
 
-    // TODO: more idiomatic code?
     fn has_null_input(&self, null: &str) -> Option<InputReferences> {
         self.inputs
             .as_ref()
-            .map(|inputs| inputs.get(null).map(|n| n.clone()))
-            .flatten()
+            .and_then(|inputs| inputs.get(null).cloned())
 
         // if let Some(inputs) = &self.inputs {
         //     return inputs.get(null).map(|n| n.clone())
@@ -106,7 +104,7 @@ impl FlakeLock {
         self.nodes
             .keys()
             .filter(|n| n.contains("_"))
-            .map(|n| (n.to_string(), self.matches(&n)))
+            .map(|n| (n.to_string(), self.matches(n)))
             .collect()
     }
 
@@ -118,9 +116,9 @@ impl FlakeLock {
                     continue;
                 }
                 // an input represented as InputReferences::List is in fact null
-                if let Some(InputReferences::Single(_)) = input.has_null_input(&null_input) {
+                if let Some(InputReferences::Single(_)) = input.has_null_input(null_input) {
                     map.entry(null_input.clone())
-                        .or_insert_with(Vec::new)
+                        .or_default()
                         .push(name.clone());
                 }
             }

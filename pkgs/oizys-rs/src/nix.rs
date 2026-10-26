@@ -29,7 +29,7 @@ pub struct NixCommand {
 }
 
 fn exists_or<'a>(bin: &'a str, fallback: &'a str) -> &'a str {
-    match which::which(&bin) {
+    match which::which(bin) {
         Ok(_) => bin,
         Err(_) => {
             tracing::warn!("{bin} not found falling back to {fallback}");
@@ -48,13 +48,16 @@ impl NixName {
     }
 }
 
-impl NixCommand {
-    pub fn default() -> Self {
+impl Default for NixCommand {
+    fn default() -> Self {
         Self {
             bin: "nix".to_string(),
             bootstrap: false,
         }
     }
+}
+
+impl NixCommand {
     pub fn new(no_nom: bool, bootstrap: bool) -> Self {
         let name = if no_nom { NixName::Nix } else { NixName::Nom };
         Self {
@@ -253,7 +256,7 @@ pub fn extract_drvs(nix_output: &str) -> Result<Vec<String>> {
     let results: Vec<String> = re
         .captures_iter(nix_output)
         .map(|c| c.extract())
-        .filter(|(_full, [_hash, name])| !is_ignored(&name, &ignored))
+        .filter(|(_full, [_hash, name])| !is_ignored(name, &ignored))
         .map(|(full, [_hash, _name])| String::from(full).trim().to_string())
         .collect();
     Ok(results)
@@ -270,7 +273,7 @@ fn check_host(host: &str) -> Result<()> {
     let hosts_str = option_env!("OIZYS_HOSTS").unwrap_or("othalan");
     let hosts: Vec<&str> = hosts_str.split(",").collect();
     // let build_env = std::env::var("NIX_BUILD_TOP").unwrap_or("".to_string()) != "";
-    if let Some(_) = std::env::var_os("NIX_BUILD_TOP") {
+    if std::env::var_os("NIX_BUILD_TOP").is_some() {
         info!("skipping host check in build environment")
     } else if !hosts.contains(&host) {
         bail!("unknown host {}", host);
@@ -281,8 +284,7 @@ fn check_host(host: &str) -> Result<()> {
 
 impl Nixos {
     pub fn new_multi(nix: &NixCommand, flake: &str, hosts: &[String]) -> Result<Vec<Self>> {
-        let nixoses: Result<Vec<Self>> =
-            hosts.iter().map(|h| Self::new(&nix, &flake, &h)).collect();
+        let nixoses: Result<Vec<Self>> = hosts.iter().map(|h| Self::new(nix, flake, h)).collect();
         nixoses
     }
     pub fn new(nix: &NixCommand, flake: &str, host: &str) -> Result<Self> {
@@ -461,7 +463,7 @@ impl NixosOps for Vec<Nixos> {
 fn needs_to_be_built(flake: &str) -> Result<bool> {
     let output = LoggedCommand::new("nix")
         .arg("path-info")
-        .arg(&flake)
+        .arg(flake)
         .output()?;
     Ok(!output.status.success())
 }
@@ -491,10 +493,10 @@ pub fn set_flake(flake: Option<String>) -> Result<String> {
 }
 
 // TODO: better error handling here
-pub fn run_current(nix: &NixCommand, flake: &str, args: Vec<String>) {
+pub fn run_current(nix: &NixCommand, flake: &str, args: Vec<String>) -> Result<()> {
     let flake = format!("{flake}#oizys");
     let to_build =
-        needs_to_be_built(&flake).expect(&format!("failed to check path-info of: {}", &flake));
+        needs_to_be_built(&flake).wrap_err(format!("failed to check path-info of: {}", flake))?;
     if to_build {
         nix.cmd()
             .arg("build")
@@ -529,7 +531,7 @@ pub struct NixCache {
 
 impl std::fmt::Display for NixCache {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-        write!(f, "Cache({})", &self.url)?;
+        write!(f, "Cache({})", self.url)?;
         Ok(())
     }
 }
@@ -546,8 +548,8 @@ impl NixCache {
         debug!("GET: {}", url);
         let resp = client.get(url).send().await?;
         match resp.status() {
-            StatusCode::OK => return Ok(Some(resp.text().await?)),
-            StatusCode::NOT_FOUND => return Ok(None),
+            StatusCode::OK => Ok(Some(resp.text().await?)),
+            StatusCode::NOT_FOUND => Ok(None),
             _ => bail!("unexpected failure, {:?}", resp),
         }
     }
@@ -562,7 +564,7 @@ impl Cache for HashSet<NixCache> {
         let client = Client::builder().user_agent(APP_USER_AGENT).build()?;
         for hash in &hashes {
             for cache in self {
-                if let Some(response) = cache.search(&client, &hash).await? {
+                if let Some(response) = cache.search(&client, hash).await? {
                     ui::show_narinfo(&response);
                     if !all {
                         continue;
@@ -580,8 +582,8 @@ pub fn parse_substituters(stdout: &str) -> Result<HashSet<NixCache>> {
     for line in stdout.lines() {
         if line.starts_with("substituters =") {
             let caches = line
-                .splitn(2, "=")
-                .nth(1)
+                .split_once("=")
+                .map(|x| x.1)
                 .ok_or(eyre!("expected = in string"))?
                 .split_whitespace()
                 .filter(|s| s != &"")
@@ -598,7 +600,7 @@ pub fn get_substituters() -> Result<HashSet<NixCache>> {
         .arg("config")
         .arg("show")
         .stdout_ok()?;
-    Ok(parse_substituters(&stdout)?)
+    parse_substituters(&stdout)
 }
 
 #[derive(Deserialize, Debug)]
@@ -636,7 +638,7 @@ impl NixDerivation {
         if self.name.starts_with("lix-") {
             return !(self.name.ends_with("-debug") || self.name.ends_with("-dev"));
         }
-        return false;
+        false
     }
 
     fn is_lix_dependent(&self) -> Result<bool> {
@@ -646,9 +648,9 @@ impl NixDerivation {
         {
             return Ok(false);
         }
-        for (drv_name, _) in &self.input_drvs {
+        for drv_name in self.input_drvs.keys() {
             let (name, _) =
-                split_drv_name(&drv_name).wrap_err("unexpected error handling drv names")?;
+                split_drv_name(drv_name).wrap_err("unexpected error handling drv names")?;
             if name.starts_with("lix-") {
                 return Ok(true);
             }
@@ -700,11 +702,11 @@ pub async fn narinfo(attrs: Vec<String>, all: bool) -> Result<()> {
 pub fn chezmoi_status() -> Result<()> {
     info!("check chezmoi status");
     let stdout = LoggedCommand::new("chezmoi").arg("status").stdout_ok()?;
-    if stdout != "" {
+    if !stdout.is_empty() {
         println!(
             "\nfyi the dotfiles don't match, see below:\n{}:\n{}",
             style("CHEZMOI STATUS").magenta().bold(),
-            &crate::indent(stdout)
+            crate::indent(stdout)
         )
     }
     Ok(())

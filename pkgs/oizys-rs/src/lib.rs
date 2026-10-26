@@ -35,9 +35,9 @@ pub fn indent(s: String) -> String {
     for l in s.lines() {
         indented.push_str("  ");
         indented.push_str(l);
-        indented.push_str("\n");
+        indented.push('\n');
     }
-    return indented;
+    indented
 }
 
 pub fn copy_to_clipboard(data: String) -> Result<()> {

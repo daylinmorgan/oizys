@@ -22,7 +22,7 @@ async fn main() -> Result<()> {
     let systems: Vec<Nixos> = Nixos::new_multi(&nix, &flake, &hosts)?;
 
     match cli.command {
-        Commands::Current { args } => nix::run_current(&nix, &flake, args),
+        Commands::Current { args } => nix::run_current(&nix, &flake, args)?,
         Commands::Completion { shell } => {
             let mut cmd = Cli::command();
             eprintln!("Generating completion file for {shell}...");

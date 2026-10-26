@@ -22,7 +22,7 @@ pub fn show_narinfo(info: &str) {
     for line in info.lines() {
         let split: Vec<&str> = line.splitn(2, ":").collect();
         let (k, v) = (split[0], split[1]); // could panic ¯\_(ツ)_/¯
-        print!("  {}:{}\n", style(k).bold(), v)
+        println!("  {}:{}", style(k).bold(), v)
     }
 }
 
