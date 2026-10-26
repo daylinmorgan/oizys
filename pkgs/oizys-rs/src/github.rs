@@ -256,7 +256,9 @@ impl GitHubRepo {
         async {
             while start_time.elapsed() < Duration::from_secs(10) {
                 let runs = self.list_workflow_runs(&workflow).await?.workflow_runs;
-                let latest = &runs[0];
+                let latest = runs
+                    .first()
+                    .ok_or(eyre!("expected to find at least one worlflow run"))?;
                 if Self::is_current_run(latest, &now) {
                     return Ok(runs[0].clone());
                 }
@@ -311,10 +313,15 @@ pub async fn get_nixpkgs_pr_status(pr_number: i64) -> Result<PrStatus> {
     let status = if !pr.merged {
         PrStatus::NotMerged
     } else {
+        let (nixpkgs_unstable, nixos_unstable_small, nixos_unstable) = tokio::try_join!(
+            repo.pr_in_branch("nixpkgs-unstable", &pr),
+            repo.pr_in_branch("nixos-unstable-small", &pr),
+            repo.pr_in_branch("nixos-unstable", &pr),
+        )?;
         PrStatus::Merged {
-            nixpkgs_unstable: repo.pr_in_branch("nixos-unstable", &pr).await?,
-            nixos_unstable_small: repo.pr_in_branch("nixos-unstable-small", &pr).await?,
-            nixos_unstable: repo.pr_in_branch("nixos-unstable", &pr).await?,
+            nixpkgs_unstable,
+            nixos_unstable_small,
+            nixos_unstable,
         }
     };
     Ok(status)

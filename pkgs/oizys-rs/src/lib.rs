@@ -48,7 +48,7 @@ pub fn copy_to_clipboard(data: String) -> Result<()> {
         .wrap_err("failed to start wl-copy")?;
 
     if let Some(mut stdin) = cmd.stdin.take() {
-        stdin.write(&data.into_bytes())?;
+        stdin.write_all(&data.into_bytes())?;
         drop(stdin);
     }
 

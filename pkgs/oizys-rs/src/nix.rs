@@ -4,7 +4,7 @@ use crate::{process::LoggedCommand, ui};
 use clap::ValueEnum;
 use reqwest::{Client, StatusCode};
 use std::collections::{BTreeMap, HashMap, HashSet};
-use tracing::{debug, info, error};
+use tracing::{debug, error, info};
 
 #[derive(Debug, Clone, ValueEnum)]
 pub enum NixName {
@@ -67,38 +67,20 @@ impl NixCommand {
         }
     }
 
-    #[cfg(feature = "substituters")]
     pub fn cmd(&self) -> LoggedCommand {
         let mut cmd = LoggedCommand::new(&self.bin.clone());
         if self.bootstrap {
-            crate::substituters::apply_subsituter_flags(&mut cmd);
+            crate::substituters::apply_substituter_flags(&mut cmd);
         }
         cmd
     }
 
-    #[cfg(feature = "substituters")]
     pub fn eval_jobs(&self) -> LoggedCommand {
         let mut cmd = LoggedCommand::new("nix-eval-jobs");
         if self.bootstrap {
-            crate::substituters::apply_subsituter_flags(&mut cmd);
+            crate::substituters::apply_substituter_flags(&mut cmd);
         }
         cmd
-    }
-
-    #[cfg(not(feature = "substituters"))]
-    pub fn cmd(&self) -> LoggedCommand {
-        if self.bootstrap {
-            tracing::error!("build with nix (and 'substituters' feature) for bootstrap support");
-        }
-        LoggedCommand::new(&self.bin.clone())
-    }
-
-    #[cfg(not(feature = "substituters"))]
-    pub fn eval_jobs(&self) -> LoggedCommand {
-        if self.bootstrap {
-            tracing::error!("build with nix (and 'substituters' feature) for bootstrap support");
-        }
-        LoggedCommand::new("nix-eval-jobs")
     }
 
     pub fn build(&self, installables: Vec<String>) -> Result<()> {
@@ -111,7 +93,7 @@ impl NixCommand {
         Self::new(true, self.bootstrap).cmd()
     }
 
-    pub fn build_dry_run(&self, installables: &Vec<String>) -> Result<String> {
+    pub fn build_dry_run(&self, installables: &[String]) -> Result<String> {
         let stderr = self
             .nix()
             .arg("build")
@@ -122,7 +104,7 @@ impl NixCommand {
     }
 
     // TODO: support nix-eval-jobs for this method
-    pub fn not_cached(&self, installables: &Vec<String>) -> Result<Vec<String>> {
+    pub fn not_cached(&self, installables: &[String]) -> Result<Vec<String>> {
         let span = bar_span!("checking for missing packages").entered();
         let stderr = self.build_dry_run(installables)?;
         span.exit();
@@ -130,7 +112,7 @@ impl NixCommand {
         Ok(drvs)
     }
 
-    pub fn to_out_paths(&self, drvs: &Vec<String>) -> Result<HashMap<String, String>> {
+    pub fn to_out_paths(&self, drvs: &[String]) -> Result<HashMap<String, String>> {
         let mut out_paths: HashMap<String, String> = HashMap::new();
         let output = LoggedCommand::new("nix")
             .arg("derivation")
@@ -261,7 +243,7 @@ fn ignored_names() -> Vec<String> {
         .collect()
 }
 
-fn is_ignored(name: &str, ignored: &Vec<String>) -> bool {
+fn is_ignored(name: &str, ignored: &[String]) -> bool {
     ignored.iter().any(|n| name.starts_with(n))
 }
 
@@ -298,7 +280,7 @@ fn check_host(host: &str) -> Result<()> {
 }
 
 impl Nixos {
-    pub fn new_multi(nix: &NixCommand, flake: &str, hosts: &Vec<String>) -> Result<Vec<Self>> {
+    pub fn new_multi(nix: &NixCommand, flake: &str, hosts: &[String]) -> Result<Vec<Self>> {
         let nixoses: Result<Vec<Self>> =
             hosts.iter().map(|h| Self::new(&nix, &flake, &h)).collect();
         nixoses
@@ -497,8 +479,7 @@ pub fn set_flake(flake: Option<String>) -> Result<String> {
         // }
     }
 
-
-
+    // home_dir is deprecated?
     let path = std::env::home_dir().unwrap().join("oizys");
 
     if path.is_dir() {

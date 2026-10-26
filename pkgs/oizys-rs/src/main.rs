@@ -59,7 +59,7 @@ async fn main() -> Result<()> {
 
         // todo: account for packages that will be fetched too
         Commands::Dry {} => {
-            let attrs = systems.into_iter().map(|s| s.system_attr()).collect();
+            let attrs: Vec<String> = systems.into_iter().map(|s| s.system_attr()).collect();
             let drvs = nix.not_cached(&attrs)?;
             if drvs.is_empty() {
                 println!("nothing to build :)")

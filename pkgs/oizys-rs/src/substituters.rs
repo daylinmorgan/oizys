@@ -1,9 +1,6 @@
-#![allow(dead_code)] // features are used and result in dead code
-
 use crate::process::LoggedCommand;
 use serde::Deserialize;
-use tracing::error;
-use tracing::info;
+use tracing::{error, info};
 
 #[derive(Deserialize)]
 pub struct Substituters {
@@ -14,14 +11,15 @@ pub struct Substituters {
     pub trusted_public_keys: Vec<String>,
 }
 
-#[cfg(feature = "substituters")]
-const SUBSTITUTERS_JSON: Option<&'static str> = Some(include_str!("substituters.json"));
+const SUBSTITUTERS_JSON: Option<&'static str> = option_env!("OIZYS_SUBSTITUTERS");
 
-#[cfg(not(feature = "substituters"))]
-const SUBSTITUTERS_JSON: Option<&'static str> = None;
+pub fn apply_substituter_flags(cmd: &mut LoggedCommand) {
+    let Some(json) = SUBSTITUTERS_JSON else {
+        error!("build with nix for bootstrap substituters support");
+        return;
+    };
 
-pub fn apply_subsituter_flags(cmd: &mut LoggedCommand) {
-    match serde_json::from_str::<Substituters>(SUBSTITUTERS_JSON.unwrap()) {
+    match serde_json::from_str::<Substituters>(json) {
         Ok(subs) => {
             info!("including substituters in nix command");
             if !subs.substituters.is_empty() {
@@ -33,6 +31,6 @@ pub fn apply_subsituter_flags(cmd: &mut LoggedCommand) {
                 cmd.arg(subs.trusted_public_keys.join(" "));
             }
         }
-        Err(e) => error!("failed to parse substituters json, see error {}", e),
+        Err(e) => error!("failed to parse substituters json: {e}"),
     }
 }
