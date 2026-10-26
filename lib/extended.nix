@@ -163,7 +163,7 @@ let
 
   # warn when a package pulled from a PR input is the same version as the one
   # already in nixpkgs (i.e. the PR has landed and the override can be dropped)
-  checkVersion =
+  checkVersionPR =
     base: name: pr: p:
     let
       baseVer = base.${name}.version or "0";
@@ -188,7 +188,7 @@ let
       nixpkgs = importNixpkgsInput final nixpkgsInput;
       base = importNixpkgsInput final "nixpkgs";
     in
-    packageNames |> mapAttrs (name: pr: nixpkgs.${name} |> checkVersion base name pr);
+    packageNames |> mapAttrs (name: pr: nixpkgs.${name} |> checkVersionPR base name pr);
 
   pkgsFromNixpkgsWithArgs =
     {
