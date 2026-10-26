@@ -4,7 +4,7 @@ use crate::{process::LoggedCommand, ui};
 use clap::ValueEnum;
 use reqwest::{Client, StatusCode};
 use std::collections::{BTreeMap, HashMap, HashSet};
-use tracing::{debug, info};
+use tracing::{debug, info, error};
 
 #[derive(Debug, Clone, ValueEnum)]
 pub enum NixName {
@@ -497,18 +497,15 @@ pub fn set_flake(flake: Option<String>) -> Result<String> {
         // }
     }
 
-    if let Ok(path) = std::env::var("OIZYS_FLAKE") {
-        if path != "" {
-            return Ok(path);
-        }
-    };
+
 
     let path = std::env::home_dir().unwrap().join("oizys");
+
     if path.is_dir() {
         return Ok(path.into_os_string().into_string().unwrap());
     }
 
-    info!("{:?} does not exist, using remote as fallback", path);
+    error!("{:?} does not exist, using remote as fallback", path);
     Ok("github:daylinmorgan/oizys".to_string())
 }
 

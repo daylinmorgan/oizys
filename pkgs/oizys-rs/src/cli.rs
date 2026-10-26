@@ -1,5 +1,5 @@
 use clap::{Args, Parser, Subcommand};
-use clap_complete::aot::{Generator, Shell, generate};
+use clap_complete::aot::{generate, Generator, Shell};
 
 #[derive(Debug, Args)]
 #[command(next_help_heading = "Global options")]
@@ -16,7 +16,7 @@ pub struct GlobalOptions {
     pub verbose: u8,
 
     /// path to flake
-    #[arg(short, long, global = true)]
+    #[arg(short, long, global = true, env="OIZYS_FLAKE")]
     pub flake: Option<String>,
 
     /// enable bootstrap mode
