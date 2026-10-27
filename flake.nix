@@ -5,12 +5,12 @@
 
   inputs = {
     nixpkgs-nixos-unstable.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst";
-    nixos-unstable-small.url = "https://channels.nixos.org/nixos-unstable-small/nixexprs.tar.zst";
+    # nixos-unstable-small.url = "https://channels.nixos.org/nixos-unstable-small/nixexprs.tar.zst";
     # nixpkgs-nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-unstable.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.zst";
     # nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
-    # nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
+    # nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-26.05";
     # nixpkgs-master.url = "github:nixos/nixpkgs/master";
     # my-nixpkgs.url = "github:daylinmorgan/nixpkgs/nixos-unstable";
 
