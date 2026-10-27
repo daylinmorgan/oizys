@@ -376,19 +376,6 @@
         "type": "github"
       }
     },
-    "nixos-unstable-small": {
-      "locked": {
-        "lastModified": 1792839268,
-        "narHash": "sha256-l/pvZV6u92DmCh8oM6LJvvY5fpZzwAIuKsYTTIVoQA8=",
-        "rev": "21f9767ba1ac8b3ab8e7a7d469dff3fa47b684a6",
-        "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/unstable-small/nixos-26.11pre1100859.21f9767ba1ac/nixexprs.tar.zst?lastModified=1792839268&rev=21f9767ba1ac8b3ab8e7a7d469dff3fa47b684a6"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://channels.nixos.org/nixos-unstable-small/nixexprs.tar.zst"
-      }
-    },
     "nixos-wsl": {
       "inputs": {
         "flake-compat": [],
@@ -653,7 +640,6 @@
         "nim2nix": "nim2nix",
         "niriman": "niriman",
         "nix-index-database": "nix-index-database",
-        "nixos-unstable-small": "nixos-unstable-small",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": [
           "nixpkgs-nixos-unstable"
