@@ -4,13 +4,11 @@ version = "2026.1001.0"
 edition = "2024"
 
 [dependencies]
-anstyle = "1.0.11"
 chrono = { version = "0.4.41", features = ["serde"] }
 clap = { version = "4.5.46", features = ["derive", "env"] }
 clap_complete = "4.5.57"
 color-eyre = { version = "0.6.5", default-features = false }
 console = "0.16.0"
-futures = "0.3.31"
 hostname = "0.4.1"
 indicatif = "0.18.0"
 regex = "1.11.2"
