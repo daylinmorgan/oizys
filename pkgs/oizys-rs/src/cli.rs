@@ -101,7 +101,15 @@ pub enum Commands {
     },
 
     /// check merge status of nixpkgs PR
-    Pr { number: i64 },
+    Pr {
+        /// pr numbers
+        #[arg(num_args = 0..)]
+        numbers: Vec<u64>,
+
+        /// don't source from lib/data.nix
+        #[arg(long)]
+        ignore_data: bool,
+    },
 
     /// trigger GHA workflow
     ///

@@ -9,6 +9,8 @@ pub mod ui;
 use indicatif::ProgressStyle;
 use prelude::*;
 use process::LoggedCommand;
+use serde::Deserialize;
+use std::collections::HashMap;
 use std::io::Write;
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
@@ -76,7 +78,6 @@ pub fn check_lock_file(flake: &str, null: Vec<String>) -> Result<()> {
     Ok(())
 }
 
-
 pub fn possible_hosts() -> Vec<String> {
     let hosts_str = option_env!("OIZYS_HOSTS").unwrap_or("othalan");
     let mut hosts: Vec<String> = hosts_str.split(",").map(|s| s.to_string()).collect();
@@ -85,6 +86,29 @@ pub fn possible_hosts() -> Vec<String> {
         hosts.push("localhost".into());
     }
     hosts
+}
+
+
+type OverlayPrs = HashMap<String, HashMap<String, u64>>;
+
+#[derive(Debug, Deserialize)]
+struct OizysData {
+    #[serde(rename="nixpkgs-overlays")]
+    nixpkgs_overlays: OverlayPrs,
+}
+
+pub fn get_lib_overlay_prs(flake: &str) -> Result<OverlayPrs> {
+    let data_file = format!("{flake}/lib/data.nix");
+    let exists = std::path::Path::new(&data_file).try_exists()?;
+    if !exists {
+        bail!("lib/data.nix is not a file, are you using a local oizys?")
+    }
+    let data_str = nix::NixCommand::default()
+        .nix()
+        .args(["eval", "-f", &data_file, "--json"])
+        .stdout_ok()?;
+    let data: OizysData = serde_json::from_str(&data_str)?;
+    Ok(data.nixpkgs_overlays)
 }
 
 
@@ -128,7 +152,6 @@ pub fn init_subscriber(verbose: u8) {
 
     tracing::debug!("run with -vvv to see third-party log messages");
 }
-
 
 #[macro_export]
 macro_rules! bar_span {

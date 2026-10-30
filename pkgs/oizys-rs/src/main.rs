@@ -65,11 +65,27 @@ async fn main() -> Result<()> {
                 ui::show_drvs(drvs);
             }
         }
-        Commands::Pr { number } => {
+        Commands::Pr { numbers ,ignore_data} => {
             // TODO: add support for reading from lib/data.nix
-            let status = github::get_nixpkgs_pr_status(number).await?;
-            println!("PR {}", style(format!("{number}")).bold());
-            println!("{}", status)
+            if !ignore_data {
+
+            let overlay_prs = oizys::get_lib_overlay_prs(&flake)?;
+            for (branch, prs) in overlay_prs {
+                println!("flake input {}",  style(branch).bold());
+                for (name, num) in prs {
+                    let status = github::get_nixpkgs_pr_status(num).await?;
+                    println!("package {}", style(name).bold());
+                    println!("PR {}", style(format!("{num}")).bold());
+                    println!("{}", status)
+                }
+            }
+
+            }
+            for num in numbers {
+                let status = github::get_nixpkgs_pr_status(num).await?;
+                println!("PR {}", style(format!("{num}")).bold());
+                println!("{}", status)
+            }
         }
 
         Commands::Gha {

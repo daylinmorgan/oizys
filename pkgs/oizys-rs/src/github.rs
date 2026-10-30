@@ -168,7 +168,7 @@ impl GitHubRepo {
         .await
     }
 
-    async fn get_pr(&self, number: i64) -> Result<GithubPullRequest> {
+    async fn get_pr(&self, number: u64) -> Result<GithubPullRequest> {
         self.get(&format!(
             "https://api.github.com/repos/{}/{}/pulls/{}",
             self.owner, self.repo, number
@@ -307,7 +307,7 @@ impl GithubWorkflowDispatchBody {
     }
 }
 
-pub async fn get_nixpkgs_pr_status(pr_number: i64) -> Result<PrStatus> {
+pub async fn get_nixpkgs_pr_status(pr_number: u64) -> Result<PrStatus> {
     let repo = GitHubRepo::new("nixos", "nixpkgs")?;
     let pr = repo.get_pr(pr_number).await?;
     let status = if !pr.merged {
