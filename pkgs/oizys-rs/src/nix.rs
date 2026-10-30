@@ -103,6 +103,7 @@ impl NixCommand {
             .args(installables)
             .arg("--dry-run")
             .stderr_ok()?;
+        tracing::trace!("dry run output:\n{}", super::indent_log(stderr.clone()));
         Ok(stderr)
     }
 

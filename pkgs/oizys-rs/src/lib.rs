@@ -42,6 +42,16 @@ pub fn indent(s: String) -> String {
     indented
 }
 
+pub fn indent_log(s: String) -> String {
+    let mut indented = String::new();
+    for l in s.lines() {
+        indented.push_str(" | ");
+        indented.push_str(l);
+        indented.push('\n');
+    }
+    indented
+}
+
 pub fn copy_to_clipboard(data: String) -> Result<()> {
     tracing::debug!("copying data to clipboard");
     let mut cmd = Command::new("wl-copy")
