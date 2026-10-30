@@ -88,12 +88,11 @@ pub fn possible_hosts() -> Vec<String> {
     hosts
 }
 
-
 type OverlayPrs = HashMap<String, HashMap<String, u64>>;
 
 #[derive(Debug, Deserialize)]
 struct OizysData {
-    #[serde(rename="nixpkgs-overlays")]
+    #[serde(rename = "nixpkgs-overlays")]
     nixpkgs_overlays: OverlayPrs,
 }
 
@@ -110,7 +109,6 @@ pub fn get_lib_overlay_prs(flake: &str) -> Result<OverlayPrs> {
     let data: OizysData = serde_json::from_str(&data_str)?;
     Ok(data.nixpkgs_overlays)
 }
-
 
 fn default_progress_style() -> ProgressStyle {
     ProgressStyle::with_template("{span_child_prefix}{spinner:.magenta} {span_name} {span_fields}")

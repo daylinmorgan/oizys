@@ -106,7 +106,11 @@ impl FlakeLock {
 
     pub fn duplicates(&self) -> HashMap<String, HashMap<String, FlakeInput>> {
         let mut dupes = HashMap::new();
-        let numbered: Vec<&String> = self.nodes.keys().filter(|n| is_duplicated_node(n)).collect();
+        let numbered: Vec<&String> = self
+            .nodes
+            .keys()
+            .filter(|n| is_duplicated_node(n))
+            .collect();
         for n in numbered {
             let base = n.rsplit_once("_").unwrap().0;
             dupes.insert(n.to_string(), self.matches(n));

@@ -1,6 +1,6 @@
+use super::possible_hosts;
 use clap::{Args, Parser, Subcommand};
 use clap_complete::aot::{Generator, Shell, generate};
-use super::possible_hosts;
 
 #[derive(Debug, Args)]
 #[command(next_help_heading = "Global options")]
@@ -85,7 +85,6 @@ pub enum Commands {
         build: BuildOptions,
     },
 
-    // TODO: add support for --remote?
     /// nixos-rebuild subcmd
     Os {
         /// subcmd

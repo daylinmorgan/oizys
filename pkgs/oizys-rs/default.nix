@@ -6,12 +6,10 @@
 
   installShellFiles,
   makeWrapper,
-  rustPlatform,
   ...
 }:
 
 let
-  # TODO: get hosts also
   inherit (builtins)
     readFile
     getAttr
@@ -52,5 +50,4 @@ craneLib.buildPackage {
     installShellCompletion --cmd oizys \
       --zsh <($out/bin/oizys completion zsh)
   '';
-  # cargoHash = "sha256-Al3UEl4gHMVmg9j/JyXsS/cb08GKTVAZBfVgj3P+D5o=";
 }

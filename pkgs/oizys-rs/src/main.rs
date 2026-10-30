@@ -65,21 +65,21 @@ async fn main() -> Result<()> {
                 ui::show_drvs(drvs);
             }
         }
-        Commands::Pr { numbers ,ignore_data} => {
-            // TODO: add support for reading from lib/data.nix
+        Commands::Pr {
+            numbers,
+            ignore_data,
+        } => {
             if !ignore_data {
-
-            let overlay_prs = oizys::get_lib_overlay_prs(&flake)?;
-            for (branch, prs) in overlay_prs {
-                println!("flake input {}",  style(branch).bold());
-                for (name, num) in prs {
-                    let status = github::get_nixpkgs_pr_status(num).await?;
-                    println!("package {}", style(name).bold());
-                    println!("PR {}", style(format!("{num}")).bold());
-                    println!("{}", status)
+                let overlay_prs = oizys::get_lib_overlay_prs(&flake)?;
+                for (branch, prs) in overlay_prs {
+                    println!("flake input {}", style(branch).bold());
+                    for (name, num) in prs {
+                        let status = github::get_nixpkgs_pr_status(num).await?;
+                        println!("package {}", style(name).bold());
+                        println!("PR {}", style(format!("{num}")).bold());
+                        println!("{}", status)
+                    }
                 }
-            }
-
             }
             for num in numbers {
                 let status = github::get_nixpkgs_pr_status(num).await?;
@@ -125,10 +125,8 @@ async fn main() -> Result<()> {
             }
         },
         Commands::Hash { args } => {
-            // TODO: add clipboard coping via wl-paste
             let hash = oizys::get_hash(args)?;
             oizys::copy_to_clipboard(hash.clone())?;
-            // LoggedCommand::new("wl-paste") // how to input?
             print!("{}", hash);
         }
         Commands::Narinfo { attrs, all } => oizys::nix::narinfo(attrs, all).await?,
