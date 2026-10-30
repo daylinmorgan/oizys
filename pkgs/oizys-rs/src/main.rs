@@ -37,9 +37,7 @@ async fn main() -> Result<()> {
         }
         Commands::Attr { system, lix } => {
             let mut attrs = vec![];
-            // TODO: reuse sytems above
-            for host in hosts {
-                let nixos = Nixos::new(&nix, &flake, &host);
+            for nixos in systems {
                 if lix {
                     let lix_attrs = nixos.lix_and_co()?;
                     attrs.extend_from_slice(&lix_attrs);
