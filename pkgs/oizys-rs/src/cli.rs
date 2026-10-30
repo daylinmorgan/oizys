@@ -1,5 +1,6 @@
 use clap::{Args, Parser, Subcommand};
-use clap_complete::aot::{generate, Generator, Shell};
+use clap_complete::aot::{Generator, Shell, generate};
+use super::possible_hosts;
 
 #[derive(Debug, Args)]
 #[command(next_help_heading = "Global options")]
@@ -16,7 +17,7 @@ pub struct GlobalOptions {
     pub verbose: u8,
 
     /// path to flake
-    #[arg(short, long, global = true, env="OIZYS_FLAKE")]
+    #[arg(short, long, global = true, env = "OIZYS_FLAKE")]
     pub flake: Option<String>,
 
     /// enable bootstrap mode
@@ -24,7 +25,9 @@ pub struct GlobalOptions {
     pub bootstrap: bool,
 
     /// hostname
-    #[arg(long,global = true, num_args=1.., value_delimiter = ',', default_values_t = [default_host()])]
+    #[arg(long,global = true, num_args=1.., value_delimiter = ',', default_values_t = [default_host()],
+        value_parser=clap::builder::PossibleValuesParser::new(possible_hosts())
+    )]
     pub host: Vec<String>,
 }
 

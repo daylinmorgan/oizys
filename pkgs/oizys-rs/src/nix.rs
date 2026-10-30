@@ -269,30 +269,16 @@ pub struct Nixos {
     pub host: String,
 }
 
-fn check_host(host: &str) -> Result<()> {
-    let hosts_str = option_env!("OIZYS_HOSTS").unwrap_or("othalan");
-    let hosts: Vec<&str> = hosts_str.split(",").collect();
-    // let build_env = std::env::var("NIX_BUILD_TOP").unwrap_or("".to_string()) != "";
-    if std::env::var_os("NIX_BUILD_TOP").is_some() {
-        info!("skipping host check in build environment")
-    } else if !hosts.contains(&host) {
-        bail!("unknown host {}", host);
-    }
-
-    Ok(())
-}
-
 impl Nixos {
-    pub fn new_multi(nix: &NixCommand, flake: &str, hosts: &[String]) -> Result<Vec<Self>> {
-        let nixoses: Result<Vec<Self>> = hosts.iter().map(|h| Self::new(nix, flake, h)).collect();
+    pub fn new_multi(nix: &NixCommand, flake: &str, hosts: &[String]) -> Vec<Self> {
+        let nixoses: Vec<Self> = hosts.iter().map(|h| Self::new(nix, flake, h)).collect();
         nixoses
     }
-    pub fn new(nix: &NixCommand, flake: &str, host: &str) -> Result<Self> {
-        check_host(host)?;
+    pub fn new(nix: &NixCommand, flake: &str, host: &str) -> Self {
         let host = host.to_string();
         let flake = flake.to_string();
         let nix = nix.clone();
-        Ok(Self { nix, host, flake })
+        Self { nix, host, flake }
     }
 
     pub fn attr(&self) -> String {

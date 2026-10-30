@@ -76,6 +76,18 @@ pub fn check_lock_file(flake: &str, null: Vec<String>) -> Result<()> {
     Ok(())
 }
 
+
+pub fn possible_hosts() -> Vec<String> {
+    let hosts_str = option_env!("OIZYS_HOSTS").unwrap_or("othalan");
+    let mut hosts: Vec<String> = hosts_str.split(",").map(|s| s.to_string()).collect();
+    if std::env::var_os("NIX_BUILD_TOP").is_some() {
+        tracing::info!("add localhost since in build environment");
+        hosts.push("localhost".into());
+    }
+    hosts
+}
+
+
 fn default_progress_style() -> ProgressStyle {
     ProgressStyle::with_template("{span_child_prefix}{spinner:.magenta} {span_name} {span_fields}")
         .unwrap()
@@ -116,6 +128,7 @@ pub fn init_subscriber(verbose: u8) {
 
     tracing::debug!("run with -vvv to see third-party log messages");
 }
+
 
 #[macro_export]
 macro_rules! bar_span {
