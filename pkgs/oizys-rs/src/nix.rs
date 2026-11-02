@@ -302,7 +302,7 @@ impl Nixos {
         let hosts_match = self.host == default_host();
         let remote_mode = has_target_host || !hosts_match;
         if remote_mode {
-            info!("building in remote mode!");
+            eprintln!("building in remote mode!");
         };
         let mut cmd = if !remote_mode && ["switch", "boot"].contains(&subcmd) {
             let mut cmd = LoggedCommand::new("sudo");
