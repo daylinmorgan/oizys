@@ -135,7 +135,7 @@ jobs:
           hosts="${{ env.hosts }}"
           for host in ${hosts//,/ }; do
             echo "## $host" >> $GITHUB_STEP_SUMMARY
-            nix run "nixpkgs#dix" -- ./$host-current ./$host-updated >> $host-summary.md
+            nix run "nixpkgs#dix" -- diff ./$host-current ./$host-updated >> $host-summary.md
             printf '```\n%s\n```\n' "$(nix run "nixpkgs#dix" -- ./$host-current ./$host-updated)" >> $GITHUB_STEP_SUMMARY
           done
 
