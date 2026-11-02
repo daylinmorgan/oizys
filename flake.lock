@@ -72,11 +72,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793032255,
-        "narHash": "sha256-b2vZU2Pzg/+Krv3JzKgYDHNbRPOFTgDLH0HemRjw+4E=",
-        "rev": "97c0ef4451ff2f9c4a09d3271df0c55a80e7a10c",
+        "lastModified": 1793635086,
+        "narHash": "sha256-PRTDBgISzP9LVSdHIGiiFig46CTosQPKTXJZtwWqvLQ=",
+        "rev": "0606e9771c1845b3d277fb8107b4d2ece5246d97",
         "type": "tarball",
-        "url": "https://git.dayl.in/api/v1/repos/daylin/dayl.in/archive/97c0ef4451ff2f9c4a09d3271df0c55a80e7a10c.tar.gz?rev=97c0ef4451ff2f9c4a09d3271df0c55a80e7a10c"
+        "url": "https://git.dayl.in/api/v1/repos/daylin/dayl.in/archive/0606e9771c1845b3d277fb8107b4d2ece5246d97.tar.gz?rev=0606e9771c1845b3d277fb8107b4d2ece5246d97"
       },
       "original": {
         "type": "tarball",
