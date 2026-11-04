@@ -25,7 +25,7 @@ pub struct GlobalOptions {
     pub bootstrap: bool,
 
     /// hostname
-    #[arg(long,global = true, num_args=1.., value_delimiter = ',', default_values_t = [default_host()],
+    #[arg(long, global = true, num_args=1.., value_delimiter = ',',
         value_parser=clap::builder::PossibleValuesParser::new(possible_hosts())
     )]
     pub host: Vec<String>,

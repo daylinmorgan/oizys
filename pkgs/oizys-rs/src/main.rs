@@ -18,7 +18,11 @@ async fn main() -> Result<()> {
     let nix = NixCommand::new(false, cli.global.bootstrap);
 
     let flake = nix::set_flake(cli.global.flake)?;
-    let hosts = cli.global.host;
+    let hosts = if !cli.global.host.is_empty() {
+        cli.global.host
+    } else {
+        vec![cli::default_host()]
+    };
     let systems: Vec<Nixos> = Nixos::new_multi(&nix, &flake, &hosts);
 
     match cli.command {
