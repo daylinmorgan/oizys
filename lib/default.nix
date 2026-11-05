@@ -65,7 +65,11 @@ let
           ];
         };
         oizys-rs = pkgs.mkShell {
-          packages = [ inputs.fenix.packages.${system}.stable.toolchain ] ++ (with pkgs; [ rust-analyzer ]);
+          packages = with pkgs; [
+            rust-analyzer
+            rustc
+            cargo
+          ];
         };
       }
     );

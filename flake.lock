@@ -83,27 +83,6 @@
         "url": "https://git.dayl.in/daylin/dayl.in/archive/main.tar.gz"
       }
     },
-    "fenix": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "rust-analyzer-src": "rust-analyzer-src"
-      },
-      "locked": {
-        "lastModified": 1793537868,
-        "narHash": "sha256-a6WgeC/aUP43oXL+NFDNfBMl7tokr20mUalQRnKT9n8=",
-        "owner": "nix-community",
-        "repo": "fenix",
-        "rev": "ba9210be006df88ed8c14562f97ad4b4ffb048a0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "fenix",
-        "type": "github"
-      }
-    },
     "firefox-nightly": {
       "inputs": {
         "flake-compat": [],
@@ -630,7 +609,6 @@
         "celler": "celler",
         "crane": "crane",
         "daylin-website": "daylin-website",
-        "fenix": "fenix",
         "firefox-nightly": "firefox-nightly",
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",
@@ -657,23 +635,6 @@
         "tsm": "tsm",
         "utils": "utils",
         "vpn-confinement": "vpn-confinement"
-      }
-    },
-    "rust-analyzer-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1793356632,
-        "narHash": "sha256-sDRn+SFPNzi5QTa7o8iB2+6TQ6ZBhZ34dLO5I1hVYd4=",
-        "owner": "rust-lang",
-        "repo": "rust-analyzer",
-        "rev": "9e0d1ec24eb81de12160ecfa7f31c89735bda951",
-        "type": "github"
-      },
-      "original": {
-        "owner": "rust-lang",
-        "ref": "nightly",
-        "repo": "rust-analyzer",
-        "type": "github"
       }
     },
     "rust-overlay": {
