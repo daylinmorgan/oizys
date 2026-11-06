@@ -17,7 +17,6 @@ nixos-wsl-welcome-message
 nixos-wsl-welcome
 restic-gdrive
 code
-nix-index-with-full-db
 python
 net.conf
 rofi
@@ -25,5 +24,4 @@ rofi
 windows-vm-desktop-item
 lock
 gitea
-check-attic
 dragon
