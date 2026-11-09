@@ -173,6 +173,23 @@ pub enum Commands {
         #[command(subcommand)]
         command: CiCommands,
     },
+
+    /// get metadata for a package from nixpkgs
+    Meta {
+        /// package names
+        pkgs: Vec<String>,
+
+        /// keys to display
+        #[arg(long,
+            global = true, num_args=1.., value_delimiter = ',',
+            default_values_t = [ "position".to_string(),"description".to_string(),"homepage".to_string()],
+        )]
+        keys: Vec<String>,
+
+        /// don't filter by keys
+        #[arg(long)]
+        skip_filter: bool,
+    },
 }
 
 #[derive(Debug, Subcommand)]

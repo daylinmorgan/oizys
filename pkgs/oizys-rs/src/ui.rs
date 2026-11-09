@@ -1,5 +1,8 @@
+use crate::indent;
 use crate::lock::FlakeInput;
+use crate::nix::NixPkgEval;
 use console::style;
+use serde_json::{Value, to_string_pretty};
 use std::collections::HashMap;
 
 pub fn show_drvs(drvs: Vec<String>) {
@@ -23,6 +26,38 @@ pub fn show_narinfo(info: &str) {
         let split: Vec<&str> = line.splitn(2, ":").collect();
         let (k, v) = (split[0], split[1]); // could panic ¯\_(ツ)_/¯
         println!("  {}:{}", style(k).bold(), v)
+    }
+}
+
+pub fn pretty_value(v: &Value) -> String {
+    match v {
+        Value::Object(m) => indent(to_string_pretty(&m).unwrap()),
+        Value::Array(a) => indent(to_string_pretty(&a).unwrap()),
+        other => format!("{}", to_string_pretty(&other).unwrap()),
+    }
+}
+
+pub fn show_meta(name: &str, pkg: &NixPkgEval, keys: &[String], skip_filter: bool) {
+    let print_entry = |k: &str, v: &Value| {
+        println!(
+            "  {}: {}",
+            style(k).bold(),
+            pretty_value(v).trim_matches('"')
+        );
+    };
+
+    println!("{}:", style(name).bold().cyan());
+    if skip_filter {
+        for (k, v) in pkg {
+            print_entry(k, v);
+        }
+    } else {
+        for k in keys {
+            match pkg.get(k) {
+                Some(v) => print_entry(k, v),
+                None => println!("  {}: {}", k, style("UNKNOWN KEY!").red()),
+            }
+        }
     }
 }
 

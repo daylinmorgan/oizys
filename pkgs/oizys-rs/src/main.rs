@@ -134,6 +134,12 @@ async fn main() -> Result<()> {
             print!("{}", hash);
         }
         Commands::Narinfo { attrs, all } => oizys::nix::narinfo(attrs, all).await?,
+        Commands::Meta { pkgs, keys , skip_filter} => {
+            for p in pkgs {
+                let metadata = nix.eval_pkg_meta(&p)?;
+                oizys::ui::show_meta(&p, &metadata, &keys, skip_filter)
+            }
+        }
     }
 
     Ok(())

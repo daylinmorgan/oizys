@@ -3,6 +3,7 @@ use crate::prelude::*;
 use crate::{process::LoggedCommand, ui};
 use clap::ValueEnum;
 use reqwest::{Client, StatusCode};
+use serde::Deserialize;
 use std::collections::{BTreeMap, HashMap, HashSet};
 use tracing::{debug, error, info};
 
@@ -202,9 +203,25 @@ impl NixCommand {
         span.exit();
         Ok(serde_json::from_str(&output)?)
     }
+
+    // nix eval 'nixpkgs#legacyPackages.x86_64-linux.nim_lk.meta' --json | jq '{position,description,homepage}'
+    pub fn eval_pkg_meta(&self, name: &str) -> Result<NixPkgEval> {
+        // how to get current running system?
+        const SYSTEM: &str = "x86_64-linux";
+        let eval_output = self
+            .nix()
+            .args([
+                "eval",
+                &format!("nixpkgs#legacyPackages.{SYSTEM}.{name}.meta"),
+                "--json",
+            ])
+            .stdout_ok()?;
+        let eval_data = serde_json::from_str(&eval_output)?;
+        Ok(eval_data)
+    }
 }
 
-use serde::Deserialize;
+pub type NixPkgEval = HashMap<String, serde_json::Value>;
 
 #[derive(Debug, Deserialize, Eq, Hash, PartialEq)]
 pub struct NixEvalOutput {

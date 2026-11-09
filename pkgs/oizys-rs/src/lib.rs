@@ -32,24 +32,25 @@ pub fn get_hash(args: Vec<String>) -> Result<String> {
     get_hash_from_output(&stderr).ok_or(eyre!("failed to extract hash from output"))
 }
 
+pub fn indent_with(s: String, indent: &str) -> String {
+    s.lines()
+        .map(|line| {
+            if line.is_empty() {
+                line.to_string() // Skip indenting empty lines
+            } else {
+                format!("{}{}", indent, line)
+            }
+        })
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
 pub fn indent(s: String) -> String {
-    let mut indented = String::new();
-    for l in s.lines() {
-        indented.push_str("  ");
-        indented.push_str(l);
-        indented.push('\n');
-    }
-    indented
+    indent_with(s, "  ")
 }
 
 pub fn indent_log(s: String) -> String {
-    let mut indented = String::new();
-    for l in s.lines() {
-        indented.push_str(" | ");
-        indented.push_str(l);
-        indented.push('\n');
-    }
-    indented
+    indent_with(s, " | ")
 }
 
 pub fn copy_to_clipboard(data: String) -> Result<()> {
