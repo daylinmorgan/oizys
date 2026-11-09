@@ -33,7 +33,7 @@ pub fn pretty_value(v: &Value) -> String {
     match v {
         Value::Object(m) => indent(to_string_pretty(&m).unwrap()),
         Value::Array(a) => indent(to_string_pretty(&a).unwrap()),
-        other => format!("{}", to_string_pretty(&other).unwrap()),
+        other => to_string_pretty(&other).unwrap().to_string(),
     }
 }
 
