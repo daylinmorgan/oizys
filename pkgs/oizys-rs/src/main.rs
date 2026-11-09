@@ -13,6 +13,13 @@ async fn main() -> Result<()> {
 
     let cli = cli::Cli::parse();
 
+    if let Commands::Completion { shell } = cli.command {
+        let mut cmd = Cli::command();
+        eprintln!("Generating completion file for {shell}...");
+        cli::print_completions(shell, &mut cmd);
+        return Ok(());
+    }
+
     oizys::init_subscriber(cli.global.verbose);
 
     let nix = NixCommand::new(false, cli.global.bootstrap);
@@ -23,15 +30,12 @@ async fn main() -> Result<()> {
     } else {
         vec![cli::default_host()]
     };
+
     let systems: Vec<Nixos> = Nixos::new_multi(&nix, &flake, &hosts);
 
     match cli.command {
         Commands::Current { args } => nix::run_current(&nix, &flake, args)?,
-        Commands::Completion { shell } => {
-            let mut cmd = Cli::command();
-            eprintln!("Generating completion file for {shell}...");
-            cli::print_completions(shell, &mut cmd);
-        }
+        Commands::Completion { shell: _ } => {} // Handled above,
         Commands::Build { args, build } => {
             let nix = NixCommand::new(build.no_nom, cli.global.bootstrap);
             nix.build(args)?;
@@ -134,7 +138,11 @@ async fn main() -> Result<()> {
             print!("{}", hash);
         }
         Commands::Narinfo { attrs, all } => oizys::nix::narinfo(attrs, all).await?,
-        Commands::Meta { pkgs, keys , skip_filter} => {
+        Commands::Meta {
+            pkgs,
+            keys,
+            skip_filter,
+        } => {
             for p in pkgs {
                 let metadata = nix.eval_pkg_meta(&p)?;
                 oizys::ui::show_meta(&p, &metadata, &keys, skip_filter)
