@@ -25,7 +25,7 @@ in
       '')
     ]
     ++ (with pkgs; [
-      pixi
+      # pixi // see PR #584775
       uv
       python3Packages.pip # needed for viv to work
     ]);
