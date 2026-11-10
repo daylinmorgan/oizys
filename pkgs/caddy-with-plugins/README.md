@@ -12,3 +12,11 @@ pkgs.caddy.withPlugins {
   hash = "<hash>";
 }
 ```
+
+## procedure to update and get new vendorHash
+
+```sh
+go get -u ./...
+sed -i 's/vendorHash = ".*";/vendorHash = "";/'
+oizys hash '.#caddy-with-plugins'
+```
