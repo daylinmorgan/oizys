@@ -132,9 +132,22 @@ async fn main() -> Result<()> {
                 }
             }
         },
-        Commands::Hash { args } => {
-            let hash = oizys::get_hash(args)?;
-            oizys::copy_to_clipboard(hash.clone())?;
+        Commands::Hash {
+            installable,
+            file,
+            attr,
+            skip_copy,
+            // skip_file,
+        } => {
+            // TODO: integrate nix eval "installable.meta.position" to extract the local file name
+            // without --file
+            let hash = match file {
+                Some(p) => oizys::get_hash_with_file(p, attr, &installable)?,
+                None => oizys::get_hash(&installable)?,
+            };
+            if !skip_copy {
+                oizys::copy_to_clipboard(hash.clone())?;
+            }
             print!("{}", hash);
         }
         Commands::Narinfo { attrs, all } => oizys::nix::narinfo(attrs, all).await?,

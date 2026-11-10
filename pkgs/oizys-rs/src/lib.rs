@@ -15,7 +15,6 @@ use std::io::Write;
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
 
-// shouldn't this be an option?
 fn get_hash_from_output(output: &str) -> Option<String> {
     regex::Regex::new(r"(?m)^\s+got:\s+(?<hash>.*)$")
         .unwrap()
@@ -23,10 +22,66 @@ fn get_hash_from_output(output: &str) -> Option<String> {
         .map(|caps| caps["hash"].into())
 }
 
-pub fn get_hash(args: Vec<String>) -> Result<String> {
+const FAKE_HASH: &str = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+
+pub fn pick_from_matches(matches: &HashMap<String, String>) -> Result<(String, String)> {
+    let (attr, hash) = if matches.len() == 1 {
+        matches
+            .iter()
+            .collect::<Vec<_>>()
+            .first()
+            .map(|(k, v)| (k.to_string(), v.to_string()))
+            .ok_or(eyre!("failed to extract key val pair"))?
+    } else {
+        tracing::info!("multiple hash-like attrs found");
+        let options = matches.keys().map(|s| s.as_str()).collect::<Vec<_>>();
+        let attr = crate::ui::choose_option(&options)?;
+        (attr.to_string(), matches[attr].to_string())
+    };
+    Ok((attr, hash))
+}
+
+
+pub fn get_hash_with_file(p: PathBuf, attr: Option<String>, installable: &str) -> Result<String> {
+    tracing::debug!("checking {} for hash-like strings", p.display());
+    let hay = std::fs::read_to_string(&p)?;
+
+    // also check for lib.fakeHash?
+    let matches: HashMap<String, String> =
+        regex::regex!(r#"(?<attr>\w+)\s?=\s?"sha256-(?<hash>.*)=";"#)
+            .captures_iter(&hay)
+            .map(|c| c.extract())
+            .map(|(_, [attr, hash])| (attr.into(), hash.into()))
+            .collect();
+
+    if matches.is_empty() {
+        bail!("failed to identify the hash needed for this file");
+    }
+
+    let (attr, hash) = match attr {
+        Some(a) => matches
+            .get_key_value(&a)
+            .map(|(k, v)| (k.into(), v.into()))
+            .ok_or(eyre!("attr was not found in file"))?,
+        None => pick_from_matches(&matches)?,
+    };
+
+    let complete_hash = format!("sha256-{hash}");
+    tracing::debug!("subbing a fake hash");
+    let _ = std::fs::write(&p, hay.replace(&hash, FAKE_HASH));
+    let new_hash = get_hash(installable)?;
+    if complete_hash == new_hash {
+        tracing::warn!("the hash didn't actually change");
+    }
+    tracing::debug!("subbing the updated hash");
+    let _ = std::fs::write(&p, hay.replace(&complete_hash, &new_hash));
+    Ok(new_hash)
+}
+
+pub fn get_hash(installable: &str) -> Result<String> {
     let stderr = LoggedCommand::new("nix")
         .arg("build")
-        .args(args)
+        .arg(installable)
         .stderr_fail()?;
 
     get_hash_from_output(&stderr).ok_or(eyre!("failed to extract hash from output"))

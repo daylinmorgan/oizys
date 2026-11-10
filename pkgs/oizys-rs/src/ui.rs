@@ -4,6 +4,15 @@ use crate::nix::NixPkgEval;
 use console::style;
 use serde_json::{Value, to_string_pretty};
 use std::collections::HashMap;
+use inquire::Select;
+use crate::prelude::*;
+
+
+
+// fix these damn types to actually work...
+pub fn choose_option<'a>(choices: &'a [&'a str]) -> Result<&'a str> {
+    Ok(Select::new("which is the correct attr?", choices.to_vec()).prompt()?)
+}
 
 pub fn show_drvs(drvs: Vec<String>) {
     println!("{} derivation(s) to build:", drvs.len());

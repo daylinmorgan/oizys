@@ -1,4 +1,5 @@
 use super::possible_hosts;
+use std::path::PathBuf;
 use clap::{Args, Parser, Subcommand};
 use clap_complete::aot::{Generator, Shell, generate};
 
@@ -17,7 +18,7 @@ pub struct GlobalOptions {
     pub verbose: u8,
 
     /// path to flake
-    #[arg(short, long, global = true, env = "OIZYS_FLAKE")]
+    #[arg(short='F', long, global = true, env = "OIZYS_FLAKE")]
     pub flake: Option<String>,
 
     /// enable bootstrap mode
@@ -139,8 +140,19 @@ pub enum Commands {
     ///     oizys hash '.' | wl-copy
     #[command(verbatim_doc_comment)]
     Hash {
-        /// nix-args
-        args: Vec<String>,
+        installable: String,
+
+        /// path/to/file with hash
+        #[arg(short, long)]
+        file: Option<PathBuf>,
+
+        /// attr name
+        #[arg(short, long)]
+        attr: Option<String>,
+
+        /// skip copy
+        #[arg(long)]
+        skip_copy: bool,
     },
 
     /// dry run build
