@@ -2,7 +2,10 @@ module caddy
 
 go 1.27.3
 
-require github.com/caddyserver/caddy/v2 v2.11.9
+require (
+	github.com/caddyserver/caddy/v2 v2.11.9
+	pkg.jsn.cam/caddy-defender v0.10.2
+)
 
 require (
 	cel.dev/cel-go v0.32.0 // indirect
@@ -45,6 +48,7 @@ require (
 	github.com/dustin/go-humanize v1.1.0 // indirect
 	github.com/felixge/httpsnoop v1.1.0 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.4 // indirect
+	github.com/gaissmai/bart v0.30.0 // indirect
 	github.com/go-chi/chi/v5 v5.4.0 // indirect
 	github.com/go-jose/go-jose/v3 v3.0.5 // indirect
 	github.com/go-jose/go-jose/v4 v4.1.6 // indirect
@@ -111,6 +115,7 @@ require (
 	github.com/tailscale/go-winio v0.0.0-20231025203758-c4f33415bf55 // indirect
 	github.com/tailscale/tscert v0.0.0-20251216020129-aea342f6d747 // indirect
 	github.com/urfave/cli v1.22.17 // indirect
+	github.com/viccon/sturdyc v1.1.6 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	github.com/yuin/goldmark v1.8.6 // indirect
 	github.com/yuin/goldmark-highlighting/v2 v2.0.0-20230729083705-37449abec8cc // indirect
