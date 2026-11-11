@@ -33,7 +33,7 @@ import (
 
 	// plug in Caddy modules here
 	_ "github.com/caddyserver/caddy/v2/modules/standard"
-	_ "pkg.jsn.cam/caddy-defender"
+//	_ "pkg.jsn.cam/caddy-defender"
 )
 
 func main() {
