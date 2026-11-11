@@ -16,18 +16,19 @@ lib.warnIf (version != caddy.version)
   "caddy-with-plugins: go.mod pins caddy ${version} but nixpkgs has ${caddy.version}"
   caddy.overrideAttrs
   (
-  finalAttrs: prevAttrs: {
-    inherit version;
-    pname = "caddy-with-plugins";
-    src = ./.;
+    finalAttrs: prevAttrs: {
+      inherit version;
+      pname = "caddy-with-plugins";
+      src = ./.;
 
-    # https://github.com/NixOS/nixpkgs/blob/3ec636362e1816bc2f0888fa0fa2c69f1bc9e504/pkgs/by-name/ca/caddy/package.nix#L52-L57
-    postConfigure = ''
-      # vendor/ is copied from the read-only goModules store path
-      chmod u+w vendor/github.com/caddyserver/caddy/v2/cmd
-      rm vendor/github.com/caddyserver/caddy/v2/cmd/x509rootsfallback.go
-    '';
+      # https://github.com/NixOS/nixpkgs/blob/3ec636362e1816bc2f0888fa0fa2c69f1bc9e504/pkgs/by-name/ca/caddy/package.nix#L52-L57
+      postConfigure = ''
+        # vendor/ is copied from the read-only goModules store path
+        chmod u+w vendor/github.com/caddyserver/caddy/v2/cmd
+        rm vendor/github.com/caddyserver/caddy/v2/cmd/x509rootsfallback.go
+      '';
 
-    vendorHash = "sha256-0dNV6eLclOmKqzCLuWuRmEUwoSQmH0OZqo4ijUxH0Do=";
-  }
-)
+      vendorHash = "sha256-I4dHpyYpbUI7V1j+l56bCanMM1JbLY117wODEqzSwSI==";
+      meta.description = prevAttrs.meta.description; # serves to updates meta.position
+    }
+  )
