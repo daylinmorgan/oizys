@@ -28,7 +28,7 @@ lib.warnIf (version != caddy.version)
         rm vendor/github.com/caddyserver/caddy/v2/cmd/x509rootsfallback.go
       '';
 
-      vendorHash = "sha256-I4dHpyYpbUI7V1j+l56bCanMM1JbLY117wODEqzSwSI==";
+      vendorHash = "sha256-I4dHpyYpbUI7V1j+l56bCanMM1JbLY117wODEqzSwSI=";
       meta.description = prevAttrs.meta.description; # serves to updates meta.position
     }
   )
