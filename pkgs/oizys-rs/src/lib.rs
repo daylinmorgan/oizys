@@ -41,7 +41,6 @@ pub fn pick_from_matches(matches: &HashMap<String, String>) -> Result<(String, S
     Ok((attr, hash))
 }
 
-
 pub fn get_hash_with_file(p: PathBuf, attr: Option<String>, installable: &str) -> Result<String> {
     tracing::debug!("checking {} for hash-like strings", p.display());
     let hay = std::fs::read_to_string(&p)?;

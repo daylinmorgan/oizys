@@ -1,7 +1,7 @@
 use super::possible_hosts;
-use std::path::PathBuf;
 use clap::{Args, Parser, Subcommand};
 use clap_complete::aot::{Generator, Shell, generate};
+use std::path::PathBuf;
 
 #[derive(Debug, Args)]
 #[command(next_help_heading = "Global options")]
@@ -18,7 +18,7 @@ pub struct GlobalOptions {
     pub verbose: u8,
 
     /// path to flake
-    #[arg(short='F', long, global = true, env = "OIZYS_FLAKE")]
+    #[arg(short = 'F', long, global = true, env = "OIZYS_FLAKE")]
     pub flake: Option<String>,
 
     /// enable bootstrap mode

@@ -1,13 +1,11 @@
 use crate::indent;
 use crate::lock::FlakeInput;
 use crate::nix::NixPkgEval;
+use crate::prelude::*;
 use console::style;
+use inquire::Select;
 use serde_json::{Value, to_string_pretty};
 use std::collections::HashMap;
-use inquire::Select;
-use crate::prelude::*;
-
-
 
 // fix these damn types to actually work...
 pub fn choose_option<'a>(choices: &'a [&'a str]) -> Result<&'a str> {
