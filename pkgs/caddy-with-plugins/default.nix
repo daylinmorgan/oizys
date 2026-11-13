@@ -29,6 +29,7 @@ lib.warnIf (version != caddy.version)
       '';
 
       vendorHash = "sha256-I4dHpyYpbUI7V1j+l56bCanMM1JbLY117wODEqzSwSI=";
-      meta.description = prevAttrs.meta.description; # serves to updates meta.position
+
+      meta.mainProgram = "caddy"; # serves to updates <pkg>.meta.position
     }
   )
