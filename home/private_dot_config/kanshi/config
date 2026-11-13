@@ -7,7 +7,7 @@ output "LG Electronics LG ULTRAWIDE 602INJL5S204" alias $home-ultrawide
 
 
 profile default {
-  output eDP-1 mode 1920x1200 position 0,0
+  output eDP-1 mode 1920x1200 position 0,0 scale 1.0
 }
 
 profile home {
