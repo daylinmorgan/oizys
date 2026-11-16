@@ -42,6 +42,10 @@
     celler.inputs.nixpkgs.follows = "nixpkgs";
     celler.inputs.flake-parts.follows = "flake-parts";
 
+    copyparty.url = "github:9001/copyparty";
+    copyparty.inputs.nixpkgs.follows = "nixpkgs";
+    copyparty.inputs.flake-utils.follows = "flake-utils";
+
     noctalia.url = "github:noctalia-dev/noctalia/cachix";
     # noctalia.inputs.nixpkgs.follows = "nixpkgs";
 

@@ -16,6 +16,7 @@
     ./gotosocial
     ./pds
     ./yamtrack
+    ./copyparty
   ];
 
   services = {

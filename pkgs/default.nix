@@ -40,4 +40,5 @@ in
   "daylin-website"
   "celler"
   "noctalia"
+  "copyparty"
 ])
