@@ -1,6 +1,6 @@
 { ... }:
 let
-  inherit (import ../images.nix) yamtrack yamtrack-redis;
+  inherit (import ../images.nix) yamtrack redis;
 in
 {
   services.caddy.virtualHosts."yamtrack.dayl.in".extraConfig = ''
@@ -22,7 +22,7 @@ in
 
       [Container]
       ContainerName=yamtrack-redis
-      Image=${yamtrack-redis}
+      Image=${redis}
       Pod=yamtrack.pod
       Volume=/var/lib/yamtrack/redis:/data:Z,U
 

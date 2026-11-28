@@ -7,5 +7,5 @@
   pds = "ghcr.io/bluesky-social/pds:0.4.5051";
   soft-serve = "docker.io/charmcli/soft-serve:v0.12.2";
   yamtrack = "ghcr.io/fuzzygrim/yamtrack:0.26.3";
-  yamtrack-redis = "docker.io/library/redis:8-alpine";
+  redis = "docker.io/library/redis:8-alpine";
 }
